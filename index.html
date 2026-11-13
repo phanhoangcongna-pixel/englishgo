@@ -523,7 +523,7 @@ async function lookupDictionary(){
    for(const item of entries){
     const entry=item.entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry), audio=dictionaryAudio(entry);
     const translationLabel=item.word===translated?"Main translation · Bản dịch chính":"Alternative · Cách dịch khác";
-    htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">'+translationLabel+'</span><h2>'+safe(item.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(item.word)+'">🔊 Speak · Phát âm</button>'+(audio?'<audio controls preload="none" src="'+safe(audio)+'" aria-label="English pronunciation"></audio>':"")+'</div></div>';
+    htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">'+translationLabel+'</span><h2>'+safe(item.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(item.word)+'">🔊 Speak · Phát âm</button>'+'</div></div>';
     if(defs.length){
      htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+defs.slice(0,3).map(d=>'<li><span>'+safe(d.definition)+'</span>'+(d.example?'<em>Example: '+safe(d.example)+'</em>':"")+'</li>').join("")+'</ol></div>';
      const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==item.word.toLowerCase()).slice(0,8);
@@ -535,7 +535,7 @@ async function lookupDictionary(){
    }
   }else{
    const entry=entries[0].entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry), audio=dictionaryAudio(entry);
-   htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">English word · Từ tiếng Anh</span><h2>'+safe(query)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(query)+'">🔊 Speak · Phát âm</button>'+(audio?'<audio controls preload="none" src="'+safe(audio)+'" aria-label="English pronunciation"></audio>':"")+'</div></div><div class="dict-translation"><div class="small muted">Vietnamese meaning · Nghĩa tiếng Việt</div><h3>'+safe(translated)+'</h3></div>';
+   htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">English word · Từ tiếng Anh</span><h2>'+safe(query)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(query)+'">🔊 Speak · Phát âm</button>'+'</div></div><div class="dict-translation"><div class="small muted">Vietnamese meaning · Nghĩa tiếng Việt</div><h3>'+safe(translated)+'</h3></div>';
    if(defs.length){
     htmlOut+='<div class="dict-definitions"><b>English definitions · Giải nghĩa tiếng Anh</b><ol>'+defs.map(d=>'<li><small>'+safe(d.part)+'</small><span>'+safe(d.definition)+'</span>'+(d.example?'<em>Example: '+safe(d.example)+'</em>':"")+'</li>').join("")+'</ol></div>';
     const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==query.toLowerCase()).slice(0,10);
