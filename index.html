@@ -200,23 +200,26 @@ function updateStats(){document.getElementById("xp").textContent=xp+" XP";docume
 function go(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace()}
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
 function say(t){
+ const text=String(t||"").trim();
+ if(!text) return;
  const synth=window.speechSynthesis;
- if(!synth||!window.SpeechSynthesisUtterance){alert("Trình duyệt này chưa hỗ trợ đọc phát âm. Hãy thử Chrome hoặc Edge.");return}
- const text=String(t||"").trim();if(!text)return;
+ if(!synth || typeof SpeechSynthesisUtterance==="undefined"){
+   alert("Trình duyệt chưa hỗ trợ phát âm. Hãy thử Chrome hoặc Edge.");
+   return;
+ }
  synth.cancel();
- const speakNow=()=>{
-   const u=new SpeechSynthesisUtterance(text);
-   u.lang="en-US";u.rate=.88;u.pitch=1;
-   const voices=synth.getVoices();
-   const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
-   if(voice)u.voice=voice;
-   u.onerror=()=>{};
-   synth.resume();
-   synth.speak(u);
- };
- // Chrome sometimes needs a short pause after cancel() before the next utterance.
- window.setTimeout(speakNow,120);
+ const utterance=new SpeechSynthesisUtterance(text);
+ utterance.lang="en-US";
+ utterance.rate=0.88;
+ utterance.pitch=1;
+ const voices=synth.getVoices();
+ const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+ if(voice) utterance.voice=voice;
+ synth.resume();
+ synth.speak(utterance);
 }
+function sayWordFromList(text){ say(text); }
+
 let wi=0;function currentWord(){return DATA.vocab[wi]}
 function renderWords(){let cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();if(cat.options.length===1){[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)))}let chosen=cat.value;let list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><b>${w.w}</b><span class="meaning muted">${w.vi}</span><button class="btn line" onclick="wi=${w.i};showWord()">Open · Xem</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";showWord()}
 function showWord(){let w=currentWord();document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa} · ${w.cat}</div><div class="translation">${w.vi}</div><div class="example"><b>${w.ex}</b><em>${w.vn}</em></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`}
@@ -304,7 +307,7 @@ function renderWords(){
  if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)));
  const chosen=cat.value;
  const list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));
- document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" aria-label="Nghe ${w.w}" onclick="say(${JSON.stringify(w.w)})">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
+ document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" aria-label="Nghe ${w.w}" onclick="sayWordFromList(${JSON.stringify(w.w)})">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
  if(list.length && !list.some(w=>w.i===wi))wi=list[0].i;
  showWord();
 }
