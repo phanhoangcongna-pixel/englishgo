@@ -25,7 +25,7 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 </style></head>
 <body>
 <header><div class="nav"><div class="logo">English<span>Go</span> ✦ <sup style="font-size:10px;color:#9bb4ff">4.0 CLOUD</sup></div>
-<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
+<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page active" id="home">
@@ -76,6 +76,37 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 
 <section class="page" id="speaking"><h1 class="title">Speaking · Luyện nói</h1><p class="intro">Practise 20 real-life situations with English and Vietnamese. Luyện 20 tình huống thực tế song ngữ.</p><div class="panel"><select id="scenarioSelect" onchange="renderScenario()"></select><div id="scenarioLines"></div><div class="controls"><button class="btn" onclick="playScenario()">🔊 Listen to dialogue · Nghe hội thoại</button><button class="btn soft" onclick="nextScenario()">Next dialogue · Hội thoại tiếp →</button></div></div><div class="panel"><h2>Pronunciation practice · Luyện phát âm</h2><p><b>Could you help me, please?</b><br><span class="muted">Bạn có thể giúp tôi được không?</span></p><button class="btn" onclick="say('Could you help me, please?')">🔊 Listen · Nghe mẫu</button><p class="small muted">Speech recognition depends on browser support and HTTPS. Nhận diện giọng nói tùy trình duyệt và cần HTTPS.</p><button class="btn line" onclick="recognise()">🎙️ Try speaking · Thử nói</button><div id="speechFeedback"></div></div></section>
 
+
+<section class="page" id="translation">
+ <h1 class="title">Translation Reflex · Dịch phản xạ</h1>
+ <p class="intro">Nhìn câu tiếng Việt và nói/viết ngay bằng tiếng Anh. Đừng dịch từng từ — hãy phản xạ theo cụm câu.</p>
+ <div class="panel">
+  <div class="controls">
+   <select id="trLevel" onchange="startTranslation()"><option value="all">Mọi cấp độ · All levels</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option></select>
+   <select id="trDirection" onchange="startTranslation()"><option value="vi-en">Việt → Anh (phản xạ nói)</option><option value="en-vi">Anh → Việt</option></select>
+   <span class="badge" id="trCounter">Câu 1</span>
+  </div>
+  <div class="small muted" id="trLevelLabel">A1 · Everyday English</div>
+  <h2 id="trPrompt" style="font-size:25px;line-height:1.45;margin:18px 0">Đang tải câu...</h2>
+  <p class="muted" id="trHint">Hãy tự dịch trước khi xem đáp án.</p>
+  <textarea id="trAnswer" rows="3" placeholder="Nhập câu dịch của bạn ở đây..."></textarea>
+  <div class="controls">
+   <button class="btn" onclick="checkTranslation()">Check · Kiểm tra</button>
+   <button class="btn line" onclick="showTranslationAnswer()">Show answer · Xem đáp án</button>
+   <button class="btn soft" onclick="sayTranslationPrompt()">🔊 Nghe tiếng Anh</button>
+  </div>
+  <div id="trFeedback"></div>
+  <div class="controls" style="justify-content:space-between;margin-top:16px">
+   <span class="small muted" id="trScore">Đã luyện: 0 · Tự tin: 0</span>
+   <button class="btn" onclick="nextTranslation()">Câu tiếp theo →</button>
+  </div>
+ </div>
+ <div class="panel" style="margin-top:14px">
+  <h2>Cách luyện hiệu quả</h2>
+  <ol><li>Đọc câu tiếng Việt và tự nói tiếng Anh thành tiếng trong 3–5 giây.</li><li>Nhập câu bạn vừa nói, sau đó bấm “Check”.</li><li>So sánh với đáp án mẫu. Có thể có nhiều cách dịch đúng.</li><li>Bấm “Câu tiếp theo” và cố gắng trả lời nhanh hơn.</li></ol>
+  <p class="small muted">Lưu ý: phần kiểm tra là gợi ý theo đáp án mẫu; nếu diễn đạt khác nhưng đúng ngữ pháp và ý nghĩa, hãy tự đánh giá là đã nhớ.</p>
+ </div>
+</section>
 <section class="page" id="reading"><h1 class="title">Reading · Luyện đọc</h1><p class="intro">Short A2 texts with Vietnamese support. Đoạn đọc A2 ngắn có hỗ trợ tiếng Việt.</p><div class="panel"><h2>A New Life in Berlin · Cuộc sống mới ở Berlin</h2><p>My name is Linh. I moved to Berlin six months ago. I work in a small restaurant near my home. Every morning, I take the bus to work. My colleagues are friendly, and I am learning German and English. At weekends, I like visiting parks and meeting my friends.</p><p class="muted"><i>Tôi tên Linh. Tôi chuyển đến Berlin sáu tháng trước. Tôi làm việc tại một nhà hàng nhỏ gần nhà. Mỗi sáng, tôi đi xe buýt đến chỗ làm. Đồng nghiệp của tôi thân thiện, và tôi đang học tiếng Đức và tiếng Anh. Cuối tuần, tôi thích đi công viên và gặp bạn bè.</i></p></div><div class="panel"><h2>Reading check · Kiểm tra đọc hiểu</h2><p>How long has Linh lived in Berlin? · Linh đã sống ở Berlin bao lâu?</p><div class="choices"><button class="choice" onclick="readingCheck(0)">Six months · Sáu tháng</button><button class="choice" onclick="readingCheck(1)">One year · Một năm</button><button class="choice" onclick="readingCheck(2)">Two weeks · Hai tuần</button></div><div id="readingFeedback"></div></div></section>
 
 <section class="page" id="writing"><h1 class="title">Writing · Luyện viết</h1><p class="intro">Write a short paragraph and save it on your device. Viết đoạn văn ngắn và lưu trên thiết bị.</p><div class="panel"><h2>Introduce yourself · Giới thiệu bản thân</h2><p>Write 5–7 sentences about your name, home, work or studies, and hobbies.<br><span class="muted">Viết 5–7 câu về tên, nơi ở, công việc hoặc học tập và sở thích.</span></p><div class="example">My name is Mai. I live in Berlin. I work in a shop. I enjoy listening to music.<em>Tôi tên Mai. Tôi sống ở Berlin. Tôi làm ở cửa hàng. Tôi thích nghe nhạc.</em></div><textarea id="writingText" placeholder="My name is... / Tôi tên là..."></textarea><div class="controls"><button class="btn" onclick="saveWriting()">Save writing · Lưu bài</button><span id="writingStatus" class="muted small"></span></div><p class="small muted">Saved only in this browser. Chỉ lưu trong trình duyệt này.</p></div></section>
@@ -463,7 +494,48 @@ function nextGrammarQuiz(){
  wrong.innerHTML=grammarQuizWrong.length?("<h3>Ôn lại câu sai · Review mistakes</h3>"+grammarQuizWrong.map(x=>`<div class="example"><b>${x.q}</b><br>Đáp án: ${x.opts[x.ans]}<em>${x.why}</em></div>`).join("")):"<p class='feedback good'>Bạn không sai câu nào. Tuyệt vời!</p>";
 }
 function restartGrammarQuiz(){startGrammarPractice();}
-document.addEventListener("DOMContentLoaded",()=>{renderGrammar();startGrammarPractice();});
+
+const translationDeck = [{"level": "A1", "vi": "Tôi sống ở Đức.", "en": "I live in Germany.", "alt": "I am living in Germany."}, {"level": "A1", "vi": "Tôi đang học tiếng Anh.", "en": "I am learning English.", "alt": "I'm studying English."}, {"level": "A1", "vi": "Tôi không hiểu.", "en": "I don't understand.", "alt": "I do not understand."}, {"level": "A1", "vi": "Bạn có thể nói chậm hơn không?", "en": "Can you speak more slowly?", "alt": "Could you speak more slowly?"}, {"level": "A1", "vi": "Làm ơn nhắc lại.", "en": "Please say that again.", "alt": "Could you repeat that, please?"}, {"level": "A1", "vi": "Cái này giá bao nhiêu?", "en": "How much is this?", "alt": "How much does this cost?"}, {"level": "A1", "vi": "Tôi muốn một tách cà phê.", "en": "I would like a cup of coffee.", "alt": "I'd like a cup of coffee."}, {"level": "A1", "vi": "Tôi cần giúp đỡ.", "en": "I need some help.", "alt": "I need help."}, {"level": "A1", "vi": "Nhà vệ sinh ở đâu?", "en": "Where is the toilet?", "alt": "Where is the restroom?"}, {"level": "A1", "vi": "Tôi đến từ Việt Nam.", "en": "I am from Vietnam.", "alt": "I'm from Vietnam."}, {"level": "A1", "vi": "Hôm nay trời đẹp.", "en": "The weather is nice today.", "alt": "It's nice weather today."}, {"level": "A1", "vi": "Tôi thường dậy lúc sáu giờ.", "en": "I usually get up at six.", "alt": "I usually wake up at six."}, {"level": "A1", "vi": "Tôi đi làm bằng xe buýt.", "en": "I go to work by bus.", "alt": "I take the bus to work."}, {"level": "A1", "vi": "Tôi thích nghe nhạc.", "en": "I like listening to music.", "alt": "I enjoy listening to music."}, {"level": "A1", "vi": "Bạn có nói tiếng Anh không?", "en": "Do you speak English?", "alt": "Can you speak English?"}, {"level": "A1", "vi": "Tôi đang tìm nhà ga.", "en": "I am looking for the station.", "alt": "I'm trying to find the station."}, {"level": "A1", "vi": "Tôi bị lạc đường.", "en": "I am lost.", "alt": "I've lost my way."}, {"level": "A1", "vi": "Tôi muốn đặt một bàn cho hai người.", "en": "I would like to book a table for two.", "alt": "I'd like a table for two, please."}, {"level": "A1", "vi": "Tôi không có tiền mặt.", "en": "I don't have any cash.", "alt": "I have no cash."}, {"level": "A1", "vi": "Hẹn gặp lại ngày mai.", "en": "See you tomorrow.", "alt": "I'll see you tomorrow."}, {"level": "A2", "vi": "Tôi đã sống ở đây được hai năm.", "en": "I have lived here for two years.", "alt": "I've been living here for two years."}, {"level": "A2", "vi": "Tôi vừa mới ăn xong.", "en": "I have just finished eating.", "alt": "I've just finished my meal."}, {"level": "A2", "vi": "Tôi chưa bao giờ đến London.", "en": "I have never been to London.", "alt": "I've never visited London."}, {"level": "A2", "vi": "Hôm qua tôi phải làm việc muộn.", "en": "I had to work late yesterday.", "alt": "I had to stay late at work yesterday."}, {"level": "A2", "vi": "Nếu trời mưa, chúng ta sẽ ở nhà.", "en": "If it rains, we will stay at home.", "alt": "We'll stay home if it rains."}, {"level": "A2", "vi": "Tôi đang nấu ăn thì anh ấy gọi điện.", "en": "I was cooking when he called.", "alt": "I was making dinner when he phoned."}, {"level": "A2", "vi": "Bạn đã xem bộ phim đó chưa?", "en": "Have you seen that film?", "alt": "Have you watched that movie?"}, {"level": "A2", "vi": "Tôi quen với việc dậy sớm.", "en": "I am used to getting up early.", "alt": "I'm accustomed to getting up early."}, {"level": "A2", "vi": "Bạn có phiền đóng cửa sổ không?", "en": "Would you mind closing the window?", "alt": "Do you mind shutting the window?"}, {"level": "A2", "vi": "Tôi sẽ gọi lại cho bạn sau.", "en": "I will call you back later.", "alt": "I'll phone you back later."}, {"level": "A2", "vi": "Tôi đã làm mất chìa khóa.", "en": "I have lost my keys.", "alt": "I've misplaced my keys."}, {"level": "A2", "vi": "Chúng tôi đã quyết định chuyển nhà.", "en": "We have decided to move house.", "alt": "We've decided to move."}, {"level": "A2", "vi": "Tôi không cần phải đi làm ngày mai.", "en": "I don't have to go to work tomorrow.", "alt": "I needn't go to work tomorrow."}, {"level": "A2", "vi": "Cô ấy nói rằng cô ấy đang bận.", "en": "She said that she was busy.", "alt": "She said she was busy."}, {"level": "A2", "vi": "Tôi thích sống ở thành phố hơn.", "en": "I prefer living in the city.", "alt": "I prefer to live in the city."}, {"level": "A2", "vi": "Bạn nên nghỉ ngơi một chút.", "en": "You should get some rest.", "alt": "You ought to take a short break."}, {"level": "A2", "vi": "Chuyến tàu bị hoãn vì thời tiết xấu.", "en": "The train was delayed because of the bad weather.", "alt": "The train was delayed due to bad weather."}, {"level": "A2", "vi": "Tôi đã đợi bạn được nửa tiếng.", "en": "I have been waiting for you for half an hour.", "alt": "I've waited for you for thirty minutes."}, {"level": "A2", "vi": "Tôi không biết phải nói gì.", "en": "I don't know what to say.", "alt": "I'm not sure what I should say."}, {"level": "A2", "vi": "Càng luyện tập, bạn càng tiến bộ.", "en": "The more you practise, the better you get.", "alt": "The more you practice, the more you improve."}, {"level": "B1", "vi": "Giá mà tôi có nhiều thời gian hơn.", "en": "I wish I had more time.", "alt": "If only I had more time."}, {"level": "B1", "vi": "Nếu biết trước, tôi đã gọi cho bạn.", "en": "If I had known, I would have called you.", "alt": "Had I known, I would have phoned you."}, {"level": "B1", "vi": "Dù mệt, cô ấy vẫn tiếp tục làm việc.", "en": "Although she was tired, she kept working.", "alt": "Despite being tired, she continued working."}, {"level": "B1", "vi": "Tôi mong được gặp bạn sớm.", "en": "I look forward to seeing you soon.", "alt": "I'm looking forward to meeting you soon."}, {"level": "B1", "vi": "Anh ấy phủ nhận việc lấy chiếc ví.", "en": "He denied taking the wallet.", "alt": "He denied that he had taken the wallet."}, {"level": "B1", "vi": "Tôi không quen nói trước đám đông.", "en": "I am not used to speaking in public.", "alt": "I'm not accustomed to public speaking."}, {"level": "B1", "vi": "Việc này cần được giải quyết càng sớm càng tốt.", "en": "This needs to be dealt with as soon as possible.", "alt": "This should be handled as soon as possible."}, {"level": "B1", "vi": "Cô ấy hỏi tôi liệu tôi có thể giúp cô ấy không.", "en": "She asked me if I could help her.", "alt": "She asked whether I was able to help."}, {"level": "B1", "vi": "Tôi ước mình đã học tiếng Anh sớm hơn.", "en": "I wish I had started learning English earlier.", "alt": "If only I had learned English sooner."}, {"level": "B1", "vi": "Chúng ta nên tận dụng cơ hội này.", "en": "We should make the most of this opportunity.", "alt": "We ought to take advantage of this opportunity."}, {"level": "B1", "vi": "Dù có chuyện gì xảy ra, tôi sẽ không bỏ cuộc.", "en": "No matter what happens, I won't give up.", "alt": "Whatever happens, I will not give up."}, {"level": "B1", "vi": "Tôi đã quen dần với cuộc sống ở đây.", "en": "I am getting used to life here.", "alt": "I'm gradually getting accustomed to living here."}, {"level": "B1", "vi": "Điều quan trọng là bạn phải giữ bình tĩnh.", "en": "It is important that you remain calm.", "alt": "The important thing is to stay calm."}, {"level": "B1", "vi": "Tôi thà ở nhà còn hơn đi ra ngoài tối nay.", "en": "I would rather stay at home than go out tonight.", "alt": "I'd prefer to stay in rather than go out tonight."}, {"level": "B1", "vi": "Cô ấy thành công nhờ làm việc chăm chỉ.", "en": "She succeeded by working hard.", "alt": "She achieved success through hard work."}, {"level": "B1", "vi": "Tôi không thể chịu được việc phải chờ lâu.", "en": "I can't stand waiting for a long time.", "alt": "I can't bear having to wait so long."}, {"level": "B1", "vi": "Đáng lẽ bạn nên nói với tôi sớm hơn.", "en": "You should have told me earlier.", "alt": "You ought to have let me know sooner."}, {"level": "B1", "vi": "Tôi sẽ báo cho bạn ngay khi có tin mới.", "en": "I will let you know as soon as I have any news.", "alt": "I'll inform you as soon as there is an update."}, {"level": "B1", "vi": "Mặc dù giá cao, sản phẩm vẫn rất đáng mua.", "en": "Although it is expensive, the product is worth buying.", "alt": "Despite the high price, it is still worth purchasing."}];
+
+let trPool=[],trIndex=0,trDone=0,trConfident=0,trCurrent=null,trChecked=false;
+function startTranslation(){
+ const level=document.getElementById("trLevel")?.value||"all";
+ trPool=translationDeck.filter(x=>level==="all"||x.level===level).sort(()=>Math.random()-.5);
+ trIndex=0;trDone=0;trConfident=0;renderTranslation();
+}
+function renderTranslation(){
+ if(!trPool.length)return;
+ trCurrent=trPool[trIndex%trPool.length];trChecked=false;
+ const dir=document.getElementById("trDirection").value;
+ document.getElementById("trLevelLabel").textContent=trCurrent.level+" · "+(trCurrent.level==="A1"?"Everyday English":trCurrent.level==="A2"?"Daily conversations":"Natural and fluent English");
+ document.getElementById("trPrompt").textContent=dir==="vi-en"?trCurrent.vi:trCurrent.en;
+ document.getElementById("trHint").textContent=dir==="vi-en"?"Dịch sang tiếng Anh. Hãy thử nói thành tiếng trước khi nhập.":"Dịch sang tiếng Việt.";
+ document.getElementById("trAnswer").value="";
+ document.getElementById("trFeedback").innerHTML="";
+ document.getElementById("trCounter").textContent="Câu "+(trIndex+1)+"/"+trPool.length;
+ document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Tự tin: "+trConfident;
+}
+function normalizeTranslation(x){return (x||"").toLowerCase().trim().replace(/[.,!?;:'"“”‘’]/g,"").replace(/\s+/g," ");}
+function checkTranslation(){
+ if(trChecked)return;trChecked=true;trDone++;
+ const dir=document.getElementById("trDirection").value,answer=document.getElementById("trAnswer").value.trim();
+ const expected=dir==="vi-en"?trCurrent.en:trCurrent.vi;
+ const alt=dir==="vi-en"?trCurrent.alt:"";
+ const ok=normalizeTranslation(answer)===normalizeTranslation(expected)|| (alt&&normalizeTranslation(answer)===normalizeTranslation(alt));
+ document.getElementById("trFeedback").innerHTML='<div class="feedback '+(ok?'good':'bad')+'">'+(ok?'Rất tốt! Câu trả lời khớp đáp án mẫu.':'So sánh với câu mẫu nhé.')+'<br><b>Đáp án:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'</div>';
+ document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Khớp đáp án: "+(trConfident+(ok?1:0));
+ if(ok)trConfident++;
+}
+function showTranslationAnswer(){
+ if(trChecked)return;trChecked=true;trDone++;
+ const dir=document.getElementById("trDirection").value,expected=dir==="vi-en"?trCurrent.en:trCurrent.vi,alt=dir==="vi-en"?trCurrent.alt:"";
+ document.getElementById("trFeedback").innerHTML='<div class="feedback"><b>Đáp án mẫu:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'</div>';
+ document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Tự tin: "+trConfident;
+}
+function nextTranslation(){trIndex++;if(trIndex>=trPool.length){trPool=translationDeck.filter(x=>document.getElementById("trLevel").value==="all"||x.level===document.getElementById("trLevel").value).sort(()=>Math.random()-.5);trIndex=0;}renderTranslation();}
+function sayTranslationPrompt(){if(trCurrent)say(trCurrent.en);}
+
+document.addEventListener("DOMContentLoaded",()=>{startTranslation();renderGrammar();startGrammarPractice();});
 </script>
 
 </body></html>
