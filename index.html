@@ -203,22 +203,33 @@ function say(t){
  const text=String(t||"").trim();
  if(!text) return;
  const synth=window.speechSynthesis;
- if(!synth || typeof SpeechSynthesisUtterance==="undefined"){
+ if(!synth || typeof window.SpeechSynthesisUtterance==="undefined"){
    alert("Trình duyệt chưa hỗ trợ phát âm. Hãy thử Chrome hoặc Edge.");
    return;
  }
+ // Stop the previous word, then speak the word requested by this exact button.
  synth.cancel();
  const utterance=new SpeechSynthesisUtterance(text);
  utterance.lang="en-US";
  utterance.rate=0.88;
  utterance.pitch=1;
- const voices=synth.getVoices();
- const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+ const chooseVoice=()=>{
+   const voices=synth.getVoices();
+   return voices.find(v=>/^en-US$/i.test(v.lang)) ||
+          voices.find(v=>/^en-GB$/i.test(v.lang)) ||
+          voices.find(v=>/^en/i.test(v.lang)) || null;
+ };
+ const voice=chooseVoice();
  if(voice) utterance.voice=voice;
+ utterance.onerror=()=>console.warn("EnglishGo pronunciation playback failed.");
+ // resume() helps Chrome when speech synthesis has become paused.
  synth.resume();
  synth.speak(utterance);
 }
-function sayWordFromList(text){ say(text); }
+function sayWordFromList(text){
+ // Keep this function global because the word-list buttons call it directly.
+ say(text);
+}
 
 let wi=0;function currentWord(){return DATA.vocab[wi]}
 function renderWords(){let cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();if(cat.options.length===1){[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)))}let chosen=cat.value;let list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><b>${w.w}</b><span class="meaning muted">${w.vi}</span><button class="btn line" onclick="wi=${w.i};showWord()">Open · Xem</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";showWord()}
@@ -307,7 +318,7 @@ function renderWords(){
  if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)));
  const chosen=cat.value;
  const list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));
- document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" aria-label="Nghe ${w.w}" onclick="sayWordFromList(${JSON.stringify(w.w)})">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
+ document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button type="button" class="btn line" aria-label="Phát âm ${w.w}" title="Nhấn để nghe ${w.w}" onclick="event.stopPropagation();sayWordFromList(${JSON.stringify(w.w)})">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
  if(list.length && !list.some(w=>w.i===wi))wi=list[0].i;
  showWord();
 }
