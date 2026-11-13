@@ -203,33 +203,28 @@ function say(t){
  const text=String(t||"").trim();
  if(!text) return;
  const synth=window.speechSynthesis;
- if(!synth || typeof window.SpeechSynthesisUtterance==="undefined"){
+ if(!synth || typeof SpeechSynthesisUtterance==="undefined"){
    alert("Trình duyệt chưa hỗ trợ phát âm. Hãy thử Chrome hoặc Edge.");
    return;
  }
- // Stop the previous word, then speak the word requested by this exact button.
  synth.cancel();
  const utterance=new SpeechSynthesisUtterance(text);
  utterance.lang="en-US";
  utterance.rate=0.88;
  utterance.pitch=1;
- const chooseVoice=()=>{
-   const voices=synth.getVoices();
-   return voices.find(v=>/^en-US$/i.test(v.lang)) ||
-          voices.find(v=>/^en-GB$/i.test(v.lang)) ||
-          voices.find(v=>/^en/i.test(v.lang)) || null;
- };
- const voice=chooseVoice();
+ const voices=synth.getVoices();
+ const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
  if(voice) utterance.voice=voice;
- utterance.onerror=()=>console.warn("EnglishGo pronunciation playback failed.");
- // resume() helps Chrome when speech synthesis has become paused.
  synth.resume();
  synth.speak(utterance);
 }
-function sayWordFromList(text){
- // Keep this function global because the word-list buttons call it directly.
- say(text);
-}
+function sayWordFromList(text){ say(text); }
+// Use data attributes instead of inline onclick strings: this avoids broken HTML
+// when a word or sentence is wrapped in quotes.
+document.addEventListener("click",function(e){
+ const button=e.target.closest("[data-speak]");
+ if(button){e.preventDefault();say(button.getAttribute("data-speak"));}
+});
 
 let wi=0;function currentWord(){return DATA.vocab[wi]}
 function renderWords(){let cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();if(cat.options.length===1){[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)))}let chosen=cat.value;let list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><b>${w.w}</b><span class="meaning muted">${w.vi}</span><button class="btn line" onclick="wi=${w.i};showWord()">Open · Xem</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";showWord()}
@@ -318,13 +313,13 @@ function renderWords(){
  if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)));
  const chosen=cat.value;
  const list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));
- document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button type="button" class="btn line" aria-label="Phát âm ${w.w}" title="Nhấn để nghe ${w.w}" onclick="event.stopPropagation();sayWordFromList(${JSON.stringify(w.w)})">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
+ document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" type="button" aria-label="Nghe ${w.w}" data-speak="${w.w.replace(/&/g,"&amp;").replace(/\"/g,"&quot;")}">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
  if(list.length && !list.some(w=>w.i===wi))wi=list[0].i;
  showWord();
 }
 function showWord(){
  const w=currentWord();
- document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa||"Pronunciation · Phát âm"} · ${posLabel(w.pos||"n")}</div><div class="translation">${w.vi}</div><button class="btn soft" onclick="say(${JSON.stringify(w.w)})">🔊 Listen · Nghe phát âm</button><div class="example"><b>${w.ex}</b><em>${w.vn}</em><button class="btn line" style="margin-top:8px" onclick="say(${JSON.stringify(w.ex)})">🔊 Nghe câu ví dụ</button></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`;
+ document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa||"Pronunciation · Phát âm"} · ${posLabel(w.pos||"n")}</div><div class="translation">${w.vi}</div><button class="btn soft" type="button" data-speak="${w.w.replace(/&/g,"&amp;").replace(/\"/g,"&quot;")}">🔊 Listen · Nghe phát âm</button><div class="example"><b>${w.ex}</b><em>${w.vn}</em><button class="btn line" type="button" style="margin-top:8px" data-speak="${w.ex.replace(/&/g,"&amp;").replace(/\"/g,"&quot;")}">🔊 Nghe câu ví dụ</button></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`;
 }
 let egQuizFocus=0,egPlaceFocus=0;
 function egFocusChoice(group,index){
