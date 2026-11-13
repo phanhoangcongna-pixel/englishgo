@@ -552,8 +552,8 @@ function checkTranslation(){
  const alt=dir==="vi-en"?trCurrent.alt:"";
  const norm=x=>normalizeTranslation(x||"");
  const matched=!!answer&&(norm(answer)===norm(expected)||(alt&&norm(answer)===norm(alt)));
- document.getElementById("trFeedback").innerHTML='<div class="feedback '+(matched?'good':'')+'">'+(matched?'Khớp với đáp án mẫu!':'Đáp án mẫu để bạn đối chiếu:')+'<br><b>Đáp án:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'<br><span class="small">Lưu ý: Có thể có nhiều cách dịch đúng. Nếu câu của bạn cùng ý và tự nhiên, hãy tính là đúng nhé.</span></div>';
- if(matched)trConfident++;
+ document.getElementById("trFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+(matched?'✓ Chính xác!':'✗ Chưa khớp đáp án mẫu. Hãy xem lại nhé.')+'<br><b>Đáp án:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'<br><span class="small">Lưu ý: Có thể có nhiều cách dịch đúng. Nếu câu của bạn cùng ý và tự nhiên, bạn vẫn có thể tự tính là đúng.</span></div>';
+ if(matched){trConfident++;say(trCurrent.en);}
  document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Khớp đáp án mẫu: "+trConfident;
 }
 function showTranslationAnswer(){
@@ -593,7 +593,8 @@ function checkTopicTranslation(){
  const answer=document.getElementById("topicAnswer").value.trim();
  const norm=x=>(x||"").toLowerCase().trim().replace(/[.,!?;:'"“”‘’]/g,"").replace(/\\s+/g," ");
  const matched=!!answer&&norm(answer)===norm(expected);
- document.getElementById("topicFeedback").innerHTML='<div class="feedback '+(matched?'good':'')+'">'+(matched?'Khớp với đáp án mẫu!':'Đáp án mẫu để bạn đối chiếu:')+'<br><b>Đáp án:</b> '+expected+'<br><span class="small">Có thể có cách dịch khác. Nếu câu của bạn cùng ý và tự nhiên, hãy tính là đúng nhé.</span></div>';
+ document.getElementById("topicFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+(matched?'✓ Chính xác!':'✗ Chưa khớp đáp án mẫu. Hãy xem lại nhé.')+'<br><b>Đáp án:</b> '+expected+'<br><span class="small">Có thể có cách dịch khác. Nếu câu của bạn cùng ý và tự nhiên, bạn vẫn có thể tự tính là đúng.</span></div>';
+ if(matched)say(item.en);
 }
 function revealTopicTranslation(){
  if(topicAnswered)return;
