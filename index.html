@@ -25,7 +25,40 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 #cloudLoginBtn{white-space:nowrap;font-size:12px;padding:8px 11px}
 .cloud-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:20px;background:#e9f8f0;color:#14734e;font-size:12px}
 @media(max-width:700px){#cloudLoginBtn{width:100%}}
-</style></head>
+</style>
+<style id="englishgo-mobile-overflow-fix">
+/* Mobile layout fixes: keep long native selects and controls inside their cards. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { max-width: 100%; overflow-x: hidden; }
+main, .page, .panel, .card, .home-v2 { min-width: 0; max-width: 100%; }
+.panel { overflow-wrap: anywhere; }
+.controls { min-width: 0; max-width: 100%; }
+.controls > * { min-width: 0; max-width: 100%; }
+select, input, textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+}
+select {
+  width: 100%;
+  flex: 1 1 220px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+textarea { width: 100%; }
+@media (max-width: 560px) {
+  .panel { padding: 14px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; }
+  .controls select { flex: 1 1 100%; width: 100%; }
+  .controls .badge { flex: 0 0 auto; align-self: center; }
+  .controls .btn { flex: 1 1 100%; width: 100%; white-space: normal; }
+  #topicPrompt, #thousandPrompt, #trPrompt { overflow-wrap: anywhere; }
+  #topicSelect, #thousandTopic { display: block; width: 100%; }
+  .navlinks { min-width: 0; max-width: 100%; }
+}
+</style>
+
+</head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
 <nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
