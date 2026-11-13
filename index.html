@@ -14,7 +14,7 @@ h2{font-size:21px;margin:0 0 4px}.muted{color:var(--muted)}.small{font-size:13px
 </style>
 <style>
 .flashcard{border:0;cursor:pointer;box-shadow:0 15px 35px #183b7826;transition:transform .2s}.flashcard:active{transform:scale(.99)}
-.btn.gold{background:#f4bd55;color:#352300}.wordlist{display:grid;gap:8px}.savedrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:12px}.savedrow button{padding:7px 10px;border-radius:9px;background:var(--pale);color:var(--blue)}
+.btn.gold{background:#f4bd55;color:#352300}.wordlist{display:grid;gap:8px}.wordrow{grid-template-columns:minmax(110px,1fr) minmax(120px,1.2fr) auto;gap:12px}.wordrow button{white-space:nowrap}.wordrow .meaning{font-size:14px}.savedrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:12px}.savedrow button{padding:7px 10px;border-radius:9px;background:var(--pale);color:var(--blue)}
 textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}.navlinks{flex-wrap:wrap}.navlinks button{white-space:nowrap}
 @media(max-width:700px){.nav{align-items:flex-start;flex-direction:column}.navlinks{width:100%;overflow-x:auto;flex-wrap:nowrap}.savedrow{align-items:flex-start;flex-direction:column}}
 </style>
@@ -41,7 +41,7 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 <div class="two"><div class="panel"><h2>Learning progress · Tiến độ học</h2><div class="bar"><span id="progress"></span></div><p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p></div><div class="panel"><h2>Daily challenge · Thử thách hôm nay</h2><p class="muted small">Learn 5 words, listen to one dialogue and answer a quiz. Học 5 từ, nghe một hội thoại và làm một bài kiểm tra.</p><button class="btn soft" onclick="go('vocab')">Start challenge →</button></div></div>
 </section>
 
-<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">100 practical A1–B1 words in useful topics. 100 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" placeholder="Search / Tìm từ..." oninput="renderWords()"><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div id="wordList"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Listen</button></div><div id="wordCard"></div></div></section>
+<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" placeholder="Search / Tìm từ..." oninput="renderWords()"><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div id="wordCard" class="panel" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 
 <section class="page" id="grammar"><h1 class="title">Grammar · Ngữ pháp</h1><p class="intro">Clear explanations with examples. Giải thích rõ ràng kèm ví dụ.</p>
 <div class="panel"><h2>Present Simple · Hiện tại đơn</h2><p>Use it for habits and facts. Dùng cho thói quen và sự thật.</p><div class="example"><b>She works in a shop.</b><em>Cô ấy làm việc ở cửa hàng.</em>Form: I/you/we/they + verb; he/she/it + verb-s/es.</div></div>
@@ -199,7 +199,24 @@ function daily(){let d=new Date().toISOString().slice(0,10);if(lastDay!==d){let 
 function updateStats(){document.getElementById("xp").textContent=xp+" XP";document.getElementById("level").textContent=xp>=300?"B1":xp>=100?"A2":"A1";document.getElementById("streak").textContent=streak+" 🔥";document.getElementById("learned").textContent=known.length;document.getElementById("progress").style.width=Math.min(100,Math.round(done.length/15*100))+"%";document.getElementById("progressText").textContent=done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp."}
 function go(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace()}
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
-function say(t){if(!("speechSynthesis"in window)){alert("Speech audio is not supported by this browser.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.86;speechSynthesis.speak(u)}
+function say(t){
+ const synth=window.speechSynthesis;
+ if(!synth||!window.SpeechSynthesisUtterance){alert("Trình duyệt này chưa hỗ trợ đọc phát âm. Hãy thử Chrome hoặc Edge.");return}
+ const text=String(t||"").trim();if(!text)return;
+ synth.cancel();
+ const speakNow=()=>{
+   const u=new SpeechSynthesisUtterance(text);
+   u.lang="en-US";u.rate=.88;u.pitch=1;
+   const voices=synth.getVoices();
+   const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+   if(voice)u.voice=voice;
+   u.onerror=()=>{};
+   synth.resume();
+   synth.speak(u);
+ };
+ // Chrome sometimes needs a short pause after cancel() before the next utterance.
+ window.setTimeout(speakNow,120);
+}
 let wi=0;function currentWord(){return DATA.vocab[wi]}
 function renderWords(){let cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();if(cat.options.length===1){[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)))}let chosen=cat.value;let list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><b>${w.w}</b><span class="meaning muted">${w.vi}</span><button class="btn line" onclick="wi=${w.i};showWord()">Open · Xem</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";showWord()}
 function showWord(){let w=currentWord();document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa} · ${w.cat}</div><div class="translation">${w.vi}</div><div class="example"><b>${w.ex}</b><em>${w.vn}</em></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`}
