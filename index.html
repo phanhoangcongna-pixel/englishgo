@@ -28,12 +28,16 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 </style></head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
-<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
+<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page active" id="home">
-<div class="hero"><div><div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div><h1>Small steps.<br>Big progress.</h1><p>Learn English with clear Vietnamese explanations. Practise listening, speaking, reading and writing — every day, for free.<br>Học tiếng Anh với giải thích tiếng Việt dễ hiểu. Luyện đủ bốn kỹ năng mỗi ngày, hoàn toàn miễn phí.</p><div class="actions"><button class="btn white" onclick="go('vocab')">Start learning · Bắt đầu</button><button class="btn" onclick="go('placement')">Find my level · Kiểm tra trình độ</button></div></div>
+<div class="hero"><div><div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div><h1>Small steps.<br>Big progress.</h1><p>Learn English with clear Vietnamese explanations. Practise listening, speaking, reading and writing — every day, for free.<br>Học tiếng Anh với giải thích tiếng Việt dễ hiểu. Luyện đủ bốn kỹ năng mỗi ngày, hoàn toàn miễn phí.</p><div class="actions"><button class="btn white" onclick="go('vocab')">Start learning · Bắt đầu</button></div></div>
 <div class="statbox"><small>YOUR LEARNING JOURNEY · HÀNH TRÌNH HỌC TẬP</small><strong id="xp">0 XP</strong><div>Keep going! · Tiếp tục cố gắng!</div><div class="stats"><div class="mini-stat"><b id="level">A1</b><small>Level · Cấp độ</small></div><div class="mini-stat"><b id="streak">0 🔥</b><small>Day streak · Ngày liên tiếp</small></div><div class="mini-stat"><b id="learned">0</b><small>Words · Từ đã học</small></div></div></div></div>
+<div class="panel" style="margin:18px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #d8e5fb;background:#f5f8ff">
+  <div><h2 style="margin:0 0 5px">Translation Reflex · Dịch phản xạ</h2><p class="small muted" style="margin:0">Luyện dịch nhanh Việt ↔ Anh với 268 câu, chủ đề cơ bản và kho 1.000 câu giao tiếp.</p></div>
+  <button class="btn" onclick="go('translation')">Luyện dịch ngay →</button>
+</div>
 <div class="section"><div><h2>Your learning path · Lộ trình học</h2><p>Four skills and useful language · Bốn kỹ năng và kiến thức thiết thực</p></div><span class="badge">A1–B1</span></div>
 <div class="grid">
 <div class="card skill" onclick="go('listening')"><div class="ico">🎧</div><h3>Listening</h3><p>Understand everyday conversations · Nghe hiểu hội thoại hàng ngày</p><span class="tag">Listen · Nghe</span></div>
@@ -42,6 +46,11 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 <div class="card skill" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing</h3><p>Write messages and emails · Viết tin nhắn và email</p><span class="tag">Write · Viết</span></div>
 </div>
 <div class="two"><div class="panel"><h2>Learning progress · Tiến độ học</h2><div class="bar"><span id="progress"></span></div><p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p></div><div class="panel"><h2>Daily challenge · Thử thách hôm nay</h2><p class="muted small">Learn 5 words, listen to one dialogue and answer a quiz. Học 5 từ, nghe một hội thoại và làm một bài kiểm tra.</p><button class="btn soft" onclick="go('vocab')">Start challenge →</button></div></div>
+<div class="panel" style="margin-top:18px;text-align:center;background:#142342;color:#fff;border:0">
+  <h2 style="margin:0 0 6px;color:#fff">Ready to practise translation? · Sẵn sàng luyện dịch chưa?</h2>
+  <p style="margin:0 0 14px;color:#e2eaf8">Ôn lại câu giao tiếp và tăng phản xạ tiếng Anh mỗi ngày.</p>
+  <button class="btn white" onclick="go('translation')">Translation Reflex · Dịch phản xạ →</button>
+</div>
 </section>
 
 <section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" placeholder="Search / Tìm từ..." oninput="renderWords()"><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div id="wordCard" class="panel" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
@@ -221,6 +230,35 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 <p class="muted" id="cloudMessage">Cloud sync requires a free Firebase project setup once. Cần thiết lập Firebase miễn phí một lần.</p>
 </div>
 </section>
+
+<section class="page" id="dictionary">
+  <h1 class="title">Bilingual Dictionary · Từ điển Anh – Việt / Việt – Anh</h1>
+  <p class="intro">Tra từ hoặc cụm từ theo cả hai chiều: Việt → Anh và Anh → Việt.</p>
+  <div class="panel">
+    <div class="controls" style="align-items:stretch">
+      <select id="dictDirection" aria-label="Chiều tra từ" onchange="updateDictionaryDirection()">
+        <option value="vi-en">Việt → Anh</option>
+        <option value="en-vi">Anh → Việt</option>
+      </select>
+      <input id="dictQuery" type="search" placeholder="Nhập từ tiếng Việt..." style="flex:1;min-width:220px" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupDictionary()}">
+      <button class="btn" id="dictSearchBtn" onclick="lookupDictionary()">Tra từ →</button>
+    </div>
+    <p class="small muted">Tra cứu trực tuyến hai chiều. Cần có kết nối Internet; kết quả máy dịch có thể cần kiểm tra theo ngữ cảnh.</p>
+    <div id="dictStatus" class="small muted" aria-live="polite">Chọn chiều tra, nhập từ rồi nhấn Enter hoặc bấm “Tra từ”.</div>
+    <div id="dictResults"></div>
+  </div>
+  <div class="panel">
+    <h2>Mẹo tra từ</h2>
+    <ul>
+      <li>Việt → Anh: thử “chạy”, “đẹp”, “hạnh phúc”.</li>
+      <li>Anh → Việt: thử “run”, “beautiful”, “happiness”.</li>
+      <li>Nếu từ có nhiều nghĩa, hãy nhập thêm ngữ cảnh, ví dụ: “đá lạnh” hoặc “đá bóng”.</li>
+      <li>Với cụm từ dài, kết quả là bản dịch tham khảo, không phải lúc nào cũng là cách diễn đạt tự nhiên nhất.</li>
+    </ul>
+    <p class="small muted">Nguồn tra cứu: MyMemory Translation Memory. Giới hạn miễn phí ẩn danh được áp dụng bởi nhà cung cấp.</p>
+  </div>
+</section>
+
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script>
@@ -307,7 +345,60 @@ function award(id,points=10){if(!done.includes(id)){done.push(id);xp+=points;sav
 function daily(){let d=new Date().toISOString().slice(0,10);if(lastDay!==d){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);streak=lastDay===y?streak+1:1;lastDay=d;save("day",lastDay);save("streak",streak)}}
 function updateStats(){document.getElementById("xp").textContent=xp+" XP";document.getElementById("level").textContent=xp>=300?"B1":xp>=100?"A2":"A1";document.getElementById("streak").textContent=streak+" 🔥";document.getElementById("learned").textContent=known.length;document.getElementById("progress").style.width=Math.min(100,Math.round(done.length/15*100))+"%";document.getElementById("progressText").textContent=done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp."}
 function go(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace()}
+
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+function updateDictionaryDirection(){
+ const direction=document.getElementById("dictDirection")?.value||"vi-en";
+ const input=document.getElementById("dictQuery");
+ if(input)input.placeholder=direction==="vi-en"?"Nhập từ tiếng Việt... Ví dụ: yêu thương, kiên trì":"Nhập từ tiếng Anh... Ví dụ: love, patient, improve";
+ const status=document.getElementById("dictStatus");
+ if(status)status.textContent=direction==="vi-en"?"Nhập từ tiếng Việt rồi nhấn Enter hoặc bấm “Tra từ”.":"Enter an English word, then press Enter or click “Tra từ”.";
+ document.getElementById("dictResults").innerHTML="";
+}
+async function lookupDictionary(){
+ const input=document.getElementById("dictQuery");
+ const status=document.getElementById("dictStatus");
+ const results=document.getElementById("dictResults");
+ const button=document.getElementById("dictSearchBtn");
+ const direction=document.getElementById("dictDirection")?.value||"vi-en";
+ const query=(input?.value||"").trim();
+ if(!query){status.textContent="Mày nhập từ hoặc cụm từ trước nhé.";results.innerHTML="";input?.focus();return;}
+ if(new TextEncoder().encode(query).length>500){status.textContent="Nội dung quá dài. Hãy tra từ hoặc cụm từ ngắn hơn.";return;}
+ status.textContent="Đang tra cứu...";
+ results.innerHTML="";
+ if(button)button.disabled=true;
+ try{
+  const langpair=direction==="vi-en"?"vi|en":"en|vi";
+  const params=new URLSearchParams({q:query,langpair,mt:"1"});
+  const response=await fetch("https://api.mymemory.translated.net/get?"+params.toString());
+  if(!response.ok)throw new Error("HTTP "+response.status);
+  const data=await response.json();
+  const translated=(data?.responseData?.translatedText||"").trim();
+  const matches=Array.isArray(data?.matches)?data.matches:[];
+  if(!translated || (data?.responseStatus && Number(data.responseStatus)!==200)){
+   status.textContent="Chưa tìm thấy kết quả phù hợp. Thử từ khác hoặc thêm ngữ cảnh nhé.";
+   return;
+  }
+  const unique=[];
+  for(const item of matches){
+   const text=(item?.translation||"").trim();
+   if(text && !unique.some(x=>x.toLowerCase()===text.toLowerCase()))unique.push(text);
+   if(unique.length>=5)break;
+  }
+  const safe=x=>String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const sourceLabel=direction==="vi-en"?"Tiếng Việt":"English";
+  const targetLabel=direction==="vi-en"?"Tiếng Anh tham khảo":"Nghĩa tiếng Việt tham khảo";
+  const speakButton=direction==="vi-en"?'<button class="btn line" onclick="say('+JSON.stringify(translated).replace(/</g,"\\u003c")+')">🔊 Nghe phát âm tiếng Anh</button>':"";
+  results.innerHTML='<div class="panel" style="margin-top:14px;background:#f1f7ff"><div class="small muted">'+sourceLabel+'</div><h3>'+safe(query)+'</h3><div class="small muted" style="margin-top:12px">'+targetLabel+'</div><h2 style="color:#1456a0;margin:4px 0 10px">'+safe(translated)+'</h2>'+speakButton+(unique.length>1?'<div style="margin-top:14px"><b>Các cách dịch khác có thể gặp</b><ul>'+unique.slice(1).map(x=>'<li>'+safe(x)+'</li>').join("")+'</ul></div>':'')+'</div>';
+  status.textContent="Đã tra xong. Hãy chọn nghĩa phù hợp với ngữ cảnh.";
+ }catch(error){
+  status.textContent="Không kết nối được từ điển lúc này. Kiểm tra Internet rồi thử lại nhé.";
+ }finally{
+  if(button)button.disabled=false;
+ }
+}
+
 function say(t){
  const text=String(t||"").trim();
  if(!text) return;
