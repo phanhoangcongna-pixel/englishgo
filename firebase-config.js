@@ -1,5 +1,5 @@
-window.FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDNp2jhChgdIyu450CtSXd1qpokLoxRPC0",
+const firebaseConfig = {
+  apiKey: "AIzaSyDNp2jhChgdIyu450CtSXdlqpokLoxRPC0",
   authDomain: "englishgophc.firebaseapp.com",
   projectId: "englishgophc",
   storageBucket: "englishgophc.firebasestorage.app",
