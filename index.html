@@ -208,15 +208,30 @@ function say(t){
    return;
  }
  synth.cancel();
- const utterance=new SpeechSynthesisUtterance(text);
- utterance.lang="en-US";
- utterance.rate=0.88;
- utterance.pitch=1;
- const voices=synth.getVoices();
- const voice=voices.find(v=>/^en(-|_)(US|GB)/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
- if(voice) utterance.voice=voice;
- synth.resume();
- synth.speak(utterance);
+ const speakNow=()=>{
+   const utterance=new SpeechSynthesisUtterance(text);
+   utterance.lang="en-US";
+   utterance.rate=0.80;
+   utterance.pitch=0.96;
+   utterance.volume=1;
+   const voices=synth.getVoices()||[];
+   // Prefer clearer installed English voices (Google/Microsoft), then any English voice.
+   const preferred=voices.find(v=>/Google.*English.*US|Google US English/i.test(v.name))
+     || voices.find(v=>/Microsoft.*(Aria|Jenny|Guy|Ana|Christopher|Michelle)/i.test(v.name) && /^en/i.test(v.lang))
+     || voices.find(v=>/^en-US/i.test(v.lang))
+     || voices.find(v=>/^en-GB/i.test(v.lang))
+     || voices.find(v=>/^en/i.test(v.lang));
+   if(preferred) utterance.voice=preferred;
+   synth.resume();
+   synth.speak(utterance);
+ };
+ // Some browsers load their voice list shortly after the page opens.
+ if(synth.getVoices().length){ speakNow(); }
+ else {
+   const once=()=>{synth.removeEventListener("voiceschanged",once);speakNow();};
+   synth.addEventListener("voiceschanged",once);
+   setTimeout(()=>{synth.removeEventListener("voiceschanged",once);if(!synth.speaking)speakNow();},700);
+ }
 }
 function sayWordFromList(text){ say(text); }
 // Use data attributes instead of inline onclick strings: this avoids broken HTML
