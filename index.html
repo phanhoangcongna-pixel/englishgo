@@ -59,10 +59,16 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
   <p class="small muted" id="grammarCount"></p><div id="grammarTopics"></div>
 </div>
 <div class="panel">
-  <h2>Grammar practice · Bài tập ngữ pháp</h2><p class="muted">Chọn đáp án đúng. Bạn sẽ thấy giải thích sau khi trả lời.</p>
+  <h2>Grammar practice · Bài tập ngữ pháp</h2>
+  <p class="muted">Ngân hàng 46 câu A1–B2. Mỗi lượt câu hỏi được xáo trộn để bạn luyện nhiều lần.</p>
+  <div class="controls">
+    <select id="grammarPracticeMode" aria-label="Số câu"><option value="10">10 câu · Luyện nhanh</option><option value="20">20 câu · Luyện sâu</option><option value="all">Tất cả câu · Full practice</option></select>
+    <select id="grammarPracticeLevel" aria-label="Cấp độ"><option value="all">Mọi cấp độ</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select>
+    <button class="btn soft" onclick="startGrammarPractice()">Bắt đầu lượt mới</button>
+  </div><p class="muted">Chọn đáp án đúng. Bạn sẽ thấy giải thích sau khi trả lời.</p>
   <div class="badge" id="grammarQuizNo">Question 1</div><h3 id="grammarQuizQ">Loading...</h3>
-  <div class="choices" id="grammarQuizChoices"></div><div id="grammarQuizFeedback"></div>
-  <div class="controls"><button class="btn" id="grammarQuizNext" onclick="nextGrammarQuiz()" disabled>Next question · Câu tiếp</button><button class="btn line" onclick="restartGrammarQuiz()">Restart · Làm lại</button></div>
+  <div class="choices" id="grammarQuizChoices"></div><div id="grammarQuizFeedback"></div><div id="grammarWrongReview"></div>
+  <div class="controls"><button class="btn" id="grammarQuizNext" onclick="nextGrammarQuiz()" disabled>Next question · Câu tiếp</button><button class="btn line" onclick="startGrammarPractice()">Restart · Làm lại</button></div>
 </div>
 </section>
 
@@ -392,31 +398,53 @@ function renderGrammar(){
  document.getElementById("grammarCount").textContent=`Hiển thị ${items.length}/${grammarTopics.length} chủ điểm · ${grammarTopics.length} topics`;
  box.innerHTML=items.length?items.map(x=>`<details class="panel" style="margin:10px 0"><summary style="cursor:pointer;font-weight:800">${x.title} <span class="badge">${x.level}</span></summary><p>${x.use}</p><div class="example"><b>Formula · Công thức</b><br>${x.formula}<hr><b>Example · Ví dụ</b><br>${x.example}<em>${x.translation}</em></div><p class="small muted">💡 ${x.note}</p></details>`).join(""):'<p class="muted">Không tìm thấy chủ điểm phù hợp. Hãy thử từ khóa khác.</p>';
 }
-const grammarQuizData = [["She ___ to work every day.", ["go", "goes", "going"], 1, "Hiện tại đơn: he/she/it + động từ thêm -s/-es."], ["They ___ watching TV now.", ["is", "are", "am"], 1, "Hiện tại tiếp diễn: are + V-ing với they."], ["We ___ Berlin last year.", ["visit", "visited", "have visit"], 1, "Last year là mốc quá khứ đã kết thúc → Past Simple."], ["I have lived here ___ 2022.", ["for", "since", "during"], 1, "Since đi với mốc bắt đầu; for đi với khoảng thời gian."], ["You ___ wear a seat belt. It's the law.", ["might", "must", "could"], 1, "Must diễn tả nghĩa vụ mạnh."], ["This test is ___ than the last one.", ["easy", "easier", "easiest"], 1, "So sánh hơn của easy là easier."], ["The emails ___ every morning.", ["send", "are sent", "sent"], 1, "Bị động hiện tại đơn: am/is/are + V3."], ["If it rains, we ___ at home.", ["stay", "will stay", "would stayed"], 1, "Câu điều kiện loại 1: If + hiện tại đơn, will + V."], ["The man ___ called you is my uncle.", ["which", "who", "where"], 1, "Who thay cho người."], ["She said she ___ tired.", ["is", "was", "be"], 1, "Câu tường thuật thường lùi am/is → was khi động từ tường thuật ở quá khứ."]];
-let grammarQuizIndex=0,grammarQuizAnswered=false;
+
+const grammarQuizData = [{"level": "A1", "q": "She ___ from Vietnam.", "opts": ["am", "is", "are"], "ans": 1, "why": "She đi với is: She is from Vietnam."}, {"level": "A1", "q": "___ you a student?", "opts": ["Am", "Is", "Are"], "ans": 2, "why": "Câu hỏi với you dùng Are: Are you...?"}, {"level": "A1", "q": "I ___ coffee every morning.", "opts": ["drink", "drinks", "drinking"], "ans": 0, "why": "I + động từ nguyên mẫu trong hiện tại đơn."}, {"level": "A1", "q": "My brother ___ TV at night.", "opts": ["watch", "watches", "watching"], "ans": 1, "why": "He/she/it thêm -es với watch → watches."}, {"level": "A1", "q": "They ___ like spicy food.", "opts": ["doesn't", "don't", "aren't"], "ans": 1, "why": "They dùng don't + động từ nguyên mẫu."}, {"level": "A1", "q": "There ___ a supermarket near here.", "opts": ["are", "is", "be"], "ans": 1, "why": "There is + danh từ số ít."}, {"level": "A1", "q": "I have ___ apple in my bag.", "opts": ["a", "an", "the"], "ans": 1, "why": "Apple bắt đầu bằng âm nguyên âm nên dùng an."}, {"level": "A1", "q": "This is Anna. ___ is my friend.", "opts": ["He", "She", "Her"], "ans": 1, "why": "She là đại từ chủ ngữ thay cho Anna."}, {"level": "A1", "q": "He is a ___ driver.", "opts": ["carefully", "careful", "care"], "ans": 1, "why": "Tính từ careful bổ nghĩa cho danh từ driver."}, {"level": "A1", "q": "My class starts ___ 8 o'clock.", "opts": ["in", "on", "at"], "ans": 2, "why": "At dùng với giờ cụ thể."}, {"level": "A1", "q": "Look! The baby ___.", "opts": ["sleeps", "is sleeping", "sleep"], "ans": 1, "why": "Look! báo hiệu hành động đang diễn ra: is sleeping."}, {"level": "A1", "q": "How ___ books do you have?", "opts": ["much", "many", "any"], "ans": 1, "why": "Many đi với danh từ đếm được số nhiều."}, {"level": "A2", "q": "We ___ our grandparents yesterday.", "opts": ["visit", "visited", "have visit"], "ans": 1, "why": "Yesterday là thời điểm quá khứ đã kết thúc."}, {"level": "A2", "q": "She didn't ___ to school last Monday.", "opts": ["went", "go", "goes"], "ans": 1, "why": "Sau didn't dùng động từ nguyên mẫu."}, {"level": "A2", "q": "I ___ dinner when you called.", "opts": ["cooked", "was cooking", "am cooking"], "ans": 1, "why": "Hành động đang diễn ra trong quá khứ: was cooking."}, {"level": "A2", "q": "I think it ___ be sunny tomorrow.", "opts": ["will", "is", "did"], "ans": 0, "why": "Will dùng cho dự đoán tương lai."}, {"level": "A2", "q": "They are ___ to move next month.", "opts": ["go", "going", "will"], "ans": 1, "why": "Be going to + động từ nguyên mẫu."}, {"level": "A2", "q": "You ___ smoke in a hospital.", "opts": ["mustn't", "don't have", "could"], "ans": 0, "why": "Mustn't diễn tả điều bị cấm."}, {"level": "A2", "q": "This bag is ___ than that one.", "opts": ["cheap", "cheaper", "cheapest"], "ans": 1, "why": "So sánh hơn: tính từ ngắn + -er."}, {"level": "A2", "q": "This is ___ restaurant in town.", "opts": ["better", "the best", "best than"], "ans": 1, "why": "So sánh nhất cần the + best."}, {"level": "A2", "q": "The keys are ___ the table.", "opts": ["on", "at", "to"], "ans": 0, "why": "On the table = ở trên mặt bàn."}, {"level": "A2", "q": "There isn't ___ milk left.", "opts": ["many", "some", "much"], "ans": 2, "why": "Much dùng với danh từ không đếm được trong câu phủ định."}, {"level": "A2", "q": "I enjoy ___ books in English.", "opts": ["read", "reading", "to read"], "ans": 1, "why": "Enjoy thường đi với V-ing."}, {"level": "A2", "q": "You should ___ more water.", "opts": ["drinking", "drink", "to drink"], "ans": 1, "why": "Should + động từ nguyên mẫu."}, {"level": "B1", "q": "I ___ never been to London.", "opts": ["has", "have", "had"], "ans": 1, "why": "I đi với have trong hiện tại hoàn thành."}, {"level": "B1", "q": "She has worked here ___ five years.", "opts": ["since", "for", "from"], "ans": 1, "why": "For + khoảng thời gian."}, {"level": "B1", "q": "I ___ my keys. I can't open the door.", "opts": ["lost", "have lost", "lose"], "ans": 1, "why": "Kết quả hiện tại quan trọng → Present Perfect."}, {"level": "B1", "q": "When we arrived, the film ___.", "opts": ["already started", "had already started", "has started"], "ans": 1, "why": "Phim bắt đầu trước lúc chúng tôi đến → Past Perfect."}, {"level": "B1", "q": "The room ___ every day.", "opts": ["cleans", "is cleaned", "cleaned"], "ans": 1, "why": "Bị động hiện tại đơn: is + V3."}, {"level": "B1", "q": "If I see him, I ___ him the news.", "opts": ["tell", "will tell", "would tell"], "ans": 1, "why": "Điều kiện loại 1: If + hiện tại, will + V."}, {"level": "B1", "q": "If I ___ more free time, I'd learn Spanish.", "opts": ["have", "had", "will have"], "ans": 1, "why": "Điều kiện loại 2: If + quá khứ đơn, would + V."}, {"level": "B1", "q": "The woman ___ works here is very kind.", "opts": ["which", "who", "where"], "ans": 1, "why": "Who dùng để thay cho người."}, {"level": "B1", "q": "He said that he ___ busy.", "opts": ["is", "was", "be"], "ans": 1, "why": "Câu tường thuật ở quá khứ thường lùi is → was."}, {"level": "B1", "q": "I'm interested ___ learning languages.", "opts": ["on", "at", "in"], "ans": 2, "why": "Cụm cố định: interested in."}, {"level": "B1", "q": "I look forward to ___ you.", "opts": ["see", "seeing", "seen"], "ans": 1, "why": "Look forward to + V-ing."}, {"level": "B1", "q": "You ___ see a doctor if you feel worse.", "opts": ["should", "mustn't", "may not"], "ans": 0, "why": "Should dùng để đưa lời khuyên."}, {"level": "B2", "q": "By next July, she ___ her degree.", "opts": ["will finish", "will have finished", "has finished"], "ans": 1, "why": "By + mốc tương lai thường dùng Future Perfect."}, {"level": "B2", "q": "If they had left earlier, they ___ the train.", "opts": ["would catch", "would have caught", "will catch"], "ans": 1, "why": "Điều kiện loại 3: would have + V3."}, {"level": "B2", "q": "Could you tell me where the station ___?", "opts": ["is", "is it", "does"], "ans": 0, "why": "Câu hỏi gián tiếp dùng trật tự câu khẳng định: where the station is."}, {"level": "B2", "q": "Never ___ such a beautiful place.", "opts": ["I have seen", "have I seen", "I saw"], "ans": 1, "why": "Sau Never đầu câu dùng đảo ngữ: have + chủ ngữ + V3."}, {"level": "B2", "q": "Although it was late, ___ continued working.", "opts": ["but we", "we", "however we"], "ans": 1, "why": "Although đã thể hiện tương phản, không thêm but."}, {"level": "B2", "q": "The report, ___ was published yesterday, is useful.", "opts": ["that", "which", "who"], "ans": 1, "why": "Mệnh đề quan hệ không xác định có dấu phẩy, dùng which."}, {"level": "B2", "q": "She asked me ___ I had finished.", "opts": ["that", "whether", "what"], "ans": 1, "why": "Whether dùng trong câu hỏi Yes/No tường thuật."}, {"level": "B2", "q": "He is used to ___ up early.", "opts": ["get", "getting", "got"], "ans": 1, "why": "Be used to + danh từ/V-ing."}, {"level": "B2", "q": "Not only ___ late, but he also forgot the documents.", "opts": ["he was", "was he", "he is"], "ans": 1, "why": "Not only đầu câu → đảo ngữ: was he."}];
+let grammarQuizPool=[],grammarQuizIndex=0,grammarQuizAnswered=false,grammarQuizCorrect=0,grammarQuizWrong=[];
+function startGrammarPractice(){
+ const mode=document.getElementById("grammarPracticeMode")?.value||"10";
+ const level=document.getElementById("grammarPracticeLevel")?.value||"all";
+ let pool=grammarQuizData.filter(x=>level==="all"||x.level===level);
+ pool=pool.sort(()=>Math.random()-.5);
+ grammarQuizPool=pool.slice(0,mode==="all"?pool.length:Number(mode));
+ grammarQuizIndex=0;grammarQuizCorrect=0;grammarQuizWrong=[];
+ renderGrammarQuiz();
+}
 function renderGrammarQuiz(){
- const q=grammarQuizData[grammarQuizIndex];
- document.getElementById("grammarQuizNo").textContent=`Question ${grammarQuizIndex+1}/${grammarQuizData.length}`;
- document.getElementById("grammarQuizQ").textContent=q[0];
- document.getElementById("grammarQuizChoices").innerHTML=q[1].map((a,i)=>`<button class="choice" onclick="answerGrammarQuiz(${i})">${a}</button>`).join("");
+ const q=grammarQuizPool[grammarQuizIndex];
+ if(!q){document.getElementById("grammarQuizQ").textContent="Hoàn thành!";return;}
+ document.getElementById("grammarQuizNo").textContent=`Câu ${grammarQuizIndex+1}/${grammarQuizPool.length} · ${q.level}`;
+ document.getElementById("grammarQuizQ").textContent=q.q;
+ document.getElementById("grammarQuizChoices").innerHTML=q.opts.map((a,i)=>`<button class="choice" onclick="answerGrammarQuiz(${i})">${a}</button>`).join("");
  document.getElementById("grammarQuizFeedback").textContent="";
  document.getElementById("grammarQuizNext").disabled=true;
+ document.getElementById("grammarQuizNext").textContent=grammarQuizIndex===grammarQuizPool.length-1?"Xem kết quả · Finish":"Câu tiếp theo · Next";
  grammarQuizAnswered=false;
 }
 function answerGrammarQuiz(i){
- if(grammarQuizAnswered)return;
- grammarQuizAnswered=true;
- const q=grammarQuizData[grammarQuizIndex],buttons=document.querySelectorAll("#grammarQuizChoices .choice");
- buttons.forEach((b,j)=>{if(j===q[2])b.classList.add("good");else if(j===i)b.classList.add("bad");});
- const f=document.getElementById("grammarQuizFeedback");
- f.className="feedback "+(i===q[2]?"good":"bad");
- f.textContent=(i===q[2]?"Correct! Chính xác. ":"Not quite. Chưa đúng. ")+q[3];
+ if(grammarQuizAnswered)return;grammarQuizAnswered=true;
+ const q=grammarQuizPool[grammarQuizIndex],buttons=document.querySelectorAll("#grammarQuizChoices .choice");
+ buttons.forEach((b,j)=>{if(j===q.ans)b.classList.add("good");else if(j===i)b.classList.add("bad");});
+ const ok=i===q.ans;if(ok)grammarQuizCorrect++;else grammarQuizWrong.push(q);
+ const f=document.getElementById("grammarQuizFeedback");f.className="feedback "+(ok?"good":"bad");
+ f.textContent=(ok?"Chính xác! ":"Chưa đúng. Đáp án: "+q.opts[q.ans]+". ")+q.why;
  document.getElementById("grammarQuizNext").disabled=false;
- if(i===q[2]&&typeof award==="function")award("grammar-course-"+grammarQuizIndex,5);
 }
-function nextGrammarQuiz(){grammarQuizIndex=(grammarQuizIndex+1)%grammarQuizData.length;renderGrammarQuiz();}
-function restartGrammarQuiz(){grammarQuizIndex=0;renderGrammarQuiz();}
-document.addEventListener("DOMContentLoaded",()=>{renderGrammar();renderGrammarQuiz();});
+function nextGrammarQuiz(){
+ if(grammarQuizIndex<grammarQuizPool.length-1){grammarQuizIndex++;renderGrammarQuiz();return;}
+ const pct=Math.round(grammarQuizCorrect/grammarQuizPool.length*100);
+ document.getElementById("grammarQuizNo").textContent="Kết quả luyện tập";
+ document.getElementById("grammarQuizQ").textContent=`Bạn đúng ${grammarQuizCorrect}/${grammarQuizPool.length} câu (${pct}%).`;
+ document.getElementById("grammarQuizChoices").innerHTML="";
+ document.getElementById("grammarQuizFeedback").className="feedback "+(pct>=80?"good":"bad");
+ document.getElementById("grammarQuizFeedback").textContent= pct>=80?"Rất tốt! Hãy chuyển sang bài tổng hợp hoặc cấp độ tiếp theo.":"Hãy xem lại các câu sai và làm lại một lượt ngắn nhé.";
+ document.getElementById("grammarQuizNext").disabled=true;
+ document.getElementById("grammarQuizNext").textContent="Đã hoàn thành";
+ const wrong=document.getElementById("grammarWrongReview");
+ wrong.innerHTML=grammarQuizWrong.length?("<h3>Ôn lại câu sai · Review mistakes</h3>"+grammarQuizWrong.map(x=>`<div class="example"><b>${x.q}</b><br>Đáp án: ${x.opts[x.ans]}<em>${x.why}</em></div>`).join("")):"<p class='feedback good'>Bạn không sai câu nào. Tuyệt vời!</p>";
+}
+function restartGrammarQuiz(){startGrammarPractice();}
+document.addEventListener("DOMContentLoaded",()=>{renderGrammar();startGrammarPractice();});
 </script>
 
 </body></html>
