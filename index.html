@@ -4,7 +4,7 @@
 <link rel="apple-touch-icon" href="englishgo-icon.png">
 <meta name="theme-color" content="#142342">
 <meta name="description" content="EnglishGo 2.0 — Free bilingual English learning for Vietnamese speakers, A1 to B1.">
-<title>EnglishGo 3.0 — Learn English Every Day</title>
+<title>EnglishGo — Học tiếng Anh mỗi ngày</title>
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--ink:#17233c;--muted:#68758d;--line:#e5eaf2;--blue:#4169e1;--navy:#142342;--pale:#edf2ff;--green:#14865e;--gold:#e8a83c;--shadow:0 12px 30px #1d31500c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
@@ -32,24 +32,93 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page active" id="home">
-<div class="hero"><div><div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div><h1>Small steps.<br>Big progress.</h1><p>Learn English with clear Vietnamese explanations. Practise listening, speaking, reading and writing — every day, for free.<br>Học tiếng Anh với giải thích tiếng Việt dễ hiểu. Luyện đủ bốn kỹ năng mỗi ngày, hoàn toàn miễn phí.</p><div class="actions"><button class="btn white" onclick="go('vocab')">Start learning · Bắt đầu</button></div></div>
-<div class="statbox"><small>YOUR LEARNING JOURNEY · HÀNH TRÌNH HỌC TẬP</small><strong id="xp">0 XP</strong><div>Keep going! · Tiếp tục cố gắng!</div><div class="stats"><div class="mini-stat"><b id="level">A1</b><small>Level · Cấp độ</small></div><div class="mini-stat"><b id="streak">0 🔥</b><small>Day streak · Ngày liên tiếp</small></div><div class="mini-stat"><b id="learned">0</b><small>Words · Từ đã học</small></div></div></div></div>
-<div class="panel" style="margin:18px 0;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #d8e5fb;background:#f5f8ff">
-  <div><h2 style="margin:0 0 5px">Translation Reflex · Dịch phản xạ</h2><p class="small muted" style="margin:0">Luyện dịch nhanh Việt ↔ Anh với 268 câu, chủ đề cơ bản và kho 1.000 câu giao tiếp.</p></div>
-  <button class="btn" onclick="go('translation')">Luyện dịch ngay →</button>
-</div>
-<div class="section"><div><h2>Your learning path · Lộ trình học</h2><p>Four skills and useful language · Bốn kỹ năng và kiến thức thiết thực</p></div><span class="badge">A1–B1</span></div>
-<div class="grid">
-<div class="card skill" onclick="go('listening')"><div class="ico">🎧</div><h3>Listening</h3><p>Understand everyday conversations · Nghe hiểu hội thoại hàng ngày</p><span class="tag">Listen · Nghe</span></div>
-<div class="card skill" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Speaking</h3><p>Speak with confidence · Tự tin giao tiếp</p><span class="tag">Speak · Nói</span></div>
-<div class="card skill" onclick="go('reading')"><div class="ico">📖</div><h3>Reading</h3><p>Read useful short texts · Đọc đoạn văn ngắn</p><span class="tag">Read · Đọc</span></div>
-<div class="card skill" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing</h3><p>Write messages and emails · Viết tin nhắn và email</p><span class="tag">Write · Viết</span></div>
-</div>
-<div class="two"><div class="panel"><h2>Learning progress · Tiến độ học</h2><div class="bar"><span id="progress"></span></div><p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p></div><div class="panel"><h2>Daily challenge · Thử thách hôm nay</h2><p class="muted small">Learn 5 words, listen to one dialogue and answer a quiz. Học 5 từ, nghe một hội thoại và làm một bài kiểm tra.</p><button class="btn soft" onclick="go('vocab')">Start challenge →</button></div></div>
-<div class="panel" style="margin-top:18px;text-align:center;background:#142342;color:#fff;border:0">
-  <h2 style="margin:0 0 6px;color:#fff">Ready to practise translation? · Sẵn sàng luyện dịch chưa?</h2>
-  <p style="margin:0 0 14px;color:#e2eaf8">Ôn lại câu giao tiếp và tăng phản xạ tiếng Anh mỗi ngày.</p>
-  <button class="btn white" onclick="go('translation')">Translation Reflex · Dịch phản xạ →</button>
+<style>
+/* Refreshed, compact EnglishGo home page */
+.home-v2{display:grid;gap:20px}
+.home-welcome{border-radius:24px;padding:30px;color:#fff;background:linear-gradient(120deg,#102b4c 0%,#1c4773 58%,#477bd0 100%);display:grid;grid-template-columns:1.35fr .75fr;gap:22px;align-items:center;box-shadow:0 14px 35px #14234220}
+.home-welcome .eyebrow{color:#c9ddff;font-weight:800;letter-spacing:1.3px;font-size:11px;text-transform:uppercase}
+.home-welcome h1{font-size:clamp(30px,4vw,43px);line-height:1.12;margin:10px 0}
+.home-welcome p{color:#e2edff;max-width:600px;margin:0 0 18px}
+.home-welcome .btn{background:#fff;color:#173b67}
+.home-xp{border:1px solid #ffffff35;background:#ffffff14;border-radius:18px;padding:19px}
+.home-xp small{color:#d5e5ff}
+.home-xp strong{display:block;font-size:34px;margin:5px 0}
+.home-xp .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}
+.home-xp .mini-stat{background:#ffffff16;border-radius:12px;padding:10px;text-align:center}
+.home-xp .mini-stat b{display:block;font-size:19px;color:#fff}
+.home-xp .mini-stat small{font-size:11px}
+.home-section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:2px 0 12px}
+.home-section-head h2{margin:0;font-size:21px}
+.home-section-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.home-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.home-tool{border:1px solid var(--line);background:#fff;border-radius:17px;padding:17px;text-align:left;min-height:132px;transition:.18s;box-shadow:0 5px 18px #14234208;color:var(--ink)}
+.home-tool:hover{transform:translateY(-2px);border-color:#b9cafa;box-shadow:0 10px 24px #14234212}
+.home-tool .ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:22px;margin-bottom:10px;background:#edf3ff}
+.home-tool h3{font-size:15px;margin:0 0 3px}
+.home-tool p{font-size:12px;color:var(--muted);margin:0;line-height:1.45}
+.home-feature{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;background:#f1f6ff;border:1px solid #d9e6fa;border-radius:18px;padding:19px 21px}
+.home-feature h2{font-size:19px;margin:0 0 4px}
+.home-feature p{font-size:13px;color:#5e6e88;margin:0}
+.home-secondary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.home-secondary button{display:flex;align-items:center;gap:12px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px;color:var(--ink)}
+.home-secondary .ico{font-size:22px}
+.home-secondary b{display:block;font-size:14px}
+.home-secondary small{color:var(--muted);font-size:12px}
+@media(max-width:760px){.home-welcome{grid-template-columns:1fr;padding:23px}.home-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.home-secondary{grid-template-columns:1fr}.home-tool{min-height:120px}}
+</style>
+<div class="home-v2">
+  <div class="home-welcome">
+    <div>
+      <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
+      <h1>Hello! 👋<br>Hôm nay bạn muốn học gì?</h1>
+      <p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
+      <div class="actions"><button class="btn" onclick="go('practice')">Bắt đầu học ngay →</button></div>
+    </div>
+    <div class="home-xp">
+      <small>YOUR LEARNING JOURNEY · HÀNH TRÌNH HỌC TẬP</small>
+      <strong id="xp">0 XP</strong>
+      <div>Keep going! · Tiếp tục cố gắng!</div>
+      <div class="stats">
+        <div class="mini-stat"><b id="level">A1</b><small>Cấp độ</small></div>
+        <div class="mini-stat"><b id="streak">0 🔥</b><small>Ngày liên tiếp</small></div>
+        <div class="mini-stat"><b id="learned">0</b><small>Từ đã học</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="home-section-head"><div><h2>Học tiếng Anh</h2><p>8 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
+    <div class="home-tools">
+      <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Từ vựng</h3><p>Học từ mới theo chủ đề</p></button>
+      <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Ngữ pháp</h3><p>Hiểu cấu trúc và cách dùng</p></button>
+      <button class="home-tool" onclick="go('listening')"><div class="ico">🎧</div><h3>Luyện nghe</h3><p>Nghe hội thoại thực tế</p></button>
+      <button class="home-tool" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Luyện nói</h3><p>Luyện giao tiếp và phát âm</p></button>
+      <button class="home-tool" onclick="go('reading')"><div class="ico">📖</div><h3>Luyện đọc</h3><p>Đọc hiểu theo cấp độ</p></button>
+      <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Luyện viết</h3><p>Viết câu, đoạn văn và email</p></button>
+      <button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Dịch phản xạ</h3><p>268 câu + chủ đề + 1.000 câu</p></button>
+      <button class="home-tool" onclick="go('dictionary')"><div class="ico">📘</div><h3>Từ điển song ngữ</h3><p>Tra Việt–Anh và Anh–Việt</p></button>
+    </div>
+  </div>
+
+  <div class="home-feature">
+    <div><h2>🔁 Translation Reflex · Dịch phản xạ</h2><p>Luyện dịch nhanh Việt ↔ Anh với câu cơ bản, chủ đề và kho 1.000 câu giao tiếp.</p></div>
+    <button class="btn" onclick="go('translation')">Luyện dịch ngay →</button>
+  </div>
+
+  <div>
+    <div class="home-section-head"><div><h2>Công cụ học tập</h2><p>Các tiện ích được gom gọn tại đây</p></div></div>
+    <div class="home-secondary">
+      <button onclick="go('practice')"><span class="ico">🎯</span><span><b>Luyện tập hằng ngày</b><small>Flashcards, bài tập và quiz</small></span></button>
+      <button onclick="go('progress')"><span class="ico">📈</span><span><b>Tiến độ học tập</b><small>Theo dõi quá trình học</small></span></button>
+      <button onclick="go('placement')"><span class="ico">📝</span><span><b>Kiểm tra trình độ</b><small>Đánh giá cấp độ tiếng Anh</small></span></button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="home-section-head"><div><h2>Tiến độ của bạn</h2><p>Complete activities to earn XP · Hoàn thành hoạt động để nhận XP</p></div></div>
+    <div class="bar"><span id="progress"></span></div>
+    <p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p>
+  </div>
 </div>
 </section>
 
