@@ -221,6 +221,15 @@ textarea { width: 100%; }
   </div>
   <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
  </div>
+ <div class="panel" id="egLearningRoadmap">
+  <h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
+  <p class="small muted">Tick off the milestones as you complete them. Progress is saved on this device and included in your existing cloud sync. Đánh dấu từng mục khi hoàn thành.</p>
+  <div id="egRoadmapList" style="display:grid;gap:12px"></div>
+  <div class="controls" style="justify-content:space-between;margin-top:12px">
+   <b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b>
+   <button type="button" class="btn line" onclick="egRoadmapReset()">Reset roadmap · Đặt lại</button>
+  </div>
+ </div>
  <div class="panel" id="rlAdvanced">
   <div class="controls" style="justify-content:space-between;align-items:center">
    <div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
@@ -231,6 +240,11 @@ textarea { width: 100%; }
     <option value="0">Handling a misunderstanding · Xử lý hiểu lầm</option>
     <option value="1">Giving a professional opinion · Nêu ý kiến chuyên nghiệp</option>
     <option value="2">Resolving a customer concern · Giải quyết phàn nàn</option>
+    <option value="3">Nail: Consultation & design · Tư vấn và chọn mẫu</option>
+    <option value="4">Nail: Repair & quality issue · Sửa móng và xử lý lỗi</option>
+    <option value="5">Nail: Difficult customer · Khách hàng khó tính</option>
+    <option value="6">Nail: Aftercare & rebooking · Chăm sóc và đặt lịch lại</option>
+    <option value="7">Work: Scheduling & priorities · Lịch làm và ưu tiên</option>
    </select>
    <span class="small muted" id="rlAdvProgress">Scenario 1 · Turn 1</span>
   </div>
@@ -252,13 +266,17 @@ textarea { width: 100%; }
   </div>
   <div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
  </div>
- <div class="panel" id="rlMistakeBank">
-  <div class="controls" style="justify-content:space-between;align-items:center">
-   <div><h2 style="margin:0">Review My Mistakes · Ôn lại lỗi sai</h2><p class="small muted">Saved on this device and synced with Firebase when signed in. Lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p></div>
-   <button class="btn line" onclick="rlRenderMistakes()">Refresh · Làm mới</button>
+ <details class="panel" id="rlMistakeBank">
+  <summary style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:700;font-size:1.08rem">
+   <span>Review My Mistakes · Ôn lại lỗi sai</span>
+   <span class="badge" id="rlMistakeCount">0</span>
+  </summary>
+  <p class="small muted" style="margin:10px 0">Tap to open your saved mistakes. Nhấn để xem các câu đã lưu. Dữ liệu được lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p>
+  <div style="display:flex;justify-content:flex-end;margin:8px 0">
+   <button class="btn line" type="button" onclick="rlRenderMistakes()">↻ Refresh · Làm mới</button>
   </div>
   <div id="rlMistakeList" class="small muted">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
- </div>
+ </details>
  <div class="panel" id="rlDailyReview">
   <div class="controls" style="justify-content:space-between;align-items:center">
    <div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
@@ -1090,6 +1108,7 @@ function rlSaveMistake(topicIndex,turnIndex,q,chosen,correct){
 function rlRenderMistakes(){
  const el=document.getElementById("rlMistakeList");if(!el)return;
  const list=rlGetMistakes();
+ const count=document.getElementById("rlMistakeCount");if(count)count.textContent=String(list.length);
  if(!list.length){el.innerHTML="No mistakes saved yet. Chưa có câu sai nào được lưu.";return}
  el.innerHTML=list.map((m,i)=>`<div class="panel" style="margin:10px 0">
   <div class="controls" style="justify-content:space-between"><b>${i+1}. ${escapeHtml(m.topic||"Conversation")} · ${escapeHtml(m.level||"")}</b><span class="badge">Tried ${Number(m.count)||1}×</span></div>
@@ -1184,6 +1203,22 @@ function rlDailyNext(){
  document.getElementById("rlDailyStage").innerHTML=`<div class="feedback good"><b>Daily review complete! Hoàn thành ôn tập hôm nay!</b><p>You got ${correct}/${total} correct. Bạn trả lời đúng ${correct}/${total} câu.</p><button class="btn" onclick="rlDailyStart()">Practise another set · Làm bộ câu hỏi khác</button></div>`;
  document.getElementById("rlDailyProgress").textContent="Completed · Đã hoàn thành";rlDailyRenderStats();
 }
+const EG_ROADMAP_KEY="eg3-learning-roadmap";
+const EG_ROADMAP=[
+ {title:"Phase 1 · Foundation · Nền tảng",items:["Complete a level test · Làm bài kiểm tra trình độ","Build a daily vocabulary habit · Học từ vựng mỗi ngày","Practise grammar and pronunciation · Luyện ngữ pháp và phát âm","Finish listening and reading basics · Hoàn thành nghe và đọc cơ bản"]},
+ {title:"Phase 2 · Real-Life Communication · Giao tiếp thực tế",items:["Practise everyday conversation topics · Luyện chủ đề đời sống","Complete work and customer-service dialogues · Luyện hội thoại công việc","Practise Nail Salon English basics · Luyện tiếng Anh tiệm nail cơ bản","Review speaking and listening regularly · Ôn nghe nói thường xuyên"]},
+ {title:"Phase 3 · Personal Learning · Học cá nhân hóa",items:["Use Review My Mistakes · Ôn lỗi sai","Complete Daily Review sessions · Ôn tập hằng ngày","Check Learning Insights · Xem phân tích tiến độ","Focus on the weakest topics · Tập trung chủ đề còn yếu"]},
+ {title:"Phase 4 · Advanced English · Nâng cao",items:["Complete advanced work scenarios · Hoàn thành hội thoại công việc nâng cao","Practise advanced Nail Salon English · Luyện hội thoại nail nâng cao","Use natural, polite expressions · Dùng cách diễn đạt tự nhiên, lịch sự","Complete a weekly review · Tổng kết mỗi tuần"]}
+];
+function egRoadmapRead(){try{return JSON.parse(localStorage.getItem(EG_ROADMAP_KEY)||"{}")}catch(e){return {}}}
+function egRoadmapRender(){
+ const host=document.getElementById("egRoadmapList");if(!host)return;
+ const state=egRoadmapRead();let total=0,done=0;
+ host.innerHTML=EG_ROADMAP.map((phase,pi)=>`<div class="panel" style="margin:0"><h3>${phase.title}</h3>${phase.items.map((item,ii)=>{total++;const key=pi+"-"+ii,checked=!!state[key];if(checked)done++;return `<label style="display:flex;gap:10px;align-items:flex-start;padding:6px 0"><input type="checkbox" data-roadmap-key="${key}" ${checked?"checked":""} style="margin-top:4px"><span>${item}</span></label>`}).join("")}</div>`).join("");
+ host.querySelectorAll("[data-roadmap-key]").forEach(el=>el.addEventListener("change",()=>{const st=egRoadmapRead();if(el.checked)st[el.dataset.roadmapKey]=true;else delete st[el.dataset.roadmapKey];localStorage.setItem(EG_ROADMAP_KEY,JSON.stringify(st));if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender()}));
+ const pct=total?Math.round(done/total*100):0;const out=document.getElementById("egRoadmapProgress");if(out)out.textContent=`${pct}% complete · ${done}/${total} milestones · Hoàn thành ${pct}%`;
+}
+function egRoadmapReset(){if(!confirm("Reset your roadmap progress? Đặt lại tiến độ lộ trình?"))return;localStorage.removeItem(EG_ROADMAP_KEY);if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender();}
 const RL_ADVANCED=[
  {title:"Handling a misunderstanding",context:"A colleague thinks you missed an important deadline. Clarify the situation calmly and agree on a next step.",turns:[
   {speaker:"Colleague",prompt:"I thought we agreed you'd send the revised files yesterday. I haven't received anything.",vi:"Tôi tưởng chúng ta đã thống nhất bạn sẽ gửi bản chỉnh sửa hôm qua. Tôi vẫn chưa nhận được.",choices:["You're right to follow up. I sent the draft, but I should have confirmed it reached you. I'll resend it now.","That's not my problem. Check your email.","I don't know, maybe later."],answer:0,why:"Acknowledge the concern, clarify what happened, and offer a concrete next step."},
@@ -1199,6 +1234,31 @@ const RL_ADVANCED=[
   {speaker:"Customer",prompt:"I've been waiting much longer than I was told. This is really frustrating.",vi:"Tôi đã phải chờ lâu hơn nhiều so với thông báo. Điều này thực sự khiến tôi khó chịu.",choices:["I understand why you're frustrated, and I'm sorry we kept you waiting. Let me check what I can do right away.","You need to be patient.","It's busy. What do you expect?"],answer:0,why:"Acknowledge the feeling, apologize, and take ownership of the next step."},
   {speaker:"Customer",prompt:"Can you tell me honestly how much longer it will take?",vi:"Bạn có thể nói thật cho tôi biết sẽ còn mất bao lâu không?",choices:["Not long, probably.","I don't want to give you an inaccurate estimate. I'll confirm with the team and update you in five minutes.","No idea."],answer:1,why:"Be transparent; don't invent a time estimate. Promise a specific update."},
   {speaker:"Customer",prompt:"All right. I appreciate you keeping me informed.",vi:"Được rồi. Tôi cảm ơn vì bạn đã cập nhật cho tôi.",choices:["Of course. Thank you for your patience; I'll come back with an update in five minutes.","Okay, bye.","You should appreciate it."],answer:0,why:"Close politely and repeat the follow-up commitment."}
+ ]},
+ {title:"Nail salon: Consultation & design",context:"A client wants a design but is unsure what will suit their nails. Ask useful questions and confirm the plan before starting.",turns:[
+  {speaker:"Client",prompt:"I'd like something elegant, but I'm not sure what would suit my nail shape.",vi:"Tôi muốn kiểu thanh lịch nhưng chưa biết kiểu nào hợp dáng móng.",choices:["We can look at a few options. Do you prefer a natural look or something more noticeable?","You should just choose this one.","I don't know your style."],answer:0,why:"Ask about preferences and guide the client without making assumptions."},
+  {speaker:"Client",prompt:"I prefer something natural, maybe a soft pink with a little sparkle.",vi:"Tôi thích kiểu tự nhiên, có thể màu hồng nhạt với chút ánh kim.",choices:["That won't look good.","A sheer pink with a subtle shimmer would work beautifully. Would you like to see a sample first?","Sparkle is always expensive."],answer:1,why:"Reflect the client's preference and offer to confirm with a sample."},
+  {speaker:"Client",prompt:"Yes, please. And how long will the appointment take?",vi:"Có, cho tôi xem mẫu nhé. Buổi làm sẽ mất bao lâu?",choices:["Around an hour, depending on the finish. I'll let you know if anything changes.","Not long.","Maybe all day."],answer:0,why:"Give a realistic estimate and explain that timing can vary."}
+ ]},
+ {title:"Nail salon: Repair & quality issue",context:"A client returns because one nail has chipped. Respond professionally, inspect the issue, and agree on a repair.",turns:[
+  {speaker:"Client",prompt:"One of my nails chipped the day after my appointment. Could you take a look?",vi:"Một móng của tôi bị mẻ ngay ngày hôm sau buổi hẹn. Bạn xem giúp được không?",choices:["That's impossible.","Of course. I'm sorry that happened. Let me take a look and see how we can fix it.","You must have damaged it yourself."],answer:1,why:"Stay calm, apologize for the inconvenience, and inspect before deciding."},
+  {speaker:"Client",prompt:"I haven't used any cleaning products or done anything unusual.",vi:"Tôi không dùng chất tẩy rửa hay làm gì bất thường cả.",choices:["Thank you for explaining. I'll check the edge and the product application first.","It is still your fault.","Then I can't help."],answer:0,why:"Acknowledge the information and explain the next step without assigning blame."},
+  {speaker:"Client",prompt:"Would you be able to repair it today?",vi:"Hôm nay bạn có thể sửa lại giúp tôi không?",choices:["Let's check the schedule. If we have a short opening, I can repair it today; otherwise I'll offer you the earliest slot.","No, never.","Come back whenever."],answer:0,why:"Check availability and offer a clear alternative instead of promising blindly."}
+ ]},
+ {title:"Nail salon: Handling a difficult customer",context:"A client is unhappy with the final colour. Listen carefully, clarify the concern, and offer options.",turns:[
+  {speaker:"Client",prompt:"This colour looks much brighter than the picture I showed you. I'm disappointed.",vi:"Màu này sáng hơn nhiều so với ảnh tôi đưa. Tôi khá thất vọng.",choices:["The picture was unclear.","I understand. I'm sorry it isn't what you expected. Let's compare it with the reference and discuss the options.","It looks fine to me."],answer:1,why:"Acknowledge the disappointment and return to the reference before offering a fix."},
+  {speaker:"Client",prompt:"I wanted a muted beige, not this peachy tone.",vi:"Tôi muốn màu be trầm chứ không phải tông cam đào này.",choices:["Thanks for clarifying. I can show you two closer beige shades before we make any changes.","You chose it.","Peach is more fashionable."],answer:0,why:"Confirm the exact preference and show alternatives before proceeding."},
+  {speaker:"Client",prompt:"I'd like to change it, but I don't want the appointment to take much longer.",vi:"Tôi muốn đổi màu nhưng không muốn buổi hẹn kéo dài quá lâu.",choices:["I understand. I'll explain the quickest suitable option and the extra time before we start.","It will take as long as it takes.","Then don't change it."],answer:0,why:"Respect the time concern and explain the impact before starting."}
+ ]},
+ {title:"Nail salon: Aftercare & rebooking",context:"Finish an appointment by explaining aftercare and inviting the client to book their next visit.",turns:[
+  {speaker:"Client",prompt:"Is there anything I should avoid after getting this set?",vi:"Sau khi làm bộ móng này tôi cần tránh điều gì không?",choices:["For the first few hours, be gentle with your nails and avoid using them as tools. Follow the product-specific care advice I give you.","Nothing matters.","Use your nails to open things."],answer:0,why:"Give practical, cautious aftercare guidance and follow the product instructions."},
+  {speaker:"Client",prompt:"When would you recommend coming back?",vi:"Bạn khuyên khi nào tôi nên quay lại?",choices:["It depends on your nail growth and the service. We can choose a suitable interval based on how they wear.","Exactly tomorrow.","You never need to return."],answer:0,why:"Avoid a one-size-fits-all promise; tailor timing to the service and the client's nails."},
+  {speaker:"Client",prompt:"Could I book my next appointment now?",vi:"Tôi có thể đặt lịch lần tới ngay bây giờ không?",choices:["Certainly. Do weekdays or weekends usually work better for you?","No, just come sometime.","Book it yourself."],answer:0,why:"Move naturally into scheduling and ask about the client's availability."}
+ ]},
+ {title:"Work: Scheduling & priorities",context:"A teammate asks you to take on an urgent task when your schedule is already full. Clarify priorities and negotiate a realistic plan.",turns:[
+  {speaker:"Teammate",prompt:"Could you take care of this report by the end of today? It's quite urgent.",vi:"Bạn có thể xử lý báo cáo này trước cuối ngày không? Việc khá gấp.",choices:["I can help, but I'm currently finishing the client summary. Which task should take priority?","No, do it yourself.","Sure, even if I can't finish."],answer:0,why:"Be helpful while making workload and priorities explicit."},
+  {speaker:"Teammate",prompt:"The report is more urgent. The client summary can wait until tomorrow.",vi:"Báo cáo gấp hơn. Bản tổng kết khách hàng có thể để ngày mai.",choices:["Thanks for clarifying. I'll focus on the report and send you an update by 3 p.m.","That's ridiculous.","I will do both immediately."],answer:0,why:"Confirm the priority and give a realistic update time."},
+  {speaker:"Teammate",prompt:"Great. Let me know if anything blocks you.",vi:"Tốt. Báo tôi nếu có vấn đề cản trở nhé.",choices:["Will do. I'll flag any issues early so we can adjust if needed.","No promises.","Don't bother me."],answer:0,why:"Close with a clear commitment to communicate risks early."}
  ]}
 ];
 let rlAdvTurn=0,rlAdvChoice=-1,rlAdvChecked=false,rlAdvCompleted=0;
@@ -1271,7 +1331,7 @@ document.addEventListener("keydown",e=>{
  if(e.key==="ArrowRight" && rlChecked){e.preventDefault();rlNext();}
 });
 
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes();rlDailyRenderStats();rlRenderInsights();rlAdvLoad()});
+document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes();rlDailyRenderStats();rlRenderInsights();rlAdvLoad();egRoadmapRender()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
