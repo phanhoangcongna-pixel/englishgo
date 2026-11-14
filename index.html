@@ -69,6 +69,16 @@ textarea { width: 100%; }
 @media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
 
+<script>
+(function(){
+  try{
+    var page=sessionStorage.getItem("eg-last-page")||"";
+    if(!/^[a-zA-Z0-9_-]+$/.test(page)) return;
+    var css="<style id=\"eg-restore-before-paint\">#home{display:none!important}#"+page+".page{display:block!important}</style>";
+    document.write(css);
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
@@ -1120,6 +1130,8 @@ function rlChoose(i){
    b.style.background=n===i?"var(--surface)":"";
    b.setAttribute("aria-pressed",n===i?"true":"false");
  });
+ // Submit the selected answer immediately; no separate Check button is needed.
+ rlCheck();
 }
 function rlCheck(){
  if(rlChecked)return;
