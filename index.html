@@ -2398,7 +2398,7 @@ const dictBank=[
  {l:"B1",en:"If it rains tomorrow, we'll stay at home.",vi:"Nếu ngày mai trời mưa, chúng tôi sẽ ở nhà."},
  {l:"B1",en:"The most important thing is to keep practising.",vi:"Điều quan trọng nhất là tiếp tục luyện tập."}
 ];
-let dictIndex=0;
+let dictIndex=-1;
 function dictCurrent(){const l=document.getElementById("dictLevel")?.value||"A1";return dictBank.filter(x=>x.l===l)[dictIndex%dictBank.filter(x=>x.l===l).length]}
 function dictNew(){dictIndex++;document.getElementById("dictAnswer").value="";document.getElementById("dictFeedback").textContent=""}
 function dictSpeak(rate){const x=dictCurrent(),u=new SpeechSynthesisUtterance(x.en);u.lang="en-US";u.rate=rate;u.volume=1;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.speak(u)}
