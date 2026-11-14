@@ -557,7 +557,7 @@ function cloudSetStatus(title,email,msg){
  if(btn)btn.textContent=egCloudUser?"☁ "+(egCloudUser.displayName||"Account"):"☁ Sign in · Đăng nhập";
 }
 function cloudCollect(){
- const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-")))o[k]=localStorage.getItem(k)}return o;
+ const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-"))){let value=localStorage.getItem(k);if(k==="eg3-simulator-history"){try{let h=JSON.parse(value||"[]");if(Array.isArray(h))value=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){value="[]"}}o[k]=value}}return o;
 }
 function cloudMerge(local,remote){
  const out={...remote};
@@ -573,6 +573,7 @@ function cloudMerge(local,remote){
    }
   }catch(e){if(!out[k])out[k]=lv}
  }
+ if(out["eg3-simulator-history"]){try{let h=JSON.parse(out["eg3-simulator-history"]);if(Array.isArray(h))out["eg3-simulator-history"]=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){out["eg3-simulator-history"]="[]"}}
  return out;
 }
 async function cloudWrite(){
@@ -599,7 +600,7 @@ async function cloudInitialSync(){
  const ref=egCloudDb.collection("englishgoUsers").doc(egCloudUser.uid),snap=await ref.get();
  const local=cloudCollect(),remote=snap.exists?(snap.data().progress||{}):{};
  const merged=cloudMerge(local,remote);
- Object.entries(merged).forEach(([k,v])=>localStorage.setItem(k,v));
+ Object.entries(merged).forEach(([k,v])=>{try{if(k==="eg3-simulator-history"){try{const h=JSON.parse(v||"[]");if(Array.isArray(h))v=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){v="[]"}}localStorage.setItem(k,v)}catch(e){if(e&&(/QuotaExceededError|quota/i.test(e.name+" "+e.message))){console.warn("Skipped oversized local simulator history; other progress will still sync.")}else{console.warn("Could not restore local key",k,e)}}});
  await ref.set({progress:merged,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
  egCloudReady=true;cloudSetStatus("Connected · Đã kết nối",egCloudUser.email,"Your progress is synced. Use this same Google account on both devices. Tiến độ đã đồng bộ.");
  // Refresh in-memory app state from the merged local cache.
@@ -630,7 +631,7 @@ const save=(k,v)=>localStorage.setItem("eg2-"+k,JSON.stringify(v));
 let xp=get("xp",0),known=get("known",[]),done=get("done",[]),lastDay=get("day",""),streak=get("streak",0);
 function award(id,points=10){if(!done.includes(id)){done.push(id);xp+=points;save("done",done);save("xp",xp);daily();updateStats()}}
 function daily(){let d=new Date().toISOString().slice(0,10);if(lastDay!==d){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);streak=lastDay===y?streak+1:1;lastDay=d;save("day",lastDay);save("streak",streak)}}
-function updateStats(){document.getElementById("xp").textContent=xp+" XP";document.getElementById("level").textContent=xp>=300?"B1":xp>=100?"A2":"A1";document.getElementById("streak").textContent=streak+" 🔥";document.getElementById("learned").textContent=known.length;document.getElementById("progress").style.width=Math.min(100,Math.round(done.length/15*100))+"%";document.getElementById("progressText").textContent=done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp."}
+function updateStats(){const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};setText("xp",xp+" XP");setText("level",xp>=300?"B1":xp>=100?"A2":"A1");setText("streak",streak+" 🔥");setText("learned",known.length);const bar=document.getElementById("progress");if(bar)bar.style.width=Math.min(100,Math.round(done.length/15*100))+"%";setText("progressText",done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp.")}
 function go(id){try{sessionStorage.setItem("eg-last-page",id)}catch(e){}document.querySelectorAll(".nav-group").forEach(g=>g.open=false);document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace();if(id==="learninglab")labInit();if(id==="realconversation")setTimeout(()=>{if(document.getElementById("realconversation")?.classList.contains("active")){try{rlInit();rlSpeakClient()}catch(e){console.error("Real-Life initialization failed",e);const s=document.getElementById("rlSituation");if(s)s.textContent="Could not load conversations. Please refresh the page. · Không tải được hội thoại, hãy tải lại trang."}}},180)}
 
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
@@ -918,7 +919,7 @@ function importProgressFile(e){let f=e.target.files[0];if(!f)return;let r=new Fi
 const oldGo=go;go=function(id){oldGo(id);if(id==="flashcards")flashRender();if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");if(id==="practice"){document.getElementById("dailyWriting").value=EG3.get("dailyWriting","")}};
 
 // Real-Life English: 20 offline bilingual conversation scenarios (A1–B1).
-const rlTopics = [
+var rlTopics = [
 {title:"At a café · Ở quán cà phê",level:"A1",situation:"Order a drink and a snack.",turns:[
 ["Barista","Hello! What can I get for you?","Xin chào! Tôi có thể lấy gì cho bạn?",["I'd like a cappuccino, please.","I am cappuccino.","Give coffee."],"I'd like a cappuccino, please.","Use 'I'd like...' to order politely."],
 ["Barista","Would you like anything to eat?","Bạn có muốn ăn gì không?",["Yes, a croissant, please.","Yes, I like eat.","No, I eating."],"Yes, a croissant, please.","Name the item and add 'please'."],
@@ -1601,8 +1602,8 @@ function simSubmit(){
  out.innerHTML=`<div class="feedback"><b>Practice feedback · Gợi ý luyện tập</b><p>${tips.map(x=>labEsc(x)).join("<br>")}</p><p><b>Your reply · Câu trả lời của bạn:</b><br>${labEsc(reply)}</p><small>This is a guided checklist, not an AI assessment. · Đây là gợi ý luyện tập, không phải chấm điểm AI.</small></div>`;
  try{
    const hist=labRead(LAB_KEYS.sim,[]);
-   hist.push({scenario:c.role,prompt:c.prompt,reply,date:new Date().toISOString()});
-   labWrite(LAB_KEYS.sim,hist.slice(-100));
+   hist.push({scenario:c.role,prompt:c.prompt,reply:reply.slice(0,1200),date:new Date().toISOString()});
+   labWrite(LAB_KEYS.sim,hist.slice(-15));
    try{labLog("simulatorReplies")}catch(e){}
    if(historyBox)historyBox.textContent=`Saved practice replies: ${hist.length}`;
    if(typeof cloudSchedule==="function"){try{cloudSchedule()}catch(e){}}
