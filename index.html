@@ -133,11 +133,6 @@ textarea { width: 100%; }
     </div>
   </div>
 
-  <div class="home-feature">
-    <div><h2>🔁 Translation Reflex · Dịch phản xạ</h2><p>Luyện dịch nhanh Việt ↔ Anh với câu cơ bản, chủ đề và kho 1.000 câu giao tiếp.</p></div>
-    <button class="btn" onclick="go('translation')">Start translating · Luyện dịch ngay →</button>
-  </div>
-
   <div>
     <div class="home-section-head"><div><h2>Study Tools · Công cụ học tập</h2><p>Your learning tools in one place · Các tiện ích được gom gọn tại đây</p></div></div>
     <div class="home-secondary">
@@ -206,16 +201,17 @@ textarea { width: 100%; }
   <div class="small muted" id="rlSituation"></div>
   <div id="rlDialogue" style="display:grid;gap:12px;margin:16px 0"></div>
   <div class="panel" style="background:var(--surface);margin:12px 0">
-   <b id="rlSpeaker">Your turn · Đến lượt bạn</b>
+   <b id="rlSpeaker">Choose your reply · Chọn câu trả lời</b>
+   <div class="controls" style="margin:8px 0">
+    <button class="btn soft" onclick="rlSpeakClient()">🔊 Listen to client · Nghe khách nói</button>
+    <button class="btn soft" onclick="rlSpeak()">🔊 Listen to reply · Nghe câu trả lời</button>
+   </div>
    <p id="rlPrompt" style="font-size:20px;line-height:1.5;margin:10px 0">Choose a situation to begin.</p>
    <p class="muted small" id="rlPromptVi"></p>
    <div id="rlChoices" style="display:grid;gap:8px;margin:12px 0"></div>
-   <label for="rlAnswer"><b>Your reply · Câu trả lời của bạn</b></label>
-   <textarea id="rlAnswer" rows="2" placeholder="Type your reply in English... · Nhập câu trả lời bằng tiếng Anh"></textarea>
    <div class="controls" style="margin-top:10px">
-    <button class="btn" onclick="rlCheck()">Check · Kiểm tra</button>
+    <button class="btn" onclick="rlCheck()">Check · Kiểm tra (Enter)</button>
     <button class="btn line" onclick="rlShowHint()">Hint · Gợi ý</button>
-    <button class="btn soft" onclick="rlSpeak()">🔊 Listen · Nghe mẫu</button>
    </div>
    <div id="rlFeedback" aria-live="polite"></div>
    <div class="controls" style="justify-content:space-between;margin-top:12px">
@@ -937,7 +933,7 @@ const rlTopics = [
 ["Client","Great, thank you. I'd like to book my next appointment.","Tuyệt, cảm ơn bạn. Tôi muốn đặt lịch lần tới.",["Of course. What day and time would be convenient for you?","Okay, when?","Come next time."],"Of course. What day and time would be convenient for you?","Ask for a convenient day and time to finish the booking."]]}
 ];
 
-let rlCurrent=0, rlTurn=0, rlDone=0, rlHistory=[], rlChecked=false;
+let rlCurrent=0, rlTurn=0, rlDone=0, rlHistory=[], rlChecked=false, rlSelected=-1;
 function rlFiltered(){const lv=document.getElementById("rlLevel")?.value||"all";return rlTopics.map((x,i)=>({...x,idx:i})).filter(x=>lv==="all"||x.level===lv);}
 function rlInit(){
  const s=document.getElementById("rlTopic"); if(!s)return;
@@ -949,7 +945,7 @@ function rlInit(){
 function rlFilterLevel(){rlInit();}
 function rlLoadTopic(){
  const s=document.getElementById("rlTopic"); if(!s)return;
- rlCurrent=Number(s.value)||0; rlTurn=0; rlHistory=[]; rlChecked=false;
+ rlCurrent=Number(s.value)||0; rlTurn=0; rlHistory=[]; rlChecked=false; rlSelected=-1;
  const t=rlTopics[rlCurrent]; document.getElementById("rlSituation").textContent=t.level+" · "+t.situation;
  document.getElementById("rlReview").textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
  rlRender();
@@ -957,38 +953,56 @@ function rlLoadTopic(){
 function rlRender(){
  const t=rlTopics[rlCurrent], q=t.turns[rlTurn]; if(!q)return;
  document.getElementById("rlCounter").textContent=`Turn ${rlTurn+1} / ${t.turns.length}`;
- document.getElementById("rlSpeaker").textContent=`Your reply to ${q[0]} · Bạn trả lời ${q[0]}`;
+ document.getElementById("rlSpeaker").textContent=`Choose your reply · Chọn câu trả lời`;
  document.getElementById("rlPrompt").textContent=q[1];
  document.getElementById("rlPromptVi").textContent=q[2];
- document.getElementById("rlAnswer").value="";
+ document.getElementById("rlChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line rl-choice" data-choice="${i}" style="text-align:left;white-space:normal" onclick="rlChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
  document.getElementById("rlFeedback").innerHTML="";
- document.getElementById("rlChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line" style="text-align:left;white-space:normal" onclick="rlChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
- rlChecked=false;
+ rlChecked=false; rlSelected=-1;
 }
-function rlChoose(i){if(rlChecked)return;document.getElementById("rlAnswer").value=rlTopics[rlCurrent].turns[rlTurn][3][i];}
+function rlChoose(i){
+ if(rlChecked)return;
+ rlSelected=i;
+ document.querySelectorAll("#rlChoices .rl-choice").forEach((b,n)=>{
+   b.style.borderColor=n===i?"var(--primary)":"";
+   b.style.background=n===i?"var(--surface)":"";
+   b.setAttribute("aria-pressed",n===i?"true":"false");
+ });
+}
 function rlCheck(){
  if(rlChecked)return;
- const q=rlTopics[rlCurrent].turns[rlTurn], answer=document.getElementById("rlAnswer").value.trim();
- if(!answer){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Please write or choose a reply first. Hãy nhập hoặc chọn câu trả lời trước nhé.</div>';return;}
+ if(rlSelected<0){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn một câu trả lời trước nhé.</div>';return;}
+ const q=rlTopics[rlCurrent].turns[rlTurn], answer=q[3][rlSelected];
  const normalized=s=>s.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ").trim();
  const exact=normalized(answer)===normalized(q[4]);
- const likely=answer.split(/\s+/).length>=Math.min(4,q[4].split(/\s+/).length-1);
- const note=exact?"Excellent! You used the model answer. Tuyệt vời! Bạn đã dùng câu mẫu.":likely?"Good attempt. Compare your sentence with the natural example below. Câu trả lời có ý phù hợp; hãy so sánh với cách diễn đạt tự nhiên bên dưới.":"Try using a complete, polite sentence. Hãy thử dùng một câu đầy đủ và lịch sự.";
+ const note=exact?"Excellent! That's the natural reply. Tuyệt vời! Đây là câu trả lời tự nhiên.":"Good try! Compare your choice with the suggested reply. Hãy so sánh lựa chọn với câu trả lời gợi ý nhé.";
  rlHistory.push({prompt:q[1],vi:q[2],answer,model:q[4],tip:q[5],exact});
- document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Suggested reply · Câu gợi ý:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
+ document.querySelectorAll("#rlChoices .rl-choice").forEach((b,i)=>{
+   b.disabled=true;
+   if(normalized(q[3][i])===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
+   else if(i===rlSelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)";}
+ });
+ document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Suggested reply · Câu trả lời gợi ý:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
  rlChecked=true; rlDone++;
- document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your answer · Bạn trả lời:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
+ document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
 }
 function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElementById("rlFeedback").innerHTML=`<div class="feedback"><b>Hint · Gợi ý:</b> ${q[5]}<p><b>Useful phrase · Cụm từ hữu ích:</b> ${q[4].split(" ").slice(0,4).join(" ")}...</p></div>`;}
 function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
+function rlSpeakClient(){say(rlTopics[rlCurrent].turns[rlTurn][1]);}
 function rlNext(){
- if(!rlChecked){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Check your reply before moving on. Hãy kiểm tra câu trả lời trước khi tiếp tục.</div>';return;}
+ if(!rlChecked){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Check your answer before moving on. Hãy kiểm tra câu trả lời trước khi tiếp tục.</div>';return;}
  const t=rlTopics[rlCurrent];
  if(rlTurn<t.turns.length-1){rlTurn++;rlRender();}
- else{document.getElementById("rlFeedback").innerHTML='<div class="feedback good">Conversation complete! Well done. Hoàn thành hội thoại! Làm tốt lắm.</div>';rlTurn=0;rlHistory=[];document.getElementById("rlReview").innerHTML="You completed this conversation. Choose another topic to practise again. Bạn đã hoàn thành hội thoại này. Hãy chọn chủ đề khác để luyện tiếp.";}
+ else{document.getElementById("rlFeedback").innerHTML='<div class="feedback good">Conversation complete! Well done. Hoàn thành hội thoại! Làm tốt lắm.</div>';rlTurn=0;rlHistory=[];rlSelected=-1;document.getElementById("rlReview").innerHTML="You completed this conversation. Choose another topic to practise again. Bạn đã hoàn thành hội thoại này. Hãy chọn chủ đề khác để luyện tiếp.";}
 }
+document.addEventListener("keydown",e=>{
+ const page=document.getElementById("realconversation");
+ if(!page || !page.classList.contains("active"))return;
+ if(e.key==="Enter" && !e.shiftKey){e.preventDefault();rlCheck();}
+ if(e.key==="ArrowRight" && rlChecked){e.preventDefault();rlNext();}
+});
 
 document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress()});
 
