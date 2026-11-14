@@ -221,6 +221,37 @@ textarea { width: 100%; }
   </div>
   <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
  </div>
+ <div class="panel" id="rlAdvanced">
+  <div class="controls" style="justify-content:space-between;align-items:center">
+   <div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
+   <span class="badge">B2 · Advanced</span>
+  </div>
+  <div class="controls" style="margin:12px 0">
+   <select id="rlAdvScenario" aria-label="Choose advanced scenario" onchange="rlAdvLoad()">
+    <option value="0">Handling a misunderstanding · Xử lý hiểu lầm</option>
+    <option value="1">Giving a professional opinion · Nêu ý kiến chuyên nghiệp</option>
+    <option value="2">Resolving a customer concern · Giải quyết phàn nàn</option>
+   </select>
+   <span class="small muted" id="rlAdvProgress">Scenario 1 · Turn 1</span>
+  </div>
+  <p id="rlAdvContext" class="muted small"></p>
+  <div class="panel" style="background:var(--surface)">
+   <div class="controls" style="justify-content:space-between">
+    <b id="rlAdvSpeaker">Choose a natural response · Chọn cách trả lời tự nhiên</b>
+    <button class="btn soft" type="button" onclick="rlAdvListen()">🔊 Listen · Nghe</button>
+   </div>
+   <h3 id="rlAdvPrompt"></h3>
+   <p id="rlAdvVi" class="small muted"></p>
+   <div id="rlAdvChoices" style="display:grid;gap:8px;margin:12px 0"></div>
+   <div id="rlAdvFeedback" aria-live="polite"></div>
+   <div class="controls">
+    <button class="btn" type="button" onclick="rlAdvCheck()">Check · Kiểm tra</button>
+    <button class="btn line" type="button" onclick="rlAdvNext()" id="rlAdvNext" disabled>Next · Tiếp theo</button>
+    <button class="btn line" type="button" onclick="rlAdvReset()">Restart · Làm lại</button>
+   </div>
+  </div>
+  <div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
+ </div>
  <div class="panel" id="rlMistakeBank">
   <div class="controls" style="justify-content:space-between;align-items:center">
    <div><h2 style="margin:0">Review My Mistakes · Ôn lại lỗi sai</h2><p class="small muted">Saved on this device and synced with Firebase when signed in. Lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p></div>
@@ -1153,6 +1184,63 @@ function rlDailyNext(){
  document.getElementById("rlDailyStage").innerHTML=`<div class="feedback good"><b>Daily review complete! Hoàn thành ôn tập hôm nay!</b><p>You got ${correct}/${total} correct. Bạn trả lời đúng ${correct}/${total} câu.</p><button class="btn" onclick="rlDailyStart()">Practise another set · Làm bộ câu hỏi khác</button></div>`;
  document.getElementById("rlDailyProgress").textContent="Completed · Đã hoàn thành";rlDailyRenderStats();
 }
+const RL_ADVANCED=[
+ {title:"Handling a misunderstanding",context:"A colleague thinks you missed an important deadline. Clarify the situation calmly and agree on a next step.",turns:[
+  {speaker:"Colleague",prompt:"I thought we agreed you'd send the revised files yesterday. I haven't received anything.",vi:"Tôi tưởng chúng ta đã thống nhất bạn sẽ gửi bản chỉnh sửa hôm qua. Tôi vẫn chưa nhận được.",choices:["You're right to follow up. I sent the draft, but I should have confirmed it reached you. I'll resend it now.","That's not my problem. Check your email.","I don't know, maybe later."],answer:0,why:"Acknowledge the concern, clarify what happened, and offer a concrete next step."},
+  {speaker:"Colleague",prompt:"I checked my inbox and spam folder. There's nothing there.",vi:"Tôi đã kiểm tra hộp thư đến và thư rác. Không có gì cả.",choices:["Well, I definitely sent it, so that's that.","Thanks for checking. It looks like the attachment may not have gone through; I'll share a new link instead.","You must have deleted it."],answer:1,why:"Avoid blame. Explain a likely issue cautiously and propose an alternative."},
+  {speaker:"Colleague",prompt:"That would help. Can you send the link before the end of the hour?",vi:"Như vậy sẽ tốt. Bạn có thể gửi đường link trước cuối giờ này không?",choices:["Absolutely. I'll send it by 11, then message you to make sure you can access it.","I'll try if I have time.","You can wait until tomorrow."],answer:0,why:"Give a clear commitment and close the loop with a confirmation."}
+ ]},
+ {title:"Giving a professional opinion",context:"Your team is discussing a new process. Share a balanced view, support it with reasons, and invite feedback.",turns:[
+  {speaker:"Manager",prompt:"Do you think we should move all customer updates to a weekly email?",vi:"Bạn nghĩ chúng ta có nên chuyển mọi cập nhật khách hàng sang email hàng tuần không?",choices:["I can see the benefits, particularly consistency, but a weekly email may be too slow for urgent changes.","That's a terrible idea.","Whatever you decide is fine."],answer:0,why:"A balanced response recognizes benefits while raising a specific concern."},
+  {speaker:"Manager",prompt:"What would you suggest instead?",vi:"Vậy bạn đề xuất phương án nào?",choices:["Maybe do something else.","I'd recommend a weekly summary for routine updates, while keeping immediate notifications for anything time-sensitive.","I don't have to suggest anything."],answer:1,why:"Use 'I'd recommend...' and offer a practical alternative."},
+  {speaker:"Manager",prompt:"How could we make sure customers don't receive too many messages?",vi:"Làm sao để đảm bảo khách hàng không nhận quá nhiều tin nhắn?",choices:["We could segment customers by their preferences and review engagement after the first month.","Just send fewer emails.","They'll get used to it."],answer:0,why:"Suggest a measurable approach and a review point."}
+ ]},
+ {title:"Resolving a customer concern",context:"A customer is unhappy because the service took longer than expected. Respond empathetically and find a solution.",turns:[
+  {speaker:"Customer",prompt:"I've been waiting much longer than I was told. This is really frustrating.",vi:"Tôi đã phải chờ lâu hơn nhiều so với thông báo. Điều này thực sự khiến tôi khó chịu.",choices:["I understand why you're frustrated, and I'm sorry we kept you waiting. Let me check what I can do right away.","You need to be patient.","It's busy. What do you expect?"],answer:0,why:"Acknowledge the feeling, apologize, and take ownership of the next step."},
+  {speaker:"Customer",prompt:"Can you tell me honestly how much longer it will take?",vi:"Bạn có thể nói thật cho tôi biết sẽ còn mất bao lâu không?",choices:["Not long, probably.","I don't want to give you an inaccurate estimate. I'll confirm with the team and update you in five minutes.","No idea."],answer:1,why:"Be transparent; don't invent a time estimate. Promise a specific update."},
+  {speaker:"Customer",prompt:"All right. I appreciate you keeping me informed.",vi:"Được rồi. Tôi cảm ơn vì bạn đã cập nhật cho tôi.",choices:["Of course. Thank you for your patience; I'll come back with an update in five minutes.","Okay, bye.","You should appreciate it."],answer:0,why:"Close politely and repeat the follow-up commitment."}
+ ]}
+];
+let rlAdvTurn=0,rlAdvChoice=-1,rlAdvChecked=false,rlAdvCompleted=0;
+function rlAdvLoad(){
+ const sel=document.getElementById("rlAdvScenario");if(!sel)return;
+ rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;
+ const sc=RL_ADVANCED[Number(sel.value)||0];
+ document.getElementById("rlAdvContext").textContent=sc.context;
+ rlAdvRender();
+}
+function rlAdvRender(){
+ const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn];
+ document.getElementById("rlAdvProgress").textContent=`${sc.title} · Turn ${rlAdvTurn+1}/${sc.turns.length}`;
+ document.getElementById("rlAdvSpeaker").textContent=q.speaker+" · Choose a natural response";
+ document.getElementById("rlAdvPrompt").textContent=q.prompt;
+ document.getElementById("rlAdvVi").textContent=q.vi;
+ document.getElementById("rlAdvChoices").innerHTML=q.choices.map((c,i)=>`<button type="button" class="btn line" data-adv-choice="${i}" style="text-align:left;white-space:normal">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
+ document.getElementById("rlAdvFeedback").innerHTML="";
+ document.getElementById("rlAdvNext").disabled=true;
+ document.querySelectorAll("[data-adv-choice]").forEach(b=>b.addEventListener("click",()=>{if(rlAdvChecked)return;rlAdvChoice=Number(b.dataset.advChoice);document.querySelectorAll("[data-adv-choice]").forEach(x=>x.style.borderColor="");b.style.borderColor="var(--primary)"}));
+}
+function rlAdvListen(){
+ const q=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0].turns[rlAdvTurn];
+ if(typeof say==="function")say(q.prompt);else if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(q.prompt))}
+}
+function rlAdvCheck(){
+ if(rlAdvChecked)return;
+ if(rlAdvChoice<0){document.getElementById("rlAdvFeedback").textContent="Choose an answer first. Hãy chọn đáp án trước.";return}
+ const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn],correct=rlAdvChoice===q.answer;
+ document.querySelectorAll("[data-adv-choice]").forEach((b,i)=>{b.disabled=true;if(i===q.answer){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlAdvChoice){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
+ document.getElementById("rlAdvFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Excellent choice! · Rất tốt!":"Try this more natural response · Hãy tham khảo câu tự nhiên hơn"}</b><p>${q.choices[q.answer]}</p><p class="small">${q.why}</p></div>`;
+ rlAdvChecked=true;if(correct)rlAdvCompleted++;
+ document.getElementById("rlAdvScore").textContent=`Correct advanced turns this session: ${rlAdvCompleted} · Số câu đúng: ${rlAdvCompleted}`;
+ document.getElementById("rlAdvNext").disabled=false;
+}
+function rlAdvNext(){
+ if(!rlAdvChecked)return;
+ const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0];
+ if(rlAdvTurn<sc.turns.length-1){rlAdvTurn++;rlAdvChoice=-1;rlAdvChecked=false;rlAdvRender()}
+ else{document.getElementById("rlAdvFeedback").innerHTML+='<p><b>Scenario complete! · Hoàn thành tình huống!</b></p>';document.getElementById("rlAdvNext").disabled=true}
+}
+function rlAdvReset(){rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;rlAdvLoad()}
 function rlRenderInsights(){
  const stats=rlDailyStats(),days=stats.days||{},mistakes=rlGetMistakes();
  let attempts=0,correct=0;
@@ -1183,7 +1271,7 @@ document.addEventListener("keydown",e=>{
  if(e.key==="ArrowRight" && rlChecked){e.preventDefault();rlNext();}
 });
 
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes();rlDailyRenderStats();rlRenderInsights()});
+document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes();rlDailyRenderStats();rlRenderInsights();rlAdvLoad()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
