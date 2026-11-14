@@ -72,7 +72,7 @@ textarea { width: 100%; }
 </head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
-<nav class="navlinks" aria-label="Main navigation">
+<nav class="navlinks" aria-label="Main navigation"><span class="sr-only">Main sections: Home, Learning, Practice, Progress, Learning Lab and Cloud Sync.</span>
 <button class="active" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button></div></details>
 <details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button></div></details>
@@ -207,7 +207,7 @@ textarea { width: 100%; }
  <p class="intro">Practise everyday conversations, choose a reply or write your own. Luyện hội thoại đời thường, chọn câu trả lời hoặc tự nhập câu.</p>
  <div class="panel">
   <div class="controls">
-   <select id="rlTopic" onchange="rlLoadTopic()"></select>
+   <select id="rlTopic" onchange="rlLoadTopic(true)"></select>
    <select id="rlLevel" onchange="rlFilterLevel()">
     <option value="all">All levels · Tất cả</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option>
    </select>
@@ -216,7 +216,7 @@ textarea { width: 100%; }
   <div class="small muted" id="rlSituation"></div>
   <div id="rlDialogue" style="display:grid;gap:12px;margin:16px 0"></div>
   <div class="panel" style="background:var(--surface);margin:12px 0">
-   <b id="rlSpeaker">Choose your reply · Chọn câu trả lời</b>
+   <b id="rlSpeaker">Choose your reply · Chọn câu trả lời (tap to check · chạm để kiểm tra)</b>
    <div class="controls" style="margin:8px 0">
     <button class="btn soft" onclick="rlSpeakClient()">🔊 Listen to client · Nghe khách nói</button>
     <button class="btn soft" onclick="rlSpeak()">🔊 Listen to reply · Nghe câu trả lời</button>
@@ -253,7 +253,7 @@ textarea { width: 100%; }
    <span class="badge">B2 · Advanced</span>
   </div>
   <div class="controls" style="margin:12px 0">
-   <select id="rlAdvScenario" aria-label="Choose advanced scenario" onchange="rlAdvLoad()">
+   <select id="rlAdvScenario" aria-label="Choose advanced scenario" onchange="rlAdvLoad(true)">
     <option value="0">Handling a misunderstanding · Xử lý hiểu lầm</option>
     <option value="1">Giving a professional opinion · Nêu ý kiến chuyên nghiệp</option>
     <option value="2">Resolving a customer concern · Giải quyết phàn nàn</option>
@@ -1093,13 +1093,13 @@ function rlInit(){
  s.value=String(rlCurrent); rlLoadTopic();
 }
 function rlFilterLevel(){rlInit();}
-function rlLoadTopic(){
+function rlLoadTopic(autoSpeak=false){
  const s=document.getElementById("rlTopic"); if(!s)return;
  rlCurrent=Number(s.value)||0; rlTurn=0; rlHistory=[]; rlChecked=false; rlSelected=-1;
  const t=rlTopics[rlCurrent]; document.getElementById("rlSituation").textContent=t.level+" · "+t.situation;
  document.getElementById("rlReview").textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
  rlRender();
- rlSpeakClient();
+ if(autoSpeak)rlSpeakClient();
  const nextBtn=document.getElementById("rlNextBtn");if(nextBtn){nextBtn.disabled=false;nextBtn.textContent="Next · Tiếp theo →";}
 }
 function rlRender(){
@@ -1127,6 +1127,8 @@ function rlChoose(i){
    b.style.background=n===i?"var(--surface)":"";
    b.setAttribute("aria-pressed",n===i?"true":"false");
  });
+ // Selecting an option is the submission: grade it immediately.
+ rlCheck();
 }
 function rlCheck(){
  if(rlChecked)return;
@@ -1143,7 +1145,13 @@ function rlCheck(){
    if(normalized((q._displayChoices||q[3].map((text,index)=>({text,index})))[i].text)===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
    else if(i===rlSelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)";}
  });
- document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Suggested reply · Câu trả lời gợi ý:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
+ document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Your answer · Câu trả lời của bạn:</b> ${labEsc(answer)}</p><p id="rlAnswerVi" class="small"><b>Vietnamese meaning · Nghĩa tiếng Việt:</b> Đang dịch...</p><p><b>Suggested reply · Câu trả lời gợi ý:</b> ${labEsc(q[4])}</p><p class="small">${labEsc(q[5])}</p></div>`;
+ // Translate the selected answer using the existing free MyMemory translation endpoint.
+ const viBox=document.getElementById("rlAnswerVi");
+ fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(answer)+"&langpair=en|vi")
+  .then(r=>r.ok?r.json():Promise.reject(new Error("translation unavailable")))
+  .then(data=>{if(viBox&&viBox.isConnected){const translated=data&&data.responseData&&data.responseData.translatedText;if(translated)viBox.innerHTML="<b>Vietnamese meaning · Nghĩa tiếng Việt:</b> "+labEsc(translated);else viBox.textContent="Chưa lấy được bản dịch. · Translation unavailable.";}})
+  .catch(()=>{if(viBox&&viBox.isConnected)viBox.innerHTML="<b>Vietnamese meaning · Nghĩa tiếng Việt:</b> Không thể kết nối dịch lúc này. · Translation temporarily unavailable.";});
  rlChecked=true; rlDone++;
  const isLastTurn=rlTurn===rlTopics[rlCurrent].turns.length-1;
  const nextBtn=document.getElementById("rlNextBtn");
@@ -1463,13 +1471,13 @@ RL_ADVANCED.forEach((scenario,i)=>scenario.turns.push(...RL_ADVANCED_EXTRA[i]));
 
 let rlAdvTurn=0,rlAdvChoice=-1,rlAdvChecked=false,rlAdvCompleted=0;
 let rlAdvDisplayChoices=[];
-function rlAdvLoad(){
+function rlAdvLoad(autoSpeak=false){
  const sel=document.getElementById("rlAdvScenario");if(!sel)return;
  rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;
  const sc=RL_ADVANCED[Number(sel.value)||0];
  document.getElementById("rlAdvContext").textContent=sc.context;
  rlAdvRender();
- setTimeout(rlAdvListen,250);
+ if(autoSpeak)setTimeout(rlAdvListen,250);
 }
 function rlAdvRender(){
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn];
