@@ -185,13 +185,25 @@ body > main{
   }
 }
 </style>
-</head>
+
+<style id="new-practice-styles">
+.shadow-sentence{font-size:clamp(24px,4vw,34px);font-weight:800;line-height:1.35;padding:24px 0}
+.shadow-actions,.role-choices{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.role-line{padding:12px;border-bottom:1px solid var(--line,#ddd);line-height:1.6}
+.role-line strong{display:block}
+.role-choice{display:block;width:100%;text-align:left;padding:13px;border:1px solid var(--line,#ddd);border-radius:12px;background:var(--card,#fff);margin:8px 0}
+.phrasal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+.phrasal-item{border:1px solid var(--line,#ddd);border-radius:12px;padding:14px;background:var(--card,#fff)}
+.pron-example{font-size:22px;font-weight:750;margin:10px 0}
+#dictAnswer{width:100%;margin:14px 0}
+@media(max-width:650px){.shadow-actions .btn{flex:1 1 100%}.phrasal-grid{grid-template-columns:1fr}}
+</style></head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
 <nav aria-label="Main navigation" class="navlinks">
 <button class="active" data-page="home">⌂ Home</button>
-<details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button></div></details>
-<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="spokenenglish">🗣️ Natural spoken English</button></div></details>
+<details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="phrasal">Phrasal Verbs & Idioms</button></div></details>
+<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="shadowing">🎧 Shadowing</button><button data-page="pronunciation">🗣️ Pronunciation Lab</button><button data-page="roleplay">🎭 Real-life Roleplay</button><button data-page="dictation">✍️ Dictation</button><button data-page="spokenenglish">🗣️ Natural spoken English</button></div></details>
 <button data-page="progress">📈 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
@@ -679,6 +691,34 @@ body > main{
 </div>
 <div class="panel"><h2>📊 Weekly Report · Báo cáo tuần</h2><p class="small muted">Summary of Learning Lab activities recorded in the last 7 days.</p><div id="weeklyReport"></div><button class="btn line" onclick="labRenderReports()">Refresh report · Làm mới</button></div>
 </div>
+</section>
+
+<section class="page" id="shadowing">
+ <div class="page-header"><div><p class="eyebrow">LISTEN · REPEAT · IMPROVE</p><h1>🎧 Shadowing · Luyện nói đuổi</h1><p>Nghe câu mẫu, nhắc lại ngay sau đó. Luyện nhịp điệu, nối âm và ngữ điệu từng bước.</p></div></div>
+ <div class="card">
+  <label for="shadowLevel">Chọn cấp độ</label>
+  <select id="shadowLevel"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option></select>
+  <div id="shadowSentence" class="shadow-sentence" aria-live="polite">Could you say that again, please?</div>
+  <p id="shadowMeaning">Bạn có thể nói lại điều đó được không?</p>
+  <div class="shadow-actions"><button class="btn" onclick="shadowSpeak(0.82)">🔊 Nghe chậm</button><button class="btn primary" onclick="shadowSpeak(1)">▶ Nghe tự nhiên</button><button class="btn line" onclick="shadowNext()">Câu tiếp theo →</button></div>
+  <div class="card soft"><h3>🎙️ Thử nhắc lại</h3><p id="shadowStatus">Nghe mẫu rồi bấm Ghi âm để thử nói lại. Trình duyệt có thể yêu cầu quyền microphone.</p><button class="btn primary" id="shadowRecord" onclick="shadowRecord()">🎙️ Ghi âm / kiểm tra câu nói</button><p class="hint">Nhận diện giọng nói tùy trình duyệt và thiết bị. Nếu không hỗ trợ, m vẫn có thể tự luyện bằng cách nghe rồi nhắc lại.</p><div id="shadowTranscript"></div></div>
+ </div>
+</section>
+<section class="page" id="pronunciation">
+ <div class="page-header"><div><p class="eyebrow">SOUNDS · STRESS · CLARITY</p><h1>🗣️ Pronunciation Lab · Phòng luyện phát âm</h1><p>Luyện những cặp âm dễ nhầm, âm cuối và trọng âm. Nghe mẫu rồi tự nói để kiểm tra bằng nhận diện giọng nói nếu trình duyệt hỗ trợ.</p></div></div>
+ <div class="card"><label for="pronPair">Chọn bài luyện</label><select id="pronPair" onchange="pronLoad()"><option value="0">/ɪ/ vs /iː/ · ship / sheep</option><option value="1">/θ/ vs /s/ · think / sink</option><option value="2">/ʃ/ vs /s/ · she / see</option><option value="3">Âm cuối · cap / cab</option><option value="4">Trọng âm · PHOtograph / phoTOgrapher</option></select><div id="pronLesson" class="card soft"></div><button class="btn primary" onclick="pronSpeak()">🔊 Nghe mẫu</button> <button class="btn line" onclick="pronTry()">🎙️ Thử phát âm</button><div id="pronFeedback" aria-live="polite"></div></div>
+</section>
+<section class="page" id="roleplay">
+ <div class="page-header"><div><p class="eyebrow">SPEAK IN REAL SITUATIONS</p><h1>🎭 Real-life Roleplay · Đóng vai tình huống</h1><p>Chọn câu trả lời để tiếp tục hội thoại. Mỗi lựa chọn dẫn đến phản hồi khác nhau, có gợi ý cách nói tự nhiên.</p></div></div>
+ <div class="card"><label for="roleScenario">Tình huống</label><select id="roleScenario" onchange="roleStart()"><option value="cafe">At a café · Quán cà phê</option><option value="hotel">At a hotel · Khách sạn</option><option value="shop">Shopping · Mua sắm</option><option value="airport">At the airport · Sân bay</option></select><div id="roleConversation" class="role-conversation" aria-live="polite"></div><div id="roleChoices" class="role-choices"></div><button class="btn line" onclick="roleStart()">↻ Bắt đầu lại</button></div>
+</section>
+<section class="page" id="dictation">
+ <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì m nghe được rồi kiểm tra đáp án.</p></div></div>
+ <div class="card"><div class="row"><label for="dictLevel">Cấp độ</label><select id="dictLevel" onchange="dictNew()"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option></select></div><div class="row"><button class="btn primary" onclick="dictSpeak(0.82)">🔊 Nghe chậm</button><button class="btn" onclick="dictSpeak(1)">▶ Nghe bình thường</button><button class="btn line" onclick="dictNew()">Câu mới →</button></div><textarea id="dictAnswer" rows="3" placeholder="Type what you hear... · Nhập câu bạn nghe được"></textarea><button class="btn primary" onclick="dictCheck()">Kiểm tra</button><div id="dictFeedback" aria-live="polite"></div></div>
+</section>
+<section class="page" id="phrasal">
+ <div class="page-header"><div><p class="eyebrow">EVERYDAY ENGLISH</p><h1>📚 Phrasal Verbs & Idioms · Cụm động từ và thành ngữ</h1><p>Học cụm từ thông dụng qua nghĩa, ví dụ và phát âm.</p></div></div>
+ <div class="card"><input id="phrasalSearch" type="search" placeholder="Tìm cụm từ hoặc nghĩa..." oninput="phrasalRender()"/><div id="phrasalList" class="phrasal-grid"></div></div>
 </section>
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -2309,4 +2349,62 @@ document.addEventListener('click', function(e){
   const text = audioButton.getAttribute('data-spoken-audio') === 'full' ? pair[0] : pair[1];
   speakSpokenEnglish(text);
 });
-</script></body></html>
+</script>
+<script id="new-practice-scripts">
+const shadowBank=[
+ {level:"A1",en:"Could you say that again, please?",vi:"Bạn có thể nói lại điều đó được không?"},
+ {level:"A1",en:"I'm looking for the nearest bus stop.",vi:"Tôi đang tìm trạm xe buýt gần nhất."},
+ {level:"A1",en:"I'd like a cup of tea, please.",vi:"Cho tôi một tách trà."},
+ {level:"A2",en:"Would you mind opening the window?",vi:"Bạn có phiền mở cửa sổ không?"},
+ {level:"A2",en:"I've been waiting here for twenty minutes.",vi:"Tôi đã đợi ở đây hai mươi phút."},
+ {level:"A2",en:"I'm gonna meet my friend after work.",vi:"Tôi sẽ gặp bạn sau giờ làm."},
+ {level:"B1",en:"If I'd known about the delay, I would have left later.",vi:"Nếu biết về sự chậm trễ, tôi đã rời đi muộn hơn."},
+ {level:"B1",en:"What I find most useful is being able to practise every day.",vi:"Điều tôi thấy hữu ích nhất là có thể luyện tập mỗi ngày."}
+];
+let shadowIndex=0;
+function shadowCurrent(){const level=document.getElementById("shadowLevel")?.value||"A1";const list=shadowBank.filter(x=>x.level===level);return list[shadowIndex%list.length]}
+function shadowRender(){const x=shadowCurrent();document.getElementById("shadowSentence").textContent=x.en;document.getElementById("shadowMeaning").textContent=x.vi;document.getElementById("shadowTranscript").textContent="";document.getElementById("shadowStatus").textContent="Nghe mẫu rồi nhắc lại câu này."}
+function shadowSpeak(rate){const x=shadowCurrent();if(typeof speakSpokenEnglish==="function"){const u=window.speechSynthesis;u.cancel();const utter=new SpeechSynthesisUtterance(x.en);utter.lang="en-US";utter.rate=rate;utter.volume=1;const vs=u.getVoices();utter.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;u.speak(utter)}}
+function shadowNext(){const level=document.getElementById("shadowLevel").value;shadowIndex=(shadowIndex+1)%shadowBank.filter(x=>x.level===level).length;shadowRender()}
+function shadowRecord(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("shadowStatus").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. M có thể tự đọc theo câu mẫu.";return}const rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=1;document.getElementById("shadowStatus").textContent="Đang nghe…";rec.onresult=e=>{const said=e.results[0][0].transcript;document.getElementById("shadowTranscript").textContent="Bạn nói: "+said;document.getElementById("shadowStatus").textContent="So sánh câu vừa nói với câu mẫu và thử lại nhé."};rec.onerror=()=>document.getElementById("shadowStatus").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone và thử lại.";rec.start()}
+document.getElementById("shadowLevel")?.addEventListener("change",()=>{shadowIndex=0;shadowRender()});
+function pronData(){return [
+ {title:"/ɪ/ và /iː/",words:["ship","sheep","live","leave"],tip:"/ɪ/ ngắn và thả lỏng; /iː/ dài hơn, miệng hơi kéo ngang.",vi:"Phân biệt nguyên âm ngắn và dài."},
+ {title:"/θ/ và /s/",words:["think","sink","three","see"],tip:"/θ/: đặt đầu lưỡi nhẹ giữa hai hàm răng, thổi hơi; /s/: lưỡi gần lợi, luồng hơi hẹp.",vi:"Âm /θ/ không giống /s/."},
+ {title:"/ʃ/ và /s/",words:["she","see","shop","sop"],tip:"/ʃ/: môi hơi tròn, lưỡi lùi; /s/: môi ít tròn, âm sắc hơn.",vi:"Nghe sự khác nhau giữa âm sh và s."},
+ {title:"Âm cuối /p/ và /b/",words:["cap","cab","rope","robe"],tip:"/p/ vô thanh, bật hơi nhẹ; /b/ hữu thanh, dây thanh rung.",vi:"Đừng bỏ âm cuối khi nói."},
+ {title:"Trọng âm từ",words:["PHOtograph","phoTOgrapher","PHOtographic"],tip:"Đặt trọng âm đúng âm tiết được viết hoa; các từ cùng họ có thể đổi trọng âm.",vi:"Chú ý vị trí nhấn âm."}
+]}
+function pronLoad(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];document.getElementById("pronLesson").innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";document.getElementById("pronFeedback").textContent=""}
+function pronSpeak(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];const u=new SpeechSynthesisUtterance(d.words.join(". "));u.lang="en-US";u.rate=.78;u.volume=1;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function pronTry(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("pronFeedback").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy nghe mẫu và tự luyện.";return}const d=pronData()[Number(document.getElementById("pronPair").value)||0];const rec=new SR();rec.lang="en-US";rec.onresult=e=>{document.getElementById("pronFeedback").textContent="Bạn vừa đọc: "+e.results[0][0].transcript+". Hãy so sánh với mẫu; nhận diện giọng nói không thay thế đánh giá phát âm chuyên sâu."};rec.onerror=()=>document.getElementById("pronFeedback").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone.";rec.start()}
+const roleData={
+ cafe:{start:"Barista: Hi! What can I get for you?",steps:[{q:"Bạn muốn gọi cà phê.",a:[["I'd like a latte, please.","Lịch sự và tự nhiên.",1],["Give coffee.","Thiếu tự nhiên; cần nói rõ món và dùng lời lịch sự.",2],["I am a latte.","Sai nghĩa: câu này nói bạn chính là một ly latte.",2]]},{q:"Barista: What size would you like?",a:[["A medium, please.","Câu trả lời ngắn gọn, tự nhiên.",1],["I want middle.","Không tự nhiên; dùng a medium.",2],["Yesterday.","Không trả lời đúng câu hỏi.",2]]},{q:"Barista: Anything else?",a:[["No, that's all. Thank you.","Tự nhiên và lịch sự.",1],["No more thing.","Nên dùng No, that's all.",2],["Give me free.","Không phù hợp trong tình huống này.",2]]}]},
+ hotel:{start:"Receptionist: Welcome! Do you have a reservation?",steps:[{q:"Bạn đã đặt phòng.",a:[["Yes, I have a reservation under Nguyen.","Cách nói tự nhiên khi nhận phòng.",1],["I book room yesterday.","Nên dùng hiện tại hoàn thành hoặc quá khứ rõ ràng.",2],["Give room.","Quá cụt và thiếu lịch sự.",2]]},{q:"Receptionist: Could I see your ID, please?",a:[["Of course. Here you are.","Lịch sự, tự nhiên.",1],["Why you need?","Thiếu trợ động từ và nghe khá gay gắt.",2],["No see.","Không phù hợp.",2]]}]},
+ shop:{start:"Shop assistant: Can I help you find anything?",steps:[{q:"Bạn muốn tìm một chiếc áo cỡ lớn.",a:[["I'm looking for a large shirt.","Rõ ràng, tự nhiên.",1],["I search big clothes.","Có thể hiểu nhưng không tự nhiên.",2],["Where shirt large?","Thiếu cấu trúc câu.",2]]},{q:"Shop assistant: Would you like to try it on?",a:[["Yes, where are the fitting rooms?","Câu hỏi tiếp nối hợp lý.",1],["I try now where?","Thiếu cấu trúc.",2],["No, I am shirt.","Sai nghĩa.",2]]}]},
+ airport:{start:"Agent: May I see your passport and boarding pass?",steps:[{q:"Bạn đưa giấy tờ.",a:[["Sure. Here they are.","Tự nhiên khi đưa hai món.",1],["Here it is them.","Sai đại từ.",2],["I don't show.","Không phù hợp nếu không có lý do.",2]]},{q:"Agent: Are you checking any bags?",a:[["Yes, one suitcase.","Trả lời rõ ràng.",1],["I have one luggage.","Luggage không đếm được; dùng a bag/suitcase.",2],["My bag is blue.","Không trả lời đúng câu hỏi.",2]]}]}
+};
+let roleStep=0,roleScore=0,roleLog=[];
+function roleStart(){roleStep=0;roleScore=0;roleLog=[];roleRender()}
+function roleRender(){const key=document.getElementById("roleScenario").value,d=roleData[key];let h="<div class='role-line'><strong>"+d.start+"</strong></div>";roleLog.forEach(x=>h+="<div class='role-line'><b>"+x.q+"</b><br>"+x.answer+"<br><small>"+x.feedback+"</small></div>");document.getElementById("roleConversation").innerHTML=h;const host=document.getElementById("roleChoices");if(roleStep>=d.steps.length){host.innerHTML="<h3>Hoàn thành! Điểm: "+roleScore+"/"+d.steps.length+"</h3><p>Đọc lại các câu mẫu và thử tình huống khác nhé.</p>";return}const step=d.steps[roleStep];host.innerHTML="<h3>"+step.q+"</h3>"+step.a.map((a,i)=>"<button class='role-choice' onclick='roleChoose("+i+")'>"+String.fromCharCode(65+i)+". "+a[0]+"</button>").join("")}
+function roleChoose(i){const d=roleData[document.getElementById("roleScenario").value],step=d.steps[roleStep],a=step.a[i];roleScore+=a[2]===1?1:0;roleLog.push({q:step.q,answer:a[0],feedback:a[1]});roleStep++;roleRender()}
+const dictBank=[
+ {l:"A1",en:"I usually have breakfast at seven.",vi:"Tôi thường ăn sáng lúc bảy giờ."},
+ {l:"A1",en:"Could you help me, please?",vi:"Bạn có thể giúp tôi được không?"},
+ {l:"A1",en:"The train is late today.",vi:"Hôm nay tàu bị muộn."},
+ {l:"A2",en:"I've been learning English for two years.",vi:"Tôi đã học tiếng Anh được hai năm."},
+ {l:"A2",en:"Would you mind waiting for a moment?",vi:"Bạn có phiền chờ một lát không?"},
+ {l:"A2",en:"I'm going to meet her after work.",vi:"Tôi sẽ gặp cô ấy sau giờ làm."},
+ {l:"B1",en:"If it rains tomorrow, we'll stay at home.",vi:"Nếu ngày mai trời mưa, chúng tôi sẽ ở nhà."},
+ {l:"B1",en:"The most important thing is to keep practising.",vi:"Điều quan trọng nhất là tiếp tục luyện tập."}
+];
+let dictIndex=0;
+function dictCurrent(){const l=document.getElementById("dictLevel")?.value||"A1";return dictBank.filter(x=>x.l===l)[dictIndex%dictBank.filter(x=>x.l===l).length]}
+function dictNew(){dictIndex++;document.getElementById("dictAnswer").value="";document.getElementById("dictFeedback").textContent=""}
+function dictSpeak(rate){const x=dictCurrent(),u=new SpeechSynthesisUtterance(x.en);u.lang="en-US";u.rate=rate;u.volume=1;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function dictCheck(){const x=dictCurrent(),a=document.getElementById("dictAnswer").value.trim().toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," "),b=x.en.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ");document.getElementById("dictFeedback").innerHTML=(a===b?"<b>✅ Chính xác!</b>":"<b>Chưa chính xác.</b>")+"<p>Đáp án: "+x.en+"</p><p>"+x.vi+"</p>"}
+const phrasalData=[
+["get up","thức dậy","I get up at six every morning."],["wake up","tỉnh giấc","I woke up early today."],["find out","tìm ra, phát hiện","I found out the truth."],["look after","chăm sóc","She looks after her little brother."],["look for","tìm kiếm","I'm looking for my keys."],["give up","từ bỏ","Don't give up on your dreams."],["put off","trì hoãn","We put off the meeting."],["run out of","hết, cạn","We've run out of milk."],["pick up","đón; nhặt lên","I'll pick you up at seven."],["turn down","từ chối; vặn nhỏ","He turned down the offer."],["get along with","hòa thuận với","I get along with my colleagues."],["carry on","tiếp tục","Please carry on working."],["break down","hỏng; suy sụp","Our car broke down."],["come across","tình cờ bắt gặp","I came across an old photo."],["work out","tập thể dục; tìm ra cách","We can work it out."],["take off","cất cánh; cởi ra","The plane takes off at noon."],["call off","hủy bỏ","They called off the match."],["hang out","đi chơi, tụ tập","We hang out at weekends."],["once in a blue moon","hiếm khi","I eat fast food once in a blue moon."],["piece of cake","dễ như ăn bánh","The test was a piece of cake."],["under the weather","hơi mệt","I'm feeling under the weather."],["break the ice","phá tan sự ngại ngùng","A joke can break the ice."]
+];
+function phrasalRender(){const q=(document.getElementById("phrasalSearch")?.value||"").toLowerCase();const rows=phrasalData.filter(x=>x.join(" ").toLowerCase().includes(q));document.getElementById("phrasalList").innerHTML=rows.map(x=>"<article class='phrasal-item'><h3>"+x[0]+"</h3><p>"+x[1]+"</p><i>"+x[2]+"</i><p><button class='btn line' onclick='speakSpokenEnglish("+JSON.stringify(x[0]).replace(/'/g,"&#39;")+")'>🔊 Nghe phát âm</button></p></article>").join("")||"<p>Không tìm thấy cụm từ.</p>"}
+</script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();roleStart();dictNew();phrasalRender()});</script></body></html>
