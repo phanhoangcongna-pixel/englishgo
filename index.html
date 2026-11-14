@@ -177,7 +177,15 @@ body > main{
     padding:0 12px 40px !important;
   }
 }
-</style></head>
+</style><style id="desktop-hover-bridge-fix">
+@media (hover:hover) and (pointer:fine){
+  header .nav-group > .nav-menu{
+    top:100% !important;
+    margin-top:0 !important;
+  }
+}
+</style>
+</head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
 <nav aria-label="Main navigation" class="navlinks">
