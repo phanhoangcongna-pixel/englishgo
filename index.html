@@ -221,6 +221,13 @@ textarea { width: 100%; }
   </div>
   <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
  </div>
+ <div class="panel" id="rlMistakeBank">
+  <div class="controls" style="justify-content:space-between;align-items:center">
+   <div><h2 style="margin:0">Review My Mistakes · Ôn lại lỗi sai</h2><p class="small muted">Saved on this device and synced with Firebase when signed in. Lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p></div>
+   <button class="btn line" onclick="rlRenderMistakes()">Refresh · Làm mới</button>
+  </div>
+  <div id="rlMistakeList" class="small muted">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
+ </div>
  <div class="panel">
   <h2>Review your conversation · Xem lại hội thoại</h2>
   <p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
@@ -978,6 +985,7 @@ function rlCheck(){
  const exact=normalized(answer)===normalized(q[4]);
  const note=exact?"Excellent! That's the natural reply. Tuyệt vời! Đây là câu trả lời tự nhiên.":"Good try! Compare your choice with the suggested reply. Hãy so sánh lựa chọn với câu trả lời gợi ý nhé.";
  rlHistory.push({prompt:q[1],vi:q[2],answer,model:q[4],tip:q[5],exact});
+ rlSaveMistake(rlCurrent,rlTurn,q,answer,exact);
  document.querySelectorAll("#rlChoices .rl-choice").forEach((b,i)=>{
    b.disabled=true;
    if(normalized(q[3][i])===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
@@ -987,6 +995,40 @@ function rlCheck(){
  rlChecked=true; rlDone++;
  document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
+}
+const RL_MISTAKES_KEY="eg3-real-life-mistakes";
+function rlGetMistakes(){try{return JSON.parse(localStorage.getItem(RL_MISTAKES_KEY)||"[]")}catch(e){return []}}
+function rlSaveMistake(topicIndex,turnIndex,q,chosen,correct){
+ const list=rlGetMistakes(),key=topicIndex+":"+turnIndex,at=list.findIndex(x=>x.key===key);
+ if(correct){if(at>=0)list.splice(at,1)}
+ else{
+  const item={key,topicIndex,turnIndex,topic:rlTopics[topicIndex]?.title||"Conversation",level:rlTopics[topicIndex]?.level||"",prompt:q[1],vi:q[2],chosen,model:q[4],tip:q[5],updatedAt:new Date().toISOString(),count:(at>=0?list[at].count||1:0)+1};
+  if(at>=0)list[at]=item;else list.unshift(item);
+ }
+ localStorage.setItem(RL_MISTAKES_KEY,JSON.stringify(list));
+ if(typeof cloudSchedule==="function")cloudSchedule();
+ rlRenderMistakes();
+}
+function rlRenderMistakes(){
+ const el=document.getElementById("rlMistakeList");if(!el)return;
+ const list=rlGetMistakes();
+ if(!list.length){el.innerHTML="No mistakes saved yet. Chưa có câu sai nào được lưu.";return}
+ el.innerHTML=list.map((m,i)=>`<div class="panel" style="margin:10px 0">
+  <div class="controls" style="justify-content:space-between"><b>${i+1}. ${m.topic} · ${m.level}</b><span class="badge">Tried ${m.count||1}×</span></div>
+  <p><b>Client · Khách:</b> ${m.prompt}</p><p class="small muted">${m.vi}</p>
+  <p><span class="muted">Your answer · Bạn chọn:</span> <span style="color:#b45309">${m.chosen}</span></p>
+  <p><span class="muted">Suggested reply · Câu gợi ý:</span> <b>${m.model}</b></p>
+  <p class="small muted">${m.tip}</p>
+  <div class="controls"><button class="btn line" onclick="say(${JSON.stringify(m.prompt)})">🔊 Listen · Nghe</button><button class="btn" onclick="rlPracticeMistake(${m.topicIndex},${m.turnIndex})">Practise again · Luyện lại</button></div>
+ </div>`).join("");
+}
+function rlPracticeMistake(topicIndex,turnIndex){
+ const levelSelect=document.getElementById("rlLevel"),topicSelect=document.getElementById("rlTopic");
+ if(levelSelect)levelSelect.value="all";
+ rlInit();
+ if(topicSelect){topicSelect.value=String(topicIndex);rlLoadTopic()}
+ rlTurn=turnIndex;rlRender();
+ document.getElementById("rlFeedback").innerHTML='<div class="feedback">Try this question again. Hãy thử trả lời câu này lần nữa.</div>';
 }
 function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElementById("rlFeedback").innerHTML=`<div class="feedback"><b>Hint · Gợi ý:</b> ${q[5]}<p><b>Useful phrase · Cụm từ hữu ích:</b> ${q[4].split(" ").slice(0,4).join(" ")}...</p></div>`;}
 function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
@@ -1004,7 +1046,7 @@ document.addEventListener("keydown",e=>{
  if(e.key==="ArrowRight" && rlChecked){e.preventDefault();rlNext();}
 });
 
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress()});
+document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
