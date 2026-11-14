@@ -30,7 +30,7 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 <style id="englishgo-mobile-overflow-fix">
 /* Mobile layout fixes: keep long native selects and controls inside their cards. */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { max-width: 100%; overflow-x: hidden; }
+html, body { max-width: 100%; overflow-x: clip; }
 main, .page, .panel, .card, .home-v2 { min-width: 0; max-width: 100%; }
 .panel { overflow-wrap: anywhere; }
 .controls { min-width: 0; max-width: 100%; }
