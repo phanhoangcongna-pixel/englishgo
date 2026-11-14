@@ -231,7 +231,7 @@ textarea { width: 100%; }
    <div id="rlFeedback" aria-live="polite"></div>
    <div class="controls" style="justify-content:space-between;margin-top:12px">
     <span class="small muted" id="rlScore">Completed: 0 · Đã hoàn thành: 0</span>
-    <button class="btn" onclick="rlNext()">Next · Tiếp theo →</button>
+    <button class="btn" id="rlNextBtn" onclick="rlNext()">Next · Tiếp theo →</button>
    </div>
   </div>
   <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
@@ -1068,6 +1068,20 @@ const rlTopics = [
 ["Client","Can I use cuticle oil at home?","Tôi có thể dùng dầu dưỡng viền móng ở nhà không?",["Definitely. Applying cuticle oil regularly can help keep the skin around your nails moisturised.","Yes, use oil.","Oil is good."],"Definitely. Applying cuticle oil regularly can help keep the skin around your nails moisturised.","'Cuticle oil' is dầu dưỡng viền móng."],
 ["Client","Great, thank you. I'd like to book my next appointment.","Tuyệt, cảm ơn bạn. Tôi muốn đặt lịch lần tới.",["Of course. What day and time would be convenient for you?","Okay, when?","Come next time."],"Of course. What day and time would be convenient for you?","Ask for a convenient day and time to finish the booking."]]}
 ];
+// Extend every offline conversation from 4 to 6 turns with a natural, reusable closing exchange.
+// Keep the original topic content and answer keys intact.
+rlTopics.forEach(topic => {
+ if (topic && Array.isArray(topic.turns) && topic.turns.length === 4) {
+  const speaker = topic.turns[topic.turns.length - 1][0] || "Speaker";
+  topic.turns.push(
+   [speaker, "Would you like me to go over any part again?", "Bạn có muốn tôi nhắc lại phần nào không?", ["No, that's clear. Thank you.", "I don't clear nothing.", "Again no want."], "No, that's clear. Thank you.", "Use 'That's clear' when you understand."],
+   [speaker, "Is there anything else you'd like to know before we finish?", "Trước khi kết thúc, bạn còn muốn biết thêm điều gì không?", ["Could you tell me where I can find more information?", "I know anything no.", "Where information finded?"], "Could you tell me where I can find more information?", "Ask politely with 'Could you tell me...?'"],
+   [speaker, "It was nice talking with you. Is there anything else you'd like to ask?", "Rất vui được trò chuyện với bạn. Bạn còn muốn hỏi gì không?", ["No, that's all for now. Thank you for your help.", "I no ask anything.", "No, I am all."], "No, that's all for now. Thank you for your help.", "Use 'That's all for now' to close a conversation politely."],
+   [speaker, "You're welcome. Have a lovely day!", "Không có gì. Chúc bạn một ngày vui vẻ!", ["Thank you. You too. Take care!", "You too are welcome day.", "Thanks, same you."], "Thank you. You too. Take care!", "Reply with 'You too' and a friendly closing."]
+  );
+ }
+});
+
 
 let rlCurrent=0, rlTurn=0, rlDone=0, rlHistory=[], rlChecked=false, rlSelected=-1;
 function rlFiltered(){const lv=document.getElementById("rlLevel")?.value||"all";return rlTopics.map((x,i)=>({...x,idx:i})).filter(x=>lv==="all"||x.level===lv);}
@@ -1085,6 +1099,8 @@ function rlLoadTopic(){
  const t=rlTopics[rlCurrent]; document.getElementById("rlSituation").textContent=t.level+" · "+t.situation;
  document.getElementById("rlReview").textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
  rlRender();
+ rlSpeakClient();
+ const nextBtn=document.getElementById("rlNextBtn");if(nextBtn){nextBtn.disabled=false;nextBtn.textContent="Next · Tiếp theo →";}
 }
 function rlRender(){
  const t=rlTopics[rlCurrent], q=t.turns[rlTurn]; if(!q)return;
@@ -1092,8 +1108,14 @@ function rlRender(){
  document.getElementById("rlSpeaker").textContent=`Choose your reply · Chọn câu trả lời`;
  document.getElementById("rlPrompt").textContent=q[1];
  document.getElementById("rlPromptVi").textContent=q[2];
- document.getElementById("rlChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line rl-choice" data-choice="${i}" style="text-align:left;white-space:normal" onclick="rlChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
+ // Shuffle answer positions once per question so the correct answer is not always option A.
+ if(!q._displayChoices){
+  q._displayChoices=q[3].map((text,index)=>({text,index}));
+  for(let i=q._displayChoices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[q._displayChoices[i],q._displayChoices[j]]=[q._displayChoices[j],q._displayChoices[i]];}
+ }
+ document.getElementById("rlChoices").innerHTML=q._displayChoices.map((item,i)=>`<button class="btn line rl-choice" data-choice="${i}" style="text-align:left;white-space:normal" onclick="rlChoose(${i})">${String.fromCharCode(65+i)}. ${item.text}</button>`).join("");
  document.getElementById("rlFeedback").innerHTML="";
+ const nextBtn=document.getElementById("rlNextBtn");if(nextBtn){nextBtn.disabled=false;nextBtn.textContent="Next · Tiếp theo →";}
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
  rlChecked=false; rlSelected=-1;
 }
@@ -1109,7 +1131,7 @@ function rlChoose(i){
 function rlCheck(){
  if(rlChecked)return;
  if(rlSelected<0){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn một câu trả lời trước nhé.</div>';return;}
- const q=rlTopics[rlCurrent].turns[rlTurn], answer=q[3][rlSelected];
+ const q=rlTopics[rlCurrent].turns[rlTurn], answer=(q._displayChoices||q[3].map((text,index)=>({text,index})))[rlSelected].text;
  const normalized=s=>s.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ").trim();
  const exact=normalized(answer)===normalized(q[4]);
  const note=exact?"Excellent! That's the natural reply. Tuyệt vời! Đây là câu trả lời tự nhiên.":"Good try! Compare your choice with the suggested reply. Hãy so sánh lựa chọn với câu trả lời gợi ý nhé.";
@@ -1118,11 +1140,17 @@ function rlCheck(){
  if(typeof egRoadmapTrack==="function"){const topicName=(rlTopics[rlCurrent]?.title||"").toLowerCase();egRoadmapTrack("real",{kind:topicName.includes("nail")?"nail":(/work|customer|job|office/.test(topicName)?"work":"everyday")})}
  document.querySelectorAll("#rlChoices .rl-choice").forEach((b,i)=>{
    b.disabled=true;
-   if(normalized(q[3][i])===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
+   if(normalized((q._displayChoices||q[3].map((text,index)=>({text,index})))[i].text)===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
    else if(i===rlSelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)";}
  });
  document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Suggested reply · Câu trả lời gợi ý:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
  rlChecked=true; rlDone++;
+ const isLastTurn=rlTurn===rlTopics[rlCurrent].turns.length-1;
+ const nextBtn=document.getElementById("rlNextBtn");
+ if(isLastTurn){
+  document.getElementById("rlFeedback").innerHTML+=`<div class="feedback good"><b>🎉 Topic completed! · Đã hoàn thành chủ đề!</b><p>You have finished all ${rlTopics[rlCurrent].turns.length} turns. Choose another topic to continue. Bạn đã hoàn thành tất cả ${rlTopics[rlCurrent].turns.length} lượt. Hãy chọn chủ đề khác để tiếp tục.</p></div>`;
+  if(nextBtn){nextBtn.disabled=true;nextBtn.textContent="Topic completed · Đã hoàn thành";}
+ }
  document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
 }
@@ -1372,13 +1400,76 @@ const RL_ADVANCED=[
   {speaker:"Teammate",prompt:"Great. Let me know if anything blocks you.",vi:"Tốt. Báo tôi nếu có vấn đề cản trở nhé.",choices:["Will do. I'll flag any issues early so we can adjust if needed.","No promises.","Don't bother me."],answer:0,why:"Close with a clear commitment to communicate risks early."}
  ]}
 ];
+
+const RL_ADVANCED_EXTRA=[
+[
+{speaker:"Colleague",prompt:"I was concerned because the delay affected the rest of the team.",vi:"Tôi lo vì sự chậm trễ ảnh hưởng đến cả nhóm.",choices:["I understand. I should have updated everyone sooner, and I'll do that next time.","That's not important.","The team can deal with it."],answer:0,why:"Acknowledge the wider impact and show what you will change."},
+{speaker:"Colleague",prompt:"Can you explain what caused the delay?",vi:"Bạn có thể giải thích nguyên nhân chậm trễ không?",choices:["There were two issues: I was waiting for figures, and I underestimated the review time.","I was just busy.","It's complicated."],answer:0,why:"Give a concise, factual explanation without making excuses."},
+{speaker:"Colleague",prompt:"How can we avoid this happening again?",vi:"Làm sao để tránh việc này lặp lại?",choices:["I'll flag dependencies earlier and share a progress update a day before the deadline.","Let's hope it doesn't happen.","You should remind me more often."],answer:0,why:"Offer a specific preventive action."},
+{speaker:"Colleague",prompt:"Would a shared tracker make things easier?",vi:"Một bảng theo dõi chung có giúp ích không?",choices:["Yes, that would make progress visible. I can set one up and keep it updated.","No, trackers are pointless.","Whatever."],answer:0,why:"Respond constructively and take ownership of the next step."},
+{speaker:"Colleague",prompt:"Thanks. Please send the updated link and tracker today.",vi:"Cảm ơn. Hãy gửi đường dẫn cập nhật và bảng theo dõi hôm nay nhé.",choices:["Certainly. I'll send both by 2 p.m. and let you know once they're ready.","Maybe next week.","You can find them yourself."],answer:0,why:"Confirm deliverables and a realistic deadline."}
+],
+[
+{speaker:"Manager",prompt:"Some people are worried that this could increase their workload.",vi:"Một số người lo rằng việc này sẽ làm tăng khối lượng công việc.",choices:["That's a fair concern. We could pilot the process with one team and measure the extra time involved.","They just need to work harder.","We should ignore that feedback."],answer:0,why:"Recognize concerns and suggest a low-risk way to test the idea."},
+{speaker:"Manager",prompt:"What would success look like after the pilot?",vi:"Sau giai đoạn thử nghiệm, thế nào được xem là thành công?",choices:["We could look at response times, customer satisfaction, and the time the team spends preparing updates.","If everyone likes it.","We will know somehow."],answer:0,why:"Define measurable outcomes rather than relying on impressions."},
+{speaker:"Manager",prompt:"How long do you think the pilot should run?",vi:"Bạn nghĩ nên thử nghiệm trong bao lâu?",choices:["A month should give us enough data to spot patterns, although we can review sooner if problems arise.","Forever.","One afternoon is definitely enough."],answer:0,why:"Suggest a reasonable period while allowing an earlier review."},
+{speaker:"Manager",prompt:"What if the results are mixed?",vi:"Nếu kết quả không đồng nhất thì sao?",choices:["We can identify which parts worked, adjust the weaker areas, and decide whether another trial is worthwhile.","Then the whole idea has failed.","We should keep it anyway."],answer:0,why:"Show flexibility and use evidence to guide the decision."},
+{speaker:"Manager",prompt:"Could you summarize your recommendation for the team?",vi:"Bạn có thể tóm tắt đề xuất cho cả nhóm không?",choices:["I'd suggest a one-month pilot, clear success measures, and a review before we make a wider change.","Just do it.","I don't want to present it."],answer:0,why:"End with a concise recommendation and next step."}
+],
+[
+{speaker:"Customer",prompt:"I appreciate the apology, but I need to know what happens next.",vi:"Tôi ghi nhận lời xin lỗi, nhưng cần biết bước tiếp theo là gì.",choices:["I'll check the status now, explain the available options, and keep you updated until it's resolved.","You'll have to wait.","That's all I can say."],answer:0,why:"Give a clear process and take responsibility for communication."},
+{speaker:"Customer",prompt:"Can I speak to someone who can make a decision?",vi:"Tôi có thể nói chuyện với người có thẩm quyền quyết định không?",choices:["Of course. I'll connect you with the appropriate person and briefly explain the situation so you don't have to repeat everything.","No, that's impossible.","Just calm down."],answer:0,why:"Respect the request and make the handover smooth."},
+{speaker:"Customer",prompt:"I don't want to explain the whole story again.",vi:"Tôi không muốn phải kể lại toàn bộ câu chuyện lần nữa.",choices:["I understand. I'll pass on the details we've discussed and confirm that the next person has them.","You'll need to repeat it.","That's not my responsibility."],answer:0,why:"Reduce effort for the customer and confirm continuity."},
+{speaker:"Customer",prompt:"What can you offer to make this right?",vi:"Bạn có thể đưa ra giải pháp gì để khắc phục việc này?",choices:["Let me check which options are within our policy, then I'll explain them clearly before you decide.","Anything you want.","Nothing at all."],answer:0,why:"Avoid making unauthorized promises; explain valid options."},
+{speaker:"Customer",prompt:"All right. Please make sure someone follows up with me.",vi:"Được rồi. Hãy đảm bảo có người liên hệ lại với tôi.",choices:["Certainly. I'll record your preferred contact method and arrange a follow-up by the time we've agreed.","You can call us again.","I can't promise anything."],answer:0,why:"Confirm the follow-up method and expectation."}
+],
+[
+{speaker:"Client",prompt:"My nails are quite short. Would extensions be necessary?",vi:"Móng tôi khá ngắn. Có cần nối móng không?",choices:["Not necessarily. We can assess your natural nails first and choose a design that works with their length.","Yes, everyone needs extensions.","Short nails cannot look elegant."],answer:0,why:"Assess the client's natural nails before recommending a service."},
+{speaker:"Client",prompt:"I use my hands a lot at work. Will this design be practical?",vi:"Tôi dùng tay nhiều khi làm việc. Kiểu này có tiện không?",choices:["That's useful to know. I'd suggest a durable, shorter shape and a finish that suits your daily routine.","It doesn't matter.","You should stop using your hands."],answer:0,why:"Tailor the recommendation to the client's lifestyle."},
+{speaker:"Client",prompt:"Could we keep the length natural and make the shape softer?",vi:"Chúng ta có thể giữ độ dài tự nhiên và tạo dáng mềm mại hơn không?",choices:["Absolutely. I'll shape them gently and check that you're happy with the outline before applying the colour.","No, my design is better.","Choose something else."],answer:0,why:"Confirm the requested adjustment and check before proceeding."},
+{speaker:"Client",prompt:"Will the subtle shimmer look too noticeable in daylight?",vi:"Lớp ánh kim nhẹ có nổi quá khi ở ngoài trời không?",choices:["It should look understated, but I can show you a sample in natural light so you can decide.","It will definitely look perfect.","You won't notice anything."],answer:0,why:"Use a sample rather than making an absolute promise."},
+{speaker:"Client",prompt:"That sounds good. Can we confirm the final design before you start?",vi:"Nghe ổn đấy. Chúng ta xác nhận mẫu cuối cùng trước khi bắt đầu nhé?",choices:["Of course. We'll confirm the shape, colour, finish, and price together before I begin.","There's no need to confirm.","I'll decide as I go."],answer:0,why:"Summarize the service details and get agreement before starting."}
+],
+[
+{speaker:"Client",prompt:"The chip is small, but I'm worried the rest might lift too.",vi:"Vết mẻ nhỏ thôi, nhưng tôi lo những móng khác cũng bị bong.",choices:["I understand. I'll inspect the affected nail and check the surrounding ones for any signs of lifting.","They are probably all fine.","You are worrying too much."],answer:0,why:"Take the concern seriously and inspect before reassuring."},
+{speaker:"Client",prompt:"Would you need to remove the whole set?",vi:"Bạn có cần tháo toàn bộ bộ móng không?",choices:["Not necessarily. I'll assess the condition first and explain whether a local repair is suitable.","Yes, always.","No, I never remove anything."],answer:0,why:"Avoid deciding before examining the nail."},
+{speaker:"Client",prompt:"Could the repair affect the colour or finish?",vi:"Việc sửa có ảnh hưởng đến màu hoặc lớp hoàn thiện không?",choices:["It may depend on the product and the area. I'll explain the likely result before we proceed.","It can never affect it.","The colour doesn't matter."],answer:0,why:"Set realistic expectations and explain the process."},
+{speaker:"Client",prompt:"Is there anything I should do differently to prevent another chip?",vi:"Tôi có cần thay đổi điều gì để tránh bị mẻ lần nữa không?",choices:["I'll share aftercare advice specific to this product and explain when to contact us if you notice lifting.","Just be careful.","There is nothing you can do."],answer:0,why:"Give relevant, product-specific advice without blaming the client."},
+{speaker:"Client",prompt:"Thank you for taking the time to check it.",vi:"Cảm ơn bạn đã dành thời gian kiểm tra.",choices:["You're welcome. I want you to feel comfortable with the result, so please let us know if anything changes.","It's nothing.","You should thank me."],answer:0,why:"Close warmly and keep the relationship professional."}
+],
+[
+{speaker:"Client",prompt:"Could you show me the colours in a softer finish?",vi:"Bạn có thể cho tôi xem các màu với lớp hoàn thiện dịu hơn không?",choices:["Certainly. I'll prepare a few muted options so you can compare them side by side.","No, these are the only colours.","You should keep the bright one."],answer:0,why:"Offer choices that directly address the client's preference."},
+{speaker:"Client",prompt:"I like the second shade, but I'm unsure about the shape.",vi:"Tôi thích màu thứ hai nhưng chưa chắc về dáng móng.",choices:["We can test the shape on one nail first and adjust it before continuing.","The shape cannot be changed.","Just trust me."],answer:0,why:"Reduce uncertainty by checking a sample before proceeding."},
+{speaker:"Client",prompt:"Would changing the colour add much time?",vi:"Đổi màu có mất thêm nhiều thời gian không?",choices:["It depends on the stage we're at. I'll estimate the extra time before making the change.","No time at all, definitely.","It will take hours."],answer:0,why:"Give a realistic estimate based on the current stage."},
+{speaker:"Client",prompt:"I have another appointment afterwards, so I need to leave on time.",vi:"Sau đó tôi có lịch hẹn khác nên cần rời đi đúng giờ.",choices:["Thanks for letting me know. I'll explain which options fit the time we have and won't proceed without your agreement.","That isn't my concern.","We'll see."],answer:0,why:"Respect the time constraint and agree on a realistic option."},
+{speaker:"Client",prompt:"Let's go with the simpler option, then.",vi:"Vậy hãy chọn phương án đơn giản hơn nhé.",choices:["Great. I'll confirm the final colour and shape, then work to the agreed schedule.","No, let's do the complicated one.","You should decide later."],answer:0,why:"Confirm the decision and shared expectations."}
+],
+[
+{speaker:"Client",prompt:"Should I apply cuticle oil every day?",vi:"Tôi có nên dùng dầu dưỡng biểu bì mỗi ngày không?",choices:["If it's suitable for your service, regular use can help keep the surrounding skin comfortable. Follow the product guidance.","Use as much as possible.","Never use any aftercare product."],answer:0,why:"Give measured advice and defer to product-specific instructions."},
+{speaker:"Client",prompt:"What should I do if I notice lifting?",vi:"Tôi nên làm gì nếu thấy móng bị bong?",choices:["Please contact the salon rather than pulling it off yourself. We can assess it and advise you.","Pull it off immediately.","Ignore it for several weeks."],answer:0,why:"Discourage picking and recommend a professional assessment."},
+{speaker:"Client",prompt:"Can I book a refill now, even if I'm not sure of the date?",vi:"Tôi có thể đặt lịch dặm lại ngay dù chưa chắc ngày không?",choices:["We can look at a provisional date or you can contact us once your schedule is clear. Which would suit you better?","No, you must decide now.","Just arrive without booking."],answer:0,why:"Offer flexible booking options without pressuring the client."},
+{speaker:"Client",prompt:"Do you send appointment reminders?",vi:"Salon có gửi nhắc lịch hẹn không?",choices:["We can confirm the reminder options available and make sure your preferred contact details are correct.","We never remind anyone.","You should remember it yourself."],answer:0,why:"Explain the actual process and verify contact preferences."},
+{speaker:"Client",prompt:"Perfect. Thanks for explaining everything.",vi:"Tuyệt. Cảm ơn bạn đã giải thích mọi thứ.",choices:["You're very welcome. It was lovely seeing you, and we look forward to welcoming you back.","Okay, leave now.","No problem, whatever."],answer:0,why:"Finish with a warm, professional closing."}
+],
+[
+{speaker:"Teammate",prompt:"I may need the report earlier if the client meeting is moved forward.",vi:"Tôi có thể cần báo cáo sớm hơn nếu cuộc họp khách hàng được đẩy lên.",choices:["Understood. Please let me know as soon as the meeting time is confirmed, and I'll reassess the schedule.","That is impossible.","I'll ignore the change."],answer:0,why:"Stay flexible while asking for timely information."},
+{speaker:"Teammate",prompt:"Could you send me a brief outline before the full report?",vi:"Bạn có thể gửi dàn ý ngắn trước bản báo cáo đầy đủ không?",choices:["Yes. I can send a short outline first so you can check the direction while I complete the details.","No, you must wait.","The outline is useless."],answer:0,why:"Offer a useful interim deliverable."},
+{speaker:"Teammate",prompt:"One section depends on figures from Finance. What if they arrive late?",vi:"Một phần phụ thuộc số liệu từ bộ phận Tài chính. Nếu họ gửi muộn thì sao?",choices:["I'll contact Finance now, flag the dependency, and prepare the other sections in the meantime.","I'll wait and do nothing.","I'll invent the figures."],answer:0,why:"Manage dependencies and continue with work that can proceed."},
+{speaker:"Teammate",prompt:"Would you like me to take one section off your hands?",vi:"Bạn có muốn tôi phụ trách một phần không?",choices:["That would help. Could you take the summary section? I'll share the outline and agree on a handover time.","No, but I will complain later.","Do everything for me."],answer:0,why:"Delegate clearly and agree on responsibilities."},
+{speaker:"Teammate",prompt:"Let's check in at 2 p.m. and review progress.",vi:"Chúng ta trao đổi lúc 2 giờ chiều để xem tiến độ nhé.",choices:["Sounds good. I'll bring the current draft, highlight any outstanding figures, and confirm the remaining steps.","No need to discuss it.","I might not come."],answer:0,why:"Agree on a concrete check-in and prepare useful information."}
+]
+];
+RL_ADVANCED.forEach((scenario,i)=>scenario.turns.push(...RL_ADVANCED_EXTRA[i]));
+
 let rlAdvTurn=0,rlAdvChoice=-1,rlAdvChecked=false,rlAdvCompleted=0;
+let rlAdvDisplayChoices=[];
 function rlAdvLoad(){
  const sel=document.getElementById("rlAdvScenario");if(!sel)return;
  rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;
  const sc=RL_ADVANCED[Number(sel.value)||0];
  document.getElementById("rlAdvContext").textContent=sc.context;
  rlAdvRender();
+ setTimeout(rlAdvListen,250);
 }
 function rlAdvRender(){
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn];
@@ -1386,30 +1477,31 @@ function rlAdvRender(){
  document.getElementById("rlAdvSpeaker").textContent=q.speaker+" · Choose a natural response";
  document.getElementById("rlAdvPrompt").textContent=q.prompt;
  document.getElementById("rlAdvVi").textContent=q.vi;
- document.getElementById("rlAdvChoices").innerHTML=q.choices.map((c,i)=>`<button type="button" class="btn line" data-adv-choice="${i}" style="text-align:left;white-space:normal">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
+ rlAdvDisplayChoices=q.choices.map((text,i)=>({text,correct:i===q.answer}));
+ for(let i=rlAdvDisplayChoices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rlAdvDisplayChoices[i],rlAdvDisplayChoices[j]]=[rlAdvDisplayChoices[j],rlAdvDisplayChoices[i]]}
+ document.getElementById("rlAdvChoices").innerHTML=rlAdvDisplayChoices.map((c,i)=>`<button type="button" class="btn line" data-adv-choice="${i}" style="text-align:left;white-space:normal">${String.fromCharCode(65+i)}. ${c.text}</button>`).join("");
  document.getElementById("rlAdvFeedback").innerHTML="";
- document.getElementById("rlAdvNext").disabled=true;
- document.querySelectorAll("[data-adv-choice]").forEach(b=>b.addEventListener("click",()=>{if(rlAdvChecked)return;rlAdvChoice=Number(b.dataset.advChoice);document.querySelectorAll("[data-adv-choice]").forEach(x=>x.style.borderColor="");b.style.borderColor="var(--primary)"}));
+ const next=document.getElementById("rlAdvNext");next.disabled=true;next.textContent=rlAdvTurn===sc.turns.length-1?"Topic completed · Đã hết chủ đề":"Next · Tiếp theo";
+ document.querySelectorAll("[data-adv-choice]").forEach(btn=>btn.addEventListener("click",()=>{if(rlAdvChecked)return;rlAdvChoice=Number(btn.dataset.advChoice);document.querySelectorAll("[data-adv-choice]").forEach(x=>x.style.borderColor="");btn.style.borderColor="var(--primary)"}));
 }
 function rlAdvListen(){
- const q=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0].turns[rlAdvTurn];
- if(typeof say==="function")say(q.prompt);else if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(q.prompt))}
+ const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn];
+ if(typeof say==="function")say(q.prompt);else if("speechSynthesis"in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(q.prompt);u.lang="en-US";speechSynthesis.speak(u)}
 }
 function rlAdvCheck(){
  if(rlAdvChecked)return;
  if(rlAdvChoice<0){document.getElementById("rlAdvFeedback").textContent="Choose an answer first. Hãy chọn đáp án trước.";return}
- const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn],correct=rlAdvChoice===q.answer;
- document.querySelectorAll("[data-adv-choice]").forEach((b,i)=>{b.disabled=true;if(i===q.answer){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlAdvChoice){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
+ const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn],correct=!!(rlAdvDisplayChoices[rlAdvChoice]&&rlAdvDisplayChoices[rlAdvChoice].correct);
+ document.querySelectorAll("[data-adv-choice]").forEach((btn,i)=>{btn.disabled=true;if(rlAdvDisplayChoices[i].correct){btn.style.borderColor="#239765";btn.style.background="rgba(35,151,101,.10)"}else if(i===rlAdvChoice){btn.style.borderColor="#d97706";btn.style.background="rgba(217,119,6,.10)"}});
  document.getElementById("rlAdvFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Excellent choice! · Rất tốt!":"Try this more natural response · Hãy tham khảo câu tự nhiên hơn"}</b><p>${q.choices[q.answer]}</p><p class="small">${q.why}</p></div>`;
  rlAdvChecked=true;if(correct)rlAdvCompleted++;if(typeof egRoadmapTrack==="function")egRoadmapTrack("advancedAnswer",{correct});
  document.getElementById("rlAdvScore").textContent=`Correct advanced turns this session: ${rlAdvCompleted} · Số câu đúng: ${rlAdvCompleted}`;
  document.getElementById("rlAdvNext").disabled=false;
 }
 function rlAdvNext(){
- if(!rlAdvChecked)return;
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0];
- if(rlAdvTurn<sc.turns.length-1){rlAdvTurn++;rlAdvChoice=-1;rlAdvChecked=false;rlAdvRender()}
- else{document.getElementById("rlAdvFeedback").innerHTML+='<p><b>Scenario complete! · Hoàn thành tình huống!</b></p>';document.getElementById("rlAdvNext").disabled=true;if(typeof egRoadmapTrack==="function"){const n=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0].title.toLowerCase();egRoadmapTrack("advancedComplete",{kind:n.includes("nail")?"nail":"work"})}}
+ if(!rlAdvChecked||rlAdvTurn>=sc.turns.length-1)return;
+ rlAdvTurn++;rlAdvChoice=-1;rlAdvChecked=false;rlAdvRender();setTimeout(rlAdvListen,250);
 }
 function rlAdvReset(){rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;rlAdvLoad()}
 function rlRenderInsights(){
@@ -1431,10 +1523,13 @@ function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElem
 function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
 function rlSpeakClient(){say(rlTopics[rlCurrent].turns[rlTurn][1]);}
 function rlNext(){
- if(!rlChecked){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Check your answer before moving on. Hãy kiểm tra câu trả lời trước khi tiếp tục.</div>';return;}
  const t=rlTopics[rlCurrent];
- if(rlTurn<t.turns.length-1){rlTurn++;rlRender();}
- else{document.getElementById("rlFeedback").innerHTML='<div class="feedback good">Conversation complete! Well done. Hoàn thành hội thoại! Làm tốt lắm.</div>';rlTurn=0;rlHistory=[];rlSelected=-1;document.getElementById("rlReview").innerHTML="You completed this conversation. Choose another topic to practise again. Bạn đã hoàn thành hội thoại này. Hãy chọn chủ đề khác để luyện tiếp.";}
+ if(rlTurn>=t.turns.length-1){
+  const nextBtn=document.getElementById("rlNextBtn");if(nextBtn){nextBtn.disabled=true;nextBtn.textContent="Topic completed · Đã hoàn thành";}
+  return;
+ }
+ if(!rlChecked){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Check your answer before moving on. Hãy kiểm tra câu trả lời trước khi tiếp tục.</div>';return;}
+ rlTurn++;rlRender();rlSpeakClient();
 }
 document.addEventListener("keydown",e=>{
  const page=document.getElementById("realconversation");
@@ -1484,9 +1579,46 @@ function pcDeleteRecording(){pcPlayback.pause();pcPlayback.removeAttribute('src'
 function pcCompareListening(){if(!pcRecordedBlob)return;pcListen();setTimeout(()=>{if(pcRecordingUrl){pcPlayback.currentTime=0;pcPlayback.play().catch(()=>{pcStatus.textContent="Tap Play on your recording to listen. · Hãy bấm phát bản ghi."})}},Math.max(1800,pcTarget.value.trim().length*75))}
 
 const SIM_CASES=[{role:"Client",prompt:"I'm thinking about a simple nude manicure, but I have a short nail on one finger. What would you recommend?",vi:"Tôi muốn làm móng nude đơn giản nhưng có một móng ngắn. Bạn khuyên gì?",hint:"We could… / I'd recommend… / Would you prefer…"},{role:"Manager",prompt:"The client meeting has been moved forward, and the report isn't ready. How will you handle this?",vi:"Cuộc họp khách hàng được chuyển sớm và báo cáo chưa xong. Bạn xử lý thế nào?",hint:"I'll prioritise… / Could we agree on… / I'll send an update by…"},{role:"Shop assistant",prompt:"I'm afraid this item doesn't fit, and I'd like to return it. What can you do?",vi:"Món đồ không vừa và tôi muốn trả lại. Bạn hỗ trợ thế nào?",hint:"Of course… / Do you have the receipt? / We can…"},{role:"Customer",prompt:"I've been waiting for an update, but nobody has contacted me. This is disappointing.",vi:"Tôi đã chờ cập nhật nhưng không ai liên hệ. Tôi thất vọng.",hint:"I understand… / I'm sorry… / Let me check…"}];
-function simLoad(){const c=SIM_CASES[Number(simScenario.value)||0];simRole.textContent=c.role;simPrompt.textContent=c.prompt;simVi.textContent=c.vi;simReply.value="";simFeedback.innerHTML=""}
-function simHint(){simFeedback.textContent="Useful phrases: "+SIM_CASES[Number(simScenario.value)||0].hint}
-function simSubmit(){const reply=simReply.value.trim();if(reply.length<8){alert("Write a little more in English. Hãy viết dài hơn.");return}const c=SIM_CASES[Number(simScenario.value)||0],hist=labRead(LAB_KEYS.sim,[]);hist.push({scenario:c.role,prompt:c.prompt,reply,date:new Date().toISOString()});labWrite(LAB_KEYS.sim,hist.slice(-100));labLog("simulatorReplies");const tips=[];if(!/\b(please|could|would|thank|sorry|appreciate)\b/i.test(reply))tips.push("Try adding a polite expression.");if(!/[.!?]$/.test(reply))tips.push("Add punctuation at the end.");if(reply.split(/\s+/).length<8)tips.push("Add a reason or a next step.");if(!tips.length)tips.push("Good effort. Read your reply aloud and check that it answers the concern.");simFeedback.innerHTML=`<div class="feedback"><b>Practice feedback · Gợi ý</b><p>${tips.map(labEsc).join("<br>")}</p><small>This is a guided checklist, not an AI assessment.</small></div>`;simHistory.textContent=`Saved practice replies: ${hist.length}`;simReply.value=""}
+function simLoad(){
+ const get=id=>document.getElementById(id);
+ const scenario=get("simScenario"),c=SIM_CASES[Number(scenario&&scenario.value)||0];
+ if(!c)return;
+ get("simRole").textContent=c.role;
+ get("simPrompt").textContent=c.prompt;
+ get("simVi").textContent=c.vi;
+ get("simReply").value="";
+ get("simFeedback").innerHTML="";
+}
+function simHint(){
+ const scenario=document.getElementById("simScenario"),c=SIM_CASES[Number(scenario&&scenario.value)||0],out=document.getElementById("simFeedback");
+ if(out&&c)out.textContent="Useful phrases: "+c.hint;
+}
+function simSubmit(){
+ const get=id=>document.getElementById(id),replyBox=get("simReply"),out=get("simFeedback"),historyBox=get("simHistory"),scenario=get("simScenario");
+ if(!replyBox||!out||!scenario)return;
+ const reply=replyBox.value.trim();
+ if(reply.length<8){out.innerHTML='<div class="feedback">Please write a little more in English. · Hãy viết câu trả lời dài hơn nhé.</div>';replyBox.focus();return}
+ const c=SIM_CASES[Number(scenario.value)||0];
+ if(!c){out.textContent="Please choose a conversation scenario. · Hãy chọn tình huống hội thoại.";return}
+ const tips=[];
+ if(!/\b(please|could|would|thank|sorry|appreciate)\b/i.test(reply))tips.push("Try adding a polite expression.");
+ if(!/[.!?]$/.test(reply))tips.push("Add punctuation at the end (optional for this practice).");
+ if(reply.split(/\s+/).length<8)tips.push("Consider adding a reason or a next step.");
+ if(!tips.length)tips.push("Good effort. Read your reply aloud and check that it answers the concern.");
+ // Render feedback first so a storage/sync issue can never make Send appear to do nothing.
+ out.innerHTML=`<div class="feedback"><b>Practice feedback · Gợi ý luyện tập</b><p>${tips.map(x=>labEsc(x)).join("<br>")}</p><p><b>Your reply · Câu trả lời của bạn:</b><br>${labEsc(reply)}</p><small>This is a guided checklist, not an AI assessment. · Đây là gợi ý luyện tập, không phải chấm điểm AI.</small></div>`;
+ try{
+   const hist=labRead(LAB_KEYS.sim,[]);
+   hist.push({scenario:c.role,prompt:c.prompt,reply,date:new Date().toISOString()});
+   labWrite(LAB_KEYS.sim,hist.slice(-100));
+   try{labLog("simulatorReplies")}catch(e){}
+   if(historyBox)historyBox.textContent=`Saved practice replies: ${hist.length}`;
+   if(typeof cloudSchedule==="function"){try{cloudSchedule()}catch(e){}}
+ }catch(e){
+   const note=document.createElement("p");note.className="small muted";note.textContent="Your feedback is shown, but this reply could not be saved on this device.";out.appendChild(note);
+ }
+ replyBox.value="";
+}
 function wcRestore(){if(!wcText.value)wcText.value=localStorage.getItem(LAB_KEYS.draft)||""}
 function wcSave(){localStorage.setItem(LAB_KEYS.draft,wcText.value);if(typeof cloudSchedule==="function")cloudSchedule();labLog("writingDrafts");wcFeedback.textContent="Draft saved on this device. Bản nháp đã lưu."}
 function wcCheck(){const text=wcText.value.trim();if(!text){alert("Write something first.");return}const tips=[];if(/\bi am agree\b/i.test(text))tips.push("Use “I agree”, not “I am agree”.");if(/\bi am interested to\b/i.test(text))tips.push("Use “I am interested in + noun/-ing”.");if(/\byesterday\b/i.test(text)&&/\bwill\b/i.test(text))tips.push("Check the tense after “yesterday”.");if(/\bhe go\b|\bshe go\b|\bit go\b/i.test(text))tips.push("Use “goes” with he/she/it in the present simple.");if(/\bi have went\b/i.test(text))tips.push("Use “I have gone”, not “I have went”.");if(!/[.!?]$/.test(text))tips.push("Add punctuation at the end.");if(text.split(/\s+/).length<15)tips.push("Add context or a clear next step.");if(!tips.length)tips.push("No common pattern detected. Review tone, articles and verb tenses.");wcFeedback.innerHTML=`<b>${text.split(/\s+/).length} words · ${labEsc(wcType.value)}</b><ul>${tips.map(x=>`<li>${labEsc(x)}</li>`).join("")}</ul><small>Rule-based suggestions only, not an AI grammar grader.</small>`;labLog("writingChecks")}
