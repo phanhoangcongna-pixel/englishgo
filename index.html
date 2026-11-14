@@ -1655,7 +1655,7 @@ function renderTranslation(){
  document.getElementById("trCounter").textContent="Câu "+(trIndex+1)+"/"+trPool.length;
  document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Tự tin: "+trConfident;
 }
-function normalizeTranslation(x){return (x||"").toLowerCase().trim().replace(/[.,!?;:'"“”‘’]/g,"").replace(/\s+/g," ");}
+function normalizeTranslation(x){return String(x||"").normalize("NFC").toLocaleLowerCase().replace(/[’‘]/g,"\'").replace(/[.,!?;:;"“”‘’()\[\]{}]/g," ").replace(/\s+/g," ").trim();}
 function checkTranslation(){
  if(trChecked)return;trChecked=true;trDone++;
  const dir=document.getElementById("trDirection").value,answer=document.getElementById("trAnswer").value.trim();
@@ -1768,8 +1768,7 @@ function checkTopicTranslation(){
  const item=topicPool[topicIndex],dir=document.getElementById("topicDirection").value;
  const expected=dir==="vi-en"?item.en:item.vi;
  const answer=document.getElementById("topicAnswer").value.trim();
- const norm=x=>(x||"").toLowerCase().trim().replace(/[.,!?;:'"“”‘’]/g,"").replace(/\\s+/g," ");
- const matched=!!answer&&norm(answer)===norm(expected);
+ const matched=!!answer&&normalizeTranslation(answer)===normalizeTranslation(expected);
  document.getElementById("topicFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+(matched?'✓ Chính xác!':'✗ Chưa khớp đáp án mẫu. Hãy xem lại nhé.')+'<br><b>Đáp án:</b> '+expected+'<br><span class="small">Có thể có cách dịch khác. Nếu câu của bạn cùng ý và tự nhiên, bạn vẫn có thể tự tính là đúng.</span></div>';
  if(matched)say(item.en);
 }
@@ -1808,7 +1807,10 @@ document.addEventListener("keydown",function(e){
  }
 });
 
-document.addEventListener("DOMContentLoaded",()=>{startTranslation();startTopicTranslation();startThousandTranslation();renderGrammar();startGrammarPractice();rlInit();});
+document.addEventListener("DOMContentLoaded",()=>{
+ ["trAnswer","topicAnswer","thousandAnswer"].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.addEventListener("input",()=>{if(id==="trAnswer"){trChecked=false;document.getElementById("trFeedback").innerHTML="";}else if(id==="topicAnswer"){topicAnswered=false;document.getElementById("topicFeedback").innerHTML="";}else{thousandAnswered=false;document.getElementById("thousandFeedback").innerHTML="";}})});
+ startTranslation();startTopicTranslation();startThousandTranslation();renderGrammar();startGrammarPractice();rlInit();
+});
 </script>
 
 <script>
