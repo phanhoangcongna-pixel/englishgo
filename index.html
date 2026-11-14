@@ -2263,16 +2263,42 @@ function speakSpokenEnglish(text){
     alert('Trình duyệt này chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.');
     return;
   }
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const synth = window.speechSynthesis;
+  synth.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(String(text || ''));
   utterance.lang = 'en-US';
-  utterance.rate = 0.88;
-  utterance.pitch = 1;
-  const voices = window.speechSynthesis.getVoices();
-  const voice = voices.find(v => /^en(-|_)/i.test(v.lang) && /Google|Natural|English/i.test(v.name))
-             || voices.find(v => /^en(-|_)/i.test(v.lang));
-  if(voice) utterance.voice = voice;
-  window.speechSynthesis.speak(utterance);
+  utterance.rate = 0.82;
+  utterance.pitch = 1.02;
+  utterance.volume = 1;
+
+  // Prefer high-quality natural English voices when the device provides them.
+  const voices = synth.getVoices();
+  const preferredNames = [
+    /Microsoft Aria Online.*Natural/i,
+    /Microsoft Jenny Online.*Natural/i,
+    /Microsoft Ava Online.*Natural/i,
+    /Google US English/i,
+    /Samantha/i,
+    /Ava/i,
+    /Jenny/i,
+    /Aria/i,
+    /Karen/i
+  ];
+  let voice = null;
+  for(const pattern of preferredNames){
+    voice = voices.find(v => pattern.test(v.name) && /^en(-|_)(US|GB|AU|CA)/i.test(v.lang));
+    if(voice) break;
+  }
+  if(!voice) voice = voices.find(v => /^en-US$/i.test(v.lang) && /natural|online|enhanced/i.test(v.name));
+  if(!voice) voice = voices.find(v => /^en-US$/i.test(v.lang));
+  if(!voice) voice = voices.find(v => /^en(-|_)/i.test(v.lang));
+  if(voice){
+    utterance.voice = voice;
+    utterance.lang = voice.lang || 'en-US';
+  }
+  synth.resume();
+  synth.speak(utterance);
 }
 document.addEventListener('click', function(e){
   const audioButton = e.target.closest('[data-spoken-audio]');
