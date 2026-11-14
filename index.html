@@ -56,12 +56,27 @@ textarea { width: 100%; }
   #topicSelect, #thousandTopic { display: block; width: 100%; }
   .navlinks { min-width: 0; max-width: 100%; }
 }
+
+/* Compact grouped navigation */
+.navlinks{align-items:center;overflow:visible;flex-wrap:wrap;gap:5px}
+.navlinks>button,.nav-group>summary{background:transparent;color:#c8d3ea;padding:9px 11px;border-radius:9px;white-space:nowrap;font-size:13px;cursor:pointer;list-style:none;border:0}
+.nav-group>summary::-webkit-details-marker{display:none}
+.navlinks>button:hover,.nav-group>summary:hover,.nav-group[open]>summary{background:#2a3d64;color:#fff}
+.nav-group{position:relative;flex:0 0 auto}
+.nav-menu{position:absolute;top:calc(100% + 7px);left:0;z-index:20;min-width:220px;max-height:min(70vh,480px);overflow:auto;padding:7px;background:#192d50;border:1px solid #405477;border-radius:12px;box-shadow:0 12px 28px #08152c55;display:grid;gap:3px}
+.nav-menu button{width:100%;text-align:left;background:transparent;color:#e1e9f8;padding:10px 12px;border-radius:8px;font-size:13px;white-space:normal}
+.nav-menu button:hover,.nav-menu button.active{background:#2f4b78;color:#fff}
+@media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
 
 </head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
-<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="learninglab">Learning Lab · Trung tâm luyện tập</button><button data-page="cloud">Cloud sync ☁</button></nav>
+<nav class="navlinks" aria-label="Main navigation">
+<button class="active" data-page="home">⌂ Home</button>
+<details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button></div></details>
+<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button></div></details>
+<button data-page="progress">📈 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page active" id="home">
@@ -615,7 +630,7 @@ let xp=get("xp",0),known=get("known",[]),done=get("done",[]),lastDay=get("day","
 function award(id,points=10){if(!done.includes(id)){done.push(id);xp+=points;save("done",done);save("xp",xp);daily();updateStats()}}
 function daily(){let d=new Date().toISOString().slice(0,10);if(lastDay!==d){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);streak=lastDay===y?streak+1:1;lastDay=d;save("day",lastDay);save("streak",streak)}}
 function updateStats(){document.getElementById("xp").textContent=xp+" XP";document.getElementById("level").textContent=xp>=300?"B1":xp>=100?"A2":"A1";document.getElementById("streak").textContent=streak+" 🔥";document.getElementById("learned").textContent=known.length;document.getElementById("progress").style.width=Math.min(100,Math.round(done.length/15*100))+"%";document.getElementById("progressText").textContent=done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp."}
-function go(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace();if(id==="learninglab")labInit()}
+function go(id){document.querySelectorAll(".nav-group").forEach(g=>g.open=false);document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace();if(id==="learninglab")labInit()}
 
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
 
