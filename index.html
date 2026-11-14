@@ -69,46 +69,7 @@ textarea { width: 100%; }
 .nav-menu button:hover,.nav-menu button.active{background:#2f4b78;color:#fff}
 @media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
-<section class="page" id="spokenenglish">
-<div class="page-header">
-<div>
-<p class="eyebrow">SPEAK NATURALLY · NÓI TỰ NHIÊN</p>
-<h1>Natural Spoken English · Tiếng Anh giao tiếp tự nhiên</h1>
-<p>Học các dạng rút gọn thường gặp trong lời nói. Các dạng này giúp nghe hiểu và giao tiếp tự nhiên hơn; không phải lúc nào cũng phù hợp khi viết trang trọng.</p>
-</div>
-</div>
-<div class="card">
-<h2>🔎 Tra cứu cách nói rút gọn</h2>
-<p>Tìm theo dạng đầy đủ hoặc dạng nói tự nhiên. Ví dụ: <b>want to</b>, <b>wanna</b>, <b>going to</b>, <b>gonna</b>.</p>
-<input id="spokenSearch" oninput="filterSpokenEnglish()" placeholder="Nhập từ/cụm từ cần tìm..." style="width:100%;max-width:520px" type="search"/>
-<div class="spoken-grid" id="spokenResults" style="margin-top:16px"></div>
-</div>
-<div class="card">
-<h2>⚠️ Lưu ý quan trọng – đừng thay thế máy móc</h2>
-<ul>
-<li><b>Wanna = want to</b> khi <i>want to</i> đứng trước động từ: <i>I want to go → I wanna go.</i> Nhưng trước danh từ phải dùng <i>want</i>: <i>I want a coffee</i>, không nói <i>I wanna a coffee</i>.</li>
-<li><b>Gonna = going to</b> khi nói về dự định và theo sau là động từ: <i>I'm going to leave → I'm gonna leave.</i> Không dùng <i>gonna</i> để thay mọi trường hợp của <i>going to</i>: <i>I'm going to London</i> (đến London), không phải <i>I'm gonna London</i>.</li>
-<li><b>Gotta</b> thường tương ứng với <i>have got to / have to</i> mang nghĩa phải làm gì: <i>I've got to go → I gotta go.</i> Không thay cho mọi nghĩa của <i>got</i>.</li>
-<li><b>Hafta / hasta</b> là cách ghi gần âm của <i>have to / has to</i> trong lời nói; cách viết chuẩn vẫn là <i>have to / has to</i>.</li>
-<li><b>Kinda / sorta</b> tương ứng <i>kind of / sort of</i>, thường mang nghĩa “hơi / kiểu như”. Đây là cách nói thân mật, không phải lúc nào cũng thay được khi <i>kind</i> hoặc <i>sort</i> mang nghĩa danh từ riêng.</li>
-<li><b>Gimme / lemme</b> tương ứng <i>give me / let me</i> trong khẩu ngữ. Dùng khi nói thân mật; khi viết bài, email trang trọng, hãy viết đầy đủ.</li>
-<li><b>Dunno</b> là cách nói thân mật của <i>don't know</i>. Không dùng trong văn viết trang trọng.</li>
-<li><b>Didja / wouldja / couldja / shouldja</b> mô phỏng cách các âm nối vào nhau khi nói nhanh; đây chủ yếu là cách ghi phát âm, không phải chính tả chuẩn.</li>
-<li>Những dạng như <b>wanna, gonna, gotta, gimme</b> không phải lúc nào cũng được chấp nhận trong bài thi hoặc văn bản. Khi viết chuẩn, ưu tiên dạng đầy đủ.</li>
-<li>Không phải mọi cụm từ đều có dạng rút gọn cố định. Phát âm còn phụ thuộc giọng vùng miền, tốc độ nói và ngữ cảnh. Nếu không chắc, hãy dùng dạng đầy đủ.</li>
-</ul>
-</div>
-<div class="card">
-<h2>🎧 Cách học</h2>
-<ol>
-<li>Nhìn dạng đầy đủ và hiểu nghĩa trước.</li>
-<li>Nghe/đọc dạng nói tự nhiên để nhận ra khi người bản xứ nói nhanh.</li>
-<li>Tập nói dạng rút gọn trong hội thoại thân mật.</li>
-<li>Khi viết bài, làm bài thi hoặc email trang trọng, quay về cách viết đầy đủ.</li>
-</ol>
-<p><b>Ghi nhớ:</b> EnglishGo dùng mục này để giúp bạn nhận diện và học cách nói tự nhiên. Không nên tự động đổi mọi cụm từ sang dạng rút gọn nếu ngữ pháp hoặc ngữ cảnh không phù hợp.</p>
-</div>
-</section><script>
+<script>
 (function(){
   try{
     var page=sessionStorage.getItem("eg-last-page")||"";
@@ -226,6 +187,47 @@ body > main{
 <button data-page="progress">📈 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
+<section class="page" id="spokenenglish">
+<div class="page-header">
+<div>
+<p class="eyebrow">SPEAK NATURALLY · NÓI TỰ NHIÊN</p>
+<h1>Natural Spoken English · Tiếng Anh giao tiếp tự nhiên</h1>
+<p>Học các dạng rút gọn thường gặp trong lời nói. Các dạng này giúp nghe hiểu và giao tiếp tự nhiên hơn; không phải lúc nào cũng phù hợp khi viết trang trọng.</p>
+</div>
+</div>
+<div class="card">
+<h2>🔎 Tra cứu cách nói rút gọn</h2>
+<p>Tìm theo dạng đầy đủ hoặc dạng nói tự nhiên. Ví dụ: <b>want to</b>, <b>wanna</b>, <b>going to</b>, <b>gonna</b>.</p>
+<input id="spokenSearch" oninput="filterSpokenEnglish()" placeholder="Nhập từ/cụm từ cần tìm..." style="width:100%;max-width:520px" type="search"/>
+<div class="spoken-grid" id="spokenResults" style="margin-top:16px"></div>
+</div>
+<div class="card">
+<h2>⚠️ Lưu ý quan trọng – đừng thay thế máy móc</h2>
+<ul>
+<li><b>Wanna = want to</b> khi <i>want to</i> đứng trước động từ: <i>I want to go → I wanna go.</i> Nhưng trước danh từ phải dùng <i>want</i>: <i>I want a coffee</i>, không nói <i>I wanna a coffee</i>.</li>
+<li><b>Gonna = going to</b> khi nói về dự định và theo sau là động từ: <i>I'm going to leave → I'm gonna leave.</i> Không dùng <i>gonna</i> để thay mọi trường hợp của <i>going to</i>: <i>I'm going to London</i> (đến London), không phải <i>I'm gonna London</i>.</li>
+<li><b>Gotta</b> thường tương ứng với <i>have got to / have to</i> mang nghĩa phải làm gì: <i>I've got to go → I gotta go.</i> Không thay cho mọi nghĩa của <i>got</i>.</li>
+<li><b>Hafta / hasta</b> là cách ghi gần âm của <i>have to / has to</i> trong lời nói; cách viết chuẩn vẫn là <i>have to / has to</i>.</li>
+<li><b>Kinda / sorta</b> tương ứng <i>kind of / sort of</i>, thường mang nghĩa “hơi / kiểu như”. Đây là cách nói thân mật, không phải lúc nào cũng thay được khi <i>kind</i> hoặc <i>sort</i> mang nghĩa danh từ riêng.</li>
+<li><b>Gimme / lemme</b> tương ứng <i>give me / let me</i> trong khẩu ngữ. Dùng khi nói thân mật; khi viết bài, email trang trọng, hãy viết đầy đủ.</li>
+<li><b>Dunno</b> là cách nói thân mật của <i>don't know</i>. Không dùng trong văn viết trang trọng.</li>
+<li><b>Didja / wouldja / couldja / shouldja</b> mô phỏng cách các âm nối vào nhau khi nói nhanh; đây chủ yếu là cách ghi phát âm, không phải chính tả chuẩn.</li>
+<li>Những dạng như <b>wanna, gonna, gotta, gimme</b> không phải lúc nào cũng được chấp nhận trong bài thi hoặc văn bản. Khi viết chuẩn, ưu tiên dạng đầy đủ.</li>
+<li>Không phải mọi cụm từ đều có dạng rút gọn cố định. Phát âm còn phụ thuộc giọng vùng miền, tốc độ nói và ngữ cảnh. Nếu không chắc, hãy dùng dạng đầy đủ.</li>
+</ul>
+</div>
+<div class="card">
+<h2>🎧 Cách học</h2>
+<ol>
+<li>Nhìn dạng đầy đủ và hiểu nghĩa trước.</li>
+<li>Nghe/đọc dạng nói tự nhiên để nhận ra khi người bản xứ nói nhanh.</li>
+<li>Tập nói dạng rút gọn trong hội thoại thân mật.</li>
+<li>Khi viết bài, làm bài thi hoặc email trang trọng, quay về cách viết đầy đủ.</li>
+</ol>
+<p><b>Ghi nhớ:</b> EnglishGo dùng mục này để giúp bạn nhận diện và học cách nói tự nhiên. Không nên tự động đổi mọi cụm từ sang dạng rút gọn nếu ngữ pháp hoặc ngữ cảnh không phù hợp.</p>
+</div>
+</section>
+
 <section class="page active" id="home">
 <style>
 /* Refreshed, compact EnglishGo home page */
