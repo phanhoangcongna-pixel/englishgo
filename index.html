@@ -228,6 +228,20 @@ textarea { width: 100%; }
   </div>
   <div id="rlMistakeList" class="small muted">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
  </div>
+ <div class="panel" id="rlDailyReview">
+  <div class="controls" style="justify-content:space-between;align-items:center">
+   <div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
+   <span class="badge" id="rlDailyStreak">🔥 0-day streak</span>
+  </div>
+  <div class="controls" style="gap:16px;margin:10px 0">
+   <span class="small" id="rlDailyStats">Today: 0 correct · Hôm nay: 0 câu đúng</span>
+   <span class="small" id="rlDailyProgress">Ready when you are · Sẵn sàng khi bạn bắt đầu</span>
+  </div>
+  <div id="rlDailyStage">
+   <p class="muted">Complete a quick 5-question session. It will include your saved mistakes when available, plus new questions. Hoàn thành 5 câu ngắn, gồm câu từng sai (nếu có) và câu mới.</p>
+   <button class="btn" onclick="rlDailyStart()">Start daily review · Bắt đầu ôn tập</button>
+  </div>
+ </div>
  <div class="panel">
   <h2>Review your conversation · Xem lại hội thoại</h2>
   <p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
@@ -1030,6 +1044,68 @@ function rlPracticeMistake(topicIndex,turnIndex){
  rlTurn=turnIndex;rlRender();
  document.getElementById("rlFeedback").innerHTML='<div class="feedback">Try this question again. Hãy thử trả lời câu này lần nữa.</div>';
 }
+const RL_DAILY_STATS_KEY="eg3-daily-review-stats";
+let rlDailyQueue=[],rlDailyIndex=0,rlDailySelected=-1,rlDailyChecked=false,rlDailyCorrect=0;
+function rlDailyDate(){return new Date().toLocaleDateString("en-CA")}
+function rlDailyStats(){try{return JSON.parse(localStorage.getItem(RL_DAILY_STATS_KEY)||"{}")}catch(e){return {}}}
+function rlDailySaveStats(){localStorage.setItem(RL_DAILY_STATS_KEY,JSON.stringify(rlDailyStatsData));}
+let rlDailyStatsData=rlDailyStats();
+function rlDailyRenderStats(){
+ rlDailyStatsData=rlDailyStats();
+ const today=rlDailyDate(),days=rlDailyStatsData.days||{};
+ const todayCount=days[today]?.correct||0;
+ let streak=0,d=new Date();
+ while(days[d.toLocaleDateString("en-CA")]){streak++;d.setDate(d.getDate()-1)}
+ const a=document.getElementById("rlDailyStreak"),b=document.getElementById("rlDailyStats");
+ if(a)a.textContent="🔥 "+streak+"-day streak";
+ if(b)b.textContent="Today: "+todayCount+" correct · Hôm nay: "+todayCount+" câu đúng";
+}
+function rlDailyShuffle(a){return a.sort(()=>Math.random()-.5)}
+function rlDailyStart(){
+ const mistakes=rlDailyShuffle(rlGetMistakes().slice());
+ const old=mistakes.slice(0,Math.min(3,mistakes.length)).map(m=>({topicIndex:m.topicIndex,turnIndex:m.turnIndex,isMistake:true}));
+ const seen=new Set(old.map(x=>x.topicIndex+":"+x.turnIndex));
+ const fresh=[];
+ rlDailyShuffle(rlTopics.flatMap((t,ti)=>t.turns.map((q,qi)=>({topicIndex:ti,turnIndex:qi,isMistake:false}))))
+  .forEach(x=>{const k=x.topicIndex+":"+x.turnIndex;if(!seen.has(k)&&fresh.length<5-old.length){fresh.push(x);seen.add(k)}});
+ rlDailyQueue=rlDailyShuffle(old.concat(fresh));rlDailyIndex=0;rlDailySelected=-1;rlDailyChecked=false;rlDailyCorrect=0;
+ const stage=document.getElementById("rlDailyStage");
+ if(!rlDailyQueue.length){stage.textContent="No questions available. Chưa có câu hỏi.";return}
+ stage.innerHTML='<div class="badge" id="rlDailyKind"></div><h3 id="rlDailyPrompt"></h3><p class="small muted" id="rlDailyVi"></p><div id="rlDailyChoices" style="display:grid;gap:8px;margin:12px 0"></div><div id="rlDailyFeedback" aria-live="polite"></div><div class="controls"><button class="btn" id="rlDailyCheck" onclick="rlDailyCheck()">Check · Kiểm tra</button><button class="btn line" id="rlDailyNext" onclick="rlDailyNext()" disabled>Next · Tiếp theo</button></div>';
+ rlDailyRenderQuestion();
+}
+function rlDailyRenderQuestion(){
+ const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex];
+ rlDailySelected=-1;rlDailyChecked=false;
+ document.getElementById("rlDailyKind").textContent=(x.isMistake?"Review a mistake · Câu từng sai":"New question · Câu mới")+" · "+(rlDailyIndex+1)+"/"+rlDailyQueue.length;
+ document.getElementById("rlDailyPrompt").textContent=q[1];
+ document.getElementById("rlDailyVi").textContent=q[2];
+ document.getElementById("rlDailyChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line" data-daily-choice="${i}" style="text-align:left;white-space:normal" onclick="rlDailyChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
+ document.getElementById("rlDailyFeedback").innerHTML="";
+ document.getElementById("rlDailyCheck").disabled=false;document.getElementById("rlDailyNext").disabled=true;
+ document.getElementById("rlDailyProgress").textContent="Question "+(rlDailyIndex+1)+" of "+rlDailyQueue.length+" · Câu "+(rlDailyIndex+1)+"/"+rlDailyQueue.length;
+}
+function rlDailyChoose(i){
+ if(rlDailyChecked)return;rlDailySelected=i;
+ document.querySelectorAll("#rlDailyChoices button").forEach((b,n)=>{b.style.borderColor=n===i?"var(--primary)":"";b.style.background=n===i?"var(--surface)":""});
+}
+function rlDailyCheck(){
+ if(rlDailyChecked)return;
+ if(rlDailySelected<0){document.getElementById("rlDailyFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn đáp án trước.</div>';return}
+ const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex],norm=v=>v.toLowerCase().replace(/[.,!?']/g,"").replace(/\\s+/g," ").trim();
+ const chosen=q[3][rlDailySelected],correct=norm(chosen)===norm(q[4]);
+ if(correct){rlDailyCorrect++;rlDailyStatsData=rlDailyStats();const day=rlDailyDate();rlDailyStatsData.days=rlDailyStatsData.days||{};rlDailyStatsData.days[day]=rlDailyStatsData.days[day]||{correct:0};rlDailyStatsData.days[day].correct++;rlDailySaveStats();if(x.isMistake)rlSaveMistake(x.topicIndex,x.turnIndex,q,chosen,true)}
+ document.querySelectorAll("#rlDailyChoices button").forEach((b,i)=>{b.disabled=true;if(norm(q[3][i])===norm(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlDailySelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
+ document.getElementById("rlDailyFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Correct! Well done. Chính xác!":"Not quite. Keep practising. Chưa đúng, hãy tiếp tục luyện tập."}</b><p><b>Suggested reply:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
+ rlDailyChecked=true;document.getElementById("rlDailyCheck").disabled=true;document.getElementById("rlDailyNext").disabled=false;rlDailyRenderStats();
+}
+function rlDailyNext(){
+ if(!rlDailyChecked)return;
+ if(rlDailyIndex<rlDailyQueue.length-1){rlDailyIndex++;rlDailyRenderQuestion();return}
+ const total=rlDailyQueue.length,correct=rlDailyCorrect;
+ document.getElementById("rlDailyStage").innerHTML=`<div class="feedback good"><b>Daily review complete! Hoàn thành ôn tập hôm nay!</b><p>You got ${correct}/${total} correct. Bạn trả lời đúng ${correct}/${total} câu.</p><button class="btn" onclick="rlDailyStart()">Practise another set · Làm bộ câu hỏi khác</button></div>`;
+ document.getElementById("rlDailyProgress").textContent="Completed · Đã hoàn thành";rlDailyRenderStats();
+}
 function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElementById("rlFeedback").innerHTML=`<div class="feedback"><b>Hint · Gợi ý:</b> ${q[5]}<p><b>Useful phrase · Cụm từ hữu ích:</b> ${q[4].split(" ").slice(0,4).join(" ")}...</p></div>`;}
 function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
 function rlSpeakClient(){say(rlTopics[rlCurrent].turns[rlTurn][1]);}
@@ -1046,7 +1122,7 @@ document.addEventListener("keydown",e=>{
  if(e.key==="ArrowRight" && rlChecked){e.preventDefault();rlNext();}
 });
 
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes()});
+document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlRenderMistakes();rlDailyRenderStats()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
