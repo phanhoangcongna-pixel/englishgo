@@ -1,9 +1,10 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" type="image/png" href="englishgo-icon.png">
-<link rel="apple-touch-icon" href="englishgo-icon.png">
-<meta name="theme-color" content="#142342">
-<meta name="description" content="EnglishGo 2.0 — Free bilingual English learning for Vietnamese speakers, A1 to B1.">
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="englishgo-icon.png" rel="icon" type="image/png"/>
+<link href="englishgo-icon.png" rel="apple-touch-icon"/>
+<meta content="#142342" name="theme-color"/>
+<meta content="EnglishGo 2.0 — Free bilingual English learning for Vietnamese speakers, A1 to B1." name="description"/>
 <title>EnglishGo — Learn English · Học tiếng Anh</title>
 <style>
 :root{--bg:#f4f6fb;--card:#fff;--ink:#17233c;--muted:#68758d;--line:#e5eaf2;--blue:#4169e1;--navy:#142342;--pale:#edf2ff;--green:#14865e;--gold:#e8a83c;--shadow:0 12px 30px #1d31500c}
@@ -68,8 +69,46 @@ textarea { width: 100%; }
 .nav-menu button:hover,.nav-menu button.active{background:#2f4b78;color:#fff}
 @media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
-
-<script>
+<section class="page" id="spokenenglish">
+<div class="page-header">
+<div>
+<p class="eyebrow">SPEAK NATURALLY · NÓI TỰ NHIÊN</p>
+<h1>Natural Spoken English · Tiếng Anh giao tiếp tự nhiên</h1>
+<p>Học các dạng rút gọn thường gặp trong lời nói. Các dạng này giúp nghe hiểu và giao tiếp tự nhiên hơn; không phải lúc nào cũng phù hợp khi viết trang trọng.</p>
+</div>
+</div>
+<div class="card">
+<h2>🔎 Tra cứu cách nói rút gọn</h2>
+<p>Tìm theo dạng đầy đủ hoặc dạng nói tự nhiên. Ví dụ: <b>want to</b>, <b>wanna</b>, <b>going to</b>, <b>gonna</b>.</p>
+<input id="spokenSearch" oninput="filterSpokenEnglish()" placeholder="Nhập từ/cụm từ cần tìm..." style="width:100%;max-width:520px" type="search"/>
+<div class="spoken-grid" id="spokenResults" style="margin-top:16px"></div>
+</div>
+<div class="card">
+<h2>⚠️ Lưu ý quan trọng – đừng thay thế máy móc</h2>
+<ul>
+<li><b>Wanna = want to</b> khi <i>want to</i> đứng trước động từ: <i>I want to go → I wanna go.</i> Nhưng trước danh từ phải dùng <i>want</i>: <i>I want a coffee</i>, không nói <i>I wanna a coffee</i>.</li>
+<li><b>Gonna = going to</b> khi nói về dự định và theo sau là động từ: <i>I'm going to leave → I'm gonna leave.</i> Không dùng <i>gonna</i> để thay mọi trường hợp của <i>going to</i>: <i>I'm going to London</i> (đến London), không phải <i>I'm gonna London</i>.</li>
+<li><b>Gotta</b> thường tương ứng với <i>have got to / have to</i> mang nghĩa phải làm gì: <i>I've got to go → I gotta go.</i> Không thay cho mọi nghĩa của <i>got</i>.</li>
+<li><b>Hafta / hasta</b> là cách ghi gần âm của <i>have to / has to</i> trong lời nói; cách viết chuẩn vẫn là <i>have to / has to</i>.</li>
+<li><b>Kinda / sorta</b> tương ứng <i>kind of / sort of</i>, thường mang nghĩa “hơi / kiểu như”. Đây là cách nói thân mật, không phải lúc nào cũng thay được khi <i>kind</i> hoặc <i>sort</i> mang nghĩa danh từ riêng.</li>
+<li><b>Gimme / lemme</b> tương ứng <i>give me / let me</i> trong khẩu ngữ. Dùng khi nói thân mật; khi viết bài, email trang trọng, hãy viết đầy đủ.</li>
+<li><b>Dunno</b> là cách nói thân mật của <i>don't know</i>. Không dùng trong văn viết trang trọng.</li>
+<li><b>Didja / wouldja / couldja / shouldja</b> mô phỏng cách các âm nối vào nhau khi nói nhanh; đây chủ yếu là cách ghi phát âm, không phải chính tả chuẩn.</li>
+<li>Những dạng như <b>wanna, gonna, gotta, gimme</b> không phải lúc nào cũng được chấp nhận trong bài thi hoặc văn bản. Khi viết chuẩn, ưu tiên dạng đầy đủ.</li>
+<li>Không phải mọi cụm từ đều có dạng rút gọn cố định. Phát âm còn phụ thuộc giọng vùng miền, tốc độ nói và ngữ cảnh. Nếu không chắc, hãy dùng dạng đầy đủ.</li>
+</ul>
+</div>
+<div class="card">
+<h2>🎧 Cách học</h2>
+<ol>
+<li>Nhìn dạng đầy đủ và hiểu nghĩa trước.</li>
+<li>Nghe/đọc dạng nói tự nhiên để nhận ra khi người bản xứ nói nhanh.</li>
+<li>Tập nói dạng rút gọn trong hội thoại thân mật.</li>
+<li>Khi viết bài, làm bài thi hoặc email trang trọng, quay về cách viết đầy đủ.</li>
+</ol>
+<p><b>Ghi nhớ:</b> EnglishGo dùng mục này để giúp bạn nhận diện và học cách nói tự nhiên. Không nên tự động đổi mọi cụm từ sang dạng rút gọn nếu ngữ pháp hoặc ngữ cảnh không phù hợp.</p>
+</div>
+</section><script>
 (function(){
   try{
     var page=sessionStorage.getItem("eg-last-page")||"";
@@ -80,13 +119,19 @@ textarea { width: 100%; }
   }catch(e){}
 })();
 </script>
-</head>
+<style>
+.spoken-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.spoken-item{border:1px solid var(--border, #ddd);border-radius:12px;padding:12px;background:var(--card, transparent)}
+.spoken-item strong{display:block;font-size:1.05em;margin-bottom:5px}
+.spoken-item small{display:block;opacity:.8;margin-top:5px}
+.spoken-empty{opacity:.75;padding:12px}
+</style></head>
 <body>
-<header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
-<nav class="navlinks" aria-label="Main navigation">
+<header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
+<nav aria-label="Main navigation" class="navlinks">
 <button class="active" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button></div></details>
-<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button></div></details>
+<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="spokenenglish">🗣️ Natural spoken English</button></div></details>
 <button data-page="progress">📈 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
@@ -126,327 +171,310 @@ textarea { width: 100%; }
 @media(max-width:760px){.home-welcome{grid-template-columns:1fr;padding:23px}.home-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.home-secondary{grid-template-columns:1fr}.home-tool{min-height:120px}}
 </style>
 <div class="home-v2">
-  <div class="home-welcome">
-    <div>
-      <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
-      <h1>Hello! 👋<br>What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
-      <p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
-      <div class="actions"><button class="btn" onclick="go('practice')">Bắt đầu học ngay →</button></div>
-    </div>
-
-  </div>
-
-  <div>
-    <div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>8 key skills and tools · 8 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
-    <div class="home-tools">
-      <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
-      <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
-      <button class="home-tool" onclick="go('listening')"><div class="ico">🎧</div><h3>Listening · Luyện nghe</h3><p>Listen to real-life conversations · Nghe hội thoại thực tế</p></button>
-      <button class="home-tool" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Speaking · Luyện nói</h3><p>Practice conversation and pronunciation · Luyện giao tiếp và phát âm</p></button>
-      <button class="home-tool" onclick="go('reading')"><div class="ico">📖</div><h3>Reading · Luyện đọc</h3><p>Read at your level · Đọc hiểu theo cấp độ</p></button>
-      <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
-      <button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>268 sentences + topics + 1,000 phrases · 268 câu + chủ đề + 1.000 câu</p></button>
-      <button class="home-tool" onclick="go('dictionary')"><div class="ico">📘</div><h3>Bilingual Dictionary · Từ điển song ngữ</h3><p>Look up Vietnamese–English and English–Vietnamese · Tra Việt–Anh và Anh–Việt</p></button>
-    </div>
-  </div>
-
-  <div>
-    <div class="home-section-head"><div><h2>Study Tools · Công cụ học tập</h2><p>Your learning tools in one place · Các tiện ích được gom gọn tại đây</p></div></div>
-    <div class="home-secondary">
-      <button onclick="go('realconversation')"><span class="ico">💬</span><span><b>Real-Life Conversation · Hội thoại thực tế</b><small>Practise everyday English · Luyện giao tiếp đời thường</small></span></button>
-      
-      <button onclick="go('practice')"><span class="ico">🎯</span><span><b>Daily Practice · Luyện tập hằng ngày</b><small>Flashcards, exercises and quizzes · Flashcards, bài tập và quiz</small></span></button>
-      <button onclick="go('progress')"><span class="ico">📈</span><span><b>Learning Progress · Tiến độ học tập</b><small>Track your learning journey · Theo dõi quá trình học</small></span></button>
-      <button onclick="go('placement')"><span class="ico">📝</span><span><b>Level Test · Kiểm tra trình độ</b><small>Check your English level · Đánh giá cấp độ tiếng Anh</small></span></button>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="home-section-head"><div><h2>Your Progress · Tiến độ của bạn</h2><p>Complete activities to earn XP · Hoàn thành hoạt động để nhận XP</p></div></div>
-    <div class="bar"><span id="homeProgressBar"></span></div>
-    <p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p>
-  </div>
+<div class="home-welcome">
+<div>
+<div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
+<h1>Hello! 👋<br/>What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
+<p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
+<div class="actions"><button class="btn" onclick="go('practice')">Bắt đầu học ngay →</button></div>
+</div>
+</div>
+<div>
+<div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>8 key skills and tools · 8 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
+<div class="home-tools">
+<button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
+<button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
+<button class="home-tool" onclick="go('listening')"><div class="ico">🎧</div><h3>Listening · Luyện nghe</h3><p>Listen to real-life conversations · Nghe hội thoại thực tế</p></button>
+<button class="home-tool" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Speaking · Luyện nói</h3><p>Practice conversation and pronunciation · Luyện giao tiếp và phát âm</p></button>
+<button class="home-tool" onclick="go('reading')"><div class="ico">📖</div><h3>Reading · Luyện đọc</h3><p>Read at your level · Đọc hiểu theo cấp độ</p></button>
+<button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
+<button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>268 sentences + topics + 1,000 phrases · 268 câu + chủ đề + 1.000 câu</p></button>
+<button class="home-tool" onclick="go('dictionary')"><div class="ico">📘</div><h3>Bilingual Dictionary · Từ điển song ngữ</h3><p>Look up Vietnamese–English and English–Vietnamese · Tra Việt–Anh và Anh–Việt</p></button>
+</div>
+</div>
+<div>
+<div class="home-section-head"><div><h2>Study Tools · Công cụ học tập</h2><p>Your learning tools in one place · Các tiện ích được gom gọn tại đây</p></div></div>
+<div class="home-secondary">
+<button onclick="go('realconversation')"><span class="ico">💬</span><span><b>Real-Life Conversation · Hội thoại thực tế</b><small>Practise everyday English · Luyện giao tiếp đời thường</small></span></button>
+<button onclick="go('practice')"><span class="ico">🎯</span><span><b>Daily Practice · Luyện tập hằng ngày</b><small>Flashcards, exercises and quizzes · Flashcards, bài tập và quiz</small></span></button>
+<button onclick="go('progress')"><span class="ico">📈</span><span><b>Learning Progress · Tiến độ học tập</b><small>Track your learning journey · Theo dõi quá trình học</small></span></button>
+<button onclick="go('placement')"><span class="ico">📝</span><span><b>Level Test · Kiểm tra trình độ</b><small>Check your English level · Đánh giá cấp độ tiếng Anh</small></span></button>
+</div>
+</div>
+<div class="panel">
+<div class="home-section-head"><div><h2>Your Progress · Tiến độ của bạn</h2><p>Complete activities to earn XP · Hoàn thành hoạt động để nhận XP</p></div></div>
+<div class="bar"><span id="homeProgressBar"></span></div>
+<p class="small muted" id="progressText">Complete activities to earn XP. Hoàn thành hoạt động để nhận XP.</p>
+</div>
 </div>
 </section>
-
-<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" placeholder="Search / Tìm từ..." oninput="renderWords()"><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div id="wordCard" class="panel" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
-
+<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 <section class="page" id="grammar">
 <h1 class="title">Grammar · Ngữ pháp tiếng Anh</h1>
 <p class="intro">A step-by-step grammar course from A1 to B2. Học ngữ pháp từ nền tảng đến nâng cao, có công thức, ví dụ dịch nghĩa và bài tập.</p>
 <div class="panel">
-  <div class="controls">
-    <input id="grammarSearch" placeholder="Tìm chủ điểm ngữ pháp... / Search grammar" oninput="renderGrammar()">
-    <select id="grammarLevel" onchange="renderGrammar()">
-      <option value="all">All levels · Tất cả cấp độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option><option value="B2">B2 · Khá</option>
-    </select>
-    <select id="grammarCategory" onchange="renderGrammar()">
-      <option value="all">All topics · Tất cả chủ điểm</option><option value="Foundations">Nền tảng</option><option value="Tenses">Các thì</option><option value="Verbs">Động từ</option><option value="Sentences">Cấu trúc câu</option><option value="Clauses">Mệnh đề</option><option value="Other">Chủ điểm khác</option>
-    </select>
-  </div>
-  <p class="small muted" id="grammarCount"></p><div id="grammarTopics"></div>
+<div class="controls">
+<input id="grammarSearch" oninput="renderGrammar()" placeholder="Tìm chủ điểm ngữ pháp... / Search grammar"/>
+<select id="grammarLevel" onchange="renderGrammar()">
+<option value="all">All levels · Tất cả cấp độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option><option value="B2">B2 · Khá</option>
+</select>
+<select id="grammarCategory" onchange="renderGrammar()">
+<option value="all">All topics · Tất cả chủ điểm</option><option value="Foundations">Nền tảng</option><option value="Tenses">Các thì</option><option value="Verbs">Động từ</option><option value="Sentences">Cấu trúc câu</option><option value="Clauses">Mệnh đề</option><option value="Other">Chủ điểm khác</option>
+</select>
+</div>
+<p class="small muted" id="grammarCount"></p><div id="grammarTopics"></div>
 </div>
 <div class="panel">
-  <h2>Grammar practice · Bài tập ngữ pháp</h2>
-  <p class="muted">Ngân hàng 46 câu A1–B2. Mỗi lượt câu hỏi được xáo trộn để bạn luyện nhiều lần.</p>
-  <div class="controls">
-    <select id="grammarPracticeMode" aria-label="Số câu"><option value="10">10 câu · Luyện nhanh</option><option value="20">20 câu · Luyện sâu</option><option value="all">Tất cả câu · Full practice</option></select>
-    <select id="grammarPracticeLevel" aria-label="Cấp độ"><option value="all">Mọi cấp độ</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select>
-    <button class="btn soft" onclick="startGrammarPractice()">Bắt đầu lượt mới</button>
-  </div><p class="muted">Chọn đáp án đúng. Bạn sẽ thấy giải thích sau khi trả lời.</p>
-  <div class="badge" id="grammarQuizNo">Question 1</div><h3 id="grammarQuizQ">Loading...</h3>
-  <div class="choices" id="grammarQuizChoices"></div><div id="grammarQuizFeedback"></div><div id="grammarWrongReview"></div>
-  <div class="controls"><button class="btn" id="grammarQuizNext" onclick="nextGrammarQuiz()" disabled>Next question · Câu tiếp</button><button class="btn line" onclick="startGrammarPractice()">Restart · Làm lại</button></div>
+<h2>Grammar practice · Bài tập ngữ pháp</h2>
+<p class="muted">Ngân hàng 46 câu A1–B2. Mỗi lượt câu hỏi được xáo trộn để bạn luyện nhiều lần.</p>
+<div class="controls">
+<select aria-label="Số câu" id="grammarPracticeMode"><option value="10">10 câu · Luyện nhanh</option><option value="20">20 câu · Luyện sâu</option><option value="all">Tất cả câu · Full practice</option></select>
+<select aria-label="Cấp độ" id="grammarPracticeLevel"><option value="all">Mọi cấp độ</option><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select>
+<button class="btn soft" onclick="startGrammarPractice()">Bắt đầu lượt mới</button>
+</div><p class="muted">Chọn đáp án đúng. Bạn sẽ thấy giải thích sau khi trả lời.</p>
+<div class="badge" id="grammarQuizNo">Question 1</div><h3 id="grammarQuizQ">Loading...</h3>
+<div class="choices" id="grammarQuizChoices"></div><div id="grammarQuizFeedback"></div><div id="grammarWrongReview"></div>
+<div class="controls"><button class="btn" disabled="" id="grammarQuizNext" onclick="nextGrammarQuiz()">Next question · Câu tiếp</button><button class="btn line" onclick="startGrammarPractice()">Restart · Làm lại</button></div>
 </div>
 </section>
-
 <section class="page" id="listening"><h1 class="title">Listening · Luyện nghe</h1><p class="intro">Listen to the conversation using your browser voice. Luyện nghe bằng giọng đọc của trình duyệt.</p><div class="panel"><span class="badge">A2 · At a café</span><h2>Ordering a drink · Gọi đồ uống</h2><div class="conversation"><b>Barista:</b> Good morning. What would you like?<div class="line-vi">Nhân viên: Chào buổi sáng. Bạn muốn dùng gì?</div></div><div class="conversation"><b>Anna:</b> I'd like a cup of tea, please.<div class="line-vi">Anna: Cho tôi một tách trà.</div></div><div class="conversation"><b>Barista:</b> Would you like milk or sugar?<div class="line-vi">Nhân viên: Bạn có muốn sữa hoặc đường không?</div></div><div class="conversation"><b>Anna:</b> No, thank you. How much is it?<div class="line-vi">Anna: Không, cảm ơn. Bao nhiêu tiền vậy?</div></div><div class="conversation"><b>Barista:</b> It's three euros.<div class="line-vi">Nhân viên: Ba euro.</div></div><div class="controls"><button class="btn" onclick="say('Good morning. What would you like? I would like a cup of tea, please. Would you like milk or sugar? No thank you. How much is it? It is three euros.')">▶ Play · Phát</button><button class="btn line" onclick="speechSynthesis.cancel()">■ Stop · Dừng</button></div></div><div class="panel"><h2>Check understanding · Kiểm tra nghe</h2><p>What does Anna order? · Anna gọi món gì?</p><div class="choices"><button class="choice" onclick="listenCheck(0)">Tea · Trà</button><button class="choice" onclick="listenCheck(1)">Coffee · Cà phê</button><button class="choice" onclick="listenCheck(2)">Water · Nước</button></div><div id="listenFeedback"></div></div></section>
-
-<section class="page" id="speaking"><h1 class="title">Speaking · Luyện nói</h1><p class="intro">Practise 20 real-life situations with English and Vietnamese. Luyện 20 tình huống thực tế song ngữ.</p><div class="panel"><select id="scenarioSelect" onchange="renderScenario()"></select><div id="scenarioLines"></div><div class="controls"><button class="btn" onclick="playScenario()">🔊 Listen to dialogue · Nghe hội thoại</button><button class="btn soft" onclick="nextScenario()">Next dialogue · Hội thoại tiếp →</button></div></div><div class="panel"><h2>Pronunciation practice · Luyện phát âm</h2><p><b>Could you help me, please?</b><br><span class="muted">Bạn có thể giúp tôi được không?</span></p><button class="btn" onclick="say('Could you help me, please?')">🔊 Listen · Nghe mẫu</button><p class="small muted">Speech recognition depends on browser support and HTTPS. Nhận diện giọng nói tùy trình duyệt và cần HTTPS.</p><button class="btn line" onclick="recognise()">🎙️ Try speaking · Thử nói</button><div id="speechFeedback"></div></div></section>
-
+<section class="page" id="speaking"><h1 class="title">Speaking · Luyện nói</h1><p class="intro">Practise 20 real-life situations with English and Vietnamese. Luyện 20 tình huống thực tế song ngữ.</p><div class="panel"><select id="scenarioSelect" onchange="renderScenario()"></select><div id="scenarioLines"></div><div class="controls"><button class="btn" onclick="playScenario()">🔊 Listen to dialogue · Nghe hội thoại</button><button class="btn soft" onclick="nextScenario()">Next dialogue · Hội thoại tiếp →</button></div></div><div class="panel"><h2>Pronunciation practice · Luyện phát âm</h2><p><b>Could you help me, please?</b><br/><span class="muted">Bạn có thể giúp tôi được không?</span></p><button class="btn" onclick="say('Could you help me, please?')">🔊 Listen · Nghe mẫu</button><p class="small muted">Speech recognition depends on browser support and HTTPS. Nhận diện giọng nói tùy trình duyệt và cần HTTPS.</p><button class="btn line" onclick="recognise()">🎙️ Try speaking · Thử nói</button><div id="speechFeedback"></div></div></section>
 <section class="page" id="realconversation">
- <h1 class="title">Real-Life English · Giao tiếp thực tế</h1>
- <p class="intro">Practise everyday conversations, choose a reply or write your own. Luyện hội thoại đời thường, chọn câu trả lời hoặc tự nhập câu.</p>
- <div class="panel">
-  <div class="controls">
-   <select id="rlTopic" onchange="rlLoadTopic(true)"></select>
-   <select id="rlLevel" onchange="rlFilterLevel()">
-    <option value="all">All levels · Tất cả</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option>
-   </select>
-   <span class="badge" id="rlCounter">Turn 1</span>
-  </div>
-  <div class="small muted" id="rlSituation"></div>
-  <div id="rlDialogue" style="display:grid;gap:12px;margin:16px 0"></div>
-  <div class="panel" style="background:var(--surface);margin:12px 0">
-   <b id="rlSpeaker">Choose your reply · Chọn câu trả lời</b>
-   <div class="controls" style="margin:8px 0">
-    <button class="btn soft" onclick="rlSpeakClient()">🔊 Listen to client · Nghe khách nói</button>
-    <button class="btn soft" onclick="rlSpeak()">🔊 Listen to reply · Nghe câu trả lời</button>
-   </div>
-   <p id="rlPrompt" style="font-size:20px;line-height:1.5;margin:10px 0">Choose a situation to begin.</p>
-   <p class="muted small" id="rlPromptVi"></p>
-   <div id="rlChoices" style="display:grid;gap:8px;margin:12px 0"></div>
-   <div class="controls" style="margin-top:10px">
-    <button class="btn" onclick="rlCheck()">Check · Kiểm tra (Enter)</button>
-    <button class="btn line" onclick="rlShowHint()">Hint · Gợi ý</button>
-   </div>
-   <div id="rlFeedback" aria-live="polite"></div>
-   <div class="controls" style="justify-content:space-between;margin-top:12px">
-    <span class="small muted" id="rlScore">Completed: 0 · Đã hoàn thành: 0</span>
-    <button class="btn" id="rlNextBtn" onclick="rlNext()">Next · Tiếp theo →</button>
-   </div>
-  </div>
-  <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
- </div>
- <details class="panel" id="egLearningRoadmapDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🧭 Learning Roadmap · Lộ trình học <span class="small muted">· Mở khi cần</span></summary><div id="egLearningRoadmap" style="margin-top:12px">
-  <h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
-  <p class="small muted">Your progress updates automatically when you complete lessons, quizzes and practice. Tiến độ tự cập nhật khi mày học và làm bài.</p>
-  <div class="panel" style="margin:10px 0;background:var(--surface)">
-   <div class="controls" style="justify-content:space-between"><b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b><span class="badge" id="egRoadmapUnlocked">Phase 1 available</span></div>
-   <div style="height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0"><div id="egRoadmapBar" style="height:100%;width:0%;background:var(--primary);border-radius:99px;transition:width .25s"></div></div>
-   <p id="egRoadmapNext" class="small muted" style="margin:0">Next step · Bước tiếp theo sẽ hiện ở đây.</p>
-  </div>
-  <div id="egRoadmapList" style="display:grid;gap:12px"></div>
-  <p class="small muted">Progress is stored in your existing EnglishGo data and follows the existing Firebase sync when signed in. Tiến độ lưu cùng dữ liệu hiện có và đồng bộ Firebase khi đăng nhập.</p>
- </div></details>
- <details class="panel" id="rlAdvancedDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🎯 Advanced English · Giao tiếp nâng cao <span class="small muted">· B2</span></summary><div id="rlAdvanced" style="margin-top:12px">
-  <div class="controls" style="justify-content:space-between;align-items:center">
-   <div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
-   <span class="badge">B2 · Advanced</span>
-  </div>
-  <div class="controls" style="margin:12px 0">
-   <select id="rlAdvScenario" aria-label="Choose advanced scenario" onchange="rlAdvLoad(true)">
-    <option value="0">Handling a misunderstanding · Xử lý hiểu lầm</option>
-    <option value="1">Giving a professional opinion · Nêu ý kiến chuyên nghiệp</option>
-    <option value="2">Resolving a customer concern · Giải quyết phàn nàn</option>
-    <option value="3">Nail: Consultation & design · Tư vấn và chọn mẫu</option>
-    <option value="4">Nail: Repair & quality issue · Sửa móng và xử lý lỗi</option>
-    <option value="5">Nail: Difficult customer · Khách hàng khó tính</option>
-    <option value="6">Nail: Aftercare & rebooking · Chăm sóc và đặt lịch lại</option>
-    <option value="7">Work: Scheduling & priorities · Lịch làm và ưu tiên</option>
-   </select>
-   <span class="small muted" id="rlAdvProgress">Scenario 1 · Turn 1</span>
-  </div>
-  <p id="rlAdvContext" class="muted small"></p>
-  <div class="panel" style="background:var(--surface)">
-   <div class="controls" style="justify-content:space-between">
-    <b id="rlAdvSpeaker">Choose a natural response · Chọn cách trả lời tự nhiên</b>
-    <button class="btn soft" type="button" onclick="rlAdvListen()">🔊 Listen · Nghe</button>
-   </div>
-   <h3 id="rlAdvPrompt"></h3>
-   <p id="rlAdvVi" class="small muted"></p>
-   <div id="rlAdvChoices" style="display:grid;gap:8px;margin:12px 0"></div>
-   <div id="rlAdvFeedback" aria-live="polite"></div>
-   <div class="controls">
-    <button class="btn" type="button" onclick="rlAdvCheck()">Check · Kiểm tra</button>
-    <button class="btn line" type="button" onclick="rlAdvNext()" id="rlAdvNext" disabled>Next · Tiếp theo</button>
-    <button class="btn line" type="button" onclick="rlAdvReset()">Restart · Làm lại</button>
-   </div>
-  </div>
-  <div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
- </div></details>
- <details class="panel" id="rlReviewTools"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">📚 Review & Progress · Ôn tập và tiến độ <span class="small muted">· Các công cụ bổ trợ</span></summary><div style="margin-top:12px">
- <details id="rlMistakeBank">
-  <summary style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:700;font-size:1.08rem">
-   <span>Review My Mistakes · Ôn lại lỗi sai</span>
-   <span class="badge" id="rlMistakeCount">0</span>
-  </summary>
-  <p class="small muted" style="margin:10px 0">Tap to open your saved mistakes. Nhấn để xem các câu đã lưu. Dữ liệu được lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p>
-  <div style="display:flex;justify-content:flex-end;margin:8px 0">
-   <button class="btn line" type="button" onclick="rlRenderMistakes()">↻ Refresh · Làm mới</button>
-  </div>
-  <div id="rlMistakeList" class="small muted">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
- </details>
- <details class="panel" id="rlDailyReview"><summary style="cursor:pointer;font-weight:700;list-style:none">📅 Daily Review · Ôn tập mỗi ngày</summary><div style="margin-top:10px">
-  <div class="controls" style="justify-content:space-between;align-items:center">
-   <div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
-   <span class="badge" id="rlDailyStreak">🔥 0-day streak</span>
-  </div>
-  <div class="controls" style="gap:16px;margin:10px 0">
-   <span class="small" id="rlDailyStats">Today: 0 correct · Hôm nay: 0 câu đúng</span>
-   <span class="small" id="rlDailyProgress">Ready when you are · Sẵn sàng khi bạn bắt đầu</span>
-  </div>
-  <div id="rlDailyStage">
-   <p class="muted">Complete a quick 5-question session. It will include your saved mistakes when available, plus new questions. Hoàn thành 5 câu ngắn, gồm câu từng sai (nếu có) và câu mới.</p>
-   <button class="btn" onclick="rlDailyStart()">Start daily review · Bắt đầu ôn tập</button>
-  </div>
- </div></details>
- <details class="panel" id="rlLearningInsights"><summary style="cursor:pointer;font-weight:700;list-style:none">📊 Learning Insights · Phân tích tiến độ</summary><div style="margin-top:10px">
-  <h2>Learning Insights · Phân tích tiến độ</h2>
-  <p class="small muted">See your practice totals and the topics that need more attention. Theo dõi kết quả và những chủ đề cần luyện thêm.</p>
-  <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0">
-   <div class="panel"><div class="small muted">Questions tried · Đã làm</div><b id="rlInsightAttempts">0</b></div>
-   <div class="panel"><div class="small muted">Correct · Đúng</div><b id="rlInsightCorrect">0</b></div>
-   <div class="panel"><div class="small muted">Accuracy · Độ chính xác</div><b id="rlInsightAccuracy">0%</b></div>
-   <div class="panel"><div class="small muted">Saved mistakes · Câu cần ôn</div><b id="rlInsightMistakes">0</b></div>
-  </div>
-  <h3>Focus areas · Chủ đề cần tập trung</h3>
-  <div id="rlInsightFocus" class="small muted">Your focus areas will appear after you practise. Chủ đề cần luyện sẽ hiện ở đây sau khi bạn học.</div>
- </div></details>
- <div class="panel">
-  <h2>Review your conversation · Xem lại hội thoại</h2>
-  <p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
-  <div id="rlReview" class="small muted">Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.</div>
- </div>
+<h1 class="title">Real-Life English · Giao tiếp thực tế</h1>
+<p class="intro">Practise everyday conversations, choose a reply or write your own. Luyện hội thoại đời thường, chọn câu trả lời hoặc tự nhập câu.</p>
+<div class="panel">
+<div class="controls">
+<select id="rlTopic" onchange="rlLoadTopic(true)"></select>
+<select id="rlLevel" onchange="rlFilterLevel()">
+<option value="all">All levels · Tất cả</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option>
+</select>
+<span class="badge" id="rlCounter">Turn 1</span>
+</div>
+<div class="small muted" id="rlSituation"></div>
+<div id="rlDialogue" style="display:grid;gap:12px;margin:16px 0"></div>
+<div class="panel" style="background:var(--surface);margin:12px 0">
+<b id="rlSpeaker">Choose your reply · Chọn câu trả lời</b>
+<div class="controls" style="margin:8px 0">
+<button class="btn soft" onclick="rlSpeakClient()">🔊 Listen to client · Nghe khách nói</button>
+<button class="btn soft" onclick="rlSpeak()">🔊 Listen to reply · Nghe câu trả lời</button>
+</div>
+<p id="rlPrompt" style="font-size:20px;line-height:1.5;margin:10px 0">Choose a situation to begin.</p>
+<p class="muted small" id="rlPromptVi"></p>
+<div id="rlChoices" style="display:grid;gap:8px;margin:12px 0"></div>
+<div class="controls" style="margin-top:10px">
+<button class="btn" onclick="rlCheck()">Check · Kiểm tra (Enter)</button>
+<button class="btn line" onclick="rlShowHint()">Hint · Gợi ý</button>
+</div>
+<div aria-live="polite" id="rlFeedback"></div>
+<div class="controls" style="justify-content:space-between;margin-top:12px">
+<span class="small muted" id="rlScore">Completed: 0 · Đã hoàn thành: 0</span>
+<button class="btn" id="rlNextBtn" onclick="rlNext()">Next · Tiếp theo →</button>
+</div>
+</div>
+<div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
+</div>
+<details class="panel" id="egLearningRoadmapDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🧭 Learning Roadmap · Lộ trình học <span class="small muted">· Mở khi cần</span></summary><div id="egLearningRoadmap" style="margin-top:12px">
+<h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
+<p class="small muted">Your progress updates automatically when you complete lessons, quizzes and practice. Tiến độ tự cập nhật khi mày học và làm bài.</p>
+<div class="panel" style="margin:10px 0;background:var(--surface)">
+<div class="controls" style="justify-content:space-between"><b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b><span class="badge" id="egRoadmapUnlocked">Phase 1 available</span></div>
+<div style="height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0"><div id="egRoadmapBar" style="height:100%;width:0%;background:var(--primary);border-radius:99px;transition:width .25s"></div></div>
+<p class="small muted" id="egRoadmapNext" style="margin:0">Next step · Bước tiếp theo sẽ hiện ở đây.</p>
+</div>
+<div id="egRoadmapList" style="display:grid;gap:12px"></div>
+<p class="small muted">Progress is stored in your existing EnglishGo data and follows the existing Firebase sync when signed in. Tiến độ lưu cùng dữ liệu hiện có và đồng bộ Firebase khi đăng nhập.</p>
+</div></details>
+<details class="panel" id="rlAdvancedDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🎯 Advanced English · Giao tiếp nâng cao <span class="small muted">· B2</span></summary><div id="rlAdvanced" style="margin-top:12px">
+<div class="controls" style="justify-content:space-between;align-items:center">
+<div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
+<span class="badge">B2 · Advanced</span>
+</div>
+<div class="controls" style="margin:12px 0">
+<select aria-label="Choose advanced scenario" id="rlAdvScenario" onchange="rlAdvLoad(true)">
+<option value="0">Handling a misunderstanding · Xử lý hiểu lầm</option>
+<option value="1">Giving a professional opinion · Nêu ý kiến chuyên nghiệp</option>
+<option value="2">Resolving a customer concern · Giải quyết phàn nàn</option>
+<option value="3">Nail: Consultation &amp; design · Tư vấn và chọn mẫu</option>
+<option value="4">Nail: Repair &amp; quality issue · Sửa móng và xử lý lỗi</option>
+<option value="5">Nail: Difficult customer · Khách hàng khó tính</option>
+<option value="6">Nail: Aftercare &amp; rebooking · Chăm sóc và đặt lịch lại</option>
+<option value="7">Work: Scheduling &amp; priorities · Lịch làm và ưu tiên</option>
+</select>
+<span class="small muted" id="rlAdvProgress">Scenario 1 · Turn 1</span>
+</div>
+<p class="muted small" id="rlAdvContext"></p>
+<div class="panel" style="background:var(--surface)">
+<div class="controls" style="justify-content:space-between">
+<b id="rlAdvSpeaker">Choose a natural response · Chọn cách trả lời tự nhiên</b>
+<button class="btn soft" onclick="rlAdvListen()" type="button">🔊 Listen · Nghe</button>
+</div>
+<h3 id="rlAdvPrompt"></h3>
+<p class="small muted" id="rlAdvVi"></p>
+<div id="rlAdvChoices" style="display:grid;gap:8px;margin:12px 0"></div>
+<div aria-live="polite" id="rlAdvFeedback"></div>
+<div class="controls">
+<button class="btn" onclick="rlAdvCheck()" type="button">Check · Kiểm tra</button>
+<button class="btn line" disabled="" id="rlAdvNext" onclick="rlAdvNext()" type="button">Next · Tiếp theo</button>
+<button class="btn line" onclick="rlAdvReset()" type="button">Restart · Làm lại</button>
+</div>
+</div>
+<div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
+</div></details>
+<details class="panel" id="rlReviewTools"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">📚 Review &amp; Progress · Ôn tập và tiến độ <span class="small muted">· Các công cụ bổ trợ</span></summary><div style="margin-top:12px">
+<details id="rlMistakeBank">
+<summary style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:700;font-size:1.08rem">
+<span>Review My Mistakes · Ôn lại lỗi sai</span>
+<span class="badge" id="rlMistakeCount">0</span>
+</summary>
+<p class="small muted" style="margin:10px 0">Tap to open your saved mistakes. Nhấn để xem các câu đã lưu. Dữ liệu được lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p>
+<div style="display:flex;justify-content:flex-end;margin:8px 0">
+<button class="btn line" onclick="rlRenderMistakes()" type="button">↻ Refresh · Làm mới</button>
+</div>
+<div class="small muted" id="rlMistakeList">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
+</details>
+<details class="panel" id="rlDailyReview"><summary style="cursor:pointer;font-weight:700;list-style:none">📅 Daily Review · Ôn tập mỗi ngày</summary><div style="margin-top:10px">
+<div class="controls" style="justify-content:space-between;align-items:center">
+<div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
+<span class="badge" id="rlDailyStreak">🔥 0-day streak</span>
+</div>
+<div class="controls" style="gap:16px;margin:10px 0">
+<span class="small" id="rlDailyStats">Today: 0 correct · Hôm nay: 0 câu đúng</span>
+<span class="small" id="rlDailyProgress">Ready when you are · Sẵn sàng khi bạn bắt đầu</span>
+</div>
+<div id="rlDailyStage">
+<p class="muted">Complete a quick 5-question session. It will include your saved mistakes when available, plus new questions. Hoàn thành 5 câu ngắn, gồm câu từng sai (nếu có) và câu mới.</p>
+<button class="btn" onclick="rlDailyStart()">Start daily review · Bắt đầu ôn tập</button>
+</div>
+</div></details>
+<details class="panel" id="rlLearningInsights"><summary style="cursor:pointer;font-weight:700;list-style:none">📊 Learning Insights · Phân tích tiến độ</summary><div style="margin-top:10px">
+<h2>Learning Insights · Phân tích tiến độ</h2>
+<p class="small muted">See your practice totals and the topics that need more attention. Theo dõi kết quả và những chủ đề cần luyện thêm.</p>
+<div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0">
+<div class="panel"><div class="small muted">Questions tried · Đã làm</div><b id="rlInsightAttempts">0</b></div>
+<div class="panel"><div class="small muted">Correct · Đúng</div><b id="rlInsightCorrect">0</b></div>
+<div class="panel"><div class="small muted">Accuracy · Độ chính xác</div><b id="rlInsightAccuracy">0%</b></div>
+<div class="panel"><div class="small muted">Saved mistakes · Câu cần ôn</div><b id="rlInsightMistakes">0</b></div>
+</div>
+<h3>Focus areas · Chủ đề cần tập trung</h3>
+<div class="small muted" id="rlInsightFocus">Your focus areas will appear after you practise. Chủ đề cần luyện sẽ hiện ở đây sau khi bạn học.</div>
+</div></details>
+<div class="panel">
+<h2>Review your conversation · Xem lại hội thoại</h2>
+<p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
+<div class="small muted" id="rlReview">Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.</div>
+</div>
 </div></details></section>
-
-
 <section class="page" id="translation">
- <h1 class="title">Translation Reflex · Dịch phản xạ</h1>
- <p class="intro">Nhìn câu tiếng Việt và nói/viết ngay bằng tiếng Anh. Đừng dịch từng từ — hãy phản xạ theo cụm câu.</p>
- <div class="panel">
-  <div class="controls">
-   <select id="trLevel" onchange="startTranslation()"><option value="all">Mọi cấp độ · All levels</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option></select>
-   <select id="trDirection" onchange="startTranslation()"><option value="vi-en">Việt → Anh (phản xạ nói)</option><option value="en-vi">Anh → Việt</option></select>
-   <span class="badge" id="trCounter">Câu 1</span>
-  </div>
-  <div class="small muted" id="trLevelLabel">A1 · Everyday English</div>
-  <h2 id="trPrompt" style="font-size:25px;line-height:1.45;margin:18px 0">Đang tải câu...</h2>
-  <p class="muted" id="trHint">Hãy tự dịch trước khi xem đáp án.</p>
-  <textarea id="trAnswer" rows="3" placeholder="Nhập câu dịch của bạn ở đây..."></textarea>
-  <div class="controls">
-   <button class="btn" onclick="checkTranslation()">Check · Kiểm tra</button>
-   <button class="btn line" onclick="showTranslationAnswer()">Show answer · Xem đáp án</button>
-   <button class="btn soft" onclick="sayTranslationPrompt()">🔊 Nghe tiếng Anh</button>
-  </div>
-  <div id="trFeedback"></div>
-  <div class="controls" style="justify-content:space-between;margin-top:16px">
-   <span class="small muted" id="trScore">Đã luyện: 0 · Tự tin: 0</span>
-   <button class="btn" onclick="nextTranslation()">Câu tiếp theo →</button>
-  </div>
- </div>
-
- <div class="panel" style="margin-top:16px;border:2px solid var(--blue)">
-  <h2>🎯 Dịch theo chủ đề · Topic Translation</h2>
-  <p class="muted">Mỗi chủ đề có đúng 25 câu. Chọn một chủ đề, luyện lần lượt từng câu và xem đáp án sau khi tự dịch.</p>
-  <div class="controls">
-   <select id="topicSelect" onchange="startTopicTranslation()">
-    <option value="Daily life · Sinh hoạt hằng ngày">Daily life · Sinh hoạt hằng ngày (25)</option>
-    <option value="Work · Công việc">Work · Công việc (25)</option>
-    <option value="Shopping · Mua sắm">Shopping · Mua sắm (25)</option>
-    <option value="Restaurant & Food · Nhà hàng và ăn uống">Restaurant & Food · Nhà hàng và ăn uống (25)</option>
-    <option value="Travel & Transport · Du lịch và đi lại">Travel & Transport · Du lịch và đi lại (25)</option>
-    <option value="Health & Appointments · Sức khỏe và lịch hẹn">Health & Appointments · Sức khỏe và lịch hẹn (25)</option>
-    <option value="Nail salon · Tiệm làm móng">Nail salon · Tiệm làm móng (25)</option>
-   </select>
-   <select id="topicDirection" onchange="renderTopicTranslation()">
-    <option value="vi-en">Việt → Anh</option><option value="en-vi">Anh → Việt</option>
-   </select>
-   <span class="badge" id="topicCounter">Câu 1/25</span>
-  </div>
-  <div class="small muted" id="topicName"></div>
-  <h3 id="topicPrompt" style="font-size:22px;line-height:1.5;margin:16px 0">Chọn chủ đề để bắt đầu.</h3>
-  <textarea id="topicAnswer" rows="3" placeholder="Nhập bản dịch của bạn..."></textarea>
-  <div class="controls">
-   <button class="btn" onclick="checkTopicTranslation()">Check · Kiểm tra</button>
-   <button class="btn line" onclick="revealTopicTranslation()">Show answer · Xem đáp án</button>
-   <button class="btn soft" onclick="speakTopicTranslation()">🔊 Nghe tiếng Anh</button>
-   <button class="btn" onclick="nextTopicTranslation()">Câu tiếp theo →</button>
-  </div>
-  <div id="topicFeedback"></div>
-  <p class="small muted" id="topicProgress">Chủ đề gồm 25 câu.</p>
- </div>
- <div class="panel" style="margin-top:16px;border:2px solid var(--green)">
-  <h2>📚 Kho 1.000 câu giao tiếp · 40 chủ đề</h2>
-  <p class="muted">Câu và đáp án được giữ nguyên theo PDF gốc. Chọn một trong 40 chủ đề, mỗi chủ đề có 25 câu theo đúng thứ tự.</p>
-  <div class="controls">
-   <select id="thousandTopic" aria-label="Chọn chủ đề 1.000 câu"></select>
-   <select id="thousandDirection" onchange="renderThousandTranslation()">
-    <option value="vi-en">Việt → Anh</option><option value="en-vi">Anh → Việt</option>
-   </select>
-   <span class="badge" id="thousandCounter">Câu 1/25</span>
-  </div>
-  <div class="small muted" id="thousandTopicName"></div>
-  <h3 id="thousandPrompt" style="font-size:22px;line-height:1.5;margin:16px 0">Chọn chủ đề để bắt đầu.</h3>
-  <textarea id="thousandAnswer" rows="3" placeholder="Nhập bản dịch của bạn..."></textarea>
-  <div class="controls">
-   <button class="btn" onclick="checkThousandTranslation()">Check · Kiểm tra</button>
-   <button class="btn line" onclick="revealThousandTranslation()">Show answer · Xem đáp án</button>
-   <button class="btn soft" onclick="speakThousandTranslation()">🔊 Nghe tiếng Anh</button>
-  </div>
-  <div class="controls" style="justify-content:flex-end;margin-top:12px">
-   <button class="btn" onclick="nextThousandTranslation()">Câu tiếp theo →</button>
-  </div>
-  <div id="thousandFeedback"></div>
-  <p class="small muted" id="thousandProgress">40 chủ đề · 1.000 câu · Mỗi chủ đề 25 câu.</p>
- </div>
- <div class="panel" style="margin-top:14px">
-  <h2>Cách luyện hiệu quả</h2>
-  <ol><li>Đọc câu tiếng Việt và tự nói tiếng Anh thành tiếng trong 3–5 giây.</li><li>Nhập câu bạn vừa nói, sau đó bấm “Check”.</li><li>So sánh với đáp án mẫu. Có thể có nhiều cách dịch đúng.</li><li>Bấm “Câu tiếp theo” và cố gắng trả lời nhanh hơn.</li></ol>
-  <p class="small muted">Lưu ý: phần kiểm tra là gợi ý theo đáp án mẫu; nếu diễn đạt khác nhưng đúng ngữ pháp và ý nghĩa, hãy tự đánh giá là đã nhớ.</p>
- </div>
+<h1 class="title">Translation Reflex · Dịch phản xạ</h1>
+<p class="intro">Nhìn câu tiếng Việt và nói/viết ngay bằng tiếng Anh. Đừng dịch từng từ — hãy phản xạ theo cụm câu.</p>
+<div class="panel">
+<div class="controls">
+<select id="trLevel" onchange="startTranslation()"><option value="all">Mọi cấp độ · All levels</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option></select>
+<select id="trDirection" onchange="startTranslation()"><option value="vi-en">Việt → Anh (phản xạ nói)</option><option value="en-vi">Anh → Việt</option></select>
+<span class="badge" id="trCounter">Câu 1</span>
+</div>
+<div class="small muted" id="trLevelLabel">A1 · Everyday English</div>
+<h2 id="trPrompt" style="font-size:25px;line-height:1.45;margin:18px 0">Đang tải câu...</h2>
+<p class="muted" id="trHint">Hãy tự dịch trước khi xem đáp án.</p>
+<textarea id="trAnswer" placeholder="Nhập câu dịch của bạn ở đây..." rows="3"></textarea>
+<div class="controls">
+<button class="btn" onclick="checkTranslation()">Check · Kiểm tra</button>
+<button class="btn line" onclick="showTranslationAnswer()">Show answer · Xem đáp án</button>
+<button class="btn soft" onclick="sayTranslationPrompt()">🔊 Nghe tiếng Anh</button>
+</div>
+<div id="trFeedback"></div>
+<div class="controls" style="justify-content:space-between;margin-top:16px">
+<span class="small muted" id="trScore">Đã luyện: 0 · Tự tin: 0</span>
+<button class="btn" onclick="nextTranslation()">Câu tiếp theo →</button>
+</div>
+</div>
+<div class="panel" style="margin-top:16px;border:2px solid var(--blue)">
+<h2>🎯 Dịch theo chủ đề · Topic Translation</h2>
+<p class="muted">Mỗi chủ đề có đúng 25 câu. Chọn một chủ đề, luyện lần lượt từng câu và xem đáp án sau khi tự dịch.</p>
+<div class="controls">
+<select id="topicSelect" onchange="startTopicTranslation()">
+<option value="Daily life · Sinh hoạt hằng ngày">Daily life · Sinh hoạt hằng ngày (25)</option>
+<option value="Work · Công việc">Work · Công việc (25)</option>
+<option value="Shopping · Mua sắm">Shopping · Mua sắm (25)</option>
+<option value="Restaurant &amp; Food · Nhà hàng và ăn uống">Restaurant &amp; Food · Nhà hàng và ăn uống (25)</option>
+<option value="Travel &amp; Transport · Du lịch và đi lại">Travel &amp; Transport · Du lịch và đi lại (25)</option>
+<option value="Health &amp; Appointments · Sức khỏe và lịch hẹn">Health &amp; Appointments · Sức khỏe và lịch hẹn (25)</option>
+<option value="Nail salon · Tiệm làm móng">Nail salon · Tiệm làm móng (25)</option>
+</select>
+<select id="topicDirection" onchange="renderTopicTranslation()">
+<option value="vi-en">Việt → Anh</option><option value="en-vi">Anh → Việt</option>
+</select>
+<span class="badge" id="topicCounter">Câu 1/25</span>
+</div>
+<div class="small muted" id="topicName"></div>
+<h3 id="topicPrompt" style="font-size:22px;line-height:1.5;margin:16px 0">Chọn chủ đề để bắt đầu.</h3>
+<textarea id="topicAnswer" placeholder="Nhập bản dịch của bạn..." rows="3"></textarea>
+<div class="controls">
+<button class="btn" onclick="checkTopicTranslation()">Check · Kiểm tra</button>
+<button class="btn line" onclick="revealTopicTranslation()">Show answer · Xem đáp án</button>
+<button class="btn soft" onclick="speakTopicTranslation()">🔊 Nghe tiếng Anh</button>
+<button class="btn" onclick="nextTopicTranslation()">Câu tiếp theo →</button>
+</div>
+<div id="topicFeedback"></div>
+<p class="small muted" id="topicProgress">Chủ đề gồm 25 câu.</p>
+</div>
+<div class="panel" style="margin-top:16px;border:2px solid var(--green)">
+<h2>📚 Kho 1.000 câu giao tiếp · 40 chủ đề</h2>
+<p class="muted">Câu và đáp án được giữ nguyên theo PDF gốc. Chọn một trong 40 chủ đề, mỗi chủ đề có 25 câu theo đúng thứ tự.</p>
+<div class="controls">
+<select aria-label="Chọn chủ đề 1.000 câu" id="thousandTopic"></select>
+<select id="thousandDirection" onchange="renderThousandTranslation()">
+<option value="vi-en">Việt → Anh</option><option value="en-vi">Anh → Việt</option>
+</select>
+<span class="badge" id="thousandCounter">Câu 1/25</span>
+</div>
+<div class="small muted" id="thousandTopicName"></div>
+<h3 id="thousandPrompt" style="font-size:22px;line-height:1.5;margin:16px 0">Chọn chủ đề để bắt đầu.</h3>
+<textarea id="thousandAnswer" placeholder="Nhập bản dịch của bạn..." rows="3"></textarea>
+<div class="controls">
+<button class="btn" onclick="checkThousandTranslation()">Check · Kiểm tra</button>
+<button class="btn line" onclick="revealThousandTranslation()">Show answer · Xem đáp án</button>
+<button class="btn soft" onclick="speakThousandTranslation()">🔊 Nghe tiếng Anh</button>
+</div>
+<div class="controls" style="justify-content:flex-end;margin-top:12px">
+<button class="btn" onclick="nextThousandTranslation()">Câu tiếp theo →</button>
+</div>
+<div id="thousandFeedback"></div>
+<p class="small muted" id="thousandProgress">40 chủ đề · 1.000 câu · Mỗi chủ đề 25 câu.</p>
+</div>
+<div class="panel" style="margin-top:14px">
+<h2>Cách luyện hiệu quả</h2>
+<ol><li>Đọc câu tiếng Việt và tự nói tiếng Anh thành tiếng trong 3–5 giây.</li><li>Nhập câu bạn vừa nói, sau đó bấm “Check”.</li><li>So sánh với đáp án mẫu. Có thể có nhiều cách dịch đúng.</li><li>Bấm “Câu tiếp theo” và cố gắng trả lời nhanh hơn.</li></ol>
+<p class="small muted">Lưu ý: phần kiểm tra là gợi ý theo đáp án mẫu; nếu diễn đạt khác nhưng đúng ngữ pháp và ý nghĩa, hãy tự đánh giá là đã nhớ.</p>
+</div>
 </section>
 <section class="page" id="reading"><h1 class="title">Reading · Luyện đọc</h1><p class="intro">Short A2 texts with Vietnamese support. Đoạn đọc A2 ngắn có hỗ trợ tiếng Việt.</p><div class="panel"><h2>A New Life in Berlin · Cuộc sống mới ở Berlin</h2><p>My name is Linh. I moved to Berlin six months ago. I work in a small restaurant near my home. Every morning, I take the bus to work. My colleagues are friendly, and I am learning German and English. At weekends, I like visiting parks and meeting my friends.</p><p class="muted"><i>Tôi tên Linh. Tôi chuyển đến Berlin sáu tháng trước. Tôi làm việc tại một nhà hàng nhỏ gần nhà. Mỗi sáng, tôi đi xe buýt đến chỗ làm. Đồng nghiệp của tôi thân thiện, và tôi đang học tiếng Đức và tiếng Anh. Cuối tuần, tôi thích đi công viên và gặp bạn bè.</i></p></div><div class="panel"><h2>Reading check · Kiểm tra đọc hiểu</h2><p>How long has Linh lived in Berlin? · Linh đã sống ở Berlin bao lâu?</p><div class="choices"><button class="choice" onclick="readingCheck(0)">Six months · Sáu tháng</button><button class="choice" onclick="readingCheck(1)">One year · Một năm</button><button class="choice" onclick="readingCheck(2)">Two weeks · Hai tuần</button></div><div id="readingFeedback"></div></div></section>
-
-<section class="page" id="writing"><h1 class="title">Writing · Luyện viết</h1><p class="intro">Write a short paragraph and save it on your device. Viết đoạn văn ngắn và lưu trên thiết bị.</p><div class="panel"><h2>Introduce yourself · Giới thiệu bản thân</h2><p>Write 5–7 sentences about your name, home, work or studies, and hobbies.<br><span class="muted">Viết 5–7 câu về tên, nơi ở, công việc hoặc học tập và sở thích.</span></p><div class="example">My name is Mai. I live in Berlin. I work in a shop. I enjoy listening to music.<em>Tôi tên Mai. Tôi sống ở Berlin. Tôi làm ở cửa hàng. Tôi thích nghe nhạc.</em></div><textarea id="writingText" placeholder="My name is... / Tôi tên là..."></textarea><div class="controls"><button class="btn" onclick="saveWriting()">Save writing · Lưu bài</button><span id="writingStatus" class="muted small"></span></div><p class="small muted">Saved only in this browser. Chỉ lưu trong trình duyệt này.</p></div></section>
-
-<section class="page" id="quiz"><h1 class="title">A2 Quiz · Kiểm tra A2</h1><p class="intro">Quick grammar and vocabulary quiz. Bài kiểm tra nhanh từ vựng và ngữ pháp.</p><div class="panel"><span class="badge" id="quizNo">Question 1</span><h2 id="quizQ">Loading...</h2><p class="muted" id="quizVi"></p><div class="choices" id="quizChoices"></div><div id="quizFeedback"></div><div class="controls"><button class="btn" id="quizNext" disabled onclick="nextQuiz()">Next · Tiếp theo</button><button class="btn line" onclick="restartQuiz()">Restart · Làm lại</button></div></div></section>
-
-<section class="page" id="placement"><h1 class="title">Find your level · Kiểm tra trình độ</h1><p class="intro">A short placement test from A1 to B1. Bài kiểm tra ngắn để ước lượng trình độ A1 đến B1.</p><div class="panel"><span class="badge" id="placeNo">Question 1 / 10</span><h2 id="placeQ"></h2><p class="muted" id="placeVi"></p><div class="choices" id="placeChoices"></div><div id="placeFeedback"></div><div class="controls"><button class="btn" id="placeNext" disabled onclick="nextPlace()">Next · Tiếp theo</button><button class="btn line" onclick="restartPlace()">Restart · Làm lại</button></div></div></section>
-<div class="footer">EnglishGo 2.0 · Free bilingual learning · Học tiếng Anh miễn phí<br>Progress, XP and writing are stored locally on your device. Tiến độ được lưu trên thiết bị.</div>
-
+<section class="page" id="writing"><h1 class="title">Writing · Luyện viết</h1><p class="intro">Write a short paragraph and save it on your device. Viết đoạn văn ngắn và lưu trên thiết bị.</p><div class="panel"><h2>Introduce yourself · Giới thiệu bản thân</h2><p>Write 5–7 sentences about your name, home, work or studies, and hobbies.<br/><span class="muted">Viết 5–7 câu về tên, nơi ở, công việc hoặc học tập và sở thích.</span></p><div class="example">My name is Mai. I live in Berlin. I work in a shop. I enjoy listening to music.<em>Tôi tên Mai. Tôi sống ở Berlin. Tôi làm ở cửa hàng. Tôi thích nghe nhạc.</em></div><textarea id="writingText" placeholder="My name is... / Tôi tên là..."></textarea><div class="controls"><button class="btn" onclick="saveWriting()">Save writing · Lưu bài</button><span class="muted small" id="writingStatus"></span></div><p class="small muted">Saved only in this browser. Chỉ lưu trong trình duyệt này.</p></div></section>
+<section class="page" id="quiz"><h1 class="title">A2 Quiz · Kiểm tra A2</h1><p class="intro">Quick grammar and vocabulary quiz. Bài kiểm tra nhanh từ vựng và ngữ pháp.</p><div class="panel"><span class="badge" id="quizNo">Question 1</span><h2 id="quizQ">Loading...</h2><p class="muted" id="quizVi"></p><div class="choices" id="quizChoices"></div><div id="quizFeedback"></div><div class="controls"><button class="btn" disabled="" id="quizNext" onclick="nextQuiz()">Next · Tiếp theo</button><button class="btn line" onclick="restartQuiz()">Restart · Làm lại</button></div></div></section>
+<section class="page" id="placement"><h1 class="title">Find your level · Kiểm tra trình độ</h1><p class="intro">A short placement test from A1 to B1. Bài kiểm tra ngắn để ước lượng trình độ A1 đến B1.</p><div class="panel"><span class="badge" id="placeNo">Question 1 / 10</span><h2 id="placeQ"></h2><p class="muted" id="placeVi"></p><div class="choices" id="placeChoices"></div><div id="placeFeedback"></div><div class="controls"><button class="btn" disabled="" id="placeNext" onclick="nextPlace()">Next · Tiếp theo</button><button class="btn line" onclick="restartPlace()">Restart · Làm lại</button></div></div></section>
+<div class="footer">EnglishGo 2.0 · Free bilingual learning · Học tiếng Anh miễn phí<br/>Progress, XP and writing are stored locally on your device. Tiến độ được lưu trên thiết bị.</div>
 <section class="page" id="flashcards">
 <h1 class="title">Smart flashcards · Thẻ từ vựng thông minh</h1>
 <p class="intro">Flip each card, save difficult words and review them later. Lật thẻ, lưu từ khó và ôn tập lại.</p>
 <div class="panel" style="max-width:760px;margin:auto;text-align:center">
 <div class="small muted" id="fcCount"></div>
 <button class="flashcard" id="flashCard" onclick="flipFlashcard()" style="width:100%;min-height:230px;border-radius:22px;background:linear-gradient(135deg,#183b78,#347de8);color:white;padding:28px;margin:16px 0">
-<div class="small" id="fcHint">ENGLISH WORD · NHẤN ĐỂ LẬT</div><div style="font-size:clamp(30px,6vw,48px);font-weight:900;margin:20px 0" id="fcFront">Hello</div><div id="fcBack" style="font-size:20px;display:none"></div>
+<div class="small" id="fcHint">ENGLISH WORD · NHẤN ĐỂ LẬT</div><div id="fcFront" style="font-size:clamp(30px,6vw,48px);font-weight:900;margin:20px 0">Hello</div><div id="fcBack" style="font-size:20px;display:none"></div>
 </button>
 <div class="controls" style="justify-content:center;flex-wrap:wrap">
 <button class="btn line" onclick="flashPrev()">← Previous · Trước</button><button class="btn" onclick="flashNext()">Next · Tiếp →</button><button class="btn gold" onclick="flashSave()">☆ Difficult · Từ khó</button><button class="btn line" onclick="flashKnown()">✓ I know it · Đã nhớ</button>
 </div><p class="muted" id="fcStatus"></p>
 </div>
-<div class="panel"><h2>Words to review · Từ cần ôn</h2><div id="savedWords" class="wordlist"></div></div>
+<div class="panel"><h2>Words to review · Từ cần ôn</h2><div class="wordlist" id="savedWords"></div></div>
 </section>
 <section class="page" id="practice">
 <h1 class="title">Daily practice · Luyện tập mỗi ngày</h1>
 <p class="intro">A small routine for all four skills. Mỗi ngày một bài luyện đủ bốn kỹ năng.</p>
 <div class="grid">
-<div class="panel"><div class="icon">🎧</div><h2>Listening · Nghe</h2><p>Listen to the sentence and choose the correct meaning. Nghe câu và chọn nghĩa đúng.</p><button class="btn" onclick="dailyListen()">Play sentence · Nghe câu</button><p id="dailyListenText" class="example"></p><div id="dailyListenChoices" class="choices"></div><div id="dailyListenFeedback"></div></div>
-<div class="panel"><div class="icon">🗣️</div><h2>Speaking · Nói</h2><p>Say this sentence aloud. Nhấn micro và đọc câu sau.</p><div class="example"><b id="dailySpeakSentence">I usually have breakfast at seven.</b><em>Tôi thường ăn sáng lúc bảy giờ.</em></div><button class="btn" onclick="say(document.getElementById('dailySpeakSentence').textContent)">🔊 Listen · Nghe mẫu</button> <button class="btn line" onclick="dailyRecognise()">🎙️ Speak · Nói</button><p id="dailySpeakResult" class="muted"></p></div>
+<div class="panel"><div class="icon">🎧</div><h2>Listening · Nghe</h2><p>Listen to the sentence and choose the correct meaning. Nghe câu và chọn nghĩa đúng.</p><button class="btn" onclick="dailyListen()">Play sentence · Nghe câu</button><p class="example" id="dailyListenText"></p><div class="choices" id="dailyListenChoices"></div><div id="dailyListenFeedback"></div></div>
+<div class="panel"><div class="icon">🗣️</div><h2>Speaking · Nói</h2><p>Say this sentence aloud. Nhấn micro và đọc câu sau.</p><div class="example"><b id="dailySpeakSentence">I usually have breakfast at seven.</b><em>Tôi thường ăn sáng lúc bảy giờ.</em></div><button class="btn" onclick="say(document.getElementById('dailySpeakSentence').textContent)">🔊 Listen · Nghe mẫu</button> <button class="btn line" onclick="dailyRecognise()">🎙️ Speak · Nói</button><p class="muted" id="dailySpeakResult"></p></div>
 <div class="panel"><div class="icon">📖</div><h2>Reading · Đọc</h2><p id="dailyReadText">Tom works in a small café. He starts work at eight and finishes at four. He enjoys his job because he meets many people.</p><p class="muted">Tom làm việc ở một quán cà phê nhỏ. Anh bắt đầu lúc tám giờ và kết thúc lúc bốn giờ. Anh thích công việc vì gặp được nhiều người.</p><p><b>When does Tom finish work? · Tom tan làm lúc mấy giờ?</b></p><div class="choices"><button class="choice" onclick="dailyReadAnswer(0)">At 3 o'clock</button><button class="choice" onclick="dailyReadAnswer(1)">At 4 o'clock</button><button class="choice" onclick="dailyReadAnswer(2)">At 8 o'clock</button></div><div id="dailyReadFeedback"></div></div>
-<div class="panel"><div class="icon">✍️</div><h2>Writing · Viết</h2><p>Write three sentences about your day. Viết ba câu về ngày hôm nay.</p><textarea id="dailyWriting" rows="4" placeholder="Today, I..."></textarea><button class="btn" onclick="saveDailyWriting()">Save writing · Lưu bài viết</button><p id="dailyWritingStatus" class="muted"></p></div>
+<div class="panel"><div class="icon">✍️</div><h2>Writing · Viết</h2><p>Write three sentences about your day. Viết ba câu về ngày hôm nay.</p><textarea id="dailyWriting" placeholder="Today, I..." rows="4"></textarea><button class="btn" onclick="saveDailyWriting()">Save writing · Lưu bài viết</button><p class="muted" id="dailyWritingStatus"></p></div>
 </div>
 </section>
 <section class="page" id="progress">
@@ -458,22 +486,19 @@ textarea { width: 100%; }
 <div class="panel"><h2>🔥 Learning streak</h2><div class="word" id="progressStreak">0</div><p class="muted">Consecutive learning days. Số ngày học liên tiếp.</p></div>
 <div class="panel"><h2>🏅 Achievements</h2><div class="word" id="progressAchievements">0</div><p class="muted">Activities completed. Hoạt động đã hoàn thành.</p></div>
 </div>
-<div class="panel"><h2>Achievements · Thành tích</h2><div id="achievementList" class="wordlist"></div></div>
-<div class="panel"><h2>Backup your progress · Sao lưu tiến độ</h2><p class="muted">Download a backup file before changing devices. Tải bản sao lưu trước khi đổi thiết bị.</p><button class="btn" onclick="exportProgress()">Download backup · Tải bản sao lưu</button> <label class="btn line" for="importProgress">Restore backup · Khôi phục</label><input id="importProgress" type="file" accept="application/json" style="display:none" onchange="importProgressFile(event)"></div>
+<div class="panel"><h2>Achievements · Thành tích</h2><div class="wordlist" id="achievementList"></div></div>
+<div class="panel"><h2>Backup your progress · Sao lưu tiến độ</h2><p class="muted">Download a backup file before changing devices. Tải bản sao lưu trước khi đổi thiết bị.</p><button class="btn" onclick="exportProgress()">Download backup · Tải bản sao lưu</button> <label class="btn line" for="importProgress">Restore backup · Khôi phục</label><input accept="application/json" id="importProgress" onchange="importProgressFile(event)" style="display:none" type="file"/></div>
 </section>
-
-
 <section class="page" id="cloud">
 <h1 class="title">Cloud account · Tài khoản đồng bộ</h1>
 <p class="intro">Sign in with the same Google account on your phone and computer to keep your learning progress in sync. Đăng nhập cùng một tài khoản Google trên điện thoại và máy tính để đồng bộ tiến độ.</p>
 <div class="panel" style="max-width:760px;margin:auto">
 <div class="icon">☁️</div><h2 id="cloudStatus">Not signed in · Chưa đăng nhập</h2>
-<p id="cloudEmail" class="muted">Your progress stays on this device until you sign in. Tiến độ vẫn nằm trên thiết bị này cho đến khi đăng nhập.</p>
+<p class="muted" id="cloudEmail">Your progress stays on this device until you sign in. Tiến độ vẫn nằm trên thiết bị này cho đến khi đăng nhập.</p>
 <div class="controls"><button class="btn" onclick="cloudSignIn()">Continue with Google · Đăng nhập Google</button><button class="btn line" onclick="cloudSignOut()">Sign out · Đăng xuất</button><button class="btn line" onclick="cloudSyncNow()">Sync now · Đồng bộ ngay</button></div>
 <p class="muted" id="cloudMessage">Cloud sync requires a free Firebase project setup once. Cần thiết lập Firebase miễn phí một lần.</p>
 </div>
 </section>
-
 <section class="page" id="dictionary">
 <style>
 .dict-result-list{display:grid;gap:13px;margin-top:14px}
@@ -497,67 +522,63 @@ textarea { width: 100%; }
 .dict-chip:hover{background:#e8f1ff}
 @media(max-width:560px){.dict-entry{padding:14px}.dict-sounds{width:100%}.dict-sounds audio{max-width:100%}}
 </style>
-
-  <h1 class="title">Bilingual Dictionary · Từ điển Anh – Việt / Việt – Anh</h1>
-  <p class="intro">Look up words in both directions · Tra từ hai chiều Việt ↔ Anh, xem nhiều cách dịch, phiên âm IPA, định nghĩa, ví dụ và từ liên quan khi có dữ liệu.</p>
-  <div class="panel">
-    <div class="controls" style="align-items:stretch">
-      <select id="dictDirection" aria-label="Chiều tra từ" onchange="updateDictionaryDirection()">
-        <option value="vi-en">Việt → Anh</option>
-        <option value="en-vi">Anh → Việt</option>
-      </select>
-      <input id="dictQuery" type="search" placeholder="Nhập từ tiếng Việt..." style="flex:1;min-width:220px" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupDictionary()}">
-      <button class="btn" id="dictSearchBtn" onclick="lookupDictionary()">Tra từ →</button>
-    </div>
-    <p class="small muted">Tra cứu trực tuyến hai chiều. Cần có kết nối Internet; kết quả máy dịch có thể cần kiểm tra theo ngữ cảnh.</p>
-    <div id="dictStatus" class="small muted" aria-live="polite">Chọn chiều tra, nhập từ rồi nhấn Enter hoặc bấm “Tra từ”.</div>
-    <div id="dictResults"></div>
-  </div>
-  <div class="panel">
-    <h2>How to use the dictionary · Cách sử dụng từ điển</h2>
-    <ul>
-      <li>Vietnamese → English: try “áo khoác”, “chạy”, “hạnh phúc”. · Việt → Anh: thử “áo khoác”, “chạy”, “hạnh phúc”.</li>
-      <li>English → Vietnamese: try “jacket”, “run”, “happiness”. · Anh → Việt: thử “jacket”, “run”, “happiness”.</li>
-      <li>Nếu từ có nhiều nghĩa, hãy nhập thêm ngữ cảnh, ví dụ: “đá lạnh” hoặc “đá bóng”.</li>
-      <li>Với cụm từ dài, kết quả là bản dịch tham khảo, không phải lúc nào cũng là cách diễn đạt tự nhiên nhất.</li>
-    </ul>
-    <p class="small muted">Nguồn tra cứu: MyMemory Translation Memory. Giới hạn miễn phí ẩn danh được áp dụng bởi nhà cung cấp.</p>
-  </div>
+<h1 class="title">Bilingual Dictionary · Từ điển Anh – Việt / Việt – Anh</h1>
+<p class="intro">Look up words in both directions · Tra từ hai chiều Việt ↔ Anh, xem nhiều cách dịch, phiên âm IPA, định nghĩa, ví dụ và từ liên quan khi có dữ liệu.</p>
+<div class="panel">
+<div class="controls" style="align-items:stretch">
+<select aria-label="Chiều tra từ" id="dictDirection" onchange="updateDictionaryDirection()">
+<option value="vi-en">Việt → Anh</option>
+<option value="en-vi">Anh → Việt</option>
+</select>
+<input id="dictQuery" onkeydown="if(event.key==='Enter'){event.preventDefault();lookupDictionary()}" placeholder="Nhập từ tiếng Việt..." style="flex:1;min-width:220px" type="search"/>
+<button class="btn" id="dictSearchBtn" onclick="lookupDictionary()">Tra từ →</button>
+</div>
+<p class="small muted">Tra cứu trực tuyến hai chiều. Cần có kết nối Internet; kết quả máy dịch có thể cần kiểm tra theo ngữ cảnh.</p>
+<div aria-live="polite" class="small muted" id="dictStatus">Chọn chiều tra, nhập từ rồi nhấn Enter hoặc bấm “Tra từ”.</div>
+<div id="dictResults"></div>
+</div>
+<div class="panel">
+<h2>How to use the dictionary · Cách sử dụng từ điển</h2>
+<ul>
+<li>Vietnamese → English: try “áo khoác”, “chạy”, “hạnh phúc”. · Việt → Anh: thử “áo khoác”, “chạy”, “hạnh phúc”.</li>
+<li>English → Vietnamese: try “jacket”, “run”, “happiness”. · Anh → Việt: thử “jacket”, “run”, “happiness”.</li>
+<li>Nếu từ có nhiều nghĩa, hãy nhập thêm ngữ cảnh, ví dụ: “đá lạnh” hoặc “đá bóng”.</li>
+<li>Với cụm từ dài, kết quả là bản dịch tham khảo, không phải lúc nào cũng là cách diễn đạt tự nhiên nhất.</li>
+</ul>
+<p class="small muted">Nguồn tra cứu: MyMemory Translation Memory. Giới hạn miễn phí ẩn danh được áp dụng bởi nhà cung cấp.</p>
+</div>
 </section>
-
-
 <section class="page" id="learninglab">
- <h1 class="title">Learning Lab · Trung tâm luyện tập</h1>
- <p class="intro">Vocabulary, pronunciation, role-play, writing, achievements and weekly progress. Tất cả công cụ nâng cao trong một nơi.</p>
- <div class="panel" style="margin-bottom:12px">
-  <h2>🗓️ Daily Learning Path · Lộ trình mỗi ngày</h2>
-  <p class="small muted">A short 15–20 minute routine. Tick each activity as you finish; your progress is saved on this device and included in cloud sync.</p>
-  <div id="dailyPath"></div><p id="dailyPathStatus" class="small muted" aria-live="polite"></p>
- </div>
- <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
-  <div class="panel"><h2>🧠 Smart Vocabulary · Ôn từ thông minh</h2><p class="small muted">Save words and review them with spaced repetition. Lưu từ mới và ôn theo lịch lặp lại.</p>
-   <div class="controls"><input id="svWord" placeholder="English word or phrase"><input id="svMeaning" placeholder="Nghĩa tiếng Việt"></div><div class="controls"><input id="svExample" placeholder="Example sentence (optional)"><button class="btn" type="button" onclick="svAdd()">Add word · Thêm từ</button></div>
-   <div id="svStats" class="small muted"></div><div class="panel" style="background:var(--surface)"><p id="svPrompt">Add a word to start. Thêm từ để bắt đầu.</p><div id="svAnswer" hidden></div><div class="controls"><button class="btn line" onclick="svReveal()">Show meaning · Hiện nghĩa</button><button class="btn line" onclick="svRate(1)">Again · Chưa nhớ</button><button class="btn" onclick="svRate(3)">Got it · Đã nhớ</button></div></div><div id="svList" class="small"></div>
-  </div>
-  <div class="panel"><h2>🎙️ Pronunciation Coach · Luyện phát âm</h2><p class="small muted">Hear the model, record your own voice directly, then listen back and compare. Nghe mẫu, tự ghi âm bằng micro và nghe lại giọng của mình.</p>
-   <label class="small" for="pcTarget"><b>Practice sentence · Câu luyện tập</b></label><textarea id="pcTarget" rows="3">I'd like to book an appointment for Friday afternoon.</textarea><div class="controls"><button class="btn line" type="button" onclick="pcListen()">🔊 Listen · Nghe mẫu</button><button class="btn" type="button" id="pcRecordBtn" onclick="pcRecordStart()">🎙️ Record · Ghi âm</button><button class="btn line" type="button" id="pcStopBtn" onclick="pcRecordStop()" disabled>⏹ Stop · Dừng</button></div><p id="pcStatus" class="small muted" aria-live="polite">Ready · Sẵn sàng luyện tập</p><div class="panel" style="background:var(--surface);margin-top:10px"><b>🎧 Your recording · Bản ghi của bạn</b><p class="small muted">Bản ghi chỉ nằm trên thiết bị trong phiên này; không tải lên máy chủ.</p><audio id="pcPlayback" controls style="width:100%;display:none"></audio><div class="controls"><button class="btn line" type="button" id="pcPlayModelThenYours" onclick="pcCompareListening()" disabled>🔁 Listen & compare · Nghe lần lượt</button><button class="btn line" type="button" id="pcDeleteBtn" onclick="pcDeleteRecording()" disabled>🗑️ Delete · Xóa bản ghi</button></div></div><div id="pcAcoustic" class="panel" style="background:var(--surface);margin-top:10px"><b>📊 Free voice analysis · Phân tích giọng nói miễn phí</b><p class="small muted">Sau khi ghi âm, EnglishGo phân tích ngay trên thiết bị: thời lượng, âm lượng và khoảng ngắt. Đây là chỉ số luyện tập, không phải điểm chuẩn phát âm âm vị.</p></div><div id="pcResult" class="panel" style="background:var(--surface)"><b>Self-check · Tự đánh giá</b><p class="small">Nghe lại và kiểm tra: âm cuối, trọng âm từ, nhịp câu và độ rõ. Bản ghi trực tiếp chưa tự chấm chính xác âm vị.</p></div><textarea id="pcManualTranscript" rows="2" placeholder="Optional: type what you said to compare the words… · Có thể nhập lời đã nói để so khớp từ" style="margin-top:10px"></textarea><button class="btn line" type="button" onclick="pcCompare()">Compare words · So khớp từ</button>
-  </div>
-  <div class="panel"><h2>💬 Conversation Simulator · Mô phỏng hội thoại</h2><p class="small muted">Answer in your own words. Trả lời bằng câu của mày.</p>
-   <select id="simScenario" onchange="simLoad()"><option value="0">Nail salon · New design</option><option value="1">Work · Explain a delay</option><option value="2">Daily life · Return an item</option><option value="3">Customer service · Complaint</option></select>
-   <div class="panel" style="background:var(--surface);margin-top:10px"><b id="simRole">Client</b><p id="simPrompt"></p><p id="simVi" class="small muted"></p><textarea id="simReply" rows="3" placeholder="Type your reply in English..."></textarea><div class="controls"><button class="btn" onclick="simSubmit()">Send reply · Gửi câu trả lời</button><button class="btn line" onclick="simHint()">Useful phrase · Câu gợi ý</button></div><div id="simFeedback"></div></div><div id="simHistory" class="small"></div>
-  </div>
-  <div class="panel"><h2>✍️ Writing Coach · Luyện viết</h2><p class="small muted">Rule-based feedback for common mistakes; not an AI grammar grader. Gợi ý sửa lỗi phổ biến.</p>
-   <select id="wcType"><option>Message to a customer</option><option>Work email</option><option>Daily journal</option><option>Nail salon appointment reply</option></select><textarea id="wcText" rows="6" placeholder="Write 3–6 sentences in English..."></textarea><div class="controls"><button class="btn" onclick="wcCheck()">Check my writing · Kiểm tra</button><button class="btn line" onclick="wcSave()">Save draft · Lưu bản nháp</button></div><div id="wcFeedback" class="panel" style="background:var(--surface)">Suggestions will appear here.</div>
-  </div>
-  <div class="panel"><h2>📓 My English Notebook · Sổ tay tiếng Anh</h2><p class="small muted">Save useful sentences, work phrases and personal notes. Stored locally and synced with your EnglishGo account when cloud sync is enabled.</p>
-   <input id="nbTitle" placeholder="Title / Chủ đề (e.g. At work)"><textarea id="nbPhrase" rows="3" placeholder="English phrase or sentence..."></textarea><input id="nbMeaning" placeholder="Vietnamese meaning / Nghĩa tiếng Việt"><div class="controls"><button class="btn" onclick="nbAdd()">Save note · Lưu ghi chú</button></div><div id="notebookList"></div>
-  </div>
-  <div class="panel"><h2>🔥 30-Day Challenge · Thử thách 30 ngày</h2><p class="small muted">Build a steady habit with one small English activity each day. No paid service required.</p><div id="challengePanel"></div>
-  </div>
-  <div class="panel"><h2>📊 Weekly Report · Báo cáo tuần</h2><p class="small muted">Summary of Learning Lab activities recorded in the last 7 days.</p><div id="weeklyReport"></div><button class="btn line" onclick="labRenderReports()">Refresh report · Làm mới</button></div>
- </div>
+<h1 class="title">Learning Lab · Trung tâm luyện tập</h1>
+<p class="intro">Vocabulary, pronunciation, role-play, writing, achievements and weekly progress. Tất cả công cụ nâng cao trong một nơi.</p>
+<div class="panel" style="margin-bottom:12px">
+<h2>🗓️ Daily Learning Path · Lộ trình mỗi ngày</h2>
+<p class="small muted">A short 15–20 minute routine. Tick each activity as you finish; your progress is saved on this device and included in cloud sync.</p>
+<div id="dailyPath"></div><p aria-live="polite" class="small muted" id="dailyPathStatus"></p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+<div class="panel"><h2>🧠 Smart Vocabulary · Ôn từ thông minh</h2><p class="small muted">Save words and review them with spaced repetition. Lưu từ mới và ôn theo lịch lặp lại.</p>
+<div class="controls"><input id="svWord" placeholder="English word or phrase"/><input id="svMeaning" placeholder="Nghĩa tiếng Việt"/></div><div class="controls"><input id="svExample" placeholder="Example sentence (optional)"/><button class="btn" onclick="svAdd()" type="button">Add word · Thêm từ</button></div>
+<div class="small muted" id="svStats"></div><div class="panel" style="background:var(--surface)"><p id="svPrompt">Add a word to start. Thêm từ để bắt đầu.</p><div hidden="" id="svAnswer"></div><div class="controls"><button class="btn line" onclick="svReveal()">Show meaning · Hiện nghĩa</button><button class="btn line" onclick="svRate(1)">Again · Chưa nhớ</button><button class="btn" onclick="svRate(3)">Got it · Đã nhớ</button></div></div><div class="small" id="svList"></div>
+</div>
+<div class="panel"><h2>🎙️ Pronunciation Coach · Luyện phát âm</h2><p class="small muted">Hear the model, record your own voice directly, then listen back and compare. Nghe mẫu, tự ghi âm bằng micro và nghe lại giọng của mình.</p>
+<label class="small" for="pcTarget"><b>Practice sentence · Câu luyện tập</b></label><textarea id="pcTarget" rows="3">I'd like to book an appointment for Friday afternoon.</textarea><div class="controls"><button class="btn line" onclick="pcListen()" type="button">🔊 Listen · Nghe mẫu</button><button class="btn" id="pcRecordBtn" onclick="pcRecordStart()" type="button">🎙️ Record · Ghi âm</button><button class="btn line" disabled="" id="pcStopBtn" onclick="pcRecordStop()" type="button">⏹ Stop · Dừng</button></div><p aria-live="polite" class="small muted" id="pcStatus">Ready · Sẵn sàng luyện tập</p><div class="panel" style="background:var(--surface);margin-top:10px"><b>🎧 Your recording · Bản ghi của bạn</b><p class="small muted">Bản ghi chỉ nằm trên thiết bị trong phiên này; không tải lên máy chủ.</p><audio controls="" id="pcPlayback" style="width:100%;display:none"></audio><div class="controls"><button class="btn line" disabled="" id="pcPlayModelThenYours" onclick="pcCompareListening()" type="button">🔁 Listen &amp; compare · Nghe lần lượt</button><button class="btn line" disabled="" id="pcDeleteBtn" onclick="pcDeleteRecording()" type="button">🗑️ Delete · Xóa bản ghi</button></div></div><div class="panel" id="pcAcoustic" style="background:var(--surface);margin-top:10px"><b>📊 Free voice analysis · Phân tích giọng nói miễn phí</b><p class="small muted">Sau khi ghi âm, EnglishGo phân tích ngay trên thiết bị: thời lượng, âm lượng và khoảng ngắt. Đây là chỉ số luyện tập, không phải điểm chuẩn phát âm âm vị.</p></div><div class="panel" id="pcResult" style="background:var(--surface)"><b>Self-check · Tự đánh giá</b><p class="small">Nghe lại và kiểm tra: âm cuối, trọng âm từ, nhịp câu và độ rõ. Bản ghi trực tiếp chưa tự chấm chính xác âm vị.</p></div><textarea id="pcManualTranscript" placeholder="Optional: type what you said to compare the words… · Có thể nhập lời đã nói để so khớp từ" rows="2" style="margin-top:10px"></textarea><button class="btn line" onclick="pcCompare()" type="button">Compare words · So khớp từ</button>
+</div>
+<div class="panel"><h2>💬 Conversation Simulator · Mô phỏng hội thoại</h2><p class="small muted">Answer in your own words. Trả lời bằng câu của mày.</p>
+<select id="simScenario" onchange="simLoad()"><option value="0">Nail salon · New design</option><option value="1">Work · Explain a delay</option><option value="2">Daily life · Return an item</option><option value="3">Customer service · Complaint</option></select>
+<div class="panel" style="background:var(--surface);margin-top:10px"><b id="simRole">Client</b><p id="simPrompt"></p><p class="small muted" id="simVi"></p><textarea id="simReply" placeholder="Type your reply in English..." rows="3"></textarea><div class="controls"><button class="btn" onclick="simSubmit()">Send reply · Gửi câu trả lời</button><button class="btn line" onclick="simHint()">Useful phrase · Câu gợi ý</button></div><div id="simFeedback"></div></div><div class="small" id="simHistory"></div>
+</div>
+<div class="panel"><h2>✍️ Writing Coach · Luyện viết</h2><p class="small muted">Rule-based feedback for common mistakes; not an AI grammar grader. Gợi ý sửa lỗi phổ biến.</p>
+<select id="wcType"><option>Message to a customer</option><option>Work email</option><option>Daily journal</option><option>Nail salon appointment reply</option></select><textarea id="wcText" placeholder="Write 3–6 sentences in English..." rows="6"></textarea><div class="controls"><button class="btn" onclick="wcCheck()">Check my writing · Kiểm tra</button><button class="btn line" onclick="wcSave()">Save draft · Lưu bản nháp</button></div><div class="panel" id="wcFeedback" style="background:var(--surface)">Suggestions will appear here.</div>
+</div>
+<div class="panel"><h2>📓 My English Notebook · Sổ tay tiếng Anh</h2><p class="small muted">Save useful sentences, work phrases and personal notes. Stored locally and synced with your EnglishGo account when cloud sync is enabled.</p>
+<input id="nbTitle" placeholder="Title / Chủ đề (e.g. At work)"/><textarea id="nbPhrase" placeholder="English phrase or sentence..." rows="3"></textarea><input id="nbMeaning" placeholder="Vietnamese meaning / Nghĩa tiếng Việt"/><div class="controls"><button class="btn" onclick="nbAdd()">Save note · Lưu ghi chú</button></div><div id="notebookList"></div>
+</div>
+<div class="panel"><h2>🔥 30-Day Challenge · Thử thách 30 ngày</h2><p class="small muted">Build a steady habit with one small English activity each day. No paid service required.</p><div id="challengePanel"></div>
+</div>
+<div class="panel"><h2>📊 Weekly Report · Báo cáo tuần</h2><p class="small muted">Summary of Learning Lab activities recorded in the last 7 days.</p><div id="weeklyReport"></div><button class="btn line" onclick="labRenderReports()">Refresh report · Làm mới</button></div>
+</div>
 </section>
-
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script>
@@ -1999,7 +2020,6 @@ document.addEventListener("DOMContentLoaded",()=>{
  startTranslation();startTopicTranslation();startThousandTranslation();renderGrammar();startGrammarPractice();rlInit();
 });
 </script>
-
 <script>
 // EnglishGo all-in-one free learning upgrades. All data uses eg3-* keys for existing cloud sync.
 const EG_NEW_KEYS={path:'eg3-daily-path',notes:'eg3-english-notebook',challenge:'eg3-30day-challenge'};
@@ -2040,4 +2060,63 @@ window.addEventListener("load",()=>{
  finally{document.documentElement.classList.remove("eg-restoring")}
 });
 </script>
-</body></html>
+<script>
+const spokenEnglishPairs = [
+["want to","wanna","I want to go. → I wanna go.","Trước động từ; không dùng trước danh từ (I want a coffee)."],
+["going to","gonna","I'm going to call you. → I'm gonna call you.","Dùng cho dự định + động từ; không dùng thay nghĩa 'đi đến một nơi' (I'm going to London)."],
+["got to / have got to","gotta","I've got to go. → I gotta go.","Nghĩa phải làm gì; không thay mọi nghĩa của got."],
+["have to","hafta","I have to work. → I hafta work.","Cách ghi gần âm trong khẩu ngữ; viết chuẩn là have to."],
+["has to","hasta","She has to leave. → She hasta leave.","Cách ghi gần âm; viết chuẩn là has to."],
+["kind of","kinda","It's kind of funny. → It's kinda funny.","Nghĩa hơi/kiểu như; thân mật."],
+["sort of","sorta","I'm sort of tired. → I'm sorta tired.","Nghĩa hơi/kiểu như; thân mật."],
+["a lot of","lotta","A lot of people → A lotta people.","Cách nói nhanh; viết chuẩn vẫn là a lot of."],
+["lots of","lotsa","Lots of fun → Lotsa fun.","Rất thân mật, chủ yếu để nhận diện lời nói."],
+["out of","outta","Get out of here. → Get outta here.","Khẩu ngữ; không áp dụng nếu cấu trúc/ngữ cảnh không phù hợp."],
+["because","'cause / cuz","Because I'm tired. → 'Cause I'm tired.","Thân mật; because vẫn là dạng chuẩn."],
+["give me","gimme","Give me a minute. → Gimme a minute.","Dùng trong lời nói thân mật."],
+["let me","lemme","Let me see. → Lemme see.","Dùng trong lời nói thân mật."],
+["tell them","tell 'em","Tell them I called. → Tell 'em I called.","'em là cách nói rút gọn của them."],
+["them","'em","I saw them. → I saw 'em.","Dạng khẩu ngữ, không phải chính tả trang trọng."],
+["don't know","dunno","I don't know. → I dunno.","Rất thân mật."],
+["what are you","whatcha","What are you doing? → Whatcha doing?","Cách ghi gần âm; cách viết phụ thuộc câu và giọng."],
+["what do you","whaddaya / whaddya","What do you want? → Whaddaya want?","Cách ghi gần âm trong lời nói nhanh."],
+["did you","didja","Did you see it? → Didja see it?","Âm d + y nối thành âm gần /dʒ/."],
+["would you","wouldja","Would you help me? → Wouldja help me?","Cách ghi gần âm, thân mật."],
+["could you","couldja","Could you wait? → Couldja wait?","Cách ghi gần âm, thân mật."],
+["should you","shouldja","Should you go? → Shouldja go?","Cách ghi gần âm; không phải cách viết chuẩn."],
+["don't you","dontcha","Don't you know? → Dontcha know?","Cách ghi gần âm; nhận diện khi nghe."],
+["got you","gotcha","I got you. → I gotcha.","Có thể mang nghĩa 'hiểu rồi/bắt được bạn' tùy ngữ cảnh."],
+["would have","woulda","I would have called. → I woulda called.","Cách ghi gần âm; trong viết chuẩn dùng would have / would've."],
+["could have","coulda","You could have asked. → You coulda asked.","Cách ghi gần âm; viết chuẩn dùng could have / could've."],
+["should have","shoulda","We should have left. → We shoulda left.","Cách ghi gần âm; viết chuẩn dùng should have / should've."],
+["might have","mighta","It might have worked. → It mighta worked.","Ít phổ biến hơn; cách ghi khẩu ngữ."],
+["must have","musta","You must have known. → You musta known.","Cách ghi gần âm; viết chuẩn dùng must have / must've."],
+["used to","useta","I used to live here. → I useta live here.","Cách ghi phát âm thân mật; không phải chính tả chuẩn."],
+["supposed to","supposta","You're supposed to call. → You're supposta call.","Cách ghi gần âm; viết chuẩn là supposed to."],
+["probably","probly","Probably later. → Probly later.","Cách nói nhanh; cách viết chuẩn vẫn là probably."],
+["especially","specially (in some speech)","Especially this one.","Không phải lúc nào cũng đồng nghĩa; không tự động thay thế."],
+["because of","'cause of","Because of the rain... → 'Cause of the rain...","Thân mật; because of là dạng chuẩn."],
+["come on","c'mon","Come on! → C'mon!","Cách viết thân mật phổ biến."],
+["them all","'em all","Give them all back. → Give 'em all back.","Chỉ dùng khi 'em thực sự đại diện cho them."],
+["a little","lil' / little (reduced pronunciation)","Wait a little. → Wait a lil'.","Chủ yếu là cách ghi khẩu ngữ; không phải lúc nào cũng rút gọn thành lil'."],
+["isn't it","innit","It's good, isn't it? → It's good, innit?","Đặc trưng một số giọng Anh; không phải cách thay thế phổ quát."],
+["you all","y'all","Are you all ready? → Y'all ready?","Phổ biến trong một số biến thể tiếng Anh, đặc biệt miền Nam Hoa Kỳ; sắc thái vùng miền."],
+["let us","let's","Let us go. → Let's go.","Let's thường mang nghĩa rủ rê; không thay được mọi câu let us."],
+["I am going to","I'm gonna","I am going to leave. → I'm gonna leave.","Cần giữ chủ ngữ và trợ động từ phù hợp."],
+["want a","want a (not wanna)","I want a sandwich.","Không rút thành wanna trước danh từ; wanna = want to + động từ."],
+["going to + place","going to + place (not gonna)","I'm going to the station.","Khi going to chỉ di chuyển đến nơi chốn, giữ going to."]
+];
+function filterSpokenEnglish(){
+  const input = document.getElementById('spokenSearch');
+  const host = document.getElementById('spokenResults');
+  if(!input || !host) return;
+  const q = input.value.trim().toLowerCase();
+  const matches = spokenEnglishPairs.filter(p => p.join(' ').toLowerCase().includes(q));
+  host.innerHTML = matches.length ? matches.map(p => `<article class="spoken-item"><strong>${p[0]} → ${p[1]}</strong><div>${p[2]}</div><small>📝 ${p[3]}</small></article>`).join('') : '<div class="spoken-empty">Không tìm thấy. Thử một từ hoặc cụm khác nhé.</div>';
+}
+</script><script>
+document.addEventListener('click', function(e){
+  const b = e.target.closest('[data-page="spokenenglish"]');
+  if(b) setTimeout(filterSpokenEnglish, 0);
+});
+</script></body></html>
