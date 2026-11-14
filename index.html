@@ -177,15 +177,13 @@ body > main{
   body > header .navlinks{
     grid-area:links !important;
     display:flex !important;
-    flex-wrap:nowrap !important;
+    flex-wrap:wrap !important;
     align-items:center !important;
     width:100% !important;
     min-width:0 !important;
-    overflow-x:auto !important;
-    overflow-y:visible !important;
+    overflow:visible !important;
     gap:5px !important;
     padding:2px 0 5px !important;
-    -webkit-overflow-scrolling:touch;
   }
   body > header .navlinks>button,
   body > header .navlinks>details>summary{
@@ -195,7 +193,24 @@ body > main{
     padding:8px 9px !important;
   }
   body > header .nav-group{flex:0 0 auto !important;}
-  body > header .nav-menu{z-index:1002 !important; max-height:60vh !important;}
+  /* On phones, dropdowns expand inside the header instead of being clipped. */
+  body > header .nav-group[open]{
+    flex:1 1 100% !important;
+    width:100% !important;
+  }
+  body > header .nav-group .nav-menu,
+  body > header .nav-group[open] .nav-menu{
+    position:static !important;
+    display:grid !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    max-height:45vh !important;
+    overflow-y:auto !important;
+    margin-top:6px !important;
+    box-sizing:border-box !important;
+    box-shadow:none !important;
+  }
   body > main{
     margin:18px auto !important;
     padding:0 12px 40px !important;
