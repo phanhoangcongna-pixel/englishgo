@@ -61,7 +61,7 @@ textarea { width: 100%; }
 </head>
 <body>
 <header><div class="nav"><a class="brand-logo" href="#" aria-label="EnglishGo - Trang chủ" onclick="document.querySelector('[data-page=home]')?.click();return false"><img src="englishgo-logo.png" alt="EnglishGo"></a>
-<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
+<nav class="navlinks"><button class="active" data-page="home">Home</button><button data-page="vocab">Vocabulary</button><button data-page="dictionary">Dictionary · Từ điển</button><button data-page="grammar">Grammar</button><button data-page="listening">Listening</button><button data-page="speaking">Speaking</button><button data-page="realconversation">Real-life conversation · Giao tiếp</button><button data-page="translation">Translation reflex</button><button data-page="reading">Reading</button><button data-page="writing">Writing</button><button data-page="quiz">Quiz</button><button data-page="placement">Level test</button><button data-page="flashcards">Flashcards</button><button data-page="practice">Daily practice</button><button data-page="progress">My progress</button><button data-page="cloud">Cloud sync ☁</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page active" id="home">
@@ -141,6 +141,8 @@ textarea { width: 100%; }
   <div>
     <div class="home-section-head"><div><h2>Study Tools · Công cụ học tập</h2><p>Your learning tools in one place · Các tiện ích được gom gọn tại đây</p></div></div>
     <div class="home-secondary">
+      <button onclick="go('realconversation')"><span class="ico">💬</span><span><b>Real-Life Conversation · Hội thoại thực tế</b><small>Practise everyday English · Luyện giao tiếp đời thường</small></span></button>
+      
       <button onclick="go('practice')"><span class="ico">🎯</span><span><b>Daily Practice · Luyện tập hằng ngày</b><small>Flashcards, exercises and quizzes · Flashcards, bài tập và quiz</small></span></button>
       <button onclick="go('progress')"><span class="ico">📈</span><span><b>Learning Progress · Tiến độ học tập</b><small>Track your learning journey · Theo dõi quá trình học</small></span></button>
       <button onclick="go('placement')"><span class="ico">📝</span><span><b>Level Test · Kiểm tra trình độ</b><small>Check your English level · Đánh giá cấp độ tiếng Anh</small></span></button>
@@ -189,6 +191,46 @@ textarea { width: 100%; }
 <section class="page" id="listening"><h1 class="title">Listening · Luyện nghe</h1><p class="intro">Listen to the conversation using your browser voice. Luyện nghe bằng giọng đọc của trình duyệt.</p><div class="panel"><span class="badge">A2 · At a café</span><h2>Ordering a drink · Gọi đồ uống</h2><div class="conversation"><b>Barista:</b> Good morning. What would you like?<div class="line-vi">Nhân viên: Chào buổi sáng. Bạn muốn dùng gì?</div></div><div class="conversation"><b>Anna:</b> I'd like a cup of tea, please.<div class="line-vi">Anna: Cho tôi một tách trà.</div></div><div class="conversation"><b>Barista:</b> Would you like milk or sugar?<div class="line-vi">Nhân viên: Bạn có muốn sữa hoặc đường không?</div></div><div class="conversation"><b>Anna:</b> No, thank you. How much is it?<div class="line-vi">Anna: Không, cảm ơn. Bao nhiêu tiền vậy?</div></div><div class="conversation"><b>Barista:</b> It's three euros.<div class="line-vi">Nhân viên: Ba euro.</div></div><div class="controls"><button class="btn" onclick="say('Good morning. What would you like? I would like a cup of tea, please. Would you like milk or sugar? No thank you. How much is it? It is three euros.')">▶ Play · Phát</button><button class="btn line" onclick="speechSynthesis.cancel()">■ Stop · Dừng</button></div></div><div class="panel"><h2>Check understanding · Kiểm tra nghe</h2><p>What does Anna order? · Anna gọi món gì?</p><div class="choices"><button class="choice" onclick="listenCheck(0)">Tea · Trà</button><button class="choice" onclick="listenCheck(1)">Coffee · Cà phê</button><button class="choice" onclick="listenCheck(2)">Water · Nước</button></div><div id="listenFeedback"></div></div></section>
 
 <section class="page" id="speaking"><h1 class="title">Speaking · Luyện nói</h1><p class="intro">Practise 20 real-life situations with English and Vietnamese. Luyện 20 tình huống thực tế song ngữ.</p><div class="panel"><select id="scenarioSelect" onchange="renderScenario()"></select><div id="scenarioLines"></div><div class="controls"><button class="btn" onclick="playScenario()">🔊 Listen to dialogue · Nghe hội thoại</button><button class="btn soft" onclick="nextScenario()">Next dialogue · Hội thoại tiếp →</button></div></div><div class="panel"><h2>Pronunciation practice · Luyện phát âm</h2><p><b>Could you help me, please?</b><br><span class="muted">Bạn có thể giúp tôi được không?</span></p><button class="btn" onclick="say('Could you help me, please?')">🔊 Listen · Nghe mẫu</button><p class="small muted">Speech recognition depends on browser support and HTTPS. Nhận diện giọng nói tùy trình duyệt và cần HTTPS.</p><button class="btn line" onclick="recognise()">🎙️ Try speaking · Thử nói</button><div id="speechFeedback"></div></div></section>
+
+<section class="page" id="realconversation">
+ <h1 class="title">Real-Life English · Giao tiếp thực tế</h1>
+ <p class="intro">Practise everyday conversations, choose a reply or write your own. Luyện hội thoại đời thường, chọn câu trả lời hoặc tự nhập câu.</p>
+ <div class="panel">
+  <div class="controls">
+   <select id="rlTopic" onchange="rlLoadTopic()"></select>
+   <select id="rlLevel" onchange="rlFilterLevel()">
+    <option value="all">All levels · Tất cả</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp</option><option value="B1">B1 · Trung cấp</option>
+   </select>
+   <span class="badge" id="rlCounter">Turn 1</span>
+  </div>
+  <div class="small muted" id="rlSituation"></div>
+  <div id="rlDialogue" style="display:grid;gap:12px;margin:16px 0"></div>
+  <div class="panel" style="background:var(--surface);margin:12px 0">
+   <b id="rlSpeaker">Your turn · Đến lượt bạn</b>
+   <p id="rlPrompt" style="font-size:20px;line-height:1.5;margin:10px 0">Choose a situation to begin.</p>
+   <p class="muted small" id="rlPromptVi"></p>
+   <div id="rlChoices" style="display:grid;gap:8px;margin:12px 0"></div>
+   <label for="rlAnswer"><b>Your reply · Câu trả lời của bạn</b></label>
+   <textarea id="rlAnswer" rows="2" placeholder="Type your reply in English... · Nhập câu trả lời bằng tiếng Anh"></textarea>
+   <div class="controls" style="margin-top:10px">
+    <button class="btn" onclick="rlCheck()">Check · Kiểm tra</button>
+    <button class="btn line" onclick="rlShowHint()">Hint · Gợi ý</button>
+    <button class="btn soft" onclick="rlSpeak()">🔊 Listen · Nghe mẫu</button>
+   </div>
+   <div id="rlFeedback" aria-live="polite"></div>
+   <div class="controls" style="justify-content:space-between;margin-top:12px">
+    <span class="small muted" id="rlScore">Completed: 0 · Đã hoàn thành: 0</span>
+    <button class="btn" onclick="rlNext()">Next · Tiếp theo →</button>
+   </div>
+  </div>
+  <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
+ </div>
+ <div class="panel">
+  <h2>Review your conversation · Xem lại hội thoại</h2>
+  <p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
+  <div id="rlReview" class="small muted">Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.</div>
+ </div>
+</section>
 
 
 <section class="page" id="translation">
@@ -750,6 +792,204 @@ function renderProgress(){document.getElementById("progressXP").textContent=(loc
 function exportProgress(){let keys=["eg2-xp","eg2-streak","eg2-last","eg2-known","eg2-writing"];let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));data.eg3={difficult:EG3.get("difficult",[]),completed:EG3.get("completed",[]),dailyWriting:EG3.get("dailyWriting","")};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="englishgo-progress-backup.json";a.click();URL.revokeObjectURL(a.href)}
 function importProgressFile(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);Object.entries(d).forEach(([k,v])=>{if(k==="eg3"){Object.entries(v).forEach(([a,b])=>EG3.set(a,b))}else if(v!==null)localStorage.setItem(k,v)});alert("Progress restored · Đã khôi phục tiến độ");location.reload()}catch(err){alert("Invalid backup file · File sao lưu không hợp lệ")}};r.readAsText(f)}
 const oldGo=go;go=function(id){oldGo(id);if(id==="flashcards")flashRender();if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");if(id==="practice"){document.getElementById("dailyWriting").value=EG3.get("dailyWriting","")}};
+
+// Real-Life English: 20 offline bilingual conversation scenarios (A1–B1).
+const rlTopics = [
+{title:"At a café · Ở quán cà phê",level:"A1",situation:"Order a drink and a snack.",turns:[
+["Barista","Hello! What can I get for you?","Xin chào! Tôi có thể lấy gì cho bạn?",["I'd like a cappuccino, please.","I am cappuccino.","Give coffee."],"I'd like a cappuccino, please.","Use 'I'd like...' to order politely."],
+["Barista","Would you like anything to eat?","Bạn có muốn ăn gì không?",["Yes, a croissant, please.","Yes, I like eat.","No, I eating."],"Yes, a croissant, please.","Name the item and add 'please'."],
+["Barista","What size would you like?","Bạn muốn cỡ nào?",["A medium, please.","I am medium.","Size middle."],"A medium, please.","Use 'a medium' for the size."],
+["Barista","That's six euros. For here or to go?","Tổng cộng sáu euro. Dùng tại đây hay mang đi?",["To go, please.","I go to.","Go away."],"To go, please.","'To go' means takeaway."]]},
+{title:"At a restaurant · Ở nhà hàng",level:"A1",situation:"Get a table and order food.",turns:[
+["Server","Good evening. Do you have a reservation?","Chào buổi tối. Bạn đã đặt bàn chưa?",["No, we don't. Do you have a table for two?","No reservation have.","We are two table."],"No, we don't. Do you have a table for two?","Ask for a table for two."],
+["Server","Are you ready to order?","Bạn sẵn sàng gọi món chưa?",["Yes. I'd like the chicken, please.","Yes, I ready order chicken.","I want chicken food."],"Yes. I'd like the chicken, please.","Use 'I'd like' for a polite order."],
+["Server","What would you like to drink?","Bạn muốn uống gì?",["Still water, please.","I drink water now.","Water is like."],"Still water, please.","A short polite request is natural."],
+["Server","Would you like the bill?","Bạn muốn thanh toán không?",["Yes, could we have the bill, please?","Give bill.","I want pay paper."],"Yes, could we have the bill, please?","'Could we have...' is polite."]]},
+{title:"Meeting someone · Làm quen",level:"A1",situation:"Introduce yourself to someone new.",turns:[
+["Alex","Hi! I'm Alex. What's your name?","Chào! Tôi là Alex. Bạn tên gì?",["I'm Minh. Nice to meet you.","My name Minh.","I called Minh."],"I'm Minh. Nice to meet you.","Say 'I'm...' and 'Nice to meet you'."],
+["Alex","Where are you from?","Bạn đến từ đâu?",["I'm from Vietnam.","I from Vietnam.","I come Vietnam."],"I'm from Vietnam.","Use 'I'm from' for your country."],
+["Alex","What do you do?","Bạn làm nghề gì?",["I work in customer service.","I am work customer service.","I do customer."],"I work in customer service.","Use 'I work in...' to describe your job."],
+["Alex","What do you like doing in your free time?","Bạn thích làm gì lúc rảnh?",["I enjoy listening to music and going for walks.","I like listen music.","I enjoy to walk."],"I enjoy listening to music and going for walks.","After 'enjoy', use the -ing form."]]},
+{title:"At a shop · Ở cửa hàng",level:"A1",situation:"Ask about an item and pay.",turns:[
+["Assistant","Can I help you find anything?","Tôi có thể giúp bạn tìm gì không?",["Yes, I'm looking for a jacket.","Yes, I look jacket.","Find me jacket."],"Yes, I'm looking for a jacket.","Use 'I'm looking for...'."],
+["Assistant","What size do you need?","Bạn cần cỡ nào?",["A medium, please.","I need medium size one.","Medium is me."],"A medium, please.","Name the size simply."],
+["Assistant","Would you like to try it on?","Bạn có muốn thử không?",["Yes, where are the fitting rooms?","Yes, where try?","I try it here?"],"Yes, where are the fitting rooms?","Ask where the fitting rooms are."],
+["Assistant","How would you like to pay?","Bạn muốn thanh toán bằng cách nào?",["By card, please.","I pay carding.","With my card is."],"By card, please.","'By card' is the natural phrase."]]},
+{title:"Asking for directions · Hỏi đường",level:"A1",situation:"Find a nearby station.",turns:[
+["Local","Hello. Can I help you?","Xin chào. Tôi có thể giúp gì?",["Yes, how can I get to the train station?","Where train station go?","I want station."],"Yes, how can I get to the train station?","Use 'How can I get to...?'."],
+["Local","Go straight and turn left.","Đi thẳng rồi rẽ trái.",["Thank you. Is it far?","Thanks, far it?","How many far?"],"Thank you. Is it far?","Ask 'Is it far?'."],
+["Local","No, it's about five minutes on foot.","Không, đi bộ khoảng năm phút.",["Great. Is it easy to find?","Good, easy find?","I can finding?"],"Great. Is it easy to find?","Use 'easy to find'."],
+["Local","Yes, you'll see it on your right.","Có, bạn sẽ thấy nó ở bên phải.",["Thanks for your help!","Thanks help you!","Thank you for helping me much."],"Thanks for your help!","A natural way to say thank you."]]},
+{title:"At the hotel · Ở khách sạn",level:"A2",situation:"Check in and ask about hotel services.",turns:[
+["Receptionist","Welcome. Do you have a reservation?","Chào mừng. Bạn đã đặt phòng chưa?",["Yes, I have a reservation under the name Minh Nguyen.","Yes, I booking Minh.","I reserved room name Minh."],"Yes, I have a reservation under the name Minh Nguyen.","Use 'under the name...'."],
+["Receptionist","Could I see your passport, please?","Tôi có thể xem hộ chiếu của bạn không?",["Of course. Here you are.","Yes, see it.","I give passport you."],"Of course. Here you are.","'Here you are' when handing something over."],
+["Receptionist","Breakfast is served from seven to ten.","Bữa sáng được phục vụ từ bảy đến mười giờ.",["Is breakfast included in the room rate?","Breakfast include room?","I have breakfast free?"],"Is breakfast included in the room rate?","Ask whether it is included."],
+["Receptionist","Your room is on the third floor.","Phòng của bạn ở tầng ba.",["Thank you. Where are the lifts?","Thanks, where lift is?","Where elevator go?"],"Thank you. Where are the lifts?","'Lift' (UK) / 'elevator' (US)."]]},
+{title:"At the airport · Ở sân bay",level:"A2",situation:"Check in for your flight.",turns:[
+["Agent","May I see your passport and ticket?","Tôi có thể xem hộ chiếu và vé không?",["Certainly. Here they are.","Sure, here it is them.","I show you."],"Certainly. Here they are.","Use 'Here they are' for two items."],
+["Agent","Are you checking in any bags?","Bạn có ký gửi hành lý không?",["Yes, I have one suitcase to check in.","Yes, one bag check.","I have suitcase."],"Yes, I have one suitcase to check in.","Say 'one suitcase to check in'."],
+["Agent","Would you prefer a window or an aisle seat?","Bạn thích ghế cạnh cửa sổ hay lối đi?",["An aisle seat, please.","I like aisle place.","Window no."],"An aisle seat, please.","An aisle seat is beside the walkway."],
+["Agent","Your gate is B twelve. Boarding starts at nine.","Cổng của bạn là B12. Việc lên máy bay bắt đầu lúc chín giờ.",["Thanks. How long does it take to get there?","Thanks, how long go there?","How many time there?"],"Thanks. How long does it take to get there?","Use 'How long does it take...?'"]]},
+{title:"Making an appointment · Đặt lịch hẹn",level:"A2",situation:"Arrange an appointment by phone.",turns:[
+["Receptionist","Good morning. How can I help?","Chào buổi sáng. Tôi có thể giúp gì?",["I'd like to make an appointment, please.","I want appointment make.","I need meet doctor time."],"I'd like to make an appointment, please.","Use 'make an appointment'."],
+["Receptionist","What day works best for you?","Ngày nào phù hợp nhất với bạn?",["Friday afternoon would be best.","Friday afternoon is good me.","I can Friday afternoon."],"Friday afternoon would be best.","'Would be best' sounds polite."],
+["Receptionist","We have a slot at two thirty.","Chúng tôi có lịch lúc hai giờ ba mươi.",["That works for me. Thank you.","That works me.","Two thirty I take."],"That works for me. Thank you.","Say 'That works for me'."],
+["Receptionist","Could you arrive ten minutes early?","Bạn có thể đến sớm mười phút không?",["Of course. I'll be there early.","Yes, I arrive before.","I come ten minutes."],"Of course. I'll be there early.","Use 'I'll be there' for a future plan."]]},
+{title:"At the doctor · Ở phòng khám",level:"A2",situation:"Describe a simple health problem.",turns:[
+["Doctor","What seems to be the problem?","Bạn đang gặp vấn đề gì?",["I've had a headache since yesterday.","My head pain from yesterday.","I have headache yesterday."],"I've had a headache since yesterday.","Use present perfect with 'since'."],
+["Doctor","Do you have any other symptoms?","Bạn có triệu chứng nào khác không?",["I also have a sore throat.","I have throat hurt too.","My throat is bad."],"I also have a sore throat.","'A sore throat' is the common phrase."],
+["Doctor","Have you taken any medicine?","Bạn đã uống thuốc gì chưa?",["Yes, I took some painkillers this morning.","Yes, I drink medicine morning.","I took pain medicine at morning."],"Yes, I took some painkillers this morning.","Use 'took' for past time."],
+["Doctor","Try to rest and drink plenty of water.","Hãy nghỉ ngơi và uống nhiều nước.",["Thank you. When should I come back?","Thanks, when return?","When I come again?"],"Thank you. When should I come back?","Ask 'When should I...?' for advice."]]},
+{title:"At work · Ở nơi làm việc",level:"A2",situation:"Talk to a colleague about a task.",turns:[
+["Colleague","Have you finished the report?","Bạn hoàn thành báo cáo chưa?",["I'm almost done. I'll send it this afternoon.","Almost finish, send afternoon.","I finish nearly."],"I'm almost done. I'll send it this afternoon.","'I'm almost done' means nearly finished."],
+["Colleague","Do you need any help?","Bạn có cần giúp gì không?",["Thanks. Could you check the figures?","Please check number for me.","You can help figures?"],"Thanks. Could you check the figures?","Make a polite request with 'Could you...?'."],
+["Colleague","Sure. When do you need it?","Được. Khi nào bạn cần?",["By the end of the day, if possible.","Today end time.","Before day finish."],"By the end of the day, if possible.","'By the end of the day' is a deadline."],
+["Colleague","No problem. I'll take a look.","Không vấn đề. Tôi sẽ xem qua.",["I really appreciate your help.","I appreciate you help.","Thanks your helping."],"I really appreciate your help.","Use 'appreciate' + noun or -ing."]]},
+{title:"Making small talk · Trò chuyện xã giao",level:"A2",situation:"Have a friendly conversation.",turns:[
+["Jamie","How was your weekend?","Cuối tuần của bạn thế nào?",["It was great. I went hiking with some friends.","It was good, I go hike.","I have hiking."],"It was great. I went hiking with some friends.","Use past simple for last weekend."],
+["Jamie","That sounds fun! Where did you go?","Nghe vui đấy! Bạn đã đi đâu?",["We went to a lake outside the city.","We go lake outside city.","At lake near city."],"We went to a lake outside the city.","Use 'went' as the past of 'go'."],
+["Jamie","Was the weather good?","Thời tiết có đẹp không?",["Yes, it was sunny but a little windy.","Yes, sunny but wind.","Weather was sun."],"Yes, it was sunny but a little windy.","Use 'sunny' and 'windy'."],
+["Jamie","I'd love to go there sometime.","Tôi cũng muốn đến đó một hôm.",["You should! It's definitely worth visiting.","You should go, very worth.","Yes, you visit."],"You should! It's definitely worth visiting.","'Worth visiting' means đáng để ghé thăm."]]},
+{title:"On the phone · Gọi điện thoại",level:"A2",situation:"Make a short phone call.",turns:[
+["Receptionist","Good afternoon. Green Street Clinic.","Chào buổi chiều. Phòng khám Green Street.",["Hello. I'd like to speak to someone about an appointment.","Hello, I speak appointment.","I want talk appointment."],"Hello. I'd like to speak to someone about an appointment.","Use 'I'd like to speak to...'."],
+["Receptionist","Certainly. Can I take your name?","Được. Tôi xin tên của bạn được không?",["It's Minh Nguyen.","My name is Minh Nguyen.","I am name Minh."],"It's Minh Nguyen.","Both 'It's...' and 'My name is...' work."],
+["Receptionist","Could you hold for a moment?","Bạn vui lòng giữ máy một lát nhé?",["Of course. I'll wait.","Yes, I hold.","I wait you."],"Of course. I'll wait.","A polite response is 'Of course'."],
+["Receptionist","Thank you for waiting. How can I help?","Cảm ơn bạn đã chờ. Tôi có thể giúp gì?",["I'd like to reschedule my appointment.","I want change appointment time.","I need appointment different."],"I'd like to reschedule my appointment.","'Reschedule' means change the time."]]},
+{title:"Returning an item · Đổi trả hàng",level:"B1",situation:"Explain a problem and request an exchange.",turns:[
+["Assistant","Hello. How can I help you today?","Xin chào. Hôm nay tôi có thể giúp gì?",["I'd like to return this jacket because the zip is broken.","I return jacket, zip no work.","I want give back this."],"I'd like to return this jacket because the zip is broken.","Explain the reason with 'because'."],
+["Assistant","Do you have the receipt?","Bạn có hóa đơn không?",["Yes, I have it here.","Yes, I have receipt here.","I have it."],"Yes, I have it here.","A natural response is short and clear."],
+["Assistant","Would you prefer a refund or an exchange?","Bạn muốn hoàn tiền hay đổi sản phẩm?",["I'd prefer an exchange for the same item in a different size.","I want change size same.","Exchange different size please."],"I'd prefer an exchange for the same item in a different size.","Use 'I'd prefer...' to state a preference."],
+["Assistant","Let me check if we have your size.","Để tôi kiểm tra xem còn cỡ của bạn không.",["Thank you. I appreciate your help.","Thanks, you help good.","Thank you for help me."],"Thank you. I appreciate your help.","'I appreciate your help' is natural and polite."]]},
+{title:"Solving a problem · Giải quyết vấn đề",level:"B1",situation:"Explain a problem with an online order.",turns:[
+["Support","Could you tell me what happened?","Bạn có thể cho tôi biết chuyện gì đã xảy ra không?",["My order was marked as delivered, but I haven't received it.","Order say delivered but I don't get.","My order delivered, not here."],"My order was marked as delivered, but I haven't received it.","Use passive voice 'was marked' and present perfect."],
+["Support","Have you checked with your neighbours?","Bạn đã hỏi hàng xóm chưa?",["Yes, I checked with them this morning, but nobody has seen it.","Yes, I ask neighbours morning.","I checked, nobody see."],"Yes, I checked with them this morning, but nobody has seen it.","Use past simple for the check and present perfect for the result."],
+["Support","I'm sorry about that. Would you like a replacement?","Tôi xin lỗi về việc đó. Bạn muốn gửi sản phẩm thay thế không?",["A replacement would be great, provided it can arrive this week.","Replacement good if arrive this week.","Yes, send this week."],"A replacement would be great, provided it can arrive this week.","'Provided' introduces a condition."],
+["Support","I'll arrange that for you.","Tôi sẽ sắp xếp việc đó cho bạn.",["Thank you. Could you email me the updated delivery details?","Thanks, send email new delivery.","Can email details me?"],"Thank you. Could you email me the updated delivery details?","Ask politely with 'Could you...?'"]]},
+{title:"Making plans · Lên kế hoạch",level:"B1",situation:"Arrange to meet a friend.",turns:[
+["Sam","Are you free this Saturday?","Thứ Bảy này bạn có rảnh không?",["I think so. What did you have in mind?","Maybe yes, what plan?","I free, what do?"],"I think so. What did you have in mind?","A natural way to ask about the plan."],
+["Sam","How about going to the new exhibition?","Đi xem triển lãm mới thì sao?",["That sounds interesting. What time does it start?","Interesting, what time start?","I like. When?"],"That sounds interesting. What time does it start?","Ask about the start time."],
+["Sam","It opens at eleven. We could meet outside.","Nó mở cửa lúc mười một giờ. Chúng ta có thể gặp bên ngoài.",["Eleven works for me. Shall we meet at the entrance?","Eleven okay, meet entrance?","I can eleven."],"Eleven works for me. Shall we meet at the entrance?","'Works for me' means phù hợp với tôi."],
+["Sam","Perfect. See you then!","Tuyệt. Hẹn gặp bạn lúc đó!",["Looking forward to it. See you Saturday!","I wait it.","See you in Saturday."],"Looking forward to it. See you Saturday!","Use 'on Saturday', or simply 'See you Saturday'."]]},
+{title:"Giving an opinion · Nêu ý kiến",level:"B1",situation:"Discuss working from home.",turns:[
+["Taylor","What do you think about working from home?","Bạn nghĩ gì về làm việc tại nhà?",["I think it's convenient, although it can sometimes feel isolating.","It's good but lonely sometime.","I think home work convenient."],"I think it's convenient, although it can sometimes feel isolating.","Use 'although' to balance two ideas."],
+["Taylor","What do you find most difficult?","Bạn thấy điều gì khó nhất?",["The hardest part is separating work from personal time.","Hard is finish work and life.","Separate work life difficult."],"The hardest part is separating work from personal time.","Use a gerund after 'is'."],
+["Taylor","How do you deal with that?","Bạn xử lý việc đó thế nào?",["I set clear working hours and take regular breaks.","I make time rules and rest.","I do schedule."],"I set clear working hours and take regular breaks.","Use specific verbs: set, take."],
+["Taylor","That sounds like a sensible approach.","Nghe có vẻ là cách hợp lý.",["It works well for me, but I know it isn't ideal for everyone.","It works me but not all people.","Good for me, not everybody."],"It works well for me, but I know it isn't ideal for everyone.","Qualify an opinion to sound balanced."]]},
+{title:"Job interview · Phỏng vấn xin việc",level:"B1",situation:"Answer common interview questions.",turns:[
+["Interviewer","Could you tell me a little about yourself?","Bạn có thể giới thiệu đôi chút về bản thân không?",["I have three years of experience in customer service, and I enjoy solving problems.","I work customer service three years.","I have experience three year."],"I have three years of experience in customer service, and I enjoy solving problems.","Use 'years of experience'."],
+["Interviewer","What would you say is your greatest strength?","Bạn nghĩ điểm mạnh lớn nhất của mình là gì?",["I'd say I'm reliable and good at communicating with different people.","My strong is reliable.","I am good communicate."],"I'd say I'm reliable and good at communicating with different people.","Use adjectives and 'good at' + -ing."],
+["Interviewer","Can you describe a challenge you handled?","Bạn có thể kể về một thử thách bạn đã xử lý không?",["A customer was unhappy about a delay, so I explained the situation and offered a solution.","Customer angry delay, I explain.","There was problem customer."],"A customer was unhappy about a delay, so I explained the situation and offered a solution.","Structure the answer: situation, action, result."],
+["Interviewer","Do you have any questions for us?","Bạn có câu hỏi nào dành cho chúng tôi không?",["Yes. Could you tell me what a typical day in this role looks like?","What work every day?","No question."],"Yes. Could you tell me what a typical day in this role looks like?","Ask about the role to show interest."]]},
+{title:"Apologising · Xin lỗi",level:"B1",situation:"Apologise for being late and explain.",turns:[
+["Colleague","We were waiting for you. Is everything okay?","Chúng tôi đã chờ bạn. Mọi thứ ổn chứ?",["I'm really sorry I'm late. The train was delayed.","Sorry late, train problem.","I late because train."],"I'm really sorry I'm late. The train was delayed.","Acknowledge the delay and apologise."],
+["Colleague","No worries. Are you able to join the meeting now?","Không sao. Bây giờ bạn tham gia cuộc họp được chứ?",["Yes, absolutely. I'll catch up on what I've missed.","Yes, I can join and learn missed.","I join now."],"Yes, absolutely. I'll catch up on what I've missed.","'Catch up on' means cập nhật phần đã bỏ lỡ."],
+["Colleague","We've already discussed the first point.","Chúng tôi đã thảo luận mục đầu tiên rồi.",["Could someone briefly fill me in before we move on?","Tell me first point please.","I need know it."],"Could someone briefly fill me in before we move on?","'Fill me in' is an informal phrasal verb."],
+["Colleague","Of course. I'll summarise it after the meeting.","Tất nhiên. Tôi sẽ tóm tắt sau cuộc họp.",["Thanks, I appreciate that. It won't happen again.","Thanks, not again.","I appreciate you."],"Thanks, I appreciate that. It won't happen again.","Thank the person and reassure them."]]},
+{title:"Talking about travel · Kể về chuyến đi",level:"B1",situation:"Tell someone about a recent trip.",turns:[
+["Morgan","Have you been anywhere interesting recently?","Gần đây bạn có đi đâu thú vị không?",["I spent a few days in Prague last month.","I go Prague last month.","I was travel Prague."],"I spent a few days in Prague last month.","Use past simple with a finished time."],
+["Morgan","What did you enjoy most?","Bạn thích điều gì nhất?",["I especially enjoyed exploring the old town on foot.","I like old town walk.","The old town was best."],"I especially enjoyed exploring the old town on foot.","Use 'enjoyed' + -ing."],
+["Morgan","Was there anything you didn't like?","Có điều gì bạn không thích không?",["It was quite crowded, particularly around the main square.","Many people, not good.","It was crowded much."],"It was quite crowded, particularly around the main square.","Use 'particularly' to add detail."],
+["Morgan","Would you recommend visiting?","Bạn có khuyên người khác đến đó không?",["Definitely. It's a beautiful city with plenty to see and do.","Yes, very beautiful.","I recommend go."],"Definitely. It's a beautiful city with plenty to see and do.","'Plenty to see and do' is a natural phrase."]]},
+{title:"Discussing a schedule · Trao đổi lịch trình",level:"B1",situation:"Arrange a time with a colleague.",turns:[
+["Colleague","Could we move our meeting to Thursday?","Chúng ta có thể chuyển cuộc họp sang thứ Năm không?",["Thursday should be fine, as long as it's in the afternoon.","Thursday okay afternoon.","I can Thursday after lunch."],"Thursday should be fine, as long as it's in the afternoon.","'As long as' introduces a condition."],
+["Colleague","Would three o'clock suit you?","Ba giờ có phù hợp với bạn không?",["Three would work perfectly.","Three time good.","I can at three."],"Three would work perfectly.","'Would work' is a natural scheduling phrase."],
+["Colleague","I'll update the calendar invitation.","Tôi sẽ cập nhật lời mời trên lịch.",["Great. Please let me know if anything changes.","Good, tell me change.","Please inform if change."],"Great. Please let me know if anything changes.","A polite way to ask for updates."],
+["Colleague","Thanks for being flexible.","Cảm ơn bạn đã linh hoạt.",["No problem. Thanks for letting me know in advance.","No problem, tell me early.","It's okay."],"No problem. Thanks for letting me know in advance.","'In advance' means trước đó."]]},
+{title:"Neighbour conversation · Trò chuyện với hàng xóm",level:"A2",situation:"Introduce yourself to a new neighbour.",turns:[
+["Neighbour","Hi, I don't think we've met. I'm Anna from next door.","Chào, hình như chúng ta chưa gặp nhau. Tôi là Anna ở nhà bên.",["Hi Anna. I'm Minh. I moved in last week.","Hello, I Minh. I move last week.","I'm new here one week."],"Hi Anna. I'm Minh. I moved in last week.","Use 'moved in' for starting to live somewhere."],
+["Anna","Welcome to the neighbourhood! How are you settling in?","Chào mừng bạn đến khu phố! Bạn đã quen với nơi này chưa?",["Thanks! Everyone has been very friendly so far.","Thanks, people friendly until now.","All people are nice."],"Thanks! Everyone has been very friendly so far.","'So far' means cho đến hiện tại."],
+["Anna","Let me know if you need anything.","Cứ cho tôi biết nếu bạn cần gì nhé.",["That's very kind of you. I may ask for a recommendation for a good supermarket.","Kind, maybe supermarket recommend.","I need supermarket."],"That's very kind of you. I may ask for a recommendation for a good supermarket.","Use 'recommendation for'."],
+["Anna","There's a good one just around the corner.","Có một siêu thị tốt ngay gần góc phố.",["That's great. Thanks for the tip!","Great, thank you information.","Thanks for tell."],"That's great. Thanks for the tip!","'Thanks for the tip' is a friendly expression."]]},
+{title:"At the pharmacy · Ở hiệu thuốc",level:"A2",situation:"Ask for an over-the-counter product.",turns:[
+["Pharmacist","Hello. How can I help you?","Xin chào. Tôi có thể giúp gì?",["I'm looking for something for a headache.","I need medicine head pain.","I want headache."],"I'm looking for something for a headache.","Use 'something for...'."],
+["Pharmacist","How long have you had it?","Bạn bị như vậy bao lâu rồi?",["Since this morning.","From this morning.","I have today morning."],"Since this morning.","Use 'since' with a starting point."],
+["Pharmacist","Are you taking any other medication?","Bạn có đang dùng loại thuốc nào khác không?",["No, I'm not taking anything else.","No, I don't take other.","Nothing other medicine."],"No, I'm not taking anything else.","Use present continuous for current medication."],
+["Pharmacist","Please read the instructions before taking it.","Vui lòng đọc hướng dẫn trước khi dùng.",["Of course. Thank you for your advice.","Okay, thanks advice.","I will read it."],"Of course. Thank you for your advice.","A polite closing response."]]},
+{title:"Asking for help · Nhờ giúp đỡ",level:"A1",situation:"Ask someone to help with a suitcase.",turns:[
+["Passenger","You look like you need a hand. Are you okay?","Trông bạn có vẻ cần giúp đỡ. Bạn ổn chứ?",["Yes, please. Could you help me with this suitcase?","Help suitcase me?","I need you help."],"Yes, please. Could you help me with this suitcase?","Use 'Could you help me with...?'."],
+["Passenger","Of course. Where would you like me to put it?","Tất nhiên. Bạn muốn tôi đặt nó ở đâu?",["Just next to the bench, please.","Next bench there.","Put near seat."],"Just next to the bench, please.","Use 'next to' for beside."],
+["Passenger","Is this okay?","Như vậy được chưa?",["That's perfect. Thank you so much.","Perfect, thanks you.","Yes, very thank."],"That's perfect. Thank you so much.","A warm way to say thank you."],
+["Passenger","You're welcome. Have a nice day!","Không có gì. Chúc bạn một ngày tốt lành!",["You too. Take care!","Same you.","Good day you."],"You too. Take care!","'You too' is a natural response."]]},
+{title:"At the nail salon · Tại tiệm nail",level:"A1",situation:"Welcome a client and discuss the service they would like.",turns:[
+["Client","Hi! Do you have any appointments available?","Xin chào! Tiệm còn lịch trống không?",["Yes, we have an opening at two o'clock. Would that work for you?","Yes, you appointment two.","Come two clock."],"Yes, we have an opening at two o'clock. Would that work for you?","Use 'an opening' to talk about an available appointment."],
+["Client","I'd like to get my nails done.","Tôi muốn làm móng.",["Of course. Are you looking for a manicure, gel polish or extensions?","You want nails what?","Manicure or gel?"],"Of course. Are you looking for a manicure, gel polish or extensions?","Offer service options politely."],
+["Client","I'd like gel polish, please.","Tôi muốn sơn gel.",["Absolutely. Do you have a colour in mind?","Okay, what color?","Choose color now."],"Absolutely. Do you have a colour in mind?","'Do you have a colour in mind?' sounds friendly and natural."],
+["Client","Something light pink.","Màu hồng nhạt nhé.",["Lovely choice. I'll show you a few shades to choose from.","Pink here.","I show pink."],"Lovely choice. I'll show you a few shades to choose from.","'Shades' means different variations of a colour."]]},
+{title:"Nail consultation · Tư vấn mẫu móng",level:"A2",situation:"Discuss nail shape, length, colour and design before starting.",turns:[
+["Client","I'm not sure what shape would suit me.","Tôi không chắc dáng móng nào hợp với mình.",["I can help you choose. Do you prefer square, round or almond-shaped nails?","You choose shape.","Almond is good."],"I can help you choose. Do you prefer square, round or almond-shaped nails?","Offer clear choices and use 'prefer' to ask about preferences."],
+["Client","I think I'd like almond-shaped nails.","Tôi nghĩ tôi muốn dáng móng hạnh nhân.",["Great. Would you like to keep this length or go a little shorter?","Almond okay. Short?","You want long?"],"Great. Would you like to keep this length or go a little shorter?","Ask about length before filing."],
+["Client","A little shorter, please.","Ngắn hơn một chút nhé.",["No problem. Would you like a simple colour or some nail art?","Okay, color or art?","I make short."],"No problem. Would you like a simple colour or some nail art?","'Nail art' means decorative designs on nails."],
+["Client","Just a simple colour today.","Hôm nay chỉ sơn màu đơn giản thôi.",["Of course. Let's choose a shade that you like.","Okay, choose color.","Simple color."],"Of course. Let's choose a shade that you like.","'A shade' is a natural word for a particular colour."]]},
+{title:"During a manicure · Trong lúc làm móng",level:"A2",situation:"Explain the steps and check that the client is comfortable.",turns:[
+["Client","Will this take much longer?","Còn lâu nữa không?",["It should take about twenty more minutes. I'll let you know when we're nearly finished.","Twenty minute.","Almost finish."],"It should take about twenty more minutes. I'll let you know when we're nearly finished.","Use 'about' for an estimated time."],
+["Client","The file feels a little rough.","Cây dũa hơi ráp.",["Thanks for telling me. I'll use a softer file and be more gentle.","No problem, file.","I do gentle."],"Thanks for telling me. I'll use a softer file and be more gentle.","Acknowledge feedback and explain what you will change."],
+["Client","Could you make this nail a little shorter?","Bạn có thể làm móng này ngắn hơn một chút không?",["Of course. I'll shorten it a little. Is this length better?","Okay, short.","I cut it."],"Of course. I'll shorten it a little. Is this length better?","Confirm the adjustment with the client."],
+["Client","Yes, that's perfect. Thank you.","Vâng, như vậy hoàn hảo rồi. Cảm ơn bạn.",["You're welcome! Let me know if you need any other adjustments.","Welcome.","Finished now."],"You're welcome! Let me know if you need any other adjustments.","Invite the client to mention any further changes."]]},
+{title:"Nail problems & repairs · Sửa móng và xử lý sự cố",level:"B1",situation:"Respond professionally when a client reports a broken nail or a problem.",turns:[
+["Client","One of my nails has chipped since yesterday.","Một móng của tôi bị bong sơn từ hôm qua.",["I'm sorry about that. Could you show me which nail is affected?","Why chip?","Come again."],"I'm sorry about that. Could you show me which nail is affected?","Apologise politely and ask to see the issue."],
+["Client","It's this one on my right hand.","Là móng này ở bàn tay phải.",["Thank you. I'll take a closer look and see what needs to be fixed.","I see. Fix now.","This one broken."],"Thank you. I'll take a closer look and see what needs to be fixed.","'Take a closer look' means examine something more carefully."],
+["Client","Can you repair it today?","Hôm nay bạn có thể sửa nó không?",["Yes, we can repair it now. It should only take a few minutes.","Yes, easy.","Maybe later."],"Yes, we can repair it now. It should only take a few minutes.","Explain the solution and give a realistic time estimate."],
+["Client","Will there be an extra charge?","Có tính thêm phí không?",["There's no extra charge for this small repair. Thank you for letting us know.","No pay.","Free maybe."],"There's no extra charge for this small repair. Thank you for letting us know.","State the salon's policy clearly and politely."]]},
+{title:"Booking & aftercare · Đặt lịch và chăm sóc móng",level:"B1",situation:"Arrange the next appointment and explain basic aftercare.",turns:[
+["Client","When should I come back for a refill?","Khi nào tôi nên quay lại dặm móng?",["I'd recommend booking your refill in about two to three weeks, depending on your nail growth.","Two weeks come.","Come when long."],"I'd recommend booking your refill in about two to three weeks, depending on your nail growth.","Use 'I'd recommend' to give professional advice."],
+["Client","Is there anything I should avoid?","Có điều gì tôi nên tránh không?",["Try not to use your nails as tools, and wear gloves when using cleaning products.","Don't break nails.","No water."],"Try not to use your nails as tools, and wear gloves when using cleaning products.","Give specific, practical aftercare advice."],
+["Client","Can I use cuticle oil at home?","Tôi có thể dùng dầu dưỡng viền móng ở nhà không?",["Definitely. Applying cuticle oil regularly can help keep the skin around your nails moisturised.","Yes, use oil.","Oil is good."],"Definitely. Applying cuticle oil regularly can help keep the skin around your nails moisturised.","'Cuticle oil' is dầu dưỡng viền móng."],
+["Client","Great, thank you. I'd like to book my next appointment.","Tuyệt, cảm ơn bạn. Tôi muốn đặt lịch lần tới.",["Of course. What day and time would be convenient for you?","Okay, when?","Come next time."],"Of course. What day and time would be convenient for you?","Ask for a convenient day and time to finish the booking."]]}
+];
+
+let rlCurrent=0, rlTurn=0, rlDone=0, rlHistory=[], rlChecked=false;
+function rlFiltered(){const lv=document.getElementById("rlLevel")?.value||"all";return rlTopics.map((x,i)=>({...x,idx:i})).filter(x=>lv==="all"||x.level===lv);}
+function rlInit(){
+ const s=document.getElementById("rlTopic"); if(!s)return;
+ const list=rlFiltered(); if(!list.length)return;
+ s.innerHTML=list.map(x=>`<option value="${x.idx}">${x.title} (${x.level})</option>`).join("");
+ if(!list.some(x=>x.idx===rlCurrent))rlCurrent=list[0].idx;
+ s.value=String(rlCurrent); rlLoadTopic();
+}
+function rlFilterLevel(){rlInit();}
+function rlLoadTopic(){
+ const s=document.getElementById("rlTopic"); if(!s)return;
+ rlCurrent=Number(s.value)||0; rlTurn=0; rlHistory=[]; rlChecked=false;
+ const t=rlTopics[rlCurrent]; document.getElementById("rlSituation").textContent=t.level+" · "+t.situation;
+ document.getElementById("rlReview").textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
+ rlRender();
+}
+function rlRender(){
+ const t=rlTopics[rlCurrent], q=t.turns[rlTurn]; if(!q)return;
+ document.getElementById("rlCounter").textContent=`Turn ${rlTurn+1} / ${t.turns.length}`;
+ document.getElementById("rlSpeaker").textContent=`Your reply to ${q[0]} · Bạn trả lời ${q[0]}`;
+ document.getElementById("rlPrompt").textContent=q[1];
+ document.getElementById("rlPromptVi").textContent=q[2];
+ document.getElementById("rlAnswer").value="";
+ document.getElementById("rlFeedback").innerHTML="";
+ document.getElementById("rlChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line" style="text-align:left;white-space:normal" onclick="rlChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
+ document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
+ rlChecked=false;
+}
+function rlChoose(i){if(rlChecked)return;document.getElementById("rlAnswer").value=rlTopics[rlCurrent].turns[rlTurn][3][i];}
+function rlCheck(){
+ if(rlChecked)return;
+ const q=rlTopics[rlCurrent].turns[rlTurn], answer=document.getElementById("rlAnswer").value.trim();
+ if(!answer){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Please write or choose a reply first. Hãy nhập hoặc chọn câu trả lời trước nhé.</div>';return;}
+ const normalized=s=>s.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ").trim();
+ const exact=normalized(answer)===normalized(q[4]);
+ const likely=answer.split(/\s+/).length>=Math.min(4,q[4].split(/\s+/).length-1);
+ const note=exact?"Excellent! You used the model answer. Tuyệt vời! Bạn đã dùng câu mẫu.":likely?"Good attempt. Compare your sentence with the natural example below. Câu trả lời có ý phù hợp; hãy so sánh với cách diễn đạt tự nhiên bên dưới.":"Try using a complete, polite sentence. Hãy thử dùng một câu đầy đủ và lịch sự.";
+ rlHistory.push({prompt:q[1],vi:q[2],answer,model:q[4],tip:q[5],exact});
+ document.getElementById("rlFeedback").innerHTML=`<div class="feedback ${exact?"good":""}"><b>${note}</b><p><b>Suggested reply · Câu gợi ý:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
+ rlChecked=true; rlDone++;
+ document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your answer · Bạn trả lời:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
+ document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
+}
+function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElementById("rlFeedback").innerHTML=`<div class="feedback"><b>Hint · Gợi ý:</b> ${q[5]}<p><b>Useful phrase · Cụm từ hữu ích:</b> ${q[4].split(" ").slice(0,4).join(" ")}...</p></div>`;}
+function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
+function rlNext(){
+ if(!rlChecked){document.getElementById("rlFeedback").innerHTML='<div class="feedback">Check your reply before moving on. Hãy kiểm tra câu trả lời trước khi tiếp tục.</div>';return;}
+ const t=rlTopics[rlCurrent];
+ if(rlTurn<t.turns.length-1){rlTurn++;rlRender();}
+ else{document.getElementById("rlFeedback").innerHTML='<div class="feedback good">Conversation complete! Well done. Hoàn thành hội thoại! Làm tốt lắm.</div>';rlTurn=0;rlHistory=[];document.getElementById("rlReview").innerHTML="You completed this conversation. Choose another topic to practise again. Bạn đã hoàn thành hội thoại này. Hãy chọn chủ đề khác để luyện tiếp.";}
+}
+
 document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress()});
 
 
@@ -1066,7 +1306,7 @@ document.addEventListener("keydown",function(e){
  }
 });
 
-document.addEventListener("DOMContentLoaded",()=>{startTranslation();startTopicTranslation();startThousandTranslation();renderGrammar();startGrammarPractice();});
+document.addEventListener("DOMContentLoaded",()=>{startTranslation();startTopicTranslation();startThousandTranslation();renderGrammar();startGrammarPractice();rlInit();});
 </script>
 
 </body></html>
