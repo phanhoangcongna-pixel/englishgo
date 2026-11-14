@@ -223,12 +223,14 @@ textarea { width: 100%; }
  </div>
  <div class="panel" id="egLearningRoadmap">
   <h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
-  <p class="small muted">Tick off the milestones as you complete them. Progress is saved on this device and included in your existing cloud sync. Đánh dấu từng mục khi hoàn thành.</p>
-  <div id="egRoadmapList" style="display:grid;gap:12px"></div>
-  <div class="controls" style="justify-content:space-between;margin-top:12px">
-   <b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b>
-   <button type="button" class="btn line" onclick="egRoadmapReset()">Reset roadmap · Đặt lại</button>
+  <p class="small muted">Your progress updates automatically when you complete lessons, quizzes and practice. Tiến độ tự cập nhật khi mày học và làm bài.</p>
+  <div class="panel" style="margin:10px 0;background:var(--surface)">
+   <div class="controls" style="justify-content:space-between"><b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b><span class="badge" id="egRoadmapUnlocked">Phase 1 available</span></div>
+   <div style="height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0"><div id="egRoadmapBar" style="height:100%;width:0%;background:var(--primary);border-radius:99px;transition:width .25s"></div></div>
+   <p id="egRoadmapNext" class="small muted" style="margin:0">Next step · Bước tiếp theo sẽ hiện ở đây.</p>
   </div>
+  <div id="egRoadmapList" style="display:grid;gap:12px"></div>
+  <p class="small muted">Progress is stored in your existing EnglishGo data and follows the existing Firebase sync when signed in. Tiến độ lưu cùng dữ liệu hiện có và đồng bộ Firebase khi đăng nhập.</p>
  </div>
  <div class="panel" id="rlAdvanced">
   <div class="controls" style="justify-content:space-between;align-items:center">
@@ -820,10 +822,10 @@ let wi=0;function currentWord(){return DATA.vocab[wi]}
 function renderWords(){let cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();if(cat.options.length===1){[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)))}let chosen=cat.value;let list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><b>${w.w}</b><span class="meaning muted">${w.vi}</span><button class="btn line" onclick="wi=${w.i};showWord()">Open · Xem</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";showWord()}
 function showWord(){let w=currentWord();document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa} · ${w.cat}</div><div class="translation">${w.vi}</div><div class="example"><b>${w.ex}</b><em>${w.vn}</em></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`}
 function nextWord(){wi=(wi+1)%DATA.vocab.length;showWord()}function prevWord(){wi=(wi+DATA.vocab.length-1)%DATA.vocab.length;showWord()}
-function markWord(){if(!known.includes(wi)){known.push(wi);save("known",known);award("word-"+wi,5)}updateStats();showWord()}
-function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10)}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
-function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0)award("listen",10)}
-function readingCheck(i){let f=document.getElementById("readingFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Chính xác!":"Read the text again. Hãy đọc lại.";if(i===0)award("reading",10)}
+function markWord(){if(!known.includes(wi)){known.push(wi);save("known",known);award("word-"+wi,5)}if(typeof egRoadmapTrack==="function")egRoadmapTrack("word",{count:known.length});updateStats();showWord()}
+function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("grammar")}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
+function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0){award("listen",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("listen")}}
+function readingCheck(i){let f=document.getElementById("readingFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Chính xác!":"Read the text again. Hãy đọc lại.";if(i===0){award("reading",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("reading")}}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 let si=0;function renderScenario(){let sel=document.getElementById("scenarioSelect");if(!sel.options.length)DATA.scenarios.forEach((s,i)=>sel.add(new Option(s[0]+" · "+s[1],i)));si=Number(sel.value||si);let s=DATA.scenarios[si];document.getElementById("scenarioLines").innerHTML=s[2].map((l,i)=>`<div class="conversation"><div class="line-en">${i%2===0?"A":"B"}: ${escapeHtml(l[0])}</div><div class="line-vi">${escapeHtml(l[1])}</div><button type="button" class="btn line" style="margin-top:6px;padding:6px 9px;font-size:12px" data-speak="${escapeHtml(l[0])}">🔊 Listen</button></div>`).join("")}
 function nextScenario(){si=(si+1)%DATA.scenarios.length;document.getElementById("scenarioSelect").value=si;renderScenario();award("scenario-"+si,5)}
@@ -838,7 +840,7 @@ function nextQuiz(){if(qi<quiz.length-1){qi++;renderQuiz()}else{document.getElem
 function restartQuiz(){qi=0;qs=0;renderQuiz()}
 let pi=0,ps=0,pa=false;function renderPlace(){let q=DATA.placement[pi];document.getElementById("placeNo").textContent=`Question ${pi+1}/10 · ${q[0]}`;document.getElementById("placeQ").textContent=q[1];document.getElementById("placeVi").textContent=q[2];document.getElementById("placeChoices").innerHTML=q[3].map((a,i)=>`<button class="choice" onclick="answerPlace(${i})">${a}</button>`).join("");document.getElementById("placeFeedback").textContent="";document.getElementById("placeNext").disabled=true;pa=false}
 function answerPlace(i){if(pa)return;pa=true;let q=DATA.placement[pi],ok=i===q[4];if(ok)ps++;document.querySelectorAll("#placeChoices button").forEach((b,j)=>{if(j===q[4])b.classList.add("good");else if(j===i)b.classList.add("bad");b.disabled=true});let f=document.getElementById("placeFeedback");f.className="feedback "+(ok?"good":"bad");f.textContent=ok?"Correct! Chính xác!":"Not quite. Review and continue. Chưa đúng, hãy ôn lại và tiếp tục.";document.getElementById("placeNext").disabled=false}
-function nextPlace(){if(pi<9){pi++;renderPlace()}else{let level=ps<=3?"A1":ps<=7?"A2":"B1";document.getElementById("placeQ").textContent=`Your estimated level: ${level} (${ps}/10) · Trình độ ước lượng: ${level}`;document.getElementById("placeVi").textContent="This is an informal practice test, not an official certificate. Đây là bài kiểm tra tham khảo, không phải chứng chỉ chính thức.";document.getElementById("placeChoices").innerHTML="";document.getElementById("placeNext").disabled=true;award("placement",25)}}
+function nextPlace(){if(pi<9){pi++;renderPlace()}else{let level=ps<=3?"A1":ps<=7?"A2":"B1";document.getElementById("placeQ").textContent=`Your estimated level: ${level} (${ps}/10) · Trình độ ước lượng: ${level}`;document.getElementById("placeVi").textContent="This is an informal practice test, not an official certificate. Đây là bài kiểm tra tham khảo, không phải chứng chỉ chính thức.";document.getElementById("placeChoices").innerHTML="";document.getElementById("placeNext").disabled=true;award("placement",25);if(typeof egRoadmapTrack==="function")egRoadmapTrack("placement")}}
 function restartPlace(){pi=0;ps=0;renderPlace()}
 updateStats();renderWords();renderScenario();renderQuiz();renderPlace();
 
@@ -1065,6 +1067,7 @@ function rlCheck(){
  const note=exact?"Excellent! That's the natural reply. Tuyệt vời! Đây là câu trả lời tự nhiên.":"Good try! Compare your choice with the suggested reply. Hãy so sánh lựa chọn với câu trả lời gợi ý nhé.";
  rlHistory.push({prompt:q[1],vi:q[2],answer,model:q[4],tip:q[5],exact});
  rlSaveMistake(rlCurrent,rlTurn,q,answer,exact);
+ if(typeof egRoadmapTrack==="function"){const topicName=(rlTopics[rlCurrent]?.title||"").toLowerCase();egRoadmapTrack("real",{kind:topicName.includes("nail")?"nail":(/work|customer|job|office/.test(topicName)?"work":"everyday")})}
  document.querySelectorAll("#rlChoices .rl-choice").forEach((b,i)=>{
    b.disabled=true;
    if(normalized(q[3][i])===normalized(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)";}
@@ -1127,6 +1130,7 @@ document.addEventListener("click",function(e){
  rlPracticeMistake(Number(practice.dataset.practiceTopic),Number(practice.dataset.practiceTurn));
 });
 function rlPracticeMistake(topicIndex,turnIndex){
+ if(typeof egRoadmapTrack==="function")egRoadmapTrack("mistakeReview");
  if(!rlTopics[topicIndex]||!rlTopics[topicIndex].turns[turnIndex]){
   alert("This saved question is no longer available. Câu hỏi đã lưu không còn tồn tại.");
   return;
@@ -1191,7 +1195,7 @@ function rlDailyCheck(){
  if(rlDailySelected<0){document.getElementById("rlDailyFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn đáp án trước.</div>';return}
  const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex],norm=v=>v.toLowerCase().replace(/[.,!?']/g,"").replace(/\\s+/g," ").trim();
  const chosen=q[3][rlDailySelected],correct=norm(chosen)===norm(q[4]);
- rlDailyStatsData=rlDailyStats();const day=rlDailyDate();rlDailyStatsData.days=rlDailyStatsData.days||{};rlDailyStatsData.days[day]=rlDailyStatsData.days[day]||{correct:0,attempts:0,wrong:0};const dayStats=rlDailyStatsData.days[day];dayStats.attempts=(dayStats.attempts||0)+1;if(correct){rlDailyCorrect++;dayStats.correct=(dayStats.correct||0)+1}else{dayStats.wrong=(dayStats.wrong||0)+1}rlDailySaveStats();rlSaveMistake(x.topicIndex,x.turnIndex,q,chosen,correct);
+ rlDailyStatsData=rlDailyStats();const day=rlDailyDate();rlDailyStatsData.days=rlDailyStatsData.days||{};rlDailyStatsData.days[day]=rlDailyStatsData.days[day]||{correct:0,attempts:0,wrong:0};const dayStats=rlDailyStatsData.days[day];dayStats.attempts=(dayStats.attempts||0)+1;if(correct){rlDailyCorrect++;dayStats.correct=(dayStats.correct||0)+1}else{dayStats.wrong=(dayStats.wrong||0)+1}rlDailySaveStats();rlSaveMistake(x.topicIndex,x.turnIndex,q,chosen,correct);if(typeof egRoadmapTrack==="function"){egRoadmapTrack("dailyAnswer");egRoadmapTrack("accuracy",{value:Math.round((dayStats.correct||0)/(dayStats.attempts||1)*100)})}
  document.querySelectorAll("#rlDailyChoices button").forEach((b,i)=>{b.disabled=true;if(norm(q[3][i])===norm(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlDailySelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
  document.getElementById("rlDailyFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Correct! Well done. Chính xác!":"Not quite. Keep practising. Chưa đúng, hãy tiếp tục luyện tập."}</b><p><b>Suggested reply:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
  rlDailyChecked=true;document.getElementById("rlDailyCheck").disabled=true;document.getElementById("rlDailyNext").disabled=false;rlDailyRenderStats();rlRenderInsights();
@@ -1200,25 +1204,84 @@ function rlDailyNext(){
  if(!rlDailyChecked)return;
  if(rlDailyIndex<rlDailyQueue.length-1){rlDailyIndex++;rlDailyRenderQuestion();return}
  const total=rlDailyQueue.length,correct=rlDailyCorrect;
+ if(typeof egRoadmapTrack==="function")egRoadmapTrack("dailySession");
  document.getElementById("rlDailyStage").innerHTML=`<div class="feedback good"><b>Daily review complete! Hoàn thành ôn tập hôm nay!</b><p>You got ${correct}/${total} correct. Bạn trả lời đúng ${correct}/${total} câu.</p><button class="btn" onclick="rlDailyStart()">Practise another set · Làm bộ câu hỏi khác</button></div>`;
  document.getElementById("rlDailyProgress").textContent="Completed · Đã hoàn thành";rlDailyRenderStats();
 }
 const EG_ROADMAP_KEY="eg3-learning-roadmap";
+const EG_ROADMAP_ACTIVITY_KEY="eg3-roadmap-activity";
 const EG_ROADMAP=[
- {title:"Phase 1 · Foundation · Nền tảng",items:["Complete a level test · Làm bài kiểm tra trình độ","Build a daily vocabulary habit · Học từ vựng mỗi ngày","Practise grammar and pronunciation · Luyện ngữ pháp và phát âm","Finish listening and reading basics · Hoàn thành nghe và đọc cơ bản"]},
- {title:"Phase 2 · Real-Life Communication · Giao tiếp thực tế",items:["Practise everyday conversation topics · Luyện chủ đề đời sống","Complete work and customer-service dialogues · Luyện hội thoại công việc","Practise Nail Salon English basics · Luyện tiếng Anh tiệm nail cơ bản","Review speaking and listening regularly · Ôn nghe nói thường xuyên"]},
- {title:"Phase 3 · Personal Learning · Học cá nhân hóa",items:["Use Review My Mistakes · Ôn lỗi sai","Complete Daily Review sessions · Ôn tập hằng ngày","Check Learning Insights · Xem phân tích tiến độ","Focus on the weakest topics · Tập trung chủ đề còn yếu"]},
- {title:"Phase 4 · Advanced English · Nâng cao",items:["Complete advanced work scenarios · Hoàn thành hội thoại công việc nâng cao","Practise advanced Nail Salon English · Luyện hội thoại nail nâng cao","Use natural, polite expressions · Dùng cách diễn đạt tự nhiên, lịch sự","Complete a weekly review · Tổng kết mỗi tuần"]}
+ {title:"Phase 1 · Foundation · Nền tảng",items:[
+  ["Complete a level test · Làm bài kiểm tra trình độ",a=>a.placement===true,"Finish the 10-question placement test."],
+  ["Learn at least 10 vocabulary words · Học ít nhất 10 từ",a=>a.words>=10,"Open Vocabulary and mark 10 words as learned."],
+  ["Practise grammar · Luyện ngữ pháp",a=>a.grammar===true,"Complete a correct grammar practice."],
+  ["Complete listening and reading · Hoàn thành nghe và đọc",a=>a.listen&&a.reading,"Answer one listening and one reading question correctly."]
+ ]},
+ {title:"Phase 2 · Real-Life Communication · Giao tiếp thực tế",items:[
+  ["Practise 5 real-life conversation turns · Luyện 5 lượt hội thoại",a=>a.realTurns>=5,"Complete five conversation questions."],
+  ["Practise work and customer-service dialogues · Luyện hội thoại công việc",a=>a.workTurns>=3,"Complete three work/customer-service turns."],
+  ["Practise Nail Salon English · Luyện tiếng Anh tiệm nail",a=>a.nailTurns>=3,"Complete three Nail Salon conversation turns."],
+  ["Practise speaking and listening regularly · Luyện nói và nghe",a=>a.dailyAttempts>=5,"Answer five Daily Review questions."]
+ ]},
+ {title:"Phase 3 · Personal Learning · Học cá nhân hóa",items:[
+  ["Use Review My Mistakes · Ôn lỗi sai",a=>a.mistakesReviewed>=1,"Practise one saved mistake again."],
+  ["Complete 3 Daily Review sessions · Hoàn thành 3 lượt ôn tập",a=>a.dailySessions>=3,"Finish three Daily Review sets."],
+  ["Review Learning Insights · Xem phân tích tiến độ",a=>a.insightsViewed===true,"Open Learning Insights in Real-Life Conversation."],
+  ["Improve your accuracy · Cải thiện độ chính xác",a=>a.accuracy>=80&&a.dailyAttempts>=10,"Reach 80% accuracy after at least 10 Daily Review answers."]
+ ]},
+ {title:"Phase 4 · Advanced English · Nâng cao",items:[
+  ["Complete advanced work scenarios · Hoàn thành hội thoại công việc nâng cao",a=>a.advancedWork>=1,"Finish one advanced work scenario."],
+  ["Complete advanced Nail Salon scenarios · Hoàn thành hội thoại nail nâng cao",a=>a.advancedNail>=1,"Finish one advanced nail scenario."],
+  ["Practise natural, polite expressions · Luyện cách nói tự nhiên, lịch sự",a=>a.advancedCorrect>=6,"Answer six advanced turns correctly."],
+  ["Complete a weekly review · Hoàn thành ôn tập tuần",a=>a.weeklyReview===true,"Finish at least five Daily Review sessions."]
+ ]}
 ];
 function egRoadmapRead(){try{return JSON.parse(localStorage.getItem(EG_ROADMAP_KEY)||"{}")}catch(e){return {}}}
+function egRoadmapActivity(){try{return JSON.parse(localStorage.getItem(EG_ROADMAP_ACTIVITY_KEY)||"{}")}catch(e){return {}}}
+function egRoadmapSaveActivity(a){localStorage.setItem(EG_ROADMAP_ACTIVITY_KEY,JSON.stringify(a));if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender()}
+function egRoadmapTrack(type,extra={}){
+ const a=egRoadmapActivity();
+ if(type==="placement")a.placement=true;
+ if(type==="word")a.words=Math.max(a.words||0,extra.count||0);
+ if(type==="grammar")a.grammar=true;
+ if(type==="listen")a.listen=true;
+ if(type==="reading")a.reading=true;
+ if(type==="real"){a.realTurns=(a.realTurns||0)+1;if(extra.kind==="work")a.workTurns=(a.workTurns||0)+1;if(extra.kind==="nail")a.nailTurns=(a.nailTurns||0)+1}
+ if(type==="dailyAnswer")a.dailyAttempts=(a.dailyAttempts||0)+1;
+ if(type==="dailySession"){a.dailySessions=(a.dailySessions||0)+1;if(a.dailySessions>=5)a.weeklyReview=true}
+ if(type==="mistakeReview")a.mistakesReviewed=(a.mistakesReviewed||0)+1;
+ if(type==="insights")a.insightsViewed=true;
+ if(type==="advancedAnswer"&&extra.correct)a.advancedCorrect=(a.advancedCorrect||0)+1;
+ if(type==="advancedComplete"){if(extra.kind==="nail")a.advancedNail=(a.advancedNail||0)+1;else a.advancedWork=(a.advancedWork||0)+1}
+ if(type==="accuracy"){a.accuracy=extra.value||0}
+ egRoadmapSaveActivity(a);
+}
+function egRoadmapMetrics(){
+ const activity=egRoadmapActivity(),daily=(()=>{try{return JSON.parse(localStorage.getItem("eg3-daily-review-stats")||"{}")}catch(e){return {}}})();
+ let attempts=0,correct=0;Object.values(daily.days||{}).forEach(d=>{attempts+=d.attempts||0;correct+=d.correct||0});
+ const mistakes=(()=>{try{return JSON.parse(localStorage.getItem("eg3-real-life-mistakes")||"[]")}catch(e){return []}})();
+ return {...activity,words:Math.max(activity.words||0,(typeof known!=="undefined"?known.length:0)),dailyAttempts:Math.max(activity.dailyAttempts||0,attempts),accuracy:attempts?Math.round(correct/attempts*100):(activity.accuracy||0),mistakeCount:mistakes.length};
+}
 function egRoadmapRender(){
  const host=document.getElementById("egRoadmapList");if(!host)return;
- const state=egRoadmapRead();let total=0,done=0;
- host.innerHTML=EG_ROADMAP.map((phase,pi)=>`<div class="panel" style="margin:0"><h3>${phase.title}</h3>${phase.items.map((item,ii)=>{total++;const key=pi+"-"+ii,checked=!!state[key];if(checked)done++;return `<label style="display:flex;gap:10px;align-items:flex-start;padding:6px 0"><input type="checkbox" data-roadmap-key="${key}" ${checked?"checked":""} style="margin-top:4px"><span>${item}</span></label>`}).join("")}</div>`).join("");
- host.querySelectorAll("[data-roadmap-key]").forEach(el=>el.addEventListener("change",()=>{const st=egRoadmapRead();if(el.checked)st[el.dataset.roadmapKey]=true;else delete st[el.dataset.roadmapKey];localStorage.setItem(EG_ROADMAP_KEY,JSON.stringify(st));if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender()}));
- const pct=total?Math.round(done/total*100):0;const out=document.getElementById("egRoadmapProgress");if(out)out.textContent=`${pct}% complete · ${done}/${total} milestones · Hoàn thành ${pct}%`;
+ const a=egRoadmapMetrics();let total=0,done=0,unlocked=0,next=null;
+ const phases=EG_ROADMAP.map((phase,pi)=>{
+  const checks=phase.items.map(([label,test,tip])=>{total++;const complete=!!test(a);if(complete)done++;else if(!next)next={label,tip,phase:pi+1};return {label,complete,tip}});
+  const phaseDone=checks.filter(x=>x.complete).length;
+  const canOpen=pi===0||(pi>0&&EG_ROADMAP[pi-1].items.filter(([_,test])=>test(a)).length>=3);
+  if(canOpen)unlocked=pi+1;
+  const previousDone=pi>0?EG_ROADMAP[pi-1].items.filter(([_,test])=>test(a)).length:4;
+  const locked=pi>0&&previousDone<3;
+  return `<details class="panel" style="margin:0" ${pi===0||(!locked&&phaseDone<checks.length)?"open":""}><summary style="cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center"><b>${phase.title}</b><span class="badge">${locked?"🔒 Locked · Chưa mở":phaseDone+"/"+checks.length+" · "+Math.round(phaseDone/checks.length*100)+"%"}</span></summary><div style="display:grid;gap:10px;margin-top:12px">${checks.map(c=>`<div style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true">${c.complete?"✅":locked?"🔒":"⬜"}</span><div><b>${c.label}</b><div class="small muted">${c.complete?"Completed automatically · Đã tự ghi nhận":locked?"Complete the previous phase first · Hoàn thành giai đoạn trước":"Next: "+c.tip}</div></div></div>`).join("")}</div></details>`;
+ }).join("");
+ host.innerHTML=phases;
+ const pct=total?Math.round(done/total*100):0;
+ const out=document.getElementById("egRoadmapProgress");if(out)out.textContent=`${pct}% complete · ${done}/${total} milestones · Hoàn thành ${pct}%`;
+ const bar=document.getElementById("egRoadmapBar");if(bar)bar.style.width=pct+"%";
+ const badge=document.getElementById("egRoadmapUnlocked");if(badge)badge.textContent=`Phase ${Math.min(4,unlocked)} available`;
+ const nextEl=document.getElementById("egRoadmapNext");if(nextEl)nextEl.textContent=next?`Next step · Bước tiếp theo: ${next.label}. ${next.tip}`:"All roadmap milestones completed! Mày đã hoàn thành toàn bộ lộ trình!";
 }
-function egRoadmapReset(){if(!confirm("Reset your roadmap progress? Đặt lại tiến độ lộ trình?"))return;localStorage.removeItem(EG_ROADMAP_KEY);if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender();}
+function egRoadmapReset(){if(!confirm("Reset roadmap tracking only? This will not delete your lessons or mistakes. Đặt lại theo dõi lộ trình?"))return;localStorage.removeItem(EG_ROADMAP_ACTIVITY_KEY);localStorage.removeItem(EG_ROADMAP_KEY);if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender();}
 const RL_ADVANCED=[
  {title:"Handling a misunderstanding",context:"A colleague thinks you missed an important deadline. Clarify the situation calmly and agree on a next step.",turns:[
   {speaker:"Colleague",prompt:"I thought we agreed you'd send the revised files yesterday. I haven't received anything.",vi:"Tôi tưởng chúng ta đã thống nhất bạn sẽ gửi bản chỉnh sửa hôm qua. Tôi vẫn chưa nhận được.",choices:["You're right to follow up. I sent the draft, but I should have confirmed it reached you. I'll resend it now.","That's not my problem. Check your email.","I don't know, maybe later."],answer:0,why:"Acknowledge the concern, clarify what happened, and offer a concrete next step."},
@@ -1290,7 +1353,7 @@ function rlAdvCheck(){
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn],correct=rlAdvChoice===q.answer;
  document.querySelectorAll("[data-adv-choice]").forEach((b,i)=>{b.disabled=true;if(i===q.answer){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlAdvChoice){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
  document.getElementById("rlAdvFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Excellent choice! · Rất tốt!":"Try this more natural response · Hãy tham khảo câu tự nhiên hơn"}</b><p>${q.choices[q.answer]}</p><p class="small">${q.why}</p></div>`;
- rlAdvChecked=true;if(correct)rlAdvCompleted++;
+ rlAdvChecked=true;if(correct)rlAdvCompleted++;if(typeof egRoadmapTrack==="function")egRoadmapTrack("advancedAnswer",{correct});
  document.getElementById("rlAdvScore").textContent=`Correct advanced turns this session: ${rlAdvCompleted} · Số câu đúng: ${rlAdvCompleted}`;
  document.getElementById("rlAdvNext").disabled=false;
 }
@@ -1298,10 +1361,11 @@ function rlAdvNext(){
  if(!rlAdvChecked)return;
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0];
  if(rlAdvTurn<sc.turns.length-1){rlAdvTurn++;rlAdvChoice=-1;rlAdvChecked=false;rlAdvRender()}
- else{document.getElementById("rlAdvFeedback").innerHTML+='<p><b>Scenario complete! · Hoàn thành tình huống!</b></p>';document.getElementById("rlAdvNext").disabled=true}
+ else{document.getElementById("rlAdvFeedback").innerHTML+='<p><b>Scenario complete! · Hoàn thành tình huống!</b></p>';document.getElementById("rlAdvNext").disabled=true;if(typeof egRoadmapTrack==="function"){const n=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0].title.toLowerCase();egRoadmapTrack("advancedComplete",{kind:n.includes("nail")?"nail":"work"})}}
 }
 function rlAdvReset(){rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;rlAdvLoad()}
 function rlRenderInsights(){
+ if(typeof egRoadmapTrack==="function"&&!sessionStorage.getItem("eg3-insights-viewed")){sessionStorage.setItem("eg3-insights-viewed","1");egRoadmapTrack("insights")}
  const stats=rlDailyStats(),days=stats.days||{},mistakes=rlGetMistakes();
  let attempts=0,correct=0;
  Object.values(days).forEach(d=>{attempts+=(d.attempts||0);correct+=(d.correct||0)});
