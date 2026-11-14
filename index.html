@@ -748,10 +748,14 @@ function say(t){
      if(requestId === speechRequestId && event.error === "interrupted") return;
    };
    try {
+     synth.cancel();
      synth.resume();
      synth.speak(utterance);
+     // A few Chromium builds need a second resume after cancellation.
+     setTimeout(()=>{if(requestId===speechRequestId && synth.speaking===false)synth.resume();},180);
    } catch(err) {
      console.warn("EnglishGo pronunciation error:", err);
+     alert("Không phát được âm thanh. Hãy kiểm tra âm lượng và thử Chrome/Edge mới nhất.");
    }
  }).catch(err => console.warn("EnglishGo voice loading error:", err));
 }
@@ -1023,7 +1027,23 @@ function rlCheck(){
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
 }
 const RL_MISTAKES_KEY="eg3-real-life-mistakes";
-function rlGetMistakes(){try{return JSON.parse(localStorage.getItem(RL_MISTAKES_KEY)||"[]")}catch(e){return []}}
+function rlGetMistakes(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(RL_MISTAKES_KEY)||"[]");
+  if(!Array.isArray(raw))return [];
+  const unique=new Map();
+  raw.forEach((m,i)=>{
+   if(!m||!Number.isInteger(Number(m.topicIndex))||!Number.isInteger(Number(m.turnIndex)))return;
+   const key=String(m.topicIndex)+":"+String(m.turnIndex);
+   const prev=unique.get(key);
+   // Prefer the most recently updated record; otherwise keep the first valid record.
+   if(!prev || (m.updatedAt||"")>(prev.updatedAt||""))unique.set(key,{...m,key});
+  });
+  const cleaned=[...unique.values()].sort((a,b)=>(b.updatedAt||"").localeCompare(a.updatedAt||""));
+  if(cleaned.length!==raw.length)localStorage.setItem(RL_MISTAKES_KEY,JSON.stringify(cleaned));
+  return cleaned;
+ }catch(e){return []}
+}
 function rlSaveMistake(topicIndex,turnIndex,q,chosen,correct){
  const list=rlGetMistakes(),key=topicIndex+":"+turnIndex,at=list.findIndex(x=>x.key===key);
  if(correct){if(at>=0)list.splice(at,1)}
@@ -1041,22 +1061,35 @@ function rlRenderMistakes(){
  const list=rlGetMistakes();
  if(!list.length){el.innerHTML="No mistakes saved yet. Chưa có câu sai nào được lưu.";return}
  el.innerHTML=list.map((m,i)=>`<div class="panel" style="margin:10px 0">
-  <div class="controls" style="justify-content:space-between"><b>${i+1}. ${m.topic} · ${m.level}</b><span class="badge">Tried ${m.count||1}×</span></div>
-  <p><b>Client · Khách:</b> ${m.prompt}</p><p class="small muted">${m.vi}</p>
-  <p><span class="muted">Your answer · Bạn chọn:</span> <span style="color:#b45309">${m.chosen}</span></p>
-  <p><span class="muted">Suggested reply · Câu gợi ý:</span> <b>${m.model}</b></p>
-  <p class="small muted">${m.tip}</p>
-  <div class="controls"><button class="btn line" onclick="say(${JSON.stringify(m.prompt)})">🔊 Listen · Nghe</button><button class="btn" onclick="rlPracticeMistake(${m.topicIndex},${m.turnIndex})">Practise again · Luyện lại</button></div>
+  <div class="controls" style="justify-content:space-between"><b>${i+1}. ${escapeHtml(m.topic||"Conversation")} · ${escapeHtml(m.level||"")}</b><span class="badge">Tried ${Number(m.count)||1}×</span></div>
+  <p><b>Client · Khách:</b> ${escapeHtml(m.prompt||"")}</p><p class="small muted">${escapeHtml(m.vi||"")}</p>
+  <p><span class="muted">Your answer · Bạn chọn:</span> <span style="color:#b45309">${escapeHtml(m.chosen||"")}</span></p>
+  <p><span class="muted">Suggested reply · Câu gợi ý:</span> <b>${escapeHtml(m.model||"")}</b></p>
+  <p class="small muted">${escapeHtml(m.tip||"")}</p>
+  <div class="controls"><button class="btn line" type="button" data-speak="${escapeHtml(m.prompt||"")}">🔊 Listen · Nghe</button><button class="btn" type="button" data-practice-topic="${Number(m.topicIndex)}" data-practice-turn="${Number(m.turnIndex)}">Practise again · Luyện lại</button></div>
  </div>`).join("");
  rlRenderInsights();
 }
+document.addEventListener("click",function(e){
+ const practice=e.target.closest("[data-practice-topic]");
+ if(!practice)return;
+ e.preventDefault();
+ rlPracticeMistake(Number(practice.dataset.practiceTopic),Number(practice.dataset.practiceTurn));
+});
 function rlPracticeMistake(topicIndex,turnIndex){
+ if(!rlTopics[topicIndex]||!rlTopics[topicIndex].turns[turnIndex]){
+  alert("This saved question is no longer available. Câu hỏi đã lưu không còn tồn tại.");
+  return;
+ }
  const levelSelect=document.getElementById("rlLevel"),topicSelect=document.getElementById("rlTopic");
  if(levelSelect)levelSelect.value="all";
  rlInit();
  if(topicSelect){topicSelect.value=String(topicIndex);rlLoadTopic()}
  rlTurn=turnIndex;rlRender();
- document.getElementById("rlFeedback").innerHTML='<div class="feedback">Try this question again. Hãy thử trả lời câu này lần nữa.</div>';
+ const feedback=document.getElementById("rlFeedback");
+ if(feedback)feedback.innerHTML='<div class="feedback">Try this question again. Hãy thử trả lời câu này lần nữa.</div>';
+ const section=document.getElementById("realLife")||document.getElementById("realLifeConversation")||document.getElementById("rlTopic");
+ if(section)section.scrollIntoView({behavior:"smooth",block:"start"});
 }
 const RL_DAILY_STATS_KEY="eg3-daily-review-stats";
 let rlDailyQueue=[],rlDailyIndex=0,rlDailySelected=-1,rlDailyChecked=false,rlDailyCorrect=0;
