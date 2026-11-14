@@ -70,6 +70,18 @@ textarea { width: 100%; }
 @media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
 <section class="page" id="spokenenglish">
+<div class="spoken-quick-nav" id="spokenQuickNav" aria-label="Điều hướng nhanh">
+  <button type="button" onclick="go('home')">⌂ Home</button>
+  <button type="button" onclick="go('vocab')">📚 Vocabulary</button>
+  <button type="button" onclick="go('grammar')">Grammar</button>
+  <button type="button" onclick="go('listening')">Listening</button>
+  <button type="button" onclick="go('speaking')">Speaking</button>
+  <button type="button" onclick="go('translation')">Translation</button>
+  <button type="button" onclick="go('spokenenglish')" class="current">🗣️ Spoken English</button>
+  <button type="button" onclick="go('progress')">📈 Progress</button>
+  <button type="button" onclick="go('learninglab')">🧪 Learning Lab</button>
+  <button type="button" onclick="go('cloud')">☁ Cloud sync</button>
+</div>
 <div class="page-header">
 <div>
 <p class="eyebrow">SPEAK NATURALLY · NÓI TỰ NHIÊN</p>
@@ -129,6 +141,12 @@ textarea { width: 100%; }
 .spoken-audio-row button{border:1px solid var(--border, #bbb);border-radius:9px;padding:8px 11px;cursor:pointer;background:var(--card, #f5f5f5);color:inherit;font:inherit}
 .spoken-audio-row button:active{transform:scale(.98)}
 
+
+/* Quick navigation remains visible while using Natural Spoken English */
+.spoken-quick-nav{position:sticky;top:0;z-index:4;display:flex;flex-wrap:wrap;gap:7px;margin:0 0 18px;padding:10px 12px;background:#142342;border:1px solid #405477;border-radius:12px;box-shadow:0 5px 16px #10203c22}
+.spoken-quick-nav button{background:#263b63;color:#eef4ff;border:1px solid #49618b;border-radius:8px;padding:8px 11px;font-size:13px;white-space:nowrap}
+.spoken-quick-nav button:hover,.spoken-quick-nav button.current{background:#4169e1;color:#fff}
+@media(max-width:700px){.spoken-quick-nav{top:0;gap:5px;padding:8px}.spoken-quick-nav button{font-size:12px;padding:7px 9px}}
 </style></head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
