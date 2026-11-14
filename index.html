@@ -236,7 +236,7 @@ textarea { width: 100%; }
   </div>
   <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
  </div>
- <div class="panel" id="egLearningRoadmap">
+ <details class="panel" id="egLearningRoadmapDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🧭 Learning Roadmap · Lộ trình học <span class="small muted">· Mở khi cần</span></summary><div id="egLearningRoadmap" style="margin-top:12px">
   <h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
   <p class="small muted">Your progress updates automatically when you complete lessons, quizzes and practice. Tiến độ tự cập nhật khi mày học và làm bài.</p>
   <div class="panel" style="margin:10px 0;background:var(--surface)">
@@ -246,8 +246,8 @@ textarea { width: 100%; }
   </div>
   <div id="egRoadmapList" style="display:grid;gap:12px"></div>
   <p class="small muted">Progress is stored in your existing EnglishGo data and follows the existing Firebase sync when signed in. Tiến độ lưu cùng dữ liệu hiện có và đồng bộ Firebase khi đăng nhập.</p>
- </div>
- <div class="panel" id="rlAdvanced">
+ </div></div>
+ <details class="panel" id="rlAdvancedDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🎯 Advanced English · Giao tiếp nâng cao <span class="small muted">· B2</span></summary><div id="rlAdvanced" style="margin-top:12px">
   <div class="controls" style="justify-content:space-between;align-items:center">
    <div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
    <span class="badge">B2 · Advanced</span>
@@ -282,8 +282,9 @@ textarea { width: 100%; }
    </div>
   </div>
   <div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
- </div>
- <details class="panel" id="rlMistakeBank">
+ </div></div></details>
+ <details class="panel" id="rlReviewTools"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">📚 Review & Progress · Ôn tập và tiến độ <span class="small muted">· Các công cụ bổ trợ</span></summary><div style="margin-top:12px">
+ <details id="rlMistakeBank">
   <summary style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:700;font-size:1.08rem">
    <span>Review My Mistakes · Ôn lại lỗi sai</span>
    <span class="badge" id="rlMistakeCount">0</span>
@@ -294,7 +295,7 @@ textarea { width: 100%; }
   </div>
   <div id="rlMistakeList" class="small muted">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
  </details>
- <div class="panel" id="rlDailyReview">
+ <details class="panel" id="rlDailyReview"><summary style="cursor:pointer;font-weight:700;list-style:none">📅 Daily Review · Ôn tập mỗi ngày</summary><div style="margin-top:10px">
   <div class="controls" style="justify-content:space-between;align-items:center">
    <div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
    <span class="badge" id="rlDailyStreak">🔥 0-day streak</span>
@@ -307,8 +308,8 @@ textarea { width: 100%; }
    <p class="muted">Complete a quick 5-question session. It will include your saved mistakes when available, plus new questions. Hoàn thành 5 câu ngắn, gồm câu từng sai (nếu có) và câu mới.</p>
    <button class="btn" onclick="rlDailyStart()">Start daily review · Bắt đầu ôn tập</button>
   </div>
- </div>
- <div class="panel" id="rlLearningInsights">
+ </div></details>
+ <details class="panel" id="rlLearningInsights"><summary style="cursor:pointer;font-weight:700;list-style:none">📊 Learning Insights · Phân tích tiến độ</summary><div style="margin-top:10px">
   <h2>Learning Insights · Phân tích tiến độ</h2>
   <p class="small muted">See your practice totals and the topics that need more attention. Theo dõi kết quả và những chủ đề cần luyện thêm.</p>
   <div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0">
@@ -319,13 +320,13 @@ textarea { width: 100%; }
   </div>
   <h3>Focus areas · Chủ đề cần tập trung</h3>
   <div id="rlInsightFocus" class="small muted">Your focus areas will appear after you practise. Chủ đề cần luyện sẽ hiện ở đây sau khi bạn học.</div>
- </div>
+ </div></details>
  <div class="panel">
   <h2>Review your conversation · Xem lại hội thoại</h2>
   <p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
   <div id="rlReview" class="small muted">Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.</div>
  </div>
-</section>
+</div></details></section>
 
 
 <section class="page" id="translation">
@@ -639,7 +640,7 @@ let xp=get("xp",0),known=get("known",[]),done=get("done",[]),lastDay=get("day","
 function award(id,points=10){if(!done.includes(id)){done.push(id);xp+=points;save("done",done);save("xp",xp);daily();updateStats()}}
 function daily(){let d=new Date().toISOString().slice(0,10);if(lastDay!==d){let y=new Date(Date.now()-86400000).toISOString().slice(0,10);streak=lastDay===y?streak+1:1;lastDay=d;save("day",lastDay);save("streak",streak)}}
 function updateStats(){document.getElementById("xp").textContent=xp+" XP";document.getElementById("level").textContent=xp>=300?"B1":xp>=100?"A2":"A1";document.getElementById("streak").textContent=streak+" 🔥";document.getElementById("learned").textContent=known.length;document.getElementById("progress").style.width=Math.min(100,Math.round(done.length/15*100))+"%";document.getElementById("progressText").textContent=done.length+" activities completed · "+done.length+" hoạt động hoàn thành. Earn XP to unlock levels · Tích XP để lên cấp."}
-function go(id){document.querySelectorAll(".nav-group").forEach(g=>g.open=false);document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace();if(id==="learninglab")labInit()}
+function go(id){document.querySelectorAll(".nav-group").forEach(g=>g.open=false);document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"});if(id==="vocab")renderWords();if(id==="grammar")renderGrammar();if(id==="speaking")renderScenario();if(id==="quiz")renderQuiz();if(id==="placement")renderPlace();if(id==="learninglab")labInit();if(id==="realconversation")setTimeout(()=>{if(document.getElementById("realconversation")?.classList.contains("active"))rlSpeakClient()},180)}
 
 document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
 
