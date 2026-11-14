@@ -805,6 +805,23 @@ document.querySelectorAll("header .nav-menu [data-page]").forEach(item=>{
   });
 });
 
+// Desktop: open dropdowns on hover and close them when the pointer leaves.
+// Touch devices keep the existing tap-to-open behavior.
+const desktopHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+if(desktopHover.matches){
+  document.querySelectorAll("header .nav-group").forEach(group=>{
+    group.addEventListener("mouseenter",()=>{
+      document.querySelectorAll("header .nav-group").forEach(other=>{
+        if(other!==group) other.open=false;
+      });
+      group.open=true;
+    });
+    group.addEventListener("mouseleave",()=>{
+      group.open=false;
+    });
+  });
+}
+
 function updateDictionaryDirection(){
  const direction=document.getElementById("dictDirection")?.value||"vi-en";
  const input=document.getElementById("dictQuery");
