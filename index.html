@@ -203,13 +203,13 @@ body > main{
 <nav aria-label="Main navigation" class="navlinks" id="mainNav">
 <button class="active nav-home" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learn <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="vocab">📚 Vocabulary <span>→</span></button><button data-page="dictionary">📖 Dictionary <span>→</span></button><button data-page="grammar">🔤 Grammar <span>→</span></button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms <span>→</span></button><button data-page="reading">📘 Reading <span>→</span></button><button data-page="writing">✍️ Writing <span>→</span></button>
+<button data-page="vocab">📚 Vocabulary </button><button data-page="dictionary">📖 Dictionary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="reading">📘 Reading </button><button data-page="writing">✍️ Writing </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="listening">🎧 Listening <span>→</span></button><button data-page="speaking">🗣️ Speaking <span>→</span></button><button data-page="realconversation">💬 Real-life Conversation <span>→</span></button><button data-page="roleplay">🎭 Roleplay <span>→</span></button><button data-page="shadowing">🎧 Shadowing <span>→</span></button><button data-page="pronunciation">🗣️ Pronunciation Lab <span>→</span></button><button data-page="dictation">✍️ Dictation <span>→</span></button><button data-page="spokenenglish">🗣️ Natural Spoken English <span>→</span></button>
+<button data-page="listening">🎧 Listening </button><button data-page="speaking">🗣️ Speaking </button><button data-page="realconversation">💬 Real-life Conversation </button><button data-page="roleplay">🎭 Roleplay </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="pronunciation">🗣️ Pronunciation Lab </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="translation">🔁 Translation Reflex <span>→</span></button><button data-page="flashcards">🃏 Flashcards <span>→</span></button><button data-page="practice">📅 Daily Practice <span>→</span></button><button data-page="quiz">🧠 Quiz <span>→</span></button><button data-page="placement">🎯 Level Test <span>→</span></button>
+<button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="practice">📅 Daily Practice </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
 </div></details>
 <button data-page="progress">📊 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud Sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
@@ -2569,6 +2569,25 @@ phrasalData.push(
    else if(!e.target.closest('#mainNav'))groups.forEach(g=>g.open=false);
  });
  document.addEventListener('keydown',e=>{if(e.key==='Escape')groups.forEach(g=>g.open=false)});
+})();
+</script>
+
+<script id="englishgo-question-arrow-keys">
+/* Keyboard navigation for lesson steps. Never steal arrows while typing or choosing answers. */
+(function(){
+ const isVisible=el=>!!(el&&el.getClientRects().length&&getComputedStyle(el).visibility!=='hidden');
+ document.addEventListener('keydown',function(e){
+   if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+   const target=e.target;
+   if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)))return;
+   if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+   const page=document.querySelector('.page.active');
+   if(!page)return;
+   const buttons=[...page.querySelectorAll('button:not(:disabled)')].filter(isVisible);
+   const pattern=e.key==='ArrowRight'?/(next|continue|câu tiếp|tiếp theo|tiếp tục|→)/i:/(previous|prev|back|câu trước|trước đó|←)/i;
+   const button=buttons.find(b=>pattern.test((b.innerText||b.textContent||'').trim()));
+   if(button){e.preventDefault();button.click()}
+ });
 })();
 </script>
 </body></html>
