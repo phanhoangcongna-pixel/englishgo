@@ -3509,7 +3509,9 @@ document.addEventListener("DOMContentLoaded",function(){
    host.textContent="Safari này chưa hỗ trợ ghi âm trên trang. Hãy cập nhật Safari và kiểm tra quyền Microphone cho website.";return;
   }
   if(activeSession){host.textContent="Một phiên ghi âm khác vẫn đang hoạt động. Hãy bấm Dừng ở đúng khung ghi âm đó trước.";return}
-  const session={id:++recordingCounter,recorder:null,stream:null,chunks:[],host,label};
+  const trigger=targetId==="egDialogueFeedback"?document.getElementById("egRecordShadow"):targetId==="egPronFeedback"?document.querySelector('[onclick*="pronTry"]'):null;
+  const controls=trigger&&trigger.closest(".controls");
+  const session={id:++recordingCounter,recorder:null,stream:null,chunks:[],host,label,trigger,controls,stopButton:null};
   activeSession=session;
   try{
    session.stream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -3521,14 +3523,15 @@ document.addEventListener("DOMContentLoaded",function(){
     else if(MediaRecorder.isTypeSupported("audio/webm"))options.mimeType="audio/webm";
    }
    const recorder=new MediaRecorder(session.stream,options);session.recorder=recorder;
+   const restoreControls=()=>{if(session.stopButton)session.stopButton.remove();if(session.trigger)session.trigger.hidden=false};
    recorder.ondataavailable=e=>{if(e.data&&e.data.size)session.chunks.push(e.data)};
    recorder.onerror=()=>{
-    stopSessionTracks(session);if(activeSession===session)activeSession=null;
+    stopSessionTracks(session);restoreControls();if(activeSession===session)activeSession=null;
     if(session.host.isConnected)session.host.textContent="Không thể ghi âm. Kiểm tra quyền microphone và thử lại.";
    };
    recorder.onstop=()=>{
     const type=recorder.mimeType||(session.chunks[0]&&session.chunks[0].type)||"audio/mp4";
-    const blob=new Blob(session.chunks,{type});stopSessionTracks(session);
+    const blob=new Blob(session.chunks,{type});stopSessionTracks(session);restoreControls();
     if(activeSession===session)activeSession=null;
     if(!session.host.isConnected)return;
     const url=URL.createObjectURL(blob);
@@ -3537,15 +3540,13 @@ document.addEventListener("DOMContentLoaded",function(){
     if(again)again.onclick=()=>startLocalRecording(targetId,label);
    };
    recorder.start();
-   host.innerHTML='<p>🔴 Đang ghi âm… Hãy nói tiếng Anh. Bấm Dừng khi hoàn tất.</p><button type="button" class="btn" id="egStopLocalRecording_'+session.id+'">■ Dừng ghi âm</button>';
-   const stop=document.getElementById("egStopLocalRecording_"+session.id);
-   if(stop)stop.onclick=()=>{
-    if(recorder.state==="recording"){
-     recorder.stop();
-     if(activeSession===session)activeSession=null;
-     stop.textContent="Đang lưu bản ghi…";stop.disabled=true;
-    }
-   };
+   if(session.trigger)session.trigger.hidden=true;
+   if(session.controls){
+    const stop=document.createElement("button");stop.type="button";stop.className="btn";stop.textContent="■ Dừng ghi âm";stop.id="egStopLocalRecording_"+session.id;
+    session.controls.insertBefore(stop,session.trigger?session.trigger.nextSibling:null);session.stopButton=stop;
+    stop.onclick=()=>{if(recorder.state==="recording"){stop.disabled=true;stop.textContent="Đang lưu…";recorder.stop()}};
+   }
+   host.textContent="🔴 Đang ghi âm… Hãy nói tiếng Anh. Bấm Dừng ghi âm ở phía trên khi hoàn tất.";
   }catch(e){
    stopSessionTracks(session);if(activeSession===session)activeSession=null;
    const msg=e&&e.name==="NotAllowedError"?"Safari chưa được cấp quyền microphone. Vào Settings của website và cho phép Microphone.":e&&e.name==="NotFoundError"?"Không tìm thấy microphone trên thiết bị.":"Không mở được microphone ("+(e&&e.name||"lỗi")+"). Hãy kiểm tra quyền truy cập và thử lại.";
