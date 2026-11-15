@@ -2385,7 +2385,8 @@ function checkThousandTranslation(){
  const item=thousandPool[thousandIndex],dir=document.getElementById("thousandDirection").value;
  const expected=dir==="vi-en"?item.en:item.vi;
  const answer=document.getElementById("thousandAnswer").value.trim();
- const accepted=dir==="vi-en"?(item.acceptedEn||[]):(item.acceptedVi||[]);\n const matched=!!answer&&([expected,...accepted].some(candidate=>normalizeTranslation(answer)===normalizeTranslation(candidate)));
+ const accepted=dir==="vi-en"?(item.acceptedEn||[]):(item.acceptedVi||[]);
+ const matched=!!answer&&([expected,...accepted].some(candidate=>normalizeTranslation(answer)===normalizeTranslation(candidate)));
  thousandAnswered=true;
  if(matched){
   document.getElementById("thousandFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
