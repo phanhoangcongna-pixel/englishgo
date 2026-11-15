@@ -2845,4 +2845,65 @@ phrasalData.push(
  });
 })();
 </script>
+
+<script id="englishgo-page-navigation-stability">
+/* Single reliable page switcher and restore path for all learning sections. */
+(function () {
+  function validPage(id) {
+    const el = document.getElementById(id);
+    return !!(el && el.classList.contains("page"));
+  }
+  function showPage(id, save) {
+    if (!validPage(id)) id = "home";
+    document.querySelectorAll("main .page").forEach(function (page) {
+      const active = page.id === id;
+      page.classList.toggle("active", active);
+      page.style.display = active ? "block" : "none";
+      page.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+    document.querySelectorAll("header [data-page]").forEach(function (button) {
+      button.classList.toggle("active", button.dataset.page === id);
+    });
+    document.querySelectorAll("header .nav-group").forEach(function (group) {
+      group.open = false;
+    });
+    if (save) {
+      try { sessionStorage.setItem("eg-last-page", id); } catch (e) {}
+    }
+    if (id === "spokenenglish" && typeof window.filterSpokenEnglish === "function") {
+      window.filterSpokenEnglish();
+    }
+    return id;
+  }
+  function restorePage() {
+    let id = "home";
+    try {
+      const saved = sessionStorage.getItem("eg-last-page");
+      if (saved && validPage(saved)) id = saved;
+    } catch (e) {}
+    showPage(id, false);
+  }
+
+  /* Capture navigation clicks so older handlers cannot race and hide the page. */
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest("[data-page]");
+    if (!button) return;
+    const id = button.dataset.page;
+    if (!validPage(id)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    showPage(id, true);
+    try { window.scrollTo({ top: 0, behavior: "auto" }); } catch (e) {}
+  }, true);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", restorePage, { once: true });
+  } else {
+    restorePage();
+  }
+  window.addEventListener("load", restorePage, { once: true });
+  window.addEventListener("pageshow", restorePage);
+})();
+</script>
+
 </body></html>
