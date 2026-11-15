@@ -378,9 +378,14 @@ body > header #mainNav > .nav-group > summary {
 
 
 <script id="englishgo-reset-scroll-on-reload">
-/* Let Safari manage its own scroll position during pull-to-refresh and page restore. */
+/* A normal refresh should reopen the current learning page at its top, not at the old scroll offset. */
 (function () {
-  try { if ("scrollRestoration" in history) history.scrollRestoration = "auto"; } catch (e) {}
+  try {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    window.addEventListener("load", function () {
+      try { window.scrollTo(0, 0); } catch (e) {}
+    }, { once: true });
+  } catch (e) {}
 })();
 </script>
 
