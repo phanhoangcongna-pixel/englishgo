@@ -3655,7 +3655,7 @@ function egContextRender(){
  const query=(document.getElementById("contextSearch").value||"").toLowerCase().trim();
  const cat=document.getElementById("contextCategory").value;
  const rows=egContextWords.filter(x=>(cat==="all"||x.cat===cat)&&([x.word,x.vi,...x.items.flat()].join(" ").toLowerCase().includes(query)));
- document.getElementById("contextList").innerHTML=rows.length?rows.map(x=>'<div style="padding:16px 0;border-bottom:1px solid var(--line)"><h2 style="margin-bottom:3px">'+x.word+'</h2><p class="muted" style="margin:0 0 8px">'+x.vi+'</p>'+x.items.map(i=>'<div class="example"><b>'+i[0]+'</b> · '+i[1]+'<em>'+i[2]+'</em><button class="btn soft" style="padding:5px 9px;margin-top:7px" onclick="egSpeakContext(this.parentElement.getElementsByTagName(\\'em\\')[0].textContent)>🔊 Nghe ví dụ</button></div>').join("")+'</div>').join(""):'<p class="muted">Không tìm thấy kết quả phù hợp.</p>';
+ document.getElementById("contextList").innerHTML=rows.length?rows.map(x=>'<div style="padding:16px 0;border-bottom:1px solid var(--line)"><h2 style="margin-bottom:3px">'+x.word+'</h2><p class="muted" style="margin:0 0 8px">'+x.vi+'</p>'+x.items.map(i=>'<div class="example"><b>'+i[0]+'</b> · '+i[1]+'<em>'+i[2]+'</em><button class="btn soft" style="padding:5px 9px;margin-top:7px" onclick="egSpeakContext(this.parentElement.getElementsByTagName(\'em\')[0].textContent)">🔊 Nghe ví dụ</button></div>').join("")+'</div>').join(""):'<p class="muted">Không tìm thấy kết quả phù hợp.</p>';
 }
 function egSpeakContext(text){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.9;speechSynthesis.speak(u)}
 const egListeningData=[
