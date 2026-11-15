@@ -1249,10 +1249,24 @@ async function lookupDictionary(){
  const status=document.getElementById("dictStatus");
  const results=document.getElementById("dictResults");
  const button=document.getElementById("dictSearchBtn");
- const direction=document.getElementById("dictDirection")?.value||"vi-en";
+ let direction=document.getElementById("dictDirection")?.value||"vi-en";
  const query=(input?.value||"").trim();
+ let detectedEnglishEntry=null;
  if(!query){status.textContent="Please enter a word or phrase · Hãy nhập từ hoặc cụm từ.";results.innerHTML="";input?.focus();return;}
  if(new TextEncoder().encode(query).length>500){status.textContent="Search text is too long · Nội dung quá dài.";return;}
+ // If the user enters a recognizable English word while Việt → Anh is selected,
+ // switch to Anh → Việt automatically instead of translating the word as Vietnamese.
+ const hasVietnameseMarks=/[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i.test(query);
+ if(direction==="vi-en" && !hasVietnameseMarks && /^[a-zA-Z][a-zA-Z'-]*$/.test(query)){
+  detectedEnglishEntry=await fetchEnglishDictionaryEntry(query);
+  if(detectedEnglishEntry){
+   direction="en-vi";
+   const directionSelect=document.getElementById("dictDirection");
+   if(directionSelect)directionSelect.value="en-vi";
+   updateDictionaryDirection();
+   if(input)input.value=query;
+  }
+ }
  status.textContent="Searching dictionary… · Đang tra từ điển…";
  results.innerHTML="";
  if(button)button.disabled=true;
@@ -1280,7 +1294,7 @@ async function lookupDictionary(){
   for(const item of matches)addCandidate(item?.translation);
   const entries=direction==="vi-en"
    ? await Promise.all(candidates.slice(0,5).map(async word=>({word,entry:await fetchEnglishDictionaryEntry(word)})))
-   : [{word:query,entry:await fetchEnglishDictionaryEntry(query)}];
+   : [{word:query,entry:detectedEnglishEntry||await fetchEnglishDictionaryEntry(query)}];
 
   let htmlOut='<div class="dict-result-list">';
   if(direction==="vi-en"){
