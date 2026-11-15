@@ -200,11 +200,18 @@ body > main{
 </style></head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
-<nav aria-label="Main navigation" class="navlinks">
-<button class="active" data-page="home">⌂ Home</button>
-<details class="nav-group"><summary>📚 Learning ▾</summary><div class="nav-menu"><button data-page="vocab">📚 Vocabulary</button><button data-page="dictionary">📖 Dictionary · Từ điển</button><button data-page="grammar">🔤 Grammar</button><button data-page="listening">🎧 Listening</button><button data-page="reading">📘 Reading</button><button data-page="writing">✍️ Writing</button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms</button></div></details>
-<details class="nav-group"><summary>🎯 Practice ▾</summary><div class="nav-menu"><button data-page="speaking">🗣️ Speaking</button><button data-page="realconversation">💬 Real-life conversation · Giao tiếp</button><button data-page="translation">🔁 Translation reflex</button><button data-page="quiz">🧠 Quiz</button><button data-page="placement">🎯 Level test</button><button data-page="flashcards">🃏 Flashcards</button><button data-page="practice">📅 Daily practice</button><button data-page="shadowing">🎧 Shadowing</button><button data-page="pronunciation">🗣️ Pronunciation Lab</button><button data-page="roleplay">🎭 Real-life Roleplay</button><button data-page="dictation">✍️ Dictation</button><button data-page="spokenenglish">🗣️ Natural spoken English</button></div></details>
-<button data-page="progress">📊 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud sync</button></nav>
+<nav aria-label="Main navigation" class="navlinks" id="mainNav">
+<button class="active nav-home" data-page="home">⌂ Home</button>
+<details class="nav-group"><summary>📚 Learn <span aria-hidden="true">▾</span></summary><div class="nav-menu">
+<button data-page="vocab">📚 Vocabulary <span>→</span></button><button data-page="dictionary">📖 Dictionary <span>→</span></button><button data-page="grammar">🔤 Grammar <span>→</span></button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms <span>→</span></button><button data-page="reading">📘 Reading <span>→</span></button><button data-page="writing">✍️ Writing <span>→</span></button>
+</div></details>
+<details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
+<button data-page="listening">🎧 Listening <span>→</span></button><button data-page="speaking">🗣️ Speaking <span>→</span></button><button data-page="realconversation">💬 Real-life Conversation <span>→</span></button><button data-page="roleplay">🎭 Roleplay <span>→</span></button><button data-page="shadowing">🎧 Shadowing <span>→</span></button><button data-page="pronunciation">🗣️ Pronunciation Lab <span>→</span></button><button data-page="dictation">✍️ Dictation <span>→</span></button><button data-page="spokenenglish">🗣️ Natural Spoken English <span>→</span></button>
+</div></details>
+<details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
+<button data-page="translation">🔁 Translation Reflex <span>→</span></button><button data-page="flashcards">🃏 Flashcards <span>→</span></button><button data-page="practice">📅 Daily Practice <span>→</span></button><button data-page="quiz">🧠 Quiz <span>→</span></button><button data-page="placement">🎯 Level Test <span>→</span></button>
+</div></details>
+<button data-page="progress">📊 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud Sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page" id="spokenenglish">
@@ -2520,4 +2527,48 @@ phrasalData.push(
 ["once and for all","một lần dứt điểm","Let's settle this once and for all."]
 );
 
-</script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();roleStart();dictNew();phrasalRender()});</script></body></html>
+</script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();roleStart();dictNew();phrasalRender()});</script>
+<style id="englishgo-navigation-final">
+/* Clean grouped navigation: hover on desktop, tap on touch screens. */
+#mainNav{display:flex;align-items:center;gap:6px;overflow:visible;flex-wrap:nowrap;min-width:0}
+#mainNav>.nav-group{position:relative;flex:0 0 auto}
+#mainNav>.nav-group>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;white-space:nowrap;padding:10px 12px;border-radius:10px;color:#dce6fb;font-size:13px;font-weight:650;user-select:none}
+#mainNav>.nav-group>summary::-webkit-details-marker{display:none}
+#mainNav>.nav-group>summary:hover,#mainNav>.nav-group[open]>summary,#mainNav>button:hover{background:#2a3d64;color:#fff}
+#mainNav .nav-menu{position:absolute;top:100%;left:0;z-index:1200;min-width:245px;padding:9px;background:#192d50;border:1px solid #405477;border-radius:0 0 14px 14px;box-shadow:0 14px 30px #08152c55;display:grid;gap:4px;max-height:min(70vh,520px);overflow-y:auto}
+#mainNav .nav-menu button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;background:transparent;color:#e4ebf8;padding:10px 12px;border-radius:9px;font-size:13px;white-space:normal}
+#mainNav .nav-menu button span{color:#9eb7ec;font-weight:800;margin-left:auto}
+#mainNav .nav-menu button:hover,#mainNav .nav-menu button:focus-visible,#mainNav .nav-menu button.active{background:#304b78;color:#fff;outline:none}
+#mainNav>button{background:transparent;color:#c8d3ea;padding:10px 11px;border-radius:9px;white-space:nowrap;font-size:13px}
+#mainNav>button.active{background:#2a3d64;color:#fff}
+@media (hover:hover) and (pointer:fine){#mainNav>.nav-group:hover>.nav-menu,#mainNav>.nav-group:focus-within>.nav-menu{display:grid}#mainNav>.nav-group:hover>summary{background:#2a3d64;color:#fff}}
+@media(max-width:900px){#mainNav{flex-wrap:wrap;overflow:visible;gap:4px}#mainNav .nav-menu{min-width:min(270px,85vw)}}
+@media(max-width:700px){#mainNav{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:5px!important}#mainNav>.nav-group[open]{flex:1 1 100%;width:100%}#mainNav>.nav-group[open]>.nav-menu{position:static;min-width:0;width:100%;max-height:45vh;border-radius:12px;margin-top:5px;box-shadow:none}#mainNav>.nav-group>summary{padding:9px 10px;font-size:12px}#mainNav>button{font-size:12px;padding:9px 10px}}
+</style>
+<script id="englishgo-nav-keyboard">
+(function(){
+ const nav=document.getElementById('mainNav'); if(!nav)return;
+ const groups=[...nav.querySelectorAll(':scope > details.nav-group')];
+ groups.forEach(group=>{
+   const summary=group.querySelector(':scope > summary');
+   const items=[...group.querySelectorAll('.nav-menu button')];
+   summary.addEventListener('keydown',e=>{
+     if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){if(e.key==='ArrowDown'){e.preventDefault();group.open=true;items[0]?.focus()}}
+     if(e.key==='ArrowUp'){e.preventDefault();group.open=true;items[items.length-1]?.focus()}
+   });
+   items.forEach((item,index)=>item.addEventListener('keydown',e=>{
+     if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const step=e.key==='ArrowDown'?1:-1;items[(index+step+items.length)%items.length]?.focus()}
+     if(e.key==='Home'){e.preventDefault();items[0]?.focus()}
+     if(e.key==='End'){e.preventDefault();items[items.length-1]?.focus()}
+     if(e.key==='Escape'){group.open=false;summary.focus()}
+   }));
+ });
+ document.addEventListener('click',e=>{
+   const chosen=e.target.closest('#mainNav [data-page]');
+   if(chosen){groups.forEach(g=>g.open=false)}
+   else if(!e.target.closest('#mainNav'))groups.forEach(g=>g.open=false);
+ });
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')groups.forEach(g=>g.open=false)});
+})();
+</script>
+</body></html>
