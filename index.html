@@ -3718,7 +3718,6 @@ document.addEventListener("DOMContentLoaded",function(){
    pronFeedback:null,
    egPronFb:"egPronMic",
    speechFeedback:null,
-   dailySpeakResult:null
   };
   let triggerId=triggerMap[targetId];
   let trigger=triggerId?document.getElementById(triggerId):null;
@@ -3803,7 +3802,6 @@ document.addEventListener("DOMContentLoaded",function(){
 (function(){
  const fallback=(id,label)=>{if(typeof window.egSafariRecord==="function")window.egSafariRecord(id,label)};
  window.recognise=function(){fallback("speechFeedback","Roleplay speaking")};
- window.dailyRecognise=function(){fallback("dailySpeakResult","Daily speaking practice")};
  })();
 </script>
 
