@@ -2938,4 +2938,16 @@ phrasalData.push(
 })();
 </script>
 
+
+<script id="englishgo-dictation-enter-submit">
+/* Enter checks the dictation answer; Shift+Enter keeps a manual line break. */
+document.addEventListener("keydown", function(event) {
+  if (!event.target || event.target.id !== "dictAnswer") return;
+  if (event.key === "Enter" && !event.shiftKey && !event.isComposing) {
+    event.preventDefault();
+    if (typeof window.dictCheck === "function") window.dictCheck();
+  }
+});
+</script>
+
 </body></html>
