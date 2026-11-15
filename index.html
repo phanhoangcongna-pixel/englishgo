@@ -2132,7 +2132,7 @@ function egRenderChallenge(){const el=document.getElementById('challengePanel');
 function egChallengeToggle(on){const a=egNewRead(EG_NEW_KEYS.challenge,{});a[egToday()]=on;egNewWrite(EG_NEW_KEYS.challenge,a);egRenderChallenge();egRenderAllNew()}
 function egRenderAllNew(){egRenderDaily();egRenderNotebook();egRenderChallenge();const el=document.getElementById('personalAnalytics');if(!el)return;const st=egNewRead('eg3-learning-lab-stats',{}),days=Object.keys(st).sort(),tot={};days.forEach(d=>Object.entries(st[d]||{}).forEach(([k,v])=>tot[k]=(tot[k]||0)+Number(v||0)));const acts=Object.values(tot).reduce((x,y)=>x+y,0),words=egNewRead('eg3-smart-vocab',[]).length,notes=egNewRead(EG_NEW_KEYS.notes,[]).length,challenge=Object.values(egNewRead(EG_NEW_KEYS.challenge,{})).filter(Boolean).length;el.innerHTML=`<div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"><div class="panel"><b>${acts}</b><div class="small muted">Lab activities recorded</div></div><div class="panel"><b>${words}</b><div class="small muted">Saved vocabulary</div></div><div class="panel"><b>${notes}</b><div class="small muted">Notebook entries</div></div><div class="panel"><b>${challenge}/30</b><div class="small muted">Challenge days</div></div></div><p class="small muted">Activity history covers Learning Lab records since tracking was introduced. Older activity outside these records may not be included.</p>`}
 document.addEventListener('DOMContentLoaded',egRenderAllNew);
-const egOldLabInit=window.labInit;if(typeof egOldLabInit==='function')window.labInit=function(){egOldLabInit();egRenderAllNew()};
+
 </script>
 <script>
 window.addEventListener("load",()=>{
