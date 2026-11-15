@@ -3739,7 +3739,7 @@ function egStartSpeaking(){
   }
   draw()
  }
- Object.entries(lessons).forEach(([id,d])=>{if(id==="translation")return;addPanel(id,'<h2>'+safe(d.title)+'</h2><p>'+safe(d.desc)+'</p><div id="egBank_'+id+'"></div>');mountBank(id,d)});
+ Object.entries(lessons).forEach(([id,d])=>{if(id==="translation"||id==="vocab"||id==="dictionary")return;addPanel(id,'<h2>'+safe(d.title)+'</h2><p>'+safe(d.desc)+'</p><div id="egBank_'+id+'"></div>');mountBank(id,d)});
  
  /* Dialogue Shadowing: a dedicated mini-section inside Shadowing. */
  const shadow=$("shadowing");
