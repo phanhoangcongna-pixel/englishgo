@@ -3499,4 +3499,79 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 </script>
 
+<script id="englishgo-safari-mic-fallback-v1">
+(function(){
+ let activeRecorder=null,activeStream=null,activeChunks=[],activeTarget=null;
+ function stopTracks(){if(activeStream){activeStream.getTracks().forEach(t=>t.stop());activeStream=null}}
+ async function startLocalRecording(targetId,label){
+  const host=document.getElementById(targetId);if(!host)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){
+   host.textContent="Safari này chưa hỗ trợ ghi âm trên trang. Hãy cập nhật Safari và kiểm tra quyền Microphone cho website.";
+   return;
+  }
+  try{
+   if(activeRecorder&&activeRecorder.state==="recording"){host.textContent="Một phiên ghi âm khác đang chạy. Hãy dừng phiên đó trước.";return}
+   activeStream=await navigator.mediaDevices.getUserMedia({audio:true});
+   activeChunks=[];activeTarget=host;
+   let options={};
+   if(MediaRecorder.isTypeSupported){
+    if(MediaRecorder.isTypeSupported("audio/mp4"))options.mimeType="audio/mp4";
+    else if(MediaRecorder.isTypeSupported("audio/webm;codecs=opus"))options.mimeType="audio/webm;codecs=opus";
+    else if(MediaRecorder.isTypeSupported("audio/webm"))options.mimeType="audio/webm";
+   }
+   activeRecorder=new MediaRecorder(activeStream,options);
+   activeRecorder.ondataavailable=e=>{if(e.data&&e.data.size)activeChunks.push(e.data)};
+   activeRecorder.onerror=()=>{host.textContent="Không thể ghi âm. Kiểm tra quyền microphone và thử lại.";stopTracks()};
+   activeRecorder.onstop=()=>{
+    const type=activeRecorder.mimeType||activeChunks[0]?.type||"audio/mp4";
+    const blob=new Blob(activeChunks,{type});
+    stopTracks();
+    const url=URL.createObjectURL(blob);
+    host.innerHTML='<p>✅ Đã ghi âm xong · '+label+'</p><audio controls playsinline style="width:100%" src="'+url+'"></audio><p class="small muted">Nghe lại giọng của m, rồi so sánh với câu mẫu. Bản ghi chỉ nằm trên trình duyệt này.</p><button type="button" class="btn line" id="egRecordAgain_'+targetId+'">Ghi âm lại</button>';
+    const again=document.getElementById("egRecordAgain_"+targetId);
+    if(again)again.onclick=()=>startLocalRecording(targetId,label);
+   };
+   activeRecorder.start();
+   host.innerHTML='<p>🔴 Đang ghi âm… Hãy nói tiếng Anh. Bấm Dừng khi hoàn tất.</p><button type="button" class="btn" id="egStopLocalRecording">■ Dừng ghi âm</button>';
+   document.getElementById("egStopLocalRecording").onclick=()=>{if(activeRecorder&&activeRecorder.state==="recording")activeRecorder.stop()};
+  }catch(e){
+   stopTracks();
+   const msg=e&&e.name==="NotAllowedError"?"Safari chưa được cấp quyền microphone. Vào Settings của website và cho phép Microphone.":e&&e.name==="NotFoundError"?"Không tìm thấy microphone trên thiết bị.":"Không mở được microphone ("+(e&&e.name||"lỗi")+"). Hãy kiểm tra quyền truy cập và thử lại.";
+   host.textContent=msg;
+  }
+ }
+ window.shadowRecord=function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){startLocalRecording("shadowTranscript","Shadowing");return}
+  const rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=1;
+  document.getElementById("shadowStatus").textContent="Đang nghe…";
+  rec.onresult=e=>{document.getElementById("shadowTranscript").textContent="Bạn nói: "+e.results[0][0].transcript;document.getElementById("shadowStatus").textContent="So sánh câu vừa nói với câu mẫu và thử lại nhé."};
+  rec.onerror=()=>startLocalRecording("shadowTranscript","Shadowing");
+  try{rec.start()}catch(e){startLocalRecording("shadowTranscript","Shadowing")}
+ };
+ window.pronTry=function(){
+  const host=document.getElementById("pronFeedback"),SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){startLocalRecording("pronFeedback","Pronunciation practice");return}
+  const rec=new SR();rec.lang="en-US";rec.onresult=e=>host.textContent="Bạn vừa đọc: "+e.results[0][0].transcript+". Hãy so sánh với mẫu; nhận diện giọng nói không thay thế đánh giá phát âm chuyên sâu.";
+  rec.onerror=()=>startLocalRecording("pronFeedback","Pronunciation practice");
+  try{rec.start()}catch(e){startLocalRecording("pronFeedback","Pronunciation practice")}
+ };
+ window.egStartSpeaking=function(){
+  const host=document.getElementById("egSpeakFeedback"),SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){startLocalRecording("egSpeakFeedback","Speaking Partner");return}
+  const rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.onresult=e=>host.textContent="Bạn đã nói: "+e.results[0][0].transcript+" · Hãy thử trả lời thành 2–4 câu và chú ý thì động từ.";
+  rec.onerror=()=>startLocalRecording("egSpeakFeedback","Speaking Partner");
+  try{rec.start()}catch(e){startLocalRecording("egSpeakFeedback","Speaking Partner")}
+ };
+ function bindExtraMics(){
+  const dialogue=document.getElementById("egRecordShadow");
+  if(dialogue)dialogue.onclick=()=>startLocalRecording("egDialogueFeedback","Dialogue Shadowing");
+  const pron=document.getElementById("egPronMic");
+  if(pron)pron.onclick=()=>startLocalRecording("egPronFb","Pronunciation Drill");
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindExtraMics);else bindExtraMics();
+ setTimeout(bindExtraMics,1200);
+})();
+</script>
+
 </body></html>
