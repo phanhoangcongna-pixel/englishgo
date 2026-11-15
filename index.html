@@ -3237,4 +3237,175 @@ function egStartSpeaking(){
 }
 </script>
 
+
+<script id="englishgo-all-sections-expansion-v3">
+(function(){
+ const lessons={
+ vocab:{title:"Vocabulary Booster · Mở rộng từ vựng",desc:"Học theo chủ đề, cụm từ và câu ví dụ.",items:[
+ ["accommodation","chỗ ở","We booked affordable accommodation near the station.","travel"],
+ ["appointment","cuộc hẹn","I have a doctor's appointment at ten.","daily life"],
+ ["reliable","đáng tin cậy","She's a reliable colleague.","personality"],
+ ["improve","cải thiện","I want to improve my pronunciation.","learning"],
+ ["opportunity","cơ hội","This job is a great opportunity.","work"],
+ ["commute","đi lại hằng ngày","My commute takes about thirty minutes.","work"],
+ ["neighbourhood","khu dân cư","There is a lovely park in my neighbourhood.","places"],
+ ["affordable","giá cả phải chăng","We're looking for an affordable hotel.","travel"],
+ ["recommend","giới thiệu, đề xuất","Could you recommend a good restaurant?","social"],
+ ["avoid","tránh","Try to avoid making the same mistake.","learning"],
+ ["available","có sẵn, rảnh","Are you available on Friday?","work"],
+ ["decision","quyết định","We need to make a decision today.","work"],
+ ["crowded","đông đúc","The bus is always crowded in the morning.","travel"],
+ ["borrow","mượn","Can I borrow your charger?","daily life"],
+ ["appointment","cuộc hẹn","I'd like to make an appointment.","health"]
+ ]},
+ grammar:{title:"Grammar Workout · Luyện ngữ pháp",desc:"Chọn đáp án, xem giải thích và thử câu tiếp theo.",items:[
+ ["She usually ___ coffee in the morning.",["drink","drinks","drinking"],1,"Với chủ ngữ ngôi thứ ba số ít, động từ hiện tại đơn thêm -s."],
+ ["They ___ to Berlin last weekend.",["go","went","gone"],1,"Last weekend là mốc quá khứ; dùng went."],
+ ["I have known her ___ five years.",["since","for","from"],1,"For đi với khoảng thời gian."],
+ ["If I ___ more time, I'd travel more.",["have","had","will have"],1,"Câu điều kiện loại hai: If + past simple, would + V."],
+ ["This is the ___ restaurant in town.",["better","best","good"],1,"So sánh nhất với tính từ ngắn: the best."],
+ ["The email ___ yesterday.",["sent","was sent","is send"],1,"Bị động quá khứ đơn: was/were + past participle."]
+ ]},
+ reading:{title:"Reading Corner · Đọc hiểu thêm",desc:"Đọc đoạn ngắn, trả lời câu hỏi và học cụm từ.",items:[
+ ["A Busy Morning","Emma usually cycles to work, but today it is raining heavily. She takes the bus instead. On the way, she listens to a podcast and makes a list of tasks for the day.","How does Emma travel to work today?",["By bike","By bus","On foot"],1,"instead = thay vào đó"],
+ ["A New Neighbour","A new family moved into the flat next door last week. They introduced themselves on Saturday and invited us for coffee. They have a young daughter who loves drawing.","When did the family introduce themselves?",["Friday","Saturday","Sunday"],1,"introduce yourself = tự giới thiệu"],
+ ["Learning a Language","Tom studies English for twenty minutes every day. He writes down useful phrases, listens to short conversations and tries to use new expressions at work. He believes small habits make a big difference.","What does Tom do every day?",["Studies for twenty minutes","Only memorises grammar","Watches films all day"],0,"make a big difference = tạo ra khác biệt lớn"]
+ ]},
+ translation:{title:"Translation Gym · Luyện dịch",desc:"Dịch câu tiếng Việt sang tiếng Anh, sau đó xem gợi ý.",items:[
+ ["Tôi thường đi làm bằng xe buýt.","I usually go to work by bus.","usually = thường; by bus = bằng xe buýt"],
+ ["Bạn có thể nói chậm hơn được không?","Could you speak more slowly?","Could you…? là cách nhờ lịch sự."],
+ ["Tôi đã sống ở đây được ba năm.","I have lived here for three years.","Hiện tại hoàn thành + for + khoảng thời gian."],
+ ["Nếu trời đẹp, chúng tôi sẽ đi dạo.","If the weather is nice, we'll go for a walk.","Điều kiện loại một."],
+ ["Tôi đang tìm một hiệu thuốc gần đây.","I'm looking for a pharmacy nearby.","look for = tìm kiếm."]
+ ]},
+ quiz:{title:"Quick Quiz · Kiểm tra nhanh",desc:"Bộ câu hỏi bổ sung để ôn từ vựng và ngữ pháp.",items:[
+ ["What is the opposite of “generous”?",["selfish","kind","polite"],0,"Generous = hào phóng; selfish = ích kỷ."],
+ ["Choose the natural phrase:",["do a decision","make a decision","take a decisioning"],1,"Collocation thông dụng: make a decision."],
+ ["“I'm exhausted” means…",["very tired","very excited","very hungry"],0,"Exhausted = kiệt sức, rất mệt."],
+ ["We arrived ___ the airport early.",["at","in","on"],0,"Arrive at + địa điểm cụ thể."],
+ ["Could you ___ me a favour?",["make","do","give"],1,"Cụm cố định: do someone a favour."]
+ ]},
+ flashcards:{title:"Flashcard Deck · Bộ thẻ từ mới",desc:"Lật thẻ để xem nghĩa và câu ví dụ.",items:[
+ ["run out of","hết, cạn","We've run out of milk."],["look forward to","mong chờ","I look forward to hearing from you."],["figure out","tìm ra, hiểu ra","I can't figure out this problem."],["on time","đúng giờ","The train arrived on time."],["take part in","tham gia","She took part in the competition."],["get along with","hòa thuận với","I get along with my teammates."],["give up","từ bỏ","Don't give up learning English."],["carry on","tiếp tục","Please carry on with your work."]
+ ]},
+ practice:{title:"Daily Practice · Luyện tập mỗi ngày",desc:"Bài luyện ngắn kết hợp nói, viết và ghi nhớ.",items:[
+ ["Describe your morning routine in five sentences.","Dùng hiện tại đơn và trạng từ tần suất."],
+ ["Talk about a place you would recommend.","Dùng there is/are, tính từ miêu tả và because."],
+ ["Explain a problem you solved recently.","Dùng quá khứ đơn và first, then, finally."],
+ ["Give your opinion about working from home.","Dùng I think, in my opinion, however."],
+ ["Make a polite request in a shop.","Thử Could I…? hoặc Could you…?"]
+ ]},
+ dictionary:{title:"Dictionary Builder · Từ điển theo ngữ cảnh",desc:"Tra nhanh nghĩa, cách dùng và collocation hữu ích.",items:[
+ ["issue","vấn đề; số phát hành","deal with an issue · a serious issue","We need to discuss this issue."],
+ ["charge","tính phí; sạc; khoản phí","charge a phone · charge a fee","They don't charge for delivery."],
+ ["miss","nhớ; bỏ lỡ","miss a friend · miss the bus","I missed the last train."],
+ ["notice","để ý; thông báo","notice a difference · give notice","Did you notice anything unusual?"],
+ ["attend","tham dự","attend a meeting · attend a course","I have to attend a meeting."]
+ ]},
+ learninglab:{title:"Learning Lab · Phòng thí nghiệm tiếng Anh",desc:"Mẹo học có ví dụ thực hành ngay.",items:[
+ ["Chunking","Học theo cụm thay vì từ đơn.","take a break · make progress · keep in touch"],
+ ["Retrieval practice","Che đáp án và tự nhớ lại trước khi xem.","Tự nói 5 từ mới của hôm qua mà không nhìn vở."],
+ ["Spaced repetition","Ôn lại sau 1 ngày, 3 ngày, 1 tuần và 1 tháng.","Tạo flashcard cho các cụm thường quên."],
+ ["Minimal pairs","Luyện cặp âm dễ nhầm trong câu ngắn.","ship/sheep · live/leave · bad/bed"],
+ ["Self-recording","Ghi âm, nghe lại và chọn một điểm để cải thiện.","Tập trung vào âm cuối hoặc trọng âm, không sửa tất cả cùng lúc."]
+ ]},
+ phrasal:{title:"Phrasal Verbs & Idioms · Cụm động từ",desc:"Học nghĩa, ví dụ và cách dùng tự nhiên.",items:[
+ ["put off","hoãn lại","We had to put off the meeting.","put off + noun/gerund"],
+ ["bring up","đề cập; nuôi dưỡng","She brought up an interesting point.","bring something up"],
+ ["look into","điều tra, tìm hiểu","I'll look into the problem.","look into + noun"],
+ ["come across","tình cờ bắt gặp","I came across an old photo.","come across + noun"],
+ ["turn down","từ chối; vặn nhỏ","He turned down the offer.","turn down an offer"],
+ ["work out","tìm ra; tập thể dục; có kết quả","I hope everything works out.","Nhiều nghĩa tùy ngữ cảnh"],
+ ["break the ice","phá tan sự ngại ngùng","A quick game helped break the ice.","idiom"],
+ ["once in a blue moon","rất hiếm khi","We eat out once in a blue moon.","idiom"]
+ ]},
+ realconversation:{title:"Real-life Conversation · Hội thoại thực tế",desc:"Mẫu câu ngắn dùng trong tình huống thường gặp.",items:[
+ ["Making small talk","A: How's your week going? B: Pretty good, thanks. A bit busy, though.","Hỏi thăm xã giao và trả lời tự nhiên."],
+ ["Asking for clarification","A: Sorry, what do you mean by that? B: I mean we should try a different approach.","Nhờ giải thích lại khi chưa hiểu."],
+ ["Giving a suggestion","A: We could take the earlier train. B: That's a good idea.","Đề xuất bằng We could…"],
+ ["Apologising","A: I'm sorry I'm late. B: No worries. Thanks for letting me know.","Xin lỗi và phản hồi thân thiện."],
+ ["At a café","A: Could I get a flat white, please? B: Sure. For here or to go?","Gọi món và hỏi mang đi hay dùng tại chỗ."]
+ ]},
+ progress:{title:"Progress Check · Tự đánh giá",desc:"Đánh dấu kỹ năng đã luyện hôm nay. Trạng thái được lưu trên trình duyệt.",items:[
+ ["Vocabulary","Tôi ôn ít nhất 10 từ/cụm từ."],["Listening","Tôi nghe một đoạn tiếng Anh và nắm ý chính."],["Speaking","Tôi nói thành tiếng ít nhất 2 phút."],["Reading","Tôi đọc một đoạn ngắn và tóm tắt."],["Writing","Tôi tự viết 5 câu tiếng Anh."]
+ ]},
+ cloud:{title:"Study Plan · Kế hoạch học",desc:"Một lịch học gợi ý ngắn để duy trì thói quen.",items:[
+ ["Day 1 · Words","10 từ mới + 5 câu ví dụ","15 phút"],
+ ["Day 2 · Listening","Nghe đoạn ngắn 2 lần, ghi lại từ khóa","15 phút"],
+ ["Day 3 · Grammar","Ôn một chủ điểm, tự đặt 5 câu","20 phút"],
+ ["Day 4 · Speaking","Trả lời 3 câu hỏi thành tiếng","10 phút"],
+ ["Day 5 · Reading","Đọc bài ngắn và tóm tắt 3 câu","15 phút"],
+ ["Day 6 · Review","Ôn flashcard và sửa lỗi cũ","15 phút"],
+ ["Day 7 · Free practice","Xem video hoặc nghe podcast yêu thích","20 phút"]
+ ]}
+ };
+ const $=id=>document.getElementById(id);
+ function addPanel(id,html){const sec=$(id);if(!sec||$("egExtra_"+id))return;const p=document.createElement("div");p.className="panel";p.id="egExtra_"+id;p.innerHTML=html;sec.appendChild(p)}
+ function safe(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+ function mountBank(id,data){
+  const root=$("egBank_"+id);if(!root)return;
+  let idx=0,show=false;
+  function draw(){const d=data.items[idx];let body="";
+   if(id==="grammar"||id==="reading"||id==="quiz"){body='<h3>'+safe(d[0])+'</h3><div class="choices" style="display:grid;gap:8px">'+d[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
+   else if(id==="translation"){body='<h3>'+safe(d[0])+'</h3><button class="btn" id="egReveal_'+id+'">Xem gợi ý bản dịch</button><p id="egAns_'+id+'"></p>'}
+   else if(id==="flashcards"){body='<button class="card soft" style="width:100%;min-height:130px;text-align:center" id="egFlip_'+id+'"><h2>'+safe(d[0])+'</h2><p>'+ (show?safe(d[1])+"<br>"+safe(d[2]):"Nhấn để lật thẻ")+'</p></button>'}
+   else if(id==="progress"){body='<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-progress="'+idx+'"> '+safe(d[1])+'</label>'}
+   else if(id==="cloud"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><b>'+safe(d[2])+'</b>'}
+   else if(id==="practice"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><textarea id="egWrite_'+id+'" rows="3" placeholder="Write your answer in English…"></textarea><button class="btn" id="egSave_'+id+'">Lưu câu trả lời</button><p id="egFb_'+id+'"></p>'}
+   else if(id==="dictionary"){body='<h3>'+safe(d[0])+' · '+safe(d[1])+'</h3><p><b>Collocations:</b> '+safe(d[2])+'</p><p><i>'+safe(d[3])+'</i></p>'}
+   else if(id==="learninglab"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><p><b>Thử ngay:</b> '+safe(d[2])+'</p>'}
+   else if(id==="phrasal"){body='<h3>'+safe(d[0])+' — '+safe(d[1])+'</h3><p>'+safe(d[2])+'</p><small>'+safe(d[3])+'</small>'}
+   else {body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p>'}
+   root.innerHTML='<div class="controls"><span class="badge">Bài '+(idx+1)+' / '+data.items.length+'</span><span class="muted">'+safe(data.title)+'</span></div>'+body+'<div class="controls"><button class="btn line" id="egPrev_'+id+'">← Trước</button><button class="btn" id="egNext_'+id+'">Tiếp theo →</button></div>';
+   $("egPrev_"+id).onclick=()=>{idx=(idx+data.items.length-1)%data.items.length;show=false;draw()};
+   $("egNext_"+id).onclick=()=>{idx=(idx+1)%data.items.length;show=false;draw()};
+   if(id==="grammar"||id==="reading"||id==="quiz")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===d[id==="reading"?4: id==="grammar"||id==="quiz"?2:2];const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||d[4]||"";});
+   if(id==="translation")$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};
+   if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
+   if(id==="practice")$("egSave_"+id).onclick=()=>{$("egFb_"+id).textContent="Đã giữ câu trả lời trong ô này. Hãy đọc to và tự kiểm tra ngữ pháp nhé."};
+   if(id==="progress"){root.querySelector("input").checked=JSON.parse(localStorage.getItem("eg-progress-"+idx)||"false");root.querySelector("input").onchange=e=>localStorage.setItem("eg-progress-"+idx,JSON.stringify(e.target.checked))}
+  }
+  draw()
+ }
+ Object.entries(lessons).forEach(([id,d])=>{addPanel(id,'<h2>'+safe(d.title)+'</h2><p>'+safe(d.desc)+'</p><div id="egBank_'+id+'"></div>');mountBank(id,d)});
+ 
+ /* Dialogue Shadowing: a dedicated mini-section inside Shadowing. */
+ const shadow=$("shadowing");
+ if(shadow&&!$("egDialogueShadowing")){
+  const panel=document.createElement("div");panel.className="panel";panel.id="egDialogueShadowing";
+  panel.innerHTML='<h2>🎭 Dialogue Shadowing · Shadowing hội thoại</h2><p>Luyện bắt chước cả đoạn hội thoại: nghe từng lượt, xem transcript, nói đuổi theo người bản xứ mô phỏng bằng giọng đọc. Có thể ghi âm/nhận diện câu bạn nói nếu trình duyệt hỗ trợ.</p><div class="controls"><label for="egDialogueLevel">Cấp độ</label><select id="egDialogueLevel"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ trung cấp</option><option value="B1">B1 · Trung cấp</option></select><label for="egDialoguePick">Hội thoại</label><select id="egDialoguePick"></select></div><h3 id="egDialogueTitle"></h3><p id="egDialogueGoal"></p><div class="controls"><button class="btn primary" id="egPlayAll">▶ Nghe cả đoạn</button><button class="btn" id="egPlayLine">▶ Nghe từng câu</button><button class="btn line" id="egShowTranscript">Hiện/ẩn transcript</button><button class="btn" id="egRecordShadow">🎙️ Luyện nói</button></div><div id="egDialogueTranscript" class="card soft" hidden></div><p id="egDialogueFeedback" aria-live="polite"></p><div class="controls"><button class="btn line" id="egDialoguePrev">← Câu trước</button><span id="egDialogueCounter"></span><button class="btn" id="egDialogueNext">Câu tiếp →</button></div><p><b>Quy trình 4 bước:</b> 1. Nghe toàn đoạn. 2. Nghe từng câu và chú ý nối âm/trọng âm. 3. Nói đuổi theo, cố gắng chậm hơn người đọc một nhịp. 4. Thu âm và so sánh độ rõ, nhịp điệu.</p>';
+  shadow.appendChild(panel);
+  const dialogues=[
+   {level:"A1",title:"At a coffee shop",goal:"Gọi đồ uống và hỏi giá.",lines:[["Barista","Hello! What can I get for you?"],["Customer","Could I have a cappuccino, please?"],["Barista","Of course. Would you like it regular or large?"],["Customer","Regular, please. How much is it?"],["Barista","That's three euros fifty."],["Customer","Here you are. Thank you!"],["Barista","You're welcome. Have a nice day!"]]},
+   {level:"A1",title:"Meeting a new colleague",goal:"Chào hỏi và làm quen.",lines:[["Anna","Hi, I'm Anna. I don't think we've met."],["Ben","Nice to meet you, Anna. I'm Ben."],["Anna","Are you new to the team?"],["Ben","Yes, I started on Monday."],["Anna","How are you finding it so far?"],["Ben","Everyone's been really friendly. Thanks!"]]},
+   {level:"A1",title:"Asking for directions",goal:"Hỏi đường đến nhà ga.",lines:[["Tourist","Excuse me, could you tell me how to get to the station?"],["Local","Sure. Go straight ahead and turn left at the traffic lights."],["Tourist","Is it far from here?"],["Local","No, it's about a five-minute walk."],["Tourist","Great. Thanks for your help."],["Local","No problem."]]},
+   {level:"A2",title:"Making an appointment",goal:"Đặt lịch hẹn và xác nhận thời gian.",lines:[["Receptionist","Good morning, Green Street Clinic. How can I help?"],["Caller","I'd like to make an appointment, please."],["Receptionist","Would Thursday afternoon suit you?"],["Caller","I'm afraid I'm working then. Do you have anything on Friday?"],["Receptionist","We have a slot at half past ten."],["Caller","That works perfectly. Thank you."]]},
+   {level:"A2",title:"Returning an item",goal:"Giải thích vấn đề và yêu cầu đổi hàng.",lines:[["Assistant","Hi there. How can I help you?"],["Customer","I'd like to return this jacket. I bought it yesterday."],["Assistant","Is there anything wrong with it?"],["Customer","The zip doesn't work properly."],["Assistant","I'm sorry about that. Would you prefer a refund or an exchange?"],["Customer","An exchange would be great, if possible."]]},
+   {level:"A2",title:"Making weekend plans",goal:"Đề xuất, đồng ý và thay đổi kế hoạch.",lines:[["Mia","Are you doing anything this weekend?"],["Leo","Not much. Why do you ask?"],["Mia","Would you like to go hiking on Saturday?"],["Leo","That sounds great, but what if it rains?"],["Mia","We could visit the museum instead."],["Leo","Good idea. Let's decide on Friday."]]},
+   {level:"B1",title:"A project update",goal:"Cập nhật tiến độ và nêu trở ngại.",lines:[["Manager","How's the project coming along?"],["Alex","We've finished the research, but the first draft is taking longer than expected."],["Manager","What's causing the delay?"],["Alex","We're waiting for some figures from the finance team."],["Manager","Could you follow up with them today?"],["Alex","Absolutely. I'll send them a reminder and update you this afternoon."]]},
+   {level:"B1",title:"Solving a travel problem",goal:"Giải quyết chuyến bay bị hoãn.",lines:[["Passenger","Excuse me, our flight has been delayed. Could you tell us what's happening?"],["Agent","I'm sorry for the inconvenience. We're waiting for a technical inspection."],["Passenger","Do you have an estimated departure time?"],["Agent","At the moment, it's expected to leave at 8:45."],["Passenger","And what happens if we miss our connection?"],["Agent","We'll arrange an alternative flight and accommodation if necessary."]]},
+   {level:"B1",title:"Giving an opinion politely",goal:"Nêu quan điểm và phản hồi lịch sự.",lines:[["Nina","I think working from home makes people more productive."],["Sam","I see your point, although I think it depends on the person."],["Nina","That's true. Some people find it difficult to concentrate at home."],["Sam","Exactly. A flexible arrangement might be the best solution."],["Nina","I agree. It gives people more control over their schedule."]]}
+  ];
+  let current=0,line=0,recognition=null,queue=[];
+  const level=$("egDialogueLevel"),pick=$("egDialoguePick");
+  function filtered(){return dialogues.map((d,i)=>({d,i})).filter(x=>x.d.level===level.value)}
+  function loadOptions(){const a=filtered();pick.innerHTML=a.map(x=>'<option value="'+x.i+'">'+x.d.title+'</option>').join("");current=a[0].i;line=0;render()}
+  function utter(text,done){const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.86;if(done)u.onend=done;speechSynthesis.speak(u)}
+  function render(){const d=dialogues[current];$("egDialogueTitle").textContent=d.title;$("egDialogueGoal").textContent="Mục tiêu: "+d.goal;$("egDialogueCounter").textContent=(line+1)+" / "+d.lines.length;$("egDialogueTranscript").innerHTML=d.lines.map((x,i)=>'<p><b>'+x[0]+':</b> '+x[1]+'</p>').join("");$("egDialogueTranscript").hidden=true}
+  function playAll(){speechSynthesis.cancel();let i=0;function next(){if(i>=dialogues[current].lines.length)return;const x=dialogues[current].lines[i++];utter(x[1],()=>setTimeout(next,250))}next()}
+  function playLine(){speechSynthesis.cancel();utter(dialogues[current].lines[line][1])}
+  level.onchange=loadOptions;pick.onchange=()=>{current=Number(pick.value);line=0;render()};
+  $("egPlayAll").onclick=playAll;$("egPlayLine").onclick=playLine;
+  $("egShowTranscript").onclick=()=>{$("egDialogueTranscript").hidden=!$("egDialogueTranscript").hidden};
+  $("egDialoguePrev").onclick=()=>{line=Math.max(0,line-1);render()};$("egDialogueNext").onclick=()=>{line=Math.min(dialogues[current].lines.length-1,line+1);render()};
+  $("egRecordShadow").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("egDialogueFeedback").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. M vẫn có thể nghe và shadowing theo transcript.";return}recognition=new SR();recognition.lang="en-US";recognition.interimResults=false;recognition.onresult=e=>{$("egDialogueFeedback").textContent="Bạn nói: "+e.results[0][0].transcript+" · Hãy so sánh với câu mẫu và thử lại để cải thiện nhịp điệu, âm cuối.";};recognition.onerror=()=>{$("egDialogueFeedback").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone rồi thử lại."};recognition.start()};
+  loadOptions();
+ }
+ /* Extra pronunciation interaction: speak and practice selected lesson words. */
+ const pron=$("pronunciation");
+ if(pron&&!$("egPronunciationDrill")){const p=document.createElement("div");p.className="panel";p.id="egPronunciationDrill";p.innerHTML='<h2>🗣️ Pronunciation Drill · Luyện phát âm theo cụm</h2><p>Chọn một nhóm từ, nghe mẫu và tự đọc lại. Tập trung vào một lỗi mỗi lượt.</p><div id="egPronDrillBody"></div>';pron.appendChild(p);const data=[["ship · sheep","ship, sheep, ship, sheep","Phân biệt /ɪ/ ngắn và /iː/ dài."],["live · leave","live, leave, live, leave","Giữ âm /ɪ/ ngắn trong live và /iː/ dài trong leave."],["think · sink","think, sink, think, sink","Đặt đầu lưỡi nhẹ giữa hai hàm răng khi phát âm /θ/."],["three · tree","three, tree, three, tree","/θ/ có luồng hơi; /t/ là âm bật."],["worked · wanted","worked, wanted, worked, wanted","Chú ý -ed lần lượt /t/ và /ɪd/."],["comfortable","comfortable, comfortable, comfortable","Trọng âm và nhịp tự nhiên quan trọng hơn đọc từng chữ."],["Would you","Would you like to join us?","Luyện nối âm trong lời nói tự nhiên."]];let i=0;function draw(){const d=data[i];$("egPronDrillBody").innerHTML='<b>'+d[0]+'</b><p>'+d[2]+'</p><button class="btn primary" id="egPronHear">🔊 Nghe mẫu</button> <button class="btn" id="egPronMic">🎙️ Thử đọc</button> <button class="btn line" id="egPronNext">Nhóm tiếp →</button><p id="egPronFb"></p>'; $("egPronHear").onclick=()=>{const u=new SpeechSynthesisUtterance(d[1]);u.lang="en-US";u.rate=.75;speechSynthesis.cancel();speechSynthesis.speak(u)};$("egPronNext").onclick=()=>{i=(i+1)%data.length;draw()};$("egPronMic").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("egPronFb").textContent="Trình duyệt không hỗ trợ nhận diện giọng nói.";return}const rec=new SR();rec.lang="en-US";rec.onresult=e=>$("egPronFb").textContent="Bạn đọc: "+e.results[0][0].transcript+" · Nghe lại và so sánh với mẫu nhé.";rec.start()}}draw()}
+ document.addEventListener("DOMContentLoaded",function(){});
+})();
+</script>
+
 </body></html>
