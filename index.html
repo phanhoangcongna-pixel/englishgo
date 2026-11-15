@@ -2408,4 +2408,116 @@ const phrasalData=[
 ["get up","thức dậy","I get up at six every morning."],["wake up","tỉnh giấc","I woke up early today."],["find out","tìm ra, phát hiện","I found out the truth."],["look after","chăm sóc","She looks after her little brother."],["look for","tìm kiếm","I'm looking for my keys."],["give up","từ bỏ","Don't give up on your dreams."],["put off","trì hoãn","We put off the meeting."],["run out of","hết, cạn","We've run out of milk."],["pick up","đón; nhặt lên","I'll pick you up at seven."],["turn down","từ chối; vặn nhỏ","He turned down the offer."],["get along with","hòa thuận với","I get along with my colleagues."],["carry on","tiếp tục","Please carry on working."],["break down","hỏng; suy sụp","Our car broke down."],["come across","tình cờ bắt gặp","I came across an old photo."],["work out","tập thể dục; tìm ra cách","We can work it out."],["take off","cất cánh; cởi ra","The plane takes off at noon."],["call off","hủy bỏ","They called off the match."],["hang out","đi chơi, tụ tập","We hang out at weekends."],["once in a blue moon","hiếm khi","I eat fast food once in a blue moon."],["piece of cake","dễ như ăn bánh","The test was a piece of cake."],["under the weather","hơi mệt","I'm feeling under the weather."],["break the ice","phá tan sự ngại ngùng","A joke can break the ice."]
 ];
 function phrasalRender(){const q=(document.getElementById("phrasalSearch")?.value||"").toLowerCase();const rows=phrasalData.filter(x=>x.join(" ").toLowerCase().includes(q));document.getElementById("phrasalList").innerHTML=rows.map(x=>"<article class='phrasal-item'><h3>"+x[0]+"</h3><p>"+x[1]+"</p><i>"+x[2]+"</i><p><button class='btn line' onclick='speakSpokenEnglish("+JSON.stringify(x[0]).replace(/'/g,"&#39;")+")'>🔊 Nghe phát âm</button></p></article>").join("")||"<p>Không tìm thấy cụm từ.</p>"}
+
+/* Expanded practice library: additional lessons and examples */
+shadowBank.push(
+{level:"A1",en:"Where is the nearest supermarket?",vi:"Siêu thị gần nhất ở đâu?"},
+{level:"A1",en:"I don't understand. Could you speak more slowly?",vi:"Tôi không hiểu. Bạn có thể nói chậm hơn không?"},
+{level:"A1",en:"What time does the shop close?",vi:"Cửa hàng đóng cửa lúc mấy giờ?"},
+{level:"A1",en:"I'd like to pay by card, please.",vi:"Tôi muốn thanh toán bằng thẻ."},
+{level:"A1",en:"There are two chairs next to the window.",vi:"Có hai chiếc ghế cạnh cửa sổ."},
+{level:"A2",en:"I've never tried this dish before.",vi:"Tôi chưa từng thử món này trước đây."},
+{level:"A2",en:"Would you like me to carry that for you?",vi:"Bạn có muốn tôi mang thứ đó giúp không?"},
+{level:"A2",en:"I was wondering if you could give me a hand.",vi:"Tôi muốn hỏi liệu bạn có thể giúp tôi một tay không."},
+{level:"A2",en:"We ran out of time, so we took a taxi.",vi:"Chúng tôi hết thời gian nên đã bắt taxi."},
+{level:"A2",en:"I'm used to getting up early during the week.",vi:"Tôi quen thức dậy sớm trong tuần."},
+{level:"B1",en:"The sooner we leave, the less traffic we'll have to deal with.",vi:"Chúng ta đi càng sớm thì càng ít phải đối mặt với tắc đường."},
+{level:"B1",en:"Although the weather was terrible, we still enjoyed the trip.",vi:"Mặc dù thời tiết rất tệ, chúng tôi vẫn tận hưởng chuyến đi."},
+{level:"B1",en:"Could you let me know as soon as you hear anything?",vi:"Bạn có thể báo cho tôi ngay khi nghe được tin gì không?"},
+{level:"B1",en:"I've been trying to get in touch with her all morning.",vi:"Tôi đã cố liên lạc với cô ấy suốt buổi sáng."},
+{level:"B1",en:"If I were in your position, I'd think it over before deciding.",vi:"Nếu ở vị trí của bạn, tôi sẽ suy nghĩ kỹ trước khi quyết định."}
+);
+const pronBase=pronData;
+pronData=function(){return pronBase().concat([
+{title:"/æ/ và /e/",words:["bad","bed","man","men"],tip:"/æ/ mở miệng rộng hơn, hàm hạ thấp; /e/ ngắn và miệng khép hơn một chút.",vi:"Luyện phân biệt bad và bed."},
+{title:"/v/ và /w/",words:["vest","west","vine","wine"],tip:"/v/: răng trên chạm nhẹ môi dưới và rung; /w/: tròn môi, không chạm răng.",vi:"Tránh đọc v thành w hoặc ngược lại."},
+{title:"/r/ và /l/",words:["right","light","road","load"],tip:"/r/: lưỡi không chạm vòm miệng; /l/: đầu lưỡi chạm vùng lợi phía sau răng trên.",vi:"Luyện cặp âm r và l."},
+{title:"/tʃ/ và /dʒ/",words:["cheap","jeep","choke","joke"],tip:"/tʃ/ vô thanh như trong cheap; /dʒ/ hữu thanh như trong jeep.",vi:"Phân biệt âm ch và j."},
+{title:"Âm cuối /s/ và /z/",words:["rice","rise","bus","buzz"],tip:"/s/ không rung dây thanh; /z/ có rung. Giữ rõ âm cuối.",vi:"Không bỏ hoặc đổi âm cuối."},
+{title:"Trọng âm câu",words:["I WANT to go.","I want to GO.","I WANT to GO."],tip:"Từ được nhấn sẽ nổi bật hơn. Đổi trọng âm có thể làm thay đổi thông tin người nghe chú ý.",vi:"Thử đọc cùng câu với trọng âm khác nhau."},
+{title:"Nối âm phụ âm – nguyên âm",words:["pick it up","turn it on","an apple","take it easy"],tip:"Khi một từ kết thúc bằng phụ âm và từ sau bắt đầu bằng nguyên âm, lời nói tự nhiên thường nối liền hai âm.",vi:"Luyện nối âm trong cụm từ thường gặp."},
+{title:"Âm schwa /ə/",words:["about","teacher","support","banana"],tip:"/ə/ là âm nhẹ, ngắn, thường xuất hiện ở âm tiết không nhấn. Đừng đọc mọi nguyên âm thật rõ và mạnh.",vi:"Luyện âm yếu trong tiếng Anh."}
+])};
+const roleExtra={
+ restaurant:{start:"Waiter: Good evening. Do you have a reservation?",steps:[
+{q:"Bạn chưa đặt bàn và muốn bàn cho hai người.",a:[["We don't have a reservation. Do you have a table for two?","Nói rõ tình huống và yêu cầu.",1],["Give us table two.","Thiếu tự nhiên và thiếu lịch sự.",2],["We are reservation.","Sai cấu trúc.",2]]},
+{q:"Waiter: Would you like to see the menu?",a:[["Yes, please. Could we have two menus?","Lịch sự, tự nhiên.",1],["No menu see.","Sai cấu trúc.",2],["Menu now!","Quá cộc lốc.",2]]},
+{q:"Bạn muốn gọi món và hỏi món này có cay không.",a:[["I'd like this, please. Is it spicy?","Gọi món và hỏi rõ ràng.",1],["I want this hot?","Dễ gây hiểu nhầm hot là nóng.",2],["This food no.","Không diễn đạt đúng ý.",2]]}]},
+ directions:{start:"Passer-by: Hello. Can I help you?",steps:[
+{q:"Bạn muốn hỏi đường đến nhà ga.",a:[["Could you tell me how to get to the train station?","Cách hỏi đường lịch sự.",1],["Where train station go?","Thiếu cấu trúc.",2],["You take me station.","Không tự nhiên.",2]]},
+{q:"Passer-by: Go straight and turn left at the lights.",a:[["Thanks. Is it far from here?","Câu hỏi tiếp nối hợp lý.",1],["I am far.","Sai ý.",2],["Left where?","Quá cụt; nên hỏi lịch sự hơn.",2]]},
+{q:"Passer-by: It's about a ten-minute walk.",a:[["Great, thanks for your help.","Cảm ơn tự nhiên.",1],["You are welcome.","Câu này thường là đáp lại lời cảm ơn.",2],["Ten minutes walking me.","Sai cấu trúc.",2]]}]},
+ doctor:{start:"Receptionist: Hello. What's the problem?",steps:[
+{q:"Bạn bị đau họng từ hôm qua.",a:[["I've had a sore throat since yesterday.","Diễn đạt triệu chứng và thời gian rõ ràng.",1],["My throat yesterday pain.","Sai trật tự từ.",2],["I am sore yesterday.","Không tự nhiên.",2]]},
+{q:"Receptionist: Do you have a fever?",a:[["I don't think so, but I have a cough.","Trả lời rõ và bổ sung triệu chứng.",1],["No fever cough.","Thiếu cấu trúc.",2],["I have yesterday.","Không trả lời câu hỏi.",2]]},
+{q:"Bạn muốn hỏi có cần đặt lịch không.",a:[["Do I need to make an appointment?","Câu hỏi lịch sự, đúng ngữ cảnh.",1],["I need appointment?","Có thể hiểu nhưng thiếu tự nhiên.",2],["Give me doctor.","Quá trực tiếp.",2]]}]},
+ workplace:{start:"Colleague: Are you free to discuss the project?",steps:[
+{q:"Bạn đang bận và muốn hẹn sau.",a:[["I'm tied up right now. Could we talk this afternoon?","Lịch sự và tự nhiên.",1],["I busy. Later.","Quá cụt.",2],["No discuss.","Không tự nhiên.",2]]},
+{q:"Colleague: Sure. What time works for you?",a:[["Would 3 p.m. work for you?","Đề xuất thời gian lịch sự.",1],["At three you must.","Nghe như ra lệnh.",2],["I am time three.","Sai cấu trúc.",2]]},
+{q:"Colleague: That works. See you then.",a:[["Perfect. I'll send you the notes beforehand.","Xác nhận và nêu bước tiếp theo.",1],["You see.","Không đúng cách đáp.",2],["Notes me.","Sai cấu trúc.",2]]}]},
+ train:{start:"Staff: Hello. Where would you like to go?",steps:[
+{q:"Bạn muốn mua vé một chiều đến London.",a:[["I'd like a one-way ticket to London, please.","Nêu loại vé và điểm đến rõ ràng.",1],["One ticket London go.","Thiếu cấu trúc.",2],["I want London.","Chưa nói rõ vé.",2]]},
+{q:"Staff: What time would you like to travel?",a:[["The 10:30 train, please.","Trả lời trực tiếp.",1],["Ten thirty clock.","Không tự nhiên.",2],["Yesterday morning.","Không phù hợp.",2]]},
+{q:"Staff: Would you like a window seat?",a:[["Yes, if one is available, please.","Lịch sự và tự nhiên.",1],["Window yes give.","Thiếu cấu trúc.",2],["I am window.","Sai nghĩa.",2]]}]}
+};
+Object.assign(roleData,roleExtra);
+const roleSelect=document.getElementById("roleScenario");
+if(roleSelect){[
+["restaurant","Restaurant · Nhà hàng"],["directions","Asking for directions · Hỏi đường"],["doctor","At the doctor · Đi khám bệnh"],["workplace","At work · Công sở"],["train","Buying a train ticket · Mua vé tàu"]
+].forEach(([v,t])=>{if(![...roleSelect.options].some(o=>o.value===v))roleSelect.add(new Option(t,v))})}
+dictBank.push(
+{l:"A1",en:"My sister works in a small shop.",vi:"Chị/em gái tôi làm việc ở một cửa hàng nhỏ."},
+{l:"A1",en:"There is a pharmacy opposite the bank.",vi:"Có một hiệu thuốc đối diện ngân hàng."},
+{l:"A1",en:"I would like a glass of water.",vi:"Tôi muốn một cốc nước."},
+{l:"A1",en:"Please turn left at the next street.",vi:"Làm ơn rẽ trái ở con phố tiếp theo."},
+{l:"A1",en:"We are having dinner at home tonight.",vi:"Tối nay chúng tôi ăn tối ở nhà."},
+{l:"A1",en:"How much are these shoes?",vi:"Đôi giày này giá bao nhiêu?"},
+{l:"A2",en:"I missed the bus because I left home late.",vi:"Tôi lỡ xe buýt vì rời nhà muộn."},
+{l:"A2",en:"Could you tell me where the nearest station is?",vi:"Bạn có thể cho tôi biết nhà ga gần nhất ở đâu không?"},
+{l:"A2",en:"She has already finished her homework.",vi:"Cô ấy đã làm xong bài tập về nhà."},
+{l:"A2",en:"We are looking forward to seeing you again.",vi:"Chúng tôi mong sớm gặp lại bạn."},
+{l:"A2",en:"I haven't decided what to do this weekend.",vi:"Tôi vẫn chưa quyết định sẽ làm gì cuối tuần này."},
+{l:"A2",en:"The meeting was cancelled because of the weather.",vi:"Cuộc họp bị hủy vì thời tiết."},
+{l:"B1",en:"Despite the heavy rain, the match continued.",vi:"Mặc dù mưa lớn, trận đấu vẫn tiếp tục."},
+{l:"B1",en:"If you had told me earlier, I could have helped.",vi:"Nếu bạn nói với tôi sớm hơn, tôi đã có thể giúp."},
+{l:"B1",en:"The company is considering changing its working hours.",vi:"Công ty đang cân nhắc thay đổi giờ làm việc."},
+{l:"B1",en:"I would rather stay in than go out tonight.",vi:"Tối nay tôi thích ở nhà hơn là ra ngoài."},
+{l:"B1",en:"By the time we arrived, the film had already started.",vi:"Khi chúng tôi đến nơi, bộ phim đã bắt đầu rồi."},
+{l:"B1",en:"Could you explain what you mean by that suggestion?",vi:"Bạn có thể giải thích ý bạn qua đề xuất đó không?"}
+);
+phrasalData.push(
+["look forward to","mong chờ","I'm looking forward to the weekend."],
+["put up with","chịu đựng","I can't put up with the noise."],
+["get over","vượt qua; hồi phục","It took her weeks to get over the flu."],
+["come up with","nghĩ ra","We need to come up with a better plan."],
+["look up","tra cứu","Look up the word in a dictionary."],
+["look into","điều tra, xem xét","The manager will look into the problem."],
+["bring up","đề cập; nuôi dạy","She brought up an interesting point."],
+["set up","thiết lập; sắp xếp","They set up a new business."],
+["show up","xuất hiện","He didn't show up for the meeting."],
+["take care of","chăm sóc","Can you take care of my dog?"],
+["make up","bịa ra; làm hòa","They argued but made up later."],
+["turn on","bật","Could you turn on the lights?"],
+["turn off","tắt","Please turn off your phone."],
+["put away","cất đi","Put away your books after class."],
+["try on","thử quần áo","Can I try on this jacket?"],
+["check in","làm thủ tục nhận phòng","We need to check in at the hotel."],
+["check out","trả phòng; xem thử","We checked out at eleven."],
+["drop off","đưa ai đến; thả xuống","I'll drop you off at the station."],
+["fill in","điền vào","Please fill in this form."],
+["get back","trở về","What time did you get back?"],
+["go on","tiếp tục","Please go on with your story."],
+["keep up with","theo kịp","It's hard to keep up with the news."],
+["point out","chỉ ra","She pointed out a small mistake."],
+["sort out","giải quyết, sắp xếp","We need to sort out this problem."],
+["run into","tình cờ gặp","I ran into an old friend yesterday."],
+["turn up","đến; tăng âm lượng","He turned up late again."],
+["on the same page","cùng hiểu/cùng quan điểm","Let's make sure we're on the same page."],
+["a blessing in disguise","trong cái rủi có cái may","Losing that job was a blessing in disguise."],
+["cost an arm and a leg","rất đắt đỏ","That phone costs an arm and a leg."],
+["call it a day","kết thúc công việc hôm nay","We've done enough. Let's call it a day."],
+["the best of both worlds","được lợi từ cả hai lựa chọn","Working remotely gives me the best of both worlds."],
+["once and for all","một lần dứt điểm","Let's settle this once and for all."]
+);
+
 </script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();roleStart();dictNew();phrasalRender()});</script></body></html>
