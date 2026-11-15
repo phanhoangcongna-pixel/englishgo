@@ -899,7 +899,7 @@ function cloudSetStatus(title,email,msg){
  if(btn)btn.textContent=egCloudUser?"☁ "+(egCloudUser.displayName||"Account"):"☁ Sign in · Đăng nhập";
 }
 function cloudCollect(){
- const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-"))){let value=localStorage.getItem(k);if(k==="eg3-simulator-history"){try{let h=JSON.parse(value||"[]");if(Array.isArray(h))value=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){value="[]"}}o[k]=value}}return o;
+ const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-"))){let value=localStorage.getItem(k);if(k==="eg3-simulator-history"){try{let h=JSON.parse(value||"[]");if(Array.isArray(h))value=JSON.stringify(h.slice(-5).map(x=>({...x,reply:String(x.reply||"").slice(0,500)})))}catch(e){value="[]"}}o[k]=value}}return o;
 }
 function cloudMerge(local,remote){
  const out={...remote};
@@ -915,7 +915,7 @@ function cloudMerge(local,remote){
    }
   }catch(e){if(!out[k])out[k]=lv}
  }
- if(out["eg3-simulator-history"]){try{let h=JSON.parse(out["eg3-simulator-history"]);if(Array.isArray(h))out["eg3-simulator-history"]=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){out["eg3-simulator-history"]="[]"}}
+ if(out["eg3-simulator-history"]){try{let h=JSON.parse(out["eg3-simulator-history"]);if(Array.isArray(h))out["eg3-simulator-history"]=JSON.stringify(h.slice(-5).map(x=>({...x,reply:String(x.reply||"").slice(0,500)})))}catch(e){out["eg3-simulator-history"]="[]"}}
  return out;
 }
 async function cloudWrite(){
@@ -945,7 +945,7 @@ async function cloudInitialSync(){
  // documents may contain nested Firestore entities, so normalize them to strings.
  const remote={};if(remoteRaw&&typeof remoteRaw==="object"&&!Array.isArray(remoteRaw)){Object.entries(remoteRaw).forEach(([k,v])=>{try{const value=typeof v==="string"?v:JSON.stringify(v);if(typeof value==="string")remote[k]=value;}catch(e){console.warn("Skipped invalid cloud progress value:",k,e)}})}
  const merged=cloudMerge(local,remote);
- Object.entries(merged).forEach(([k,v])=>{try{if(k==="eg3-simulator-history"){try{const h=JSON.parse(v||"[]");if(Array.isArray(h))v=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){v="[]"}}localStorage.setItem(k,v)}catch(e){if(e&&(/QuotaExceededError|quota/i.test(e.name+" "+e.message))){console.warn("Skipped oversized local simulator history; other progress will still sync.")}else{console.warn("Could not restore local key",k,e)}}});
+ Object.entries(merged).forEach(([k,v])=>{try{if(k==="eg3-simulator-history"){try{const h=JSON.parse(v||"[]");if(Array.isArray(h))v=JSON.stringify(h.slice(-5).map(x=>({...x,reply:String(x.reply||"").slice(0,500)})))}catch(e){v="[]"}}localStorage.setItem(k,v)}catch(e){if(e&&(/QuotaExceededError|quota/i.test(e.name+" "+e.message))){console.warn("Skipped local progress item because browser storage quota was exceeded:",k,"; other progress will still sync.")}else{console.warn("Could not restore local key",k,e)}}});
  await ref.set({progress:merged,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
  egCloudReady=true;cloudSetStatus("Connected · Đã kết nối",egCloudUser.email,"Your progress is synced. Use this same Google account on both devices. Tiến độ đã đồng bộ.");
  // Refresh in-memory app state from the merged local cache.
