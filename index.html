@@ -945,6 +945,10 @@ html { background: #142342; }
 .dict-definitions li span{display:block}
 .dict-definitions li em{display:block;color:var(--muted);font-size:13px;margin-top:4px}
 .dict-definitions li small{display:inline-block;color:#52739a;font-weight:700;margin-bottom:3px}
+.dict-def-en{display:block;font-weight:600}
+.dict-def-vi{margin-top:5px;color:var(--ink);line-height:1.55}
+.dict-definitions li em{display:block;color:var(--muted);font-size:13px;margin-top:7px}
+.dict-example-vi{margin-top:3px;color:var(--muted);font-size:13px;font-style:italic}
 .dict-related{margin-top:13px}
 .dict-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
 .dict-chip{border:1px solid #cbd9eb;background:#f7faff;color:#244b78;border-radius:999px;padding:6px 11px;cursor:pointer}
@@ -1212,18 +1216,34 @@ function dictionaryIpa(entry){
  const phonetics=entry?.phonetics||[];
  return phonetics.find(p=>p.text)?.text || "";
 }
+function cleanDictionaryText(value){
+ return String(value||"").replace(/\\s*\\.?\\s*Wp\\s*$/i,"").trim();
+}
+async function translateDictionaryText(value){
+ const text=cleanDictionaryText(value);
+ if(!text)return "";
+ try{
+  const params=new URLSearchParams({q:text,langpair:"en|vi",mt:"1"});
+  const response=await fetch("https://api.mymemory.translated.net/get?"+params.toString());
+  if(!response.ok)return "";
+  const data=await response.json();
+  return cleanDictionaryText(data?.responseData?.translatedText||"");
+ }catch(error){return ""}
+}
 function dictionaryDefinitions(entry){
  const out=[];
  for(const meaning of (entry?.meanings||[])){
   for(const def of (meaning.definitions||[])){
-   if(def.definition && !out.some(x=>x.definition===def.definition)){
-    out.push({part:meaning.partOfSpeech||"",definition:def.definition,example:def.example||"",synonyms:[...(def.synonyms||[]),...(meaning.synonyms||[])]});
+   const definition=cleanDictionaryText(def.definition);
+   if(definition && !out.some(x=>x.definition===definition)){
+    out.push({part:meaning.partOfSpeech||"",definition,example:cleanDictionaryText(def.example||""),synonyms:[...(def.synonyms||[]),...(meaning.synonyms||[])]});
    }
-   if(out.length>=5) return out;
+   if(out.length>=3) return out;
   }
  }
  return out;
 }
+
 async function lookupDictionary(){
  const input=document.getElementById("dictQuery");
  const status=document.getElementById("dictStatus");
@@ -1270,7 +1290,8 @@ async function lookupDictionary(){
    const mainEntry=mainItem.entry, defs=dictionaryDefinitions(mainEntry), ipa=dictionaryIpa(mainEntry);
    htmlOut+='<article class="panel dict-entry dict-entry-main"><div class="dict-entry-top"><div><span class="dict-tag">Main translation · Bản dịch chính</span><h2>'+safe(mainItem.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(mainItem.word)+'">🔊 Speak · Phát âm</button></div></div>';
    if(defs.length){
-    htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+defs.slice(0,3).map(d=>'<li><span>'+safe(d.definition)+'</span>'+(d.example?'<em>Example: '+safe(d.example)+'</em>':"")+'</li>').join("")+'</ol></div>';
+    const localizedDefs=await Promise.all(defs.map(async d=>({ ...d, vietnamese:await translateDictionaryText(d.definition), exampleVi:d.example?await translateDictionaryText(d.example):"" })));
+    htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+localizedDefs.map(d=>'<li><small>'+safe(d.part)+'</small><span class="dict-def-en">'+safe(d.definition)+'</span>'+(d.vietnamese?'<div class="dict-def-vi">'+safe(d.vietnamese)+'</div>':'')+(d.example?'<em>Example: '+safe(d.example)+'</em>':'')+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
     const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==mainItem.word.toLowerCase()).slice(0,8);
     if(related.length)htmlOut+='<div class="dict-related"><b>Related words · Từ gần nghĩa/liên quan</b><div class="dict-chips">'+related.map(x=>'<button type="button" class="dict-chip" data-dict-word="'+safe(x)+'">'+safe(x)+'</button>').join("")+'</div></div>';
    }else{
@@ -1285,7 +1306,8 @@ async function lookupDictionary(){
    const entry=entries[0].entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry), audio=dictionaryAudio(entry);
    htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">English word · Từ tiếng Anh</span><h2>'+safe(query)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(query)+'">🔊 Speak · Phát âm</button>'+'</div></div><div class="dict-translation"><div class="small muted">Vietnamese meaning · Nghĩa tiếng Việt</div><h3>'+safe(translated)+'</h3></div>';
    if(defs.length){
-    htmlOut+='<div class="dict-definitions"><b>English definitions · Giải nghĩa tiếng Anh</b><ol>'+defs.map(d=>'<li><small>'+safe(d.part)+'</small><span>'+safe(d.definition)+'</span>'+(d.example?'<em>Example: '+safe(d.example)+'</em>':"")+'</li>').join("")+'</ol></div>';
+    const localizedDefs=await Promise.all(defs.map(async d=>({ ...d, vietnamese:await translateDictionaryText(d.definition), exampleVi:d.example?await translateDictionaryText(d.example):"" })));
+    htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+localizedDefs.map(d=>'<li><small>'+safe(d.part)+'</small><span class="dict-def-en">'+safe(d.definition)+'</span>'+(d.vietnamese?'<div class="dict-def-vi">'+safe(d.vietnamese)+'</div>':'')+(d.example?'<em>Example: '+safe(d.example)+'</em>':'')+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
     const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==query.toLowerCase()).slice(0,10);
     if(related.length)htmlOut+='<div class="dict-related"><b>Related words · Từ gần nghĩa/liên quan</b><div class="dict-chips">'+related.map(x=>'<button type="button" class="dict-chip" data-dict-word="'+safe(x)+'">'+safe(x)+'</button>').join("")+'</div></div>';
    }else{
