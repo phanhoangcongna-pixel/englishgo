@@ -976,7 +976,7 @@ body > header #mainNav > .nav-group > summary {
  <div class="card"><label for="roleScenario">Tình huống</label><select id="roleScenario" onchange="roleStart()"><option value="cafe">At a café · Quán cà phê</option><option value="hotel">At a hotel · Khách sạn</option><option value="shop">Shopping · Mua sắm</option><option value="airport">At the airport · Sân bay</option></select><div id="roleConversation" class="role-conversation" aria-live="polite"></div><div id="roleChoices" class="role-choices"></div><button class="btn line" onclick="roleStart()">↻ Bắt đầu lại</button></div>
 </section>
 <section class="page" id="dictation">
- <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì m nghe được rồi kiểm tra đáp án.</p></div></div>
+ <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
  <div class="card"><div class="row"><label for="dictLevel">Cấp độ</label><select id="dictLevel" onchange="dictNew()"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option></select></div><div class="row"><button class="btn primary" onclick="dictSpeak(0.82)">🔊 Nghe chậm</button><button class="btn" onclick="dictSpeak(1)">▶ Nghe bình thường</button><button class="btn line" onclick="dictNew()">Câu mới →</button></div><textarea id="dictAnswer" rows="3" placeholder="Type what you hear... · Nhập câu bạn nghe được"></textarea><button class="btn primary" onclick="dictCheck()">Kiểm tra</button><div id="dictFeedback" aria-live="polite"></div></div>
 </section>
 <section class="page" id="phrasal">
@@ -2661,11 +2661,43 @@ const dictBank=[
  {l:"B1",en:"If it rains tomorrow, we'll stay at home.",vi:"Nếu ngày mai trời mưa, chúng tôi sẽ ở nhà."},
  {l:"B1",en:"The most important thing is to keep practising.",vi:"Điều quan trọng nhất là tiếp tục luyện tập."}
 ];
-let dictIndex=-1;
-function dictCurrent(){const l=document.getElementById("dictLevel")?.value||"A1";return dictBank.filter(x=>x.l===l)[dictIndex%dictBank.filter(x=>x.l===l).length]}
-function dictNew(){dictIndex++;document.getElementById("dictAnswer").value="";document.getElementById("dictFeedback").textContent=""}
-function dictSpeak(rate){const x=dictCurrent(),u=new SpeechSynthesisUtterance(x.en);u.lang="en-US";u.rate=rate;u.volume=1;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.speak(u)}
-function dictCheck(){const x=dictCurrent(),a=document.getElementById("dictAnswer").value.trim().toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," "),b=x.en.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ");document.getElementById("dictFeedback").innerHTML=(a===b?"<b>✅ Chính xác!</b>":"<b>Chưa chính xác.</b>")+"<p>Đáp án: "+x.en+"</p><p>"+x.vi+"</p>"}
+let dictIndex=0; // Start with the first sentence ready; -1 made the initial question undefined.
+function dictCurrent(){
+ const level=document.getElementById("dictLevel")?.value||"A1";
+ const rows=dictBank.filter(x=>x.l===level);
+ if(!rows.length) return dictBank[0]||null;
+ return rows[((dictIndex%rows.length)+rows.length)%rows.length];
+}
+function dictNew(){
+ dictIndex++;
+ const answer=document.getElementById("dictAnswer");
+ const feedback=document.getElementById("dictFeedback");
+ if(answer) answer.value="";
+ if(feedback) feedback.textContent="";
+}
+function dictSpeak(rate){
+ const x=dictCurrent();
+ if(!x){const f=document.getElementById("dictFeedback");if(f)f.textContent="Chưa có câu luyện tập cho cấp độ này.";return;}
+ if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
+   const f=document.getElementById("dictFeedback");if(f)f.textContent="Trình duyệt chưa hỗ trợ đọc tiếng Anh. Hãy thử Chrome hoặc Edge.";return;
+ }
+ const u=new SpeechSynthesisUtterance(x.en);
+ u.lang="en-US";u.rate=rate;u.volume=1;
+ const vs=speechSynthesis.getVoices();
+ u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;
+ speechSynthesis.cancel();
+ speechSynthesis.resume();
+ speechSynthesis.speak(u);
+}
+function dictCheck(){
+ const x=dictCurrent();
+ const answer=document.getElementById("dictAnswer");
+ const feedback=document.getElementById("dictFeedback");
+ if(!x||!answer||!feedback)return;
+ const normalize=value=>value.trim().toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ");
+ const correct=normalize(answer.value)===normalize(x.en);
+ feedback.innerHTML=(correct?"<b>✅ Chính xác!</b>":"<b>Chưa chính xác.</b>")+"<p>Đáp án: "+x.en+"</p><p>"+x.vi+"</p>";
+}
 const phrasalData=[
 ["get up","thức dậy","I get up at six every morning."],["wake up","tỉnh giấc","I woke up early today."],["find out","tìm ra, phát hiện","I found out the truth."],["look after","chăm sóc","She looks after her little brother."],["look for","tìm kiếm","I'm looking for my keys."],["give up","từ bỏ","Don't give up on your dreams."],["put off","trì hoãn","We put off the meeting."],["run out of","hết, cạn","We've run out of milk."],["pick up","đón; nhặt lên","I'll pick you up at seven."],["turn down","từ chối; vặn nhỏ","He turned down the offer."],["get along with","hòa thuận với","I get along with my colleagues."],["carry on","tiếp tục","Please carry on working."],["break down","hỏng; suy sụp","Our car broke down."],["come across","tình cờ bắt gặp","I came across an old photo."],["work out","tập thể dục; tìm ra cách","We can work it out."],["take off","cất cánh; cởi ra","The plane takes off at noon."],["call off","hủy bỏ","They called off the match."],["hang out","đi chơi, tụ tập","We hang out at weekends."],["once in a blue moon","hiếm khi","I eat fast food once in a blue moon."],["piece of cake","dễ như ăn bánh","The test was a piece of cake."],["under the weather","hơi mệt","I'm feeling under the weather."],["break the ice","phá tan sự ngại ngùng","A joke can break the ice."]
 ];
