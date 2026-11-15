@@ -3379,33 +3379,6 @@ function egRenderListening(){
 function egPlayListening(){const d=egListenBank[egListenIndex];const u=new SpeechSynthesisUtterance(d[2]);u.lang="en-US";u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}
 function egAnswerListening(i){if(egListenDone[egListenIndex]!==undefined)return;const d=egListenBank[egListenIndex];egListenDone[egListenIndex]=i;if(i===d[5])egListenScore++;egRenderListening();const p=document.getElementById("egListenFeedback");if(p)p.innerHTML=(i===d[5]?"✅ Chính xác! ":"❌ Chưa đúng. ")+d[6]}
 
-/* Sentence Builder: reorder words and check exact sentence. */
-const egSentenceBank=[
- ["A1","She goes to school every day.","Cô ấy đi học mỗi ngày."],
- ["A1","There are two books on the table.","Có hai quyển sách trên bàn."],
- ["A1","I would like a glass of water.","Tôi muốn một cốc nước."],
- ["A1","My brother can swim very well.","Anh/em trai tôi bơi rất giỏi."],
- ["A2","I have never visited London before.","Tôi chưa từng đến London."],
- ["A2","We were watching TV when the phone rang.","Chúng tôi đang xem TV thì điện thoại reo."],
- ["A2","Could you tell me where the station is?","Bạn có thể cho tôi biết nhà ga ở đâu không?"],
- ["A2","She has been working here for three years.","Cô ấy đã làm việc ở đây được ba năm."],
- ["B1","If I had more free time, I would learn another language.","Nếu có nhiều thời gian rảnh hơn, tôi sẽ học thêm ngôn ngữ khác."],
- ["B1","The book that you lent me was really interesting.","Cuốn sách bạn cho tôi mượn thực sự rất thú vị."],
- ["B1","Although it was raining, they decided to continue playing.","Mặc dù trời mưa, họ vẫn quyết định tiếp tục chơi."],
- ["B1","By the time we arrived, the presentation had already begun.","Khi chúng tôi đến, bài thuyết trình đã bắt đầu."]
-];
-let egSentenceIndex=0,egSentenceWords=[];
-function egRenderSentence(){
- const root=document.getElementById("egSentenceBuilder");if(!root)return;
- const d=egSentenceBank[egSentenceIndex];egSentenceWords=d[1].replace(/[?.!,]/g,"").split(" ").sort(()=>Math.random()-.5);
- root.innerHTML='<div class="controls"><span class="badge">'+d[0]+'</span><b>Sentence '+(egSentenceIndex+1)+' / '+egSentenceBank.length+'</b></div><h3>'+d[2]+'</h3><p>Chọn các từ theo đúng thứ tự để tạo thành câu tiếng Anh.</p><div id="egSentenceAnswer" class="card soft" style="min-height:52px"></div><div class="choices" style="display:flex;flex-wrap:wrap;gap:8px">'+egSentenceWords.map((w,i)=>'<button class="choice" id="egWord'+i+'" onclick="egPickWord('+i+')">'+w+'</button>').join('')+'</div><div class="controls"><button class="btn primary" onclick="egCheckSentence()">Kiểm tra</button><button class="btn line" onclick="egResetSentence()">Xóa câu</button><button class="btn" onclick="egNextSentence()">Câu tiếp →</button></div><p id="egSentenceFeedback" aria-live="polite"></p>';
- window.egSentencePicked=[];
-}
-function egPickWord(i){const b=document.getElementById("egWord"+i);if(!b||b.disabled)return;b.disabled=true;window.egSentencePicked.push({i,w:egSentenceWords[i]});document.getElementById("egSentenceAnswer").textContent=window.egSentencePicked.map(x=>x.w).join(" ")}
-function egResetSentence(){window.egSentencePicked=[];document.querySelectorAll("#egSentenceBuilder .choice").forEach(b=>b.disabled=false);document.getElementById("egSentenceAnswer").textContent="";document.getElementById("egSentenceFeedback").textContent=""}
-function egCheckSentence(){const d=egSentenceBank[egSentenceIndex],answer=window.egSentencePicked.map(x=>x.w).join(" "),clean=x=>x.toLowerCase().replace(/[?.!,]/g,"").replace(/\s+/g," ").trim();document.getElementById("egSentenceFeedback").textContent=clean(answer)===clean(d[1])?"✅ Chính xác!":"Chưa đúng. Đáp án: "+d[1]}
-function egNextSentence(){egSentenceIndex=(egSentenceIndex+1)%egSentenceBank.length;egRenderSentence()}
-
 /* Monthly assessment: 20-question rotating diagnostic covering grammar and vocabulary. */
 const egMonthlyQuestions=[
  ["She ___ to work by bus every day.",["go","goes","going"],1,"Present simple with she."],
@@ -3446,7 +3419,6 @@ document.addEventListener("DOMContentLoaded",function(){
  const listen=document.getElementById("listening");
  if(listen&&!document.getElementById("egListeningChallenge")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🎧 Listening Challenge · Thử thách nghe</h2><p>Chọn cấp độ A1–B1, nghe đoạn hội thoại và trả lời câu hỏi. Có '+egListenBank.length+' bài nghe ngắn.</p><div id="egListeningChallenge"></div>';listen.appendChild(card);egRenderListening()}
  const writing=document.getElementById("writing");
- if(writing&&!document.getElementById("egSentenceBuilder")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🧩 Sentence Builder · Xây dựng câu</h2><p>'+egSentenceBank.length+' bài sắp xếp từ thành câu, từ A1 đến B1.</p><div id="egSentenceBuilder"></div>';writing.appendChild(card);egRenderSentence()}
  const placement=document.getElementById("placement");
  if(placement&&!document.getElementById("egMonthlyAssessment")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>📊 Monthly Assessment · Kiểm tra định kỳ</h2><p>20 câu hỏi ngữ pháp và từ vựng. Kết quả có giải thích từng câu.</p><div id="egMonthlyAssessment"></div>';placement.appendChild(card);egRenderMonthly()}
  const speaking=document.getElementById("speaking");
