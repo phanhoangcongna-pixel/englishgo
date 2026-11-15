@@ -1217,7 +1217,7 @@ function dictionaryIpa(entry){
  return phonetics.find(p=>p.text)?.text || "";
 }
 function cleanDictionaryText(value){
- return String(value||"").replace(/\\s*\\.?\\s*Wp\\s*$/i,"").trim();
+ return String(value||"").replace(/\s*\.?\s*Wp\s*$/i,"").trim();
 }
 async function translateDictionaryText(value){
  const text=cleanDictionaryText(value);
