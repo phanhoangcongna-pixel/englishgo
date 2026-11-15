@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "EnglishGo — Learn English",
+  "short_name": "EnglishGo",
+  "description": "Learn English with Vietnamese support, from A1 to B1.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f6fb",
+  "theme_color": "#142342",
+  "icons": [
+    {
+      "src": "./englishgo-icon.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}

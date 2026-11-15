@@ -3,6 +3,10 @@
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
 <link href="englishgo-icon.png" rel="icon" type="image/png"/>
 <link href="englishgo-icon.png" rel="apple-touch-icon"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="EnglishGo"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta content="#142342" name="theme-color"/>
 <meta content="EnglishGo 2.0 — Free bilingual English learning for Vietnamese speakers, A1 to B1." name="description"/>
 <title>EnglishGo — Learn English · Học tiếng Anh</title>
@@ -3592,4 +3596,12 @@ document.addEventListener("DOMContentLoaded",function(){
  })();
 </script>
 
+
+<script id="englishgo-pwa-registration">
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch((error) => console.warn("EnglishGo offline setup:", error));
+  });
+}
+</script>
 </body></html>
