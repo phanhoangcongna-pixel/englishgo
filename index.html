@@ -480,7 +480,7 @@ html { background: #142342; }
 <nav aria-label="Main navigation" class="navlinks" id="mainNav">
 <button class="active nav-home" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learn <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button>
+<button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button><button data-page="stories">📖 Short Stories </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
@@ -853,6 +853,30 @@ html { background: #142342; }
 <section class="page" id="dictation">
  <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
  <div class="card"><div class="row"><label for="dictLevel">Cấp độ</label><select id="dictLevel" onchange="dictNew()"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option></select></div><div class="row"><button class="btn primary" onclick="dictSpeak(0.82)">🔊 Nghe chậm</button><button class="btn" onclick="dictSpeak(1)">▶ Nghe bình thường</button><button class="btn line" onclick="dictNew()">Câu mới →</button></div><textarea id="dictAnswer" rows="3" placeholder="Type what you hear... · Nhập câu bạn nghe được"></textarea><button class="btn primary" onclick="dictCheck()">Kiểm tra</button><div id="dictFeedback" aria-live="polite"></div></div>
+</section>
+<section class="page" id="stories">
+ <div class="page-header"><div><p class="eyebrow">READ, LISTEN & UNDERSTAND</p><h1>📖 Short Stories · Truyện ngắn tiếng Anh</h1><p>Đọc truyện ngắn theo cấp độ A1–B1, nghe phát âm, xem bản dịch và trả lời câu hỏi đọc hiểu.</p></div></div>
+ <div class="card">
+  <div class="controls">
+   <label for="storyLevel">Cấp độ · Level</label>
+   <select id="storyLevel" onchange="egStoryLevelChanged()"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select>
+   <label for="storySelect">Chọn truyện · Story</label>
+   <select id="storySelect" onchange="egStoryRender()"></select>
+  </div>
+  <div class="controls">
+   <button class="btn primary" type="button" onclick="egStorySpeak()">🔊 Nghe truyện</button>
+   <button class="btn line" type="button" onclick="egStoryStop()">■ Dừng</button>
+   <button class="btn soft" id="storyTranslationBtn" type="button" onclick="egStoryToggleTranslation()">Hiện bản dịch · Show translation</button>
+  </div>
+  <div id="storyContent" aria-live="polite"></div>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <h2>Comprehension · Câu hỏi đọc hiểu</h2>
+  <p class="small muted">Đọc truyện rồi chọn đáp án đúng. Mỗi truyện có 3 câu hỏi.</p>
+  <div id="storyQuestions"></div>
+  <div class="controls"><button class="btn primary" type="button" onclick="egStoryCheck()">Kiểm tra đáp án</button><button class="btn line" type="button" onclick="egStoryReset()">Làm lại</button></div>
+  <div id="storyResult" aria-live="polite"></div>
+ </div>
 </section>
 <section class="page" id="phrasal">
  <div class="page-header"><div><p class="eyebrow">EVERYDAY ENGLISH</p><h1>📚 Phrasal Verbs, Idioms & Expressions · Cụm động từ, thành ngữ và cụm từ chuyên dụng</h1><p>Tra cứu cụm động từ, thành ngữ, collocations và cách diễn đạt thực tế trong công việc, học tập, giao tiếp và du lịch. Mỗi mục có nghĩa, ví dụ và phát âm.</p></div></div>
@@ -3485,5 +3509,103 @@ document.addEventListener("DOMContentLoaded",function(){
     console.warn("EnglishGo old offline cache cleanup:", error);
   }
 })();
+</script>
+
+<script id="englishgo-short-stories-v1">
+const egShortStories = [
+ {level:"A1",title:"A Busy Morning · Buổi sáng bận rộn",paragraphs:[
+  ["Emma gets up at seven o'clock every morning. She makes breakfast and drinks a cup of tea. Then she walks to the bus stop.","Emma thức dậy lúc bảy giờ mỗi sáng. Cô chuẩn bị bữa sáng và uống một tách trà. Sau đó cô đi bộ đến trạm xe buýt."],
+  ["Today, the bus is late. Emma waits for ten minutes and reads a message from her friend. She arrives at work at nine o'clock.","Hôm nay xe buýt đến muộn. Emma đợi mười phút và đọc tin nhắn từ bạn. Cô đến chỗ làm lúc chín giờ."]
+ ],questions:[
+  ["What time does Emma get up?",["At six","At seven","At eight"],1],
+  ["What does she drink for breakfast?",["Tea","Coffee","Milk"],0],
+  ["Why does Emma wait at the bus stop?",["She is early","The bus is late","She lost her phone"],1]
+ ]},
+ {level:"A1",title:"The Missing Wallet · Chiếc ví bị mất",paragraphs:[
+  ["Tom is at the supermarket. He buys some bread, eggs and apples. When he gets to the checkout, he cannot find his wallet.","Tom đang ở siêu thị. Anh mua bánh mì, trứng và táo. Khi đến quầy thanh toán, anh không tìm thấy ví."],
+  ["He looks in his bag and checks his pockets. A shop assistant finds the wallet near the door. Tom thanks her and pays for his food.","Anh tìm trong túi và kiểm tra các túi áo. Một nhân viên cửa hàng tìm thấy chiếc ví gần cửa ra vào. Tom cảm ơn cô ấy và thanh toán tiền hàng."]
+ ],questions:[
+  ["Where is Tom?",["At a supermarket","At a school","At a station"],0],
+  ["What does Tom buy?",["A jacket and shoes","Bread, eggs and apples","A book and a pen"],1],
+  ["Where is the wallet?",["In the car","Near the door","At home"],1]
+ ]},
+ {level:"A2",title:"A Weekend by the Sea · Cuối tuần bên bờ biển",paragraphs:[
+  ["Last Saturday, Mia and her cousin travelled to a small town by the sea. They left early because they wanted to avoid the traffic. The weather was sunny but a little windy.","Thứ Bảy tuần trước, Mia và em họ đi đến một thị trấn nhỏ bên bờ biển. Họ khởi hành sớm vì muốn tránh tắc đường. Trời nắng nhưng hơi có gió."],
+  ["After lunch, they walked along the beach and took photos of the boats. Before going home, they bought ice cream from a little shop near the harbour. They both agreed to visit again.","Sau bữa trưa, họ đi dạo dọc bãi biển và chụp ảnh những chiếc thuyền. Trước khi về nhà, họ mua kem ở một cửa hàng nhỏ gần bến cảng. Cả hai đều đồng ý sẽ quay lại."]
+ ],questions:[
+  ["Why did they leave early?",["To catch a train","To avoid traffic","To buy breakfast"],1],
+  ["What did they photograph?",["Boats","Mountains","Old houses"],0],
+  ["Where did they buy ice cream?",["Near the harbour","At the hotel","At the station"],0]
+ ]},
+ {level:"A2",title:"The Helpful Neighbour · Người hàng xóm tốt bụng",paragraphs:[
+  ["When Daniel moved into his new flat, he did not know anyone in the building. One evening, his neighbour Mrs Green knocked on his door. She had made too much soup and wanted to share it.","Khi Daniel chuyển đến căn hộ mới, anh không quen ai trong tòa nhà. Một buổi tối, bà Green, hàng xóm của anh, gõ cửa. Bà nấu quá nhiều súp và muốn chia sẻ với anh."],
+  ["They talked for half an hour. Daniel learned that Mrs Green had lived there for twenty years and knew the area very well. A few days later, he helped her carry some shopping upstairs. They soon became good friends.","Họ trò chuyện nửa tiếng. Daniel biết bà Green đã sống ở đó hai mươi năm và rất hiểu khu vực này. Vài ngày sau, anh giúp bà mang đồ mua sắm lên tầng. Họ nhanh chóng trở thành bạn tốt."]
+ ],questions:[
+  ["Why did Mrs Green visit Daniel?",["To complain about noise","To share some soup","To borrow money"],1],
+  ["How long had she lived there?",["Two years","Twelve years","Twenty years"],2],
+  ["How did Daniel help her later?",["He carried her shopping","He cleaned her flat","He cooked dinner"],0]
+ ]},
+ {level:"B1",title:"A Change of Career · Thay đổi nghề nghiệp",paragraphs:[
+  ["For several years, Laura worked in an office where she had a stable salary but very little opportunity to be creative. Although she was grateful for the job, she often felt that something was missing.","Trong nhiều năm, Laura làm việc tại một văn phòng, nơi cô có mức lương ổn định nhưng rất ít cơ hội sáng tạo. Mặc dù biết ơn công việc đó, cô thường cảm thấy còn thiếu điều gì đó."],
+  ["After taking an evening course in graphic design, she decided to build a small portfolio. It took months of practice, and she made plenty of mistakes. Eventually, a local company offered her a junior designer position. The change was challenging, but she felt more motivated than ever.","Sau khi tham gia một khóa thiết kế đồ họa buổi tối, cô quyết định xây dựng một hồ sơ năng lực nhỏ. Việc đó mất nhiều tháng luyện tập và cô mắc không ít sai lầm. Cuối cùng, một công ty địa phương đề nghị cô vị trí thiết kế viên mới vào nghề. Sự thay đổi đầy thử thách, nhưng cô cảm thấy có động lực hơn bao giờ hết."]
+ ],questions:[
+  ["What was missing from Laura's old job?",["A regular salary","Creative opportunities","A friendly manager"],1],
+  ["What did she study in the evening?",["Graphic design","Accounting","Marketing"],0],
+  ["How did she feel about her new position?",["Less confident","Bored","More motivated"],2]
+ ]},
+ {level:"B1",title:"The Community Garden · Khu vườn cộng đồng",paragraphs:[
+  ["An empty piece of land behind the library had become a place where people left rubbish. A group of residents suggested turning it into a community garden. At first, the idea seemed difficult because nobody had much experience or money.","Một mảnh đất trống phía sau thư viện đã trở thành nơi mọi người vứt rác. Một nhóm cư dân đề xuất biến nó thành khu vườn cộng đồng. Ban đầu, ý tưởng có vẻ khó thực hiện vì không ai có nhiều kinh nghiệm hay tiền bạc."],
+  ["They contacted local businesses for spare tools and organised weekend work sessions. Some residents planted vegetables, while others built small wooden boxes. Six months later, the garden was full of colour. More importantly, neighbours who had never spoken before were now working together.","Họ liên hệ các doanh nghiệp địa phương để xin dụng cụ còn dư và tổ chức các buổi làm việc cuối tuần. Một số cư dân trồng rau, trong khi những người khác đóng các thùng gỗ nhỏ. Sáu tháng sau, khu vườn rực rỡ sắc màu. Quan trọng hơn, những người hàng xóm trước đây chưa từng nói chuyện giờ đã cùng nhau làm việc."]
+ ],questions:[
+  ["What was the land used for before the project?",["A playground","A rubbish area","A car park"],1],
+  ["How did the residents get tools?",["They contacted local businesses","They bought expensive equipment","The library donated everything"],0],
+  ["What was an important result besides the garden?",["The library became larger","The neighbours worked together","The project made a profit"],1]
+ ]}
+];
+let egStoryTranslationVisible=false;
+function egStoryCurrent(){
+ const level=document.getElementById("storyLevel")?.value||"A1";
+ const rows=egShortStories.filter(x=>x.level===level);
+ const select=document.getElementById("storySelect");
+ return rows[Math.max(0,Number(select?.value||0))]||rows[0]||egShortStories[0];
+}
+function egStoryLevelChanged(){
+ const level=document.getElementById("storyLevel").value;
+ const rows=egShortStories.filter(x=>x.level===level);
+ const select=document.getElementById("storySelect");
+ select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");
+ egStoryTranslationVisible=false;
+ egStoryRender();
+}
+function egStoryRender(){
+ const story=egStoryCurrent();
+ if(!story)return;
+ const content=document.getElementById("storyContent");
+ content.innerHTML='<h2>'+story.title+'</h2><p class="small muted">Level '+story.level+' · '+story.paragraphs.length+' đoạn văn</p>'+story.paragraphs.map((p,i)=>'<div style="padding:12px 0;border-bottom:1px solid var(--line)"><p style="line-height:1.8;margin:0 0 7px"><b>'+(i+1)+'.</b> '+p[0]+'</p><p class="story-translation" style="display:'+(egStoryTranslationVisible?'block':'none')+';color:var(--muted);margin:0">'+p[1]+'</p></div>').join("");
+ document.getElementById("storyTranslationBtn").textContent=egStoryTranslationVisible?"Ẩn bản dịch · Hide translation":"Hiện bản dịch · Show translation";
+ document.getElementById("storyQuestions").innerHTML=story.questions.map((q,i)=>'<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0"><legend><b>'+(i+1)+'. '+q[0]+'</b></legend>'+q[1].map((a,j)=>'<label style="display:block;padding:6px 2px"><input type="radio" name="egStoryQ'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+a+'</label>').join("")+'</fieldset>').join("");
+ document.getElementById("storyResult").textContent="";
+}
+function egStoryToggleTranslation(){egStoryTranslationVisible=!egStoryTranslationVisible;egStoryRender()}
+function egStorySpeak(){
+ const story=egStoryCurrent();if(!story)return;
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("storyResult").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}
+ const utterance=new SpeechSynthesisUtterance(story.paragraphs.map(p=>p[0]).join(" "));
+ utterance.lang="en-US";utterance.rate=0.88;utterance.volume=1;
+ const voices=speechSynthesis.getVoices();
+ utterance.voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
+ speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.speak(utterance);
+}
+function egStoryStop(){if("speechSynthesis" in window)speechSynthesis.cancel()}
+function egStoryCheck(){
+ const story=egStoryCurrent();if(!story)return;
+ let score=0,unanswered=0;
+ story.questions.forEach((q,i)=>{const chosen=document.querySelector('input[name="egStoryQ'+i+'"]:checked');if(!chosen)unanswered++;else if(Number(chosen.value)===q[2])score++});
+ const result=document.getElementById("storyResult");
+ if(unanswered){result.textContent="Bạn còn "+unanswered+" câu chưa trả lời. Hãy hoàn thành cả 3 câu nhé.";return}
+ result.innerHTML='<b>Kết quả: '+score+'/'+story.questions.length+' câu đúng.</b> '+(score===3?'Xuất sắc! 🎉':score===2?'Tốt lắm! Hãy xem lại câu còn sai.':'Hãy đọc lại truyện và thử lần nữa nhé.');
+}
+function egStoryReset(){document.querySelectorAll('#storyQuestions input[type="radio"]').forEach(x=>x.checked=false);document.getElementById("storyResult").textContent=""}
+document.addEventListener("DOMContentLoaded",()=>egStoryLevelChanged());
 </script>
 </body></html>
