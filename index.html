@@ -2309,7 +2309,7 @@ function normalizeTranslation(x){
   const escaped=shortForm.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
   value=value.replace(new RegExp("(^|\\s)"+escaped+"(?=$|\\s|[.,!?;:])","g"),(m,prefix)=>prefix+longForm);
  }
- return value.replace(/[.,!?;:;"“”()\\[\\]{}]/g," ").replace(/\\s+/g," ").trim();
+ return value.replace(/[.,!?;:;"“”()\\[\\]{}]/g," ").replace(/\s+/g," ").trim();
 }
 function checkTranslation(){
  if(trChecked)return;trChecked=true;trDone++;
@@ -3442,7 +3442,7 @@ function egStartSpeaking(){
    $("egPrev_"+id).onclick=()=>{idx=(idx+data.items.length-1)%data.items.length;show=false;draw()};
    $("egNext_"+id).onclick=()=>{idx=(idx+1)%data.items.length;show=false;draw()};
    if(id==="grammar"||id==="quiz"||id==="reading")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===(id==="reading"?d[4]:d[2]);const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||"";});
-   if(id==="translation"){$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};$("egCheckTranslation").onclick=()=>{const input=$("egTranslationInput").value.trim();const normalize=value=>String(value).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\\s+/g," ").trim();const feedback=$("egTranslationFeedback");if(!input){feedback.textContent="Hãy nhập câu tiếng Anh trước khi kiểm tra nhé.";return}if(normalize(input)===normalize(d[1])){feedback.textContent="✅ Khớp với đáp án gợi ý! Rất tốt."}else{feedback.textContent="📝 Câu của bạn khác đáp án mẫu. Hãy xem gợi ý để đối chiếu; cách diễn đạt khác vẫn có thể đúng nếu đúng ngữ pháp và ý nghĩa."}};}
+   if(id==="translation"){$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};$("egCheckTranslation").onclick=()=>{const input=$("egTranslationInput").value.trim();const normalize=value=>String(value).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim();const feedback=$("egTranslationFeedback");if(!input){feedback.textContent="Hãy nhập câu tiếng Anh trước khi kiểm tra nhé.";return}if(normalize(input)===normalize(d[1])){feedback.textContent="✅ Khớp với đáp án gợi ý! Rất tốt."}else{feedback.textContent="📝 Câu của bạn khác đáp án mẫu. Hãy xem gợi ý để đối chiếu; cách diễn đạt khác vẫn có thể đúng nếu đúng ngữ pháp và ý nghĩa."}};}
    if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
    if(id==="practice")$("egSave_"+id).onclick=()=>{$("egFb_"+id).textContent="Đã giữ câu trả lời trong ô này. Hãy đọc to và tự kiểm tra ngữ pháp nhé."};
    if(id==="progress"){root.querySelector("input").checked=JSON.parse(localStorage.getItem("eg-progress-"+idx)||"false");root.querySelector("input").onchange=e=>localStorage.setItem("eg-progress-"+idx,JSON.stringify(e.target.checked))}
