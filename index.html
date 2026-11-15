@@ -487,7 +487,7 @@ html { background: #142342; }
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="pronunciation">🗣️ Pronunciation Lab </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
+<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="practice">📅 Daily Practice </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
@@ -930,7 +930,7 @@ html { background: #142342; }
 
 <section class="page" id="learninglab">
 <h1 class="title">Learning Lab · Trung tâm luyện tập</h1>
-<p class="intro">Vocabulary, pronunciation, role-play, writing, achievements and weekly progress. Tất cả công cụ nâng cao trong một nơi.</p>
+<p class="intro">Vocabulary, role-play, writing, achievements and weekly progress. Tất cả công cụ nâng cao trong một nơi.</p>
 <div class="panel" style="margin-bottom:12px">
 <h2>🗓️ Daily Learning Path · Lộ trình mỗi ngày</h2>
 <p class="small muted">A short 15–20 minute routine. Tick each activity as you finish; your progress is saved on this device and included in cloud sync.</p>
@@ -940,9 +940,6 @@ html { background: #142342; }
 <div class="panel"><h2>🧠 Smart Vocabulary · Ôn từ thông minh</h2><p class="small muted">Save words and review them with spaced repetition. Lưu từ mới và ôn theo lịch lặp lại.</p>
 <div class="controls"><input id="svWord" placeholder="English word or phrase"/><input id="svMeaning" placeholder="Nghĩa tiếng Việt"/></div><div class="controls"><input id="svExample" placeholder="Example sentence (optional)"/><button class="btn" onclick="svAdd()" type="button">Add word · Thêm từ</button></div>
 <div class="small muted" id="svStats"></div><div class="panel" style="background:var(--surface)"><p id="svPrompt">Add a word to start. Thêm từ để bắt đầu.</p><div hidden="" id="svAnswer"></div><div class="controls"><button class="btn line" onclick="svReveal()">Show meaning · Hiện nghĩa</button><button class="btn line" onclick="svRate(1)">Again · Chưa nhớ</button><button class="btn" onclick="svRate(3)">Got it · Đã nhớ</button></div></div><div class="small" id="svList"></div>
-</div>
-<div class="panel"><h2>🎙️ Pronunciation Coach · Luyện phát âm</h2><p class="small muted">Hear the model, record your own voice directly, then listen back and compare. Nghe mẫu, tự ghi âm bằng micro và nghe lại giọng của mình.</p>
-<label class="small" for="pcTarget"><b>Practice sentence · Câu luyện tập</b></label><textarea id="pcTarget" rows="3">I'd like to book an appointment for Friday afternoon.</textarea><div class="controls"><button class="btn line" onclick="pcListen()" type="button">🔊 Listen · Nghe mẫu</button><button class="btn" id="pcRecordBtn" onclick="pcRecordStart()" type="button">🎙️ Record · Ghi âm</button><button class="btn line" disabled="" id="pcStopBtn" onclick="pcRecordStop()" type="button">⏹ Stop · Dừng</button></div><p aria-live="polite" class="small muted" id="pcStatus">Ready · Sẵn sàng luyện tập</p><div class="panel" style="background:var(--surface);margin-top:10px"><b>🎧 Your recording · Bản ghi của bạn</b><p class="small muted">Bản ghi chỉ nằm trên thiết bị trong phiên này; không tải lên máy chủ.</p><audio controls="" id="pcPlayback" style="width:100%;display:none"></audio><div class="controls"><button class="btn line" disabled="" id="pcPlayModelThenYours" onclick="pcCompareListening()" type="button">🔁 Listen &amp; compare · Nghe lần lượt</button><button class="btn line" disabled="" id="pcDeleteBtn" onclick="pcDeleteRecording()" type="button">🗑️ Delete · Xóa bản ghi</button></div></div><div class="panel" id="pcAcoustic" style="background:var(--surface);margin-top:10px"><b>📊 Free voice analysis · Phân tích giọng nói miễn phí</b><p class="small muted">Sau khi ghi âm, EnglishGo phân tích ngay trên thiết bị: thời lượng, âm lượng và khoảng ngắt. Đây là chỉ số luyện tập, không phải điểm chuẩn phát âm âm vị.</p></div><div class="panel" id="pcResult" style="background:var(--surface)"><b>Self-check · Tự đánh giá</b><p class="small">Nghe lại và kiểm tra: âm cuối, trọng âm từ, nhịp câu và độ rõ. Bản ghi trực tiếp chưa tự chấm chính xác âm vị.</p></div><textarea id="pcManualTranscript" placeholder="Optional: type what you said to compare the words… · Có thể nhập lời đã nói để so khớp từ" rows="2" style="margin-top:10px"></textarea><button class="btn line" onclick="pcCompare()" type="button">Compare words · So khớp từ</button>
 </div>
 <div class="panel"><h2>💬 Conversation Simulator · Mô phỏng hội thoại</h2><p class="small muted">Answer in your own words. Trả lời bằng câu của mày.</p>
 <select id="simScenario" onchange="simLoad()"><option value="0">Nail salon · New design</option><option value="1">Work · Explain a delay</option><option value="2">Daily life · Return an item</option><option value="3">Customer service · Complaint</option></select>
@@ -973,10 +970,7 @@ html { background: #142342; }
  </div>
 
 </section>
-<section class="page" id="pronunciation">
- <div class="page-header"><div><p class="eyebrow">SOUNDS · STRESS · CLARITY</p><h1>🗣️ Pronunciation Lab · Phòng luyện phát âm</h1><p>Luyện những cặp âm dễ nhầm, âm cuối và trọng âm. Nghe mẫu rồi tự nói để kiểm tra bằng nhận diện giọng nói nếu trình duyệt hỗ trợ.</p></div></div>
- <div class="card"><label for="pronPair">Chọn bài luyện</label><select id="pronPair" onchange="pronLoad()"><option value="0">/ɪ/ vs /iː/ · ship / sheep</option><option value="1">/θ/ vs /s/ · think / sink</option><option value="2">/ʃ/ vs /s/ · she / see</option><option value="3">Âm cuối · cap / cab</option><option value="4">Trọng âm · PHOtograph / phoTOgrapher</option></select><div id="pronLesson" class="card soft"></div><button class="btn primary" onclick="pronSpeak()">🔊 Nghe mẫu</button> <button class="btn line" onclick="pronTry()">🎙️ Thử phát âm</button><div id="pronFeedback" aria-live="polite"></div></div>
-</section>
+
 
 <section class="page" id="dictation">
  <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
@@ -3285,71 +3279,6 @@ document.addEventListener("DOMContentLoaded",function(){
 
 
 <script id="englishgo-practice-expansion-v2">
-/* Pronunciation Lab: define all lesson data explicitly and populate the selector reliably. */
-const egPronExtra=[
- {title:"/æ/ vs /ʌ/",words:["cat","cut","bad","bud"],tip:"/æ/: mở miệng rộng hơn; /ʌ/: âm ngắn, thả lỏng ở giữa miệng.",vi:"Luyện cat/cut và bad/bud."},
- {title:"/v/ vs /w/",words:["vest","west","vine","wine"],tip:"/v/: răng trên chạm môi dưới; /w/: môi tròn, không chạm răng.",vi:"Phân biệt vest/west và vine/wine."},
- {title:"/r/ vs /l/",words:["right","light","road","load"],tip:"/r/: đầu lưỡi không chạm vòm; /l/: đầu lưỡi chạm lợi trên.",vi:"Luyện vị trí lưỡi."},
- {title:"/t/ vs /d/ cuối từ",words:["seat","seed","bet","bed"],tip:"/t/ vô thanh, /d/ hữu thanh. Giữ âm cuối rõ, không thêm nguyên âm.",vi:"Đọc rõ phụ âm cuối."},
- {title:"/s/ vs /z/ cuối từ",words:["rice","rise","ice","eyes"],tip:"/s/ không rung dây thanh; /z/ có rung. Đặt tay lên cổ để cảm nhận.",vi:"Luyện âm cuối hữu thanh và vô thanh."},
- {title:"Đuôi -ed",words:["worked","played","wanted","needed"],tip:"-ed đọc /t/ trong worked, /d/ trong played, /ɪd/ trong wanted và needed.",vi:"Ba cách phát âm đuôi -ed."},
- {title:"Đuôi số nhiều -s",words:["cats","dogs","buses","watches"],tip:"-s đọc /s/, /z/ hoặc /ɪz/ tùy âm cuối.",vi:"Phân biệt cats, dogs, buses."},
- {title:"Trọng âm câu",words:["I wanted the BLUE one.","I WANTED the blue one.","I wanted the blue ONE."],tip:"Nhấn từ khác nhau sẽ làm thay đổi thông tin người nói muốn nhấn mạnh.",vi:"Luyện ngữ điệu và trọng âm câu."},
- {title:"/æ/ trong câu",words:["That black cat sat on the bag.","A happy family"],tip:"Giữ âm /æ/ rõ, không đọc thành /e/ hoặc /ʌ/.",vi:"Luyện âm /æ/ trong ngữ cảnh."},
- {title:"Nối âm phụ âm - nguyên âm",words:["turn it on","pick it up","take it easy"],tip:"Khi một từ kết thúc bằng phụ âm và từ sau bắt đầu bằng nguyên âm, chúng thường nối liền khi nói.",vi:"Luyện nối âm tự nhiên."},
- {title:"Âm schwa /ə/",words:["about","teacher","support","banana"],tip:"Schwa là âm yếu, ngắn, thường xuất hiện ở âm tiết không nhấn.",vi:"Luyện âm trung tính trong tiếng Anh."},
- {title:"Phụ âm /h/",words:["house","ahead","behind","help"],tip:"Thổi hơi nhẹ ở /h/, không bỏ âm đầu trong house và help.",vi:"Luyện âm /h/."}
-];
-function egLoadPronunciation(){
- const select=document.getElementById("pronPair"); if(!select)return;
- const base=typeof pronData==="function"?pronData():[];
- const all=base.concat(egPronExtra);
- select.innerHTML=all.map((d,i)=>'<option value="'+i+'">'+(d.title||("Lesson "+(i+1)))+'</option>').join("");
- window.egPronAll=all;
- select.onchange=egRenderPronunciation;
- egRenderPronunciation();
-}
-const egPronIPA=[
- ["/ʃɪp/","/ʃiːp/","/lɪv/","/liːv/"],
- ["/θɪŋk/","/sɪŋk/","/θriː/","/siː/"],
- ["/ʃiː/","/siː/","/ʃɑp/","/sɑp/"],
- ["/kæp/","/kæb/","/roʊp/","/roʊb/"],
- ["/ˈfoʊtəˌɡræf/","/fəˈtɑɡrəfər/","/ˌfoʊtəˈɡræfɪk/"],
- ["/kæt/","/kʌt/","/bæd/","/bʌd/"],
- ["/vɛst/","/wɛst/","/vaɪn/","/waɪn/"],
- ["/raɪt/","/laɪt/","/roʊd/","/loʊd/"],
- ["/siːt/","/siːd/","/bɛt/","/bɛd/"],
- ["/raɪs/","/raɪz/","/aɪs/","/aɪz/"],
- ["/wɝkt/","/pleɪd/","/ˈwɑntɪd/","/ˈniːdɪd/"],
- ["/kæts/","/dɔɡz/","/ˈbʌsɪz/","/ˈwɑtʃɪz/"],
- ["/aɪ ˈwɑntɪd ðə bluː wʌn/","/aɪ ˈwɑntɪd ðə bluː wʌn/","/aɪ ˈwɑntɪd ðə bluː wʌn/"],
- ["/ðæt blæk kæt sæt ɑn ðə bæɡ/","/ə ˈhæpi ˈfæməli/"],
- ["/tɝn ɪt ɑn/","/pɪk ɪt ʌp/","/teɪk ɪt ˈiːzi/"],
- ["/əˈbaʊt/","/ˈtiːtʃɚ/","/səˈpɔrt/","/bəˈnænə/"],
- ["/haʊs/","/əˈhɛd/","/bɪˈhaɪnd/","/hɛlp/"]
-];
-function egEscapePronText(value){
- return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-}
-function egRenderPronunciation(){
- const select=document.getElementById("pronPair"),host=document.getElementById("pronLesson");
- if(!select||!host)return;
- const index=Number(select.value)||0;
- const d=(window.egPronAll||[])[index];if(!d)return;
- const ipa=egPronIPA[index]||[];
- const wordCards=d.words.map((word,i)=>{
-  const safeWord=egEscapePronText(word);
-  const safeIPA=egEscapePronText(ipa[i]||"IPA đang được cập nhật");
-  return "<div class='eg-pron-word'><b>"+safeWord+"</b><span>"+safeIPA+"</span></div>";
- }).join("");
- host.innerHTML="<b>"+egEscapePronText(d.title)+"</b><div class='eg-pron-words'>"+wordCards+"</div><p>"+egEscapePronText(d.tip)+"</p><small>"+egEscapePronText(d.vi)+"</small><div class='eg-pron-ipa-note'>IPA tham khảo theo giọng Anh-Mỹ (General American).</div>";
- const feedback=document.getElementById("pronFeedback");if(feedback)feedback.textContent="";
-}
-function egSpeakPronunciation(){
- const d=(window.egPronAll||[])[Number(document.getElementById("pronPair")?.value)||0];if(!d)return;
- const u=new SpeechSynthesisUtterance(d.words.join(". "));u.lang="en-US";u.rate=.78;speechSynthesis.cancel();speechSynthesis.speak(u);
-}
-
 /* Monthly assessment: 20-question rotating diagnostic covering grammar and vocabulary. */
 const egMonthlyQuestions=[
  ["She ___ to work by bus every day.",["go","goes","going"],1,"Present simple with she."],
@@ -3386,7 +3315,7 @@ function egSubmitMonthly(){
  try{localStorage.setItem("eg3-monthly-assessment",JSON.stringify({date:new Date().toISOString(),score,total:egMonthlyQuestions.length}))}catch(e){}
 }
 document.addEventListener("DOMContentLoaded",function(){
- egLoadPronunciation();
+
  const writing=document.getElementById("writing");
  const placement=document.getElementById("placement");
  if(placement&&!document.getElementById("egMonthlyAssessment")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>📊 Monthly Assessment · Kiểm tra định kỳ</h2><p>20 câu hỏi ngữ pháp và từ vựng. Kết quả có giải thích từng câu.</p><div id="egMonthlyAssessment"></div>';placement.appendChild(card);egRenderMonthly()}
@@ -3678,9 +3607,6 @@ function render(){const d=dialogues[current];$("egDialogueTitle").textContent=d.
   $("egRecordShadow").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("egDialogueFeedback").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. M vẫn có thể nghe và shadowing theo transcript.";return}recognition=new SR();recognition.lang="en-US";recognition.interimResults=false;recognition.onresult=e=>{$("egDialogueFeedback").textContent="Bạn nói: "+e.results[0][0].transcript+" · Hãy so sánh với câu mẫu và thử lại để cải thiện nhịp điệu, âm cuối.";};recognition.onerror=()=>{$("egDialogueFeedback").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone rồi thử lại."};recognition.start()};
   loadOptions();
  }
- /* Extra pronunciation interaction: speak and practice selected lesson words. */
- const pron=$("pronunciation");
- if(pron&&!$("egPronunciationDrill")){const p=document.createElement("div");p.className="panel";p.id="egPronunciationDrill";p.innerHTML='<h2>🗣️ Pronunciation Drill · Luyện phát âm theo cụm</h2><p>Chọn một nhóm từ, nghe mẫu và tự đọc lại. Tập trung vào một lỗi mỗi lượt.</p><div id="egPronDrillBody"></div>';pron.appendChild(p);const data=[["ship · sheep","ship, sheep, ship, sheep","Phân biệt /ɪ/ ngắn và /iː/ dài.","/ʃɪp/ · /ʃiːp/"],["live · leave","live, leave, live, leave","Giữ âm /ɪ/ ngắn trong live và /iː/ dài trong leave.","/lɪv/ · /liːv/"],["think · sink","think, sink, think, sink","Đặt đầu lưỡi nhẹ giữa hai hàm răng khi phát âm /θ/.","/θɪŋk/ · /sɪŋk/"],["three · tree","three, tree, three, tree","/θ/ có luồng hơi; /t/ là âm bật.","/θriː/ · /triː/"],["worked · wanted","worked, wanted, worked, wanted","Chú ý -ed lần lượt /t/ và /ɪd/.","/wɝkt/ · /ˈwɑntɪd/"],["comfortable","comfortable, comfortable, comfortable","Trọng âm ở âm tiết đầu; các âm tiết không nhấn thường yếu và ngắn hơn.","/ˈkʌmftɚbəl/"],["Would you","Would you like to join us?","Luyện nối âm trong lời nói tự nhiên.","/wʊdʒuː laɪk tə dʒɔɪn ʌs/"]];let i=0;function draw(){const d=data[i];$("egPronDrillBody").innerHTML='<b>'+d[0]+'</b><p>'+d[2]+'</p><div class="eg-pron-drill-ipa">'+d[3]+'</div><p class="muted" style="font-size:13px">Dấu ː trong IPA cho biết nguyên âm dài. Nghe từng từ để cảm nhận độ dài, không kéo dài phụ âm cuối.</p><button class="btn primary" id="egPronHear">🔊 Nghe mẫu chậm</button> <button class="btn" id="egPronMic">🎙️ Thử đọc</button> <button class="btn line" id="egPronNext">Nhóm tiếp →</button><p id="egPronFb" aria-live="polite"></p>'; $("egPronHear").onclick=()=>{const synth=window.speechSynthesis;if(!synth||!window.SpeechSynthesisUtterance)return;synth.cancel();synth.resume();const items=i===6?[d[1]]:d[1].split(/,\s*/).map(x=>x.trim()).filter(Boolean);let cursor=0,failed=false;const voices=synth.getVoices();const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;$("egPronFb").textContent="Đang đọc chậm từng từ, nghỉ giữa các lượt để nghe rõ nguyên âm ngắn và dài…";function next(){if(failed)return;if(cursor>=items.length){$("egPronFb").textContent="Đã đọc xong từng từ. Chú ý dấu ː: đó là nguyên âm dài.";return}const word=items[cursor++];const u=new SpeechSynthesisUtterance(word);u.lang=voice?.lang||"en-US";if(voice)u.voice=voice;u.rate=.62;u.pitch=1;u.volume=1;u.onend=()=>window.setTimeout(next,900);u.onerror=e=>{failed=true;$("egPronFb").textContent="Giọng đọc bị gián đoạn ("+(e.error||"unknown")+"). Hãy bấm nghe lại."};synth.speak(u)}next()};$("egPronNext").onclick=()=>{i=(i+1)%data.length;draw()};$("egPronMic").onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){$("egPronFb").textContent="Trình duyệt không hỗ trợ nhận diện giọng nói.";return}const rec=new SR();rec.lang="en-US";rec.onresult=e=>$("egPronFb").textContent="Bạn đọc: "+e.results[0][0].transcript+" · Nghe lại và so sánh với mẫu nhé.";rec.start()}}draw()}
  document.addEventListener("DOMContentLoaded",function(){});
 })();
 </script>
