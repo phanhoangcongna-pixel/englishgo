@@ -2991,6 +2991,23 @@ phrasalData.push(
 })();
 </script>
 
+<script id="englishgo-grammar-quiz-arrow-keys">
+/* Right arrow advances the grammar quiz only after an answer has been checked. */
+document.addEventListener("keydown", function(event) {
+  if (event.key !== "ArrowRight" || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  const target = event.target;
+  if (target && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
+  const page = document.getElementById("grammar");
+  const next = document.getElementById("grammarQuizNext");
+  if (!page || !page.classList.contains("active") || !next || next.disabled) return;
+  if (typeof grammarQuizAnswered !== "undefined" && grammarQuizAnswered) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    nextGrammarQuiz();
+  }
+});
+</script>
+
 <script id="englishgo-page-navigation-stability">
 /* Single reliable page switcher and restore path for all learning sections. */
 (function () {
