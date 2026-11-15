@@ -865,7 +865,7 @@ html { background: #142342; }
   </div>
   <div class="controls">
    <button class="btn primary" type="button" onclick="egStorySpeak()">🔊 Nghe truyện</button>
-   <button class="btn line" type="button" onclick="egStoryStop()">■ Dừng</button>
+   <button class="btn line" id="storyStopBtn" type="button" onclick="egStoryStop()" style="display:none">■ Dừng</button>
    <button class="btn soft" id="storyTranslationBtn" type="button" onclick="egStoryToggleTranslation()">Hiện bản dịch · Show translation</button>
   </div>
   <div id="storyContent" aria-live="polite"></div>
@@ -3585,9 +3585,9 @@ const egShortStories = [
 ];
 let egStoryTranslationVisible=false;
 function egStoryCurrent(){const level=document.getElementById("storyLevel")?.value||"A1";const rows=egShortStories.filter(x=>x.level===level);const select=document.getElementById("storySelect");return rows[Math.max(0,Number(select?.value||0))]||rows[0]||egShortStories[0]}
-function egStoryLevelChanged(){const level=document.getElementById("storyLevel").value;const rows=egShortStories.filter(x=>x.level===level);const select=document.getElementById("storySelect");select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");egStoryTranslationVisible=false;egStoryRender()}
+function egStoryLevelChanged(){egStoryStop();const level=document.getElementById("storyLevel").value;const rows=egShortStories.filter(x=>x.level===level);const select=document.getElementById("storySelect");select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");egStoryTranslationVisible=false;egStoryRender()}
 function egStoryRender(){
- const story=egStoryCurrent();if(!story)return;
+ egStoryStop();const story=egStoryCurrent();if(!story)return;
  document.getElementById("storyContent").innerHTML='<h2>'+story.title+'</h2><p class="small muted">Level '+story.level+' · '+story.paragraphs.length+' đoạn văn</p>'+story.paragraphs.map((p,i)=>'<div style="padding:12px 0;border-bottom:1px solid var(--line)"><p style="line-height:1.85;margin:0 0 8px"><b>'+(i+1)+'.</b> '+p[0]+'</p><p style="display:'+(egStoryTranslationVisible?'block':'none')+';color:var(--muted);line-height:1.8;margin:0">'+p[1]+'</p></div>').join("");
  document.getElementById("storyTranslationBtn").textContent=egStoryTranslationVisible?"Ẩn bản dịch · Hide translation":"Hiện bản dịch · Show translation";
  document.getElementById("storyVocab").innerHTML='<h3>Key Vocabulary · Từ vựng quan trọng</h3><div class="controls" style="display:flex;flex-wrap:wrap;gap:8px">'+story.vocab.map(v=>'<span class="badge" style="padding:7px 10px">'+v[0]+' · '+v[1]+'</span>').join("")+'</div>';
@@ -3595,8 +3595,22 @@ function egStoryRender(){
  document.getElementById("storyResult").textContent="";
 }
 function egStoryToggleTranslation(){egStoryTranslationVisible=!egStoryTranslationVisible;egStoryRender()}
-function egStorySpeak(){const story=egStoryCurrent();if(!story)return;if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("storyResult").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}const utterance=new SpeechSynthesisUtterance(story.paragraphs.map(p=>p[0]).join(" "));utterance.lang="en-US";utterance.rate=0.88;utterance.volume=1;const voices=speechSynthesis.getVoices();utterance.voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.speak(utterance)}
-function egStoryStop(){if("speechSynthesis" in window)speechSynthesis.cancel()}
+let egStoryUtterance=null;
+function egStorySetSpeaking(active){const stop=document.getElementById("storyStopBtn");if(stop)stop.style.display=active?"inline-flex":"none"}
+function egStorySpeak(){
+ const story=egStoryCurrent();if(!story)return;
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("storyResult").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}
+ egStoryStop();
+ const utterance=new SpeechSynthesisUtterance(story.paragraphs.map(p=>p[0]).join(" "));
+ egStoryUtterance=utterance;utterance.lang="en-US";utterance.rate=0.88;utterance.volume=1;
+ const voices=speechSynthesis.getVoices();
+ utterance.voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
+ utterance.onstart=()=>{if(egStoryUtterance===utterance)egStorySetSpeaking(true)};
+ utterance.onend=()=>{if(egStoryUtterance===utterance){egStoryUtterance=null;egStorySetSpeaking(false)}};
+ utterance.onerror=()=>{if(egStoryUtterance===utterance){egStoryUtterance=null;egStorySetSpeaking(false)}};
+ speechSynthesis.resume();speechSynthesis.speak(utterance);
+}
+function egStoryStop(){if("speechSynthesis" in window)speechSynthesis.cancel();egStoryUtterance=null;egStorySetSpeaking(false)}
 function egStoryCheck(){const story=egStoryCurrent();if(!story)return;let score=0,unanswered=0;const details=[];story.questions.forEach((q,i)=>{const chosen=document.querySelector('input[name="egStoryQ'+i+'"]:checked');if(!chosen){unanswered++;details.push((i+1)+'. Chưa trả lời · Đáp án: '+q[1][q[2]])}else if(Number(chosen.value)===q[2]){score++;details.push((i+1)+'. ✓ Chính xác')}else details.push((i+1)+'. ✗ Đáp án đúng: '+q[1][q[2]])});const result=document.getElementById("storyResult");if(unanswered){result.textContent="Bạn còn "+unanswered+" câu chưa trả lời. Hãy hoàn thành cả 5 câu nhé.";return}result.innerHTML='<h3>Kết quả: '+score+'/'+story.questions.length+' câu đúng</h3><p>'+(score===5?'Xuất sắc! 🎉':score>=3?'Tốt lắm! Hãy xem lại câu còn sai.':'Hãy đọc lại truyện và thử lần nữa nhé.')+'</p><p>'+details.join('<br>')+'</p>'}
 function egStoryReset(){document.querySelectorAll('#storyQuestions input[type="radio"]').forEach(x=>x.checked=false);document.getElementById("storyResult").textContent=""}
 document.addEventListener("DOMContentLoaded",()=>egStoryLevelChanged());
