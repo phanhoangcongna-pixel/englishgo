@@ -1767,7 +1767,7 @@ function rlDailyChoose(i){
 function rlDailyCheck(){
  if(rlDailyChecked)return;
  if(rlDailySelected<0){document.getElementById("rlDailyFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn đáp án trước.</div>';return}
- const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex],norm=v=>v.toLowerCase().replace(/[.,!?']/g,"").replace(/\\s+/g," ").trim();
+ const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex],norm=v=>v.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ").trim();
  const chosen=q[3][rlDailySelected],correct=norm(chosen)===norm(q[4]);
  rlDailyStatsData=rlDailyStats();const day=rlDailyDate();rlDailyStatsData.days=rlDailyStatsData.days||{};rlDailyStatsData.days[day]=rlDailyStatsData.days[day]||{correct:0,attempts:0,wrong:0};const dayStats=rlDailyStatsData.days[day];dayStats.attempts=(dayStats.attempts||0)+1;if(correct){rlDailyCorrect++;dayStats.correct=(dayStats.correct||0)+1}else{dayStats.wrong=(dayStats.wrong||0)+1}rlDailySaveStats();rlSaveMistake(x.topicIndex,x.turnIndex,q,chosen,correct);if(typeof egRoadmapTrack==="function"){egRoadmapTrack("dailyAnswer");egRoadmapTrack("accuracy",{value:Math.round((dayStats.correct||0)/(dayStats.attempts||1)*100)})}
  document.querySelectorAll("#rlDailyChoices button").forEach((b,i)=>{b.disabled=true;if(norm(q[3][i])===norm(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlDailySelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
