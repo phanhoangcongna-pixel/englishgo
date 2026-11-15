@@ -384,6 +384,74 @@ body > header #mainNav > .nav-group > summary {
 })();
 </script>
 
+
+<style id="englishgo-horizontal-desktop-header">
+/* Desktop: logo on the far left, all navigation items on one centered line. */
+@media (min-width: 901px) {
+  body > header .nav {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding: 10px 14px !important;
+  }
+  body > header .brand-logo {
+    order: 0 !important;
+    flex: 0 0 148px !important;
+    width: 148px !important;
+    height: 50px !important;
+    margin: 0 5px 0 0 !important;
+  }
+  body > header #mainNav {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 1px !important;
+    min-width: 0 !important;
+    width: auto !important;
+    overflow: visible !important;
+  }
+  body > header #mainNav > button,
+  body > header #mainNav > .nav-group > summary {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    font-size: 11px !important;
+    padding: 8px 6px !important;
+    white-space: nowrap !important;
+  }
+  body > header #cloudLoginBtn {
+    order: 2 !important;
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: 170px !important;
+    font-size: 11px !important;
+    padding: 8px 9px !important;
+  }
+  body > header .nav > .lang {
+    order: 3 !important;
+    flex: 0 0 auto !important;
+    font-size: 12px !important;
+    padding: 8px 9px !important;
+  }
+}
+/* Medium screens: retain the logo at the left, put the nav on its own tidy row. */
+@media (min-width: 701px) and (max-width: 900px) {
+  body > header .nav {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    grid-template-areas: "logo login lang" "links links links" !important;
+    align-items: center !important;
+    gap: 7px 10px !important;
+  }
+  body > header .brand-logo { width: 155px !important; height: 48px !important; }
+  body > header #mainNav { flex-wrap: wrap !important; }
+}
+</style>
+
 </head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
