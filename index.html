@@ -776,7 +776,7 @@ html { background: #142342; }
 <div id="trFeedback"></div>
 <div class="controls" style="justify-content:space-between;margin-top:16px">
 <span class="small muted" id="trScore">Đã luyện: 0 · Tự tin: 0</span>
-<button class="btn" onclick="nextTranslation()">Câu tiếp theo →</button>
+<div class="controls"><button class="btn line" onclick="prevTranslation()">← Câu trước</button><button class="btn" onclick="nextTranslation()">Câu tiếp theo →</button></div>
 </div>
 </div>
 <div class="panel" style="margin-top:16px;border:2px solid var(--blue)">
@@ -2328,6 +2328,7 @@ function showTranslationAnswer(){
  document.getElementById("trFeedback").innerHTML='<div class="feedback"><b>Đáp án mẫu:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'</div>';
  document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Tự tin: "+trConfident;
 }
+function prevTranslation(){trIndex=Math.max(0,trIndex-1);renderTranslation();}
 function nextTranslation(){trIndex++;if(trIndex>=trPool.length){trPool=translationDeck.filter(x=>document.getElementById("trLevel").value==="all"||x.level===document.getElementById("trLevel").value).sort(()=>Math.random()-.5);trIndex=0;}renderTranslation();}
 function sayTranslationPrompt(){if(trCurrent)say(trCurrent.en);}
 
@@ -2445,12 +2446,18 @@ function speakTopicTranslation(){if(topicPool.length)say(topicPool[topicIndex].e
 
 document.addEventListener("keydown",function(e){
  const el=e.target;
- if(el && ["trAnswer","topicAnswer","thousandAnswer"].includes(el.id)){
-  if(e.key==="Enter" && !e.shiftKey){
+ if(!el)return;
+ if(["trAnswer","topicAnswer","thousandAnswer"].includes(el.id)){
+  if(e.key==="Enter"&&!e.shiftKey){
    e.preventDefault();
    if(el.id==="trAnswer")checkTranslation();
    else if(el.id==="topicAnswer")checkTopicTranslation();
    else checkThousandTranslation();
+   return;
+  }
+  if(el.id==="trAnswer"&&e.altKey&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){
+   e.preventDefault();
+   if(e.key==="ArrowLeft")prevTranslation();else nextTranslation();
    return;
   }
   if(e.key==="ArrowRight"){
@@ -3449,7 +3456,7 @@ function egStartSpeaking(){
   }
   draw()
  }
- Object.entries(lessons).forEach(([id,d])=>{addPanel(id,'<h2>'+safe(d.title)+'</h2><p>'+safe(d.desc)+'</p><div id="egBank_'+id+'"></div>');mountBank(id,d)});
+ Object.entries(lessons).forEach(([id,d])=>{if(id==="translation")return;addPanel(id,'<h2>'+safe(d.title)+'</h2><p>'+safe(d.desc)+'</p><div id="egBank_'+id+'"></div>');mountBank(id,d)});
  
  /* Dialogue Shadowing: a dedicated mini-section inside Shadowing. */
  const shadow=$("shadowing");
