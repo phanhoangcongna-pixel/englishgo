@@ -2461,11 +2461,22 @@ function renderReflex1500(){
  const box=document.getElementById("reflex1500Hints");box.style.display="none";box.innerHTML="";
  const btn=document.getElementById("reflex1500HintToggle");btn.textContent="💡 Gợi ý từ";btn.setAttribute("aria-expanded","false");
 }
+function matchReflex1500Answer(answer,expected,dir){
+ const a=normalizeTranslation(answer),e=normalizeTranslation(expected);
+ if(a===e)return true;
+ // Treat common opening greetings as equivalent; they do not change the sentence meaning.
+ if(dir==="vi-en"){
+  const greeting=/^(hi|hello|hey)(?: there)?\\b\\s*/;
+  const stripGreeting=x=>x.replace(greeting,"").trim();
+  if(stripGreeting(a)&&stripGreeting(a)===stripGreeting(e))return true;
+ }
+ return false;
+}
 function checkReflex1500(){
  if(reflex1500Answered||!reflex1500Pool.length)return;
  const item=reflex1500Pool[reflex1500Index],dir=document.getElementById("reflex1500Direction").value;
  const expected=dir==="vi-en"?item.en:item.vi,answer=document.getElementById("reflex1500Answer").value.trim();
- const matched=!!answer&&normalizeTranslation(answer)===normalizeTranslation(expected);
+ const matched=!!answer&&matchReflex1500Answer(answer,expected,dir);
  reflex1500Answered=true;
  document.getElementById("reflex1500Feedback").innerHTML=matched?
  '<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>':
