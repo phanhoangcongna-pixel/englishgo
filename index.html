@@ -487,7 +487,7 @@ html { background: #142342; }
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="speaking">🗣️ Speaking </button><button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="pronunciation">🗣️ Pronunciation Lab </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
+<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="pronunciation">🗣️ Pronunciation Lab </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="practice">📅 Daily Practice </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
@@ -586,7 +586,7 @@ html { background: #142342; }
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
 <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
 
-<button class="home-tool" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Speaking · Luyện nói</h3><p>Practice conversation and pronunciation · Luyện giao tiếp và phát âm</p></button>
+
 
 <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
 <button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>268 sentences + topics + 1,000 phrases · 268 câu + chủ đề + 1.000 câu</p></button>
@@ -640,7 +640,7 @@ html { background: #142342; }
 </div>
 </section>
 
-<section class="page" id="speaking"><h1 class="title">Speaking · Luyện nói</h1><p class="intro">Practise 20 real-life situations with English and Vietnamese. Luyện 20 tình huống thực tế song ngữ.</p><div class="panel"><select id="scenarioSelect" onchange="renderScenario()"></select><div id="scenarioLines"></div><div class="controls"><button class="btn" onclick="playScenario()">🔊 Listen to dialogue · Nghe hội thoại</button><button class="btn soft" onclick="nextScenario()">Next dialogue · Hội thoại tiếp →</button></div></div><div class="panel"><h2>Pronunciation practice · Luyện phát âm</h2><p><b>Could you help me, please?</b><br/><span class="muted">Bạn có thể giúp tôi được không?</span></p><button class="btn" onclick="say('Could you help me, please?')">🔊 Listen · Nghe mẫu</button><p class="small muted">Speech recognition depends on browser support and HTTPS. Nhận diện giọng nói tùy trình duyệt và cần HTTPS.</p><button class="btn line" onclick="recognise()">🎙️ Try speaking · Thử nói</button><div id="speechFeedback"></div></div></section>
+
 <section class="page" id="realconversation">
 <h1 class="title">Real-Life English · Giao tiếp thực tế</h1>
 <p class="intro">Practise everyday conversations, choose a reply or write your own. Luyện hội thoại đời thường, chọn câu trả lời hoặc tự nhập câu.</p>
@@ -898,10 +898,10 @@ html { background: #142342; }
 </section>
 <section class="page" id="practice">
 <h1 class="title">Daily practice · Luyện tập mỗi ngày</h1>
-<p class="intro">A short daily routine for speaking and writing. Mỗi ngày một bài luyện nói và viết.</p>
+<p class="intro">A short daily writing routine. Mỗi ngày một bài luyện viết ngắn.</p>
 <div class="grid">
 </div>
-<div class="panel"><div class="icon">🗣️</div><h2>Speaking · Nói</h2><p>Say this sentence aloud. Nhấn micro và đọc câu sau.</p><div class="example"><b id="dailySpeakSentence">I usually have breakfast at seven.</b><em>Tôi thường ăn sáng lúc bảy giờ.</em></div><button class="btn" onclick="say(document.getElementById('dailySpeakSentence').textContent)">🔊 Listen · Nghe mẫu</button> <button class="btn line" onclick="dailyRecognise()">🎙️ Speak · Nói</button><p class="muted" id="dailySpeakResult"></p></div>
+
 <div class="panel"><div class="icon">✍️</div><h2>Writing · Viết</h2><p>Write three sentences about your day. Viết ba câu về ngày hôm nay.</p><textarea id="dailyWriting" placeholder="Today, I..." rows="4"></textarea><button class="btn" onclick="saveDailyWriting()">Save writing · Lưu bài viết</button><p class="muted" id="dailyWritingStatus"></p></div>
 </div>
 </section>
@@ -1230,10 +1230,6 @@ function markWord(){if(!known.includes(wi)){known.push(wi);save("known",known);a
 function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("grammar")}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
 function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0){award("listen",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("listen")}}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
-let si=0;function renderScenario(){let sel=document.getElementById("scenarioSelect");if(!sel.options.length)DATA.scenarios.forEach((s,i)=>sel.add(new Option(s[0]+" · "+s[1],i)));si=Number(sel.value||si);let s=DATA.scenarios[si];document.getElementById("scenarioLines").innerHTML=s[2].map((l,i)=>`<div class="conversation"><div class="line-en">${i%2===0?"A":"B"}: ${escapeHtml(l[0])}</div><div class="line-vi">${escapeHtml(l[1])}</div><button type="button" class="btn line" style="margin-top:6px;padding:6px 9px;font-size:12px" data-speak="${escapeHtml(l[0])}">🔊 Listen</button></div>`).join("")}
-function nextScenario(){si=(si+1)%DATA.scenarios.length;document.getElementById("scenarioSelect").value=si;renderScenario();award("scenario-"+si,5)}
-function playScenario(){say(DATA.scenarios[si][2].map(x=>x[0]).join(". "))}
-function recognise(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("speechFeedback").textContent="Speech recognition is not supported here. Try Chrome or Edge on HTTPS. Trình duyệt chưa hỗ trợ nhận diện giọng nói.";return}let r=new SR();r.lang="en-US";r.onresult=e=>document.getElementById("speechFeedback").textContent="You said: "+e.results[0][0].transcript;r.onerror=()=>document.getElementById("speechFeedback").textContent="Please check microphone permission. Kiểm tra quyền micro.";r.start()}
 function saveWriting(){localStorage.setItem("eg2-writing",document.getElementById("writingText").value);document.getElementById("writingStatus").textContent="Saved · Đã lưu";if(document.getElementById("writingText").value.trim().length>20)award("writing",10)}
 document.getElementById("writingText").value=localStorage.getItem("eg2-writing")||"";
 const quiz=[["She ___ to work every day.","Cô ấy đi làm mỗi ngày.",["go","goes","going"],1],["I ___ a film yesterday.","Hôm qua tôi đã xem phim.",["watch","watched","watches"],1],["There ___ two books on the table.","Có hai quyển sách trên bàn.",["is","are","am"],1],["I'm interested ___ music.","Tôi thích âm nhạc.",["on","at","in"],2],["We are going to ___ dinner.","Chúng tôi dự định ăn tối.",["have","has","having"],0]];
@@ -1270,7 +1266,6 @@ function flashSave(){let a=EG3.get("difficult",[]),w=DATA.vocab[flashIndex].w;if
 function flashKnown(){let i=DATA.vocab.findIndex(x=>x.w===DATA.vocab[flashIndex].w);if(!known.includes(i)){known.push(i);save("known",known);award("flash-"+i,5)}flashNext();updateStats()}
 function renderSavedWords(){let a=EG3.get("difficult",[]);document.getElementById("savedWords").innerHTML=a.length?a.map(w=>`<div class="savedrow"><b>${w}</b><button onclick="say(${JSON.stringify(w)})">🔊 Listen</button><button onclick="removeDifficult(${JSON.stringify(w)})">Remove · Xóa</button></div>`).join(""):"<p class='muted'>No saved words yet. Chưa có từ nào được lưu.</p>"}
 function removeDifficult(w){EG3.set("difficult",EG3.get("difficult",[]).filter(x=>x!==w));renderSavedWords()}
-function dailyRecognise(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("dailySpeakResult").textContent="Speech recognition is not supported in this browser. Try Chrome or Edge. Trình duyệt chưa hỗ trợ.";return}let r=new SR();r.lang="en-US";r.onresult=e=>{let t=e.results[0][0].transcript;document.getElementById("dailySpeakResult").textContent="You said: "+t+" · Bạn đã nói";award("daily-speaking-"+new Date().toDateString(),10)};r.onerror=()=>document.getElementById("dailySpeakResult").textContent="Please allow microphone access. Hãy cấp quyền micro.";r.start()}
 function saveDailyWriting(){let v=document.getElementById("dailyWriting").value.trim();if(v.length<10){document.getElementById("dailyWritingStatus").textContent="Write a little more. Hãy viết thêm một chút.";return}EG3.set("dailyWriting",v);document.getElementById("dailyWritingStatus").textContent="Saved on this device · Đã lưu trên thiết bị";award("daily-writing-"+new Date().toDateString(),10)}
 function renderProgress(){document.getElementById("progressXP").textContent=(localStorage.getItem("eg2-xp")||"0")+" XP";document.getElementById("progressWords").textContent=known.length+"/"+DATA.vocab.length;document.getElementById("progressStreak").textContent=localStorage.getItem("eg2-streak")||"0";let acts=EG3.get("completed",[]);document.getElementById("progressAchievements").textContent=acts.length;document.getElementById("achievementList").innerHTML=acts.length?acts.map(x=>`<div class="savedrow">🏅 ${x}</div>`).join(""):"<p class='muted'>Complete a lesson to earn your first achievement. Hoàn thành bài học để nhận thành tích đầu tiên.</p>";}
 function exportProgress(){let keys=["eg2-xp","eg2-streak","eg2-last","eg2-known","eg2-writing"];let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));data.eg3={difficult:EG3.get("difficult",[]),completed:EG3.get("completed",[]),dailyWriting:EG3.get("dailyWriting","")};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="englishgo-progress-backup.json";a.click();URL.revokeObjectURL(a.href)}
@@ -3396,22 +3391,9 @@ document.addEventListener("DOMContentLoaded",function(){
  const writing=document.getElementById("writing");
  const placement=document.getElementById("placement");
  if(placement&&!document.getElementById("egMonthlyAssessment")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>📊 Monthly Assessment · Kiểm tra định kỳ</h2><p>20 câu hỏi ngữ pháp và từ vựng. Kết quả có giải thích từng câu.</p><div id="egMonthlyAssessment"></div>';placement.appendChild(card);egRenderMonthly()}
- const speaking=document.getElementById("speaking");
- if(speaking&&!document.getElementById("egSpeakingPartner")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🗣️ Speaking Partner · Luyện phản xạ</h2><p>Chọn chủ đề, nghe câu hỏi và trả lời bằng micro. Tính năng nhận diện giọng nói phụ thuộc trình duyệt.</p><select id="egSpeakTopic"><option value="daily">Daily life · Cuộc sống</option><option value="travel">Travel · Du lịch</option><option value="work">Work · Công việc</option><option value="opinions">Opinions · Quan điểm</option></select><p id="egSpeakPrompt" style="font-size:20px"></p><button class="btn" onclick="egSpeakPrompt()">🔊 Nghe câu hỏi</button><button class="btn primary" onclick="egStartSpeaking()">🎙️ Trả lời bằng micro</button><button class="btn line" onclick="egNextSpeaking()">Câu hỏi tiếp →</button><p id="egSpeakFeedback" aria-live="polite"></p>';card.id="egSpeakingPartner";speaking.appendChild(card);egNextSpeaking()}
+
 });
-const egSpeakingPrompts={
- daily:["What do you usually do after work?","Describe your typical morning.","What do you enjoy doing at weekends?","Tell me about a meal you can cook.","How do you keep in touch with friends?"],
- travel:["Where would you like to travel and why?","What do you usually pack for a trip?","Describe a memorable journey.","What would you do if you missed your train?","Do you prefer travelling alone or with others?"],
- work:["What skills are important in your job?","Describe a task you recently completed.","How do you organise a busy day?","What would make a good team?","What are your goals for next year?"],
- opinions:["Is it better to study in the morning or evening?","What makes a good friend?","Should people use phones less often?","Is learning languages useful for everyone?","What is one change that would improve your town?"]
-};
-let egSpeakIndex=0,egSpeakRecognition=null;
-function egNextSpeaking(){const topic=document.getElementById("egSpeakTopic")?.value||"daily";const arr=egSpeakingPrompts[topic];egSpeakIndex=(egSpeakIndex+1)%arr.length;const p=document.getElementById("egSpeakPrompt");if(p)p.textContent=arr[egSpeakIndex]}
-function egSpeakPrompt(){const p=document.getElementById("egSpeakPrompt");if(!p)return;const u=new SpeechSynthesisUtterance(p.textContent);u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u)}
-function egStartSpeaking(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("egSpeakFeedback");if(!SR){host.textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy thử Chrome hoặc Edge và cấp quyền microphone.";return}
- egSpeakRecognition=new SR();egSpeakRecognition.lang="en-US";egSpeakRecognition.interimResults=false;egSpeakRecognition.onresult=e=>{const said=e.results[0][0].transcript;host.innerHTML="<b>Bạn đã nói:</b> "+said+"<br><small>Gợi ý: thử trả lời thành 2–4 câu, dùng ví dụ cụ thể và chú ý thì động từ. Bản ghi được xử lý bởi trình duyệt.</small>"};egSpeakRecognition.onerror=()=>host.textContent="Không nhận được giọng nói. Kiểm tra quyền microphone và thử lại.";egSpeakRecognition.start()
-}
+
 </script>
 
 
@@ -3491,13 +3473,13 @@ function egStartSpeaking(){
  ["At a café","A: Could I get a flat white, please? B: Sure. For here or to go?","Gọi món và hỏi mang đi hay dùng tại chỗ."]
  ]},
  progress:{title:"Progress Check · Tự đánh giá",desc:"Đánh dấu kỹ năng đã luyện hôm nay. Trạng thái được lưu trên trình duyệt.",items:[
- ["Vocabulary","Tôi ôn ít nhất 10 từ/cụm từ."],["Speaking","Tôi nói thành tiếng ít nhất 2 phút."],["Writing","Tôi tự viết 5 câu tiếng Anh."]
+ ["Vocabulary","Tôi ôn ít nhất 10 từ/cụm từ."],["Writing","Tôi tự viết 5 câu tiếng Anh."]
  ]},
  cloud:{title:"Study Plan · Kế hoạch học",desc:"Một lịch học gợi ý ngắn để duy trì thói quen.",items:[
  ["Day 1 · Words","10 từ mới + 5 câu ví dụ","15 phút"],
- ["Day 2 · Speaking","Luyện nói theo chủ đề và ghi âm câu trả lời","15 phút"],
+ ["Day 2 · Grammar","Ôn một chủ điểm, tự đặt 5 câu","15 phút"],
  ["Day 3 · Grammar","Ôn một chủ điểm, tự đặt 5 câu","20 phút"],
- ["Day 4 · Speaking","Trả lời 3 câu hỏi thành tiếng","10 phút"],
+ ["Day 4 · Vocabulary","Ôn từ theo chủ đề và đặt câu","10 phút"],
  ["Day 5 · Vocabulary Review","Ôn từ vựng và đặt 5 câu ví dụ","15 phút"],
  ["Day 6 · Review","Ôn flashcard và sửa lỗi cũ","15 phút"],
  ["Day 7 · Free practice","Xem video hoặc nghe podcast yêu thích","20 phút"]
@@ -3741,9 +3723,7 @@ document.addEventListener("DOMContentLoaded",function(){
   let triggerId=triggerMap[targetId];
   let trigger=triggerId?document.getElementById(triggerId):null;
   if(!trigger&&targetId==="pronFeedback")trigger=document.querySelector('#pronunciation button[onclick*="pronTry"]');
-  if(!trigger&&targetId==="egSpeakFeedback")trigger=document.querySelector('#egSpeakingPartner button[onclick*="egStartSpeaking"]');
   if(!trigger&&targetId==="speechFeedback")trigger=document.querySelector('#realconversation button[onclick*="recognise"]');
-  if(!trigger&&targetId==="dailySpeakResult")trigger=document.querySelector('button[onclick*="dailyRecognise"]');
   const controls=trigger&&trigger.parentElement;
   const session={id:++recordingCounter,recorder:null,stream:null,chunks:[],host,label,trigger,controls,stopButton:null};
   activeSession=session;
