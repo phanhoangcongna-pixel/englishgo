@@ -2335,7 +2335,7 @@ function checkTranslation(){
  const matched=!!answer&&(norm(answer)===norm(expected)||(alt&&norm(answer)===norm(alt)));
  if(matched){
   document.getElementById("trFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'</div>';
-  trConfident++;say(trCurrent.en);
+  trConfident++;say(answer);
  }else{
   document.getElementById("trFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa khớp đáp án tham khảo.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
@@ -2450,7 +2450,7 @@ function checkThousandTranslation(){
  thousandAnswered=true;
  if(matched){
   document.getElementById("thousandFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
-  say(item.en);
+  say(answer);
  }else{
   document.getElementById("thousandFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa đúng — hãy xem lại nhé.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
@@ -2500,7 +2500,7 @@ function checkTopicTranslation(){
  const matched=!!answer&&normalizeTranslation(answer)===normalizeTranslation(expected);
  if(matched){
   document.getElementById("topicFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
-  say(item.en);
+  say(answer);
  }else{
   document.getElementById("topicFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa khớp đáp án tham khảo.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
