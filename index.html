@@ -2639,7 +2639,25 @@ function pronData(){return [
  {title:"Trọng âm từ",words:["PHOtograph","phoTOgrapher","PHOtographic"],tip:"Đặt trọng âm đúng âm tiết được viết hoa; các từ cùng họ có thể đổi trọng âm.",vi:"Chú ý vị trí nhấn âm."}
 ]}
 function pronLoad(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];document.getElementById("pronLesson").innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";document.getElementById("pronFeedback").textContent=""}
-function pronSpeak(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];const u=new SpeechSynthesisUtterance(d.words.join(". "));u.lang="en-US";u.rate=.78;u.volume=1;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function pronSpeak(){
+ const d=pronData()[Number(document.getElementById("pronPair").value)||0];
+ if(!d||!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
+ const synth=window.speechSynthesis, items=d.words.filter(Boolean), feedback=document.getElementById("pronFeedback");
+ synth.cancel();
+ let index=0;
+ if(feedback)feedback.textContent="Đang đọc từng từ/cụm, có khoảng nghỉ để m nghe rõ…";
+ const voices=synth.getVoices(), voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
+ function speakNext(){
+   if(index>=items.length){if(feedback)feedback.textContent="Đã đọc xong từng từ/cụm. Bấm Nghe mẫu để nghe lại.";return;}
+   const item=items[index++];
+   const u=new SpeechSynthesisUtterance(item);
+   u.lang="en-US";u.rate=0.62;u.pitch=1;u.volume=1;if(voice)u.voice=voice;
+   u.onend=()=>window.setTimeout(speakNext,850);
+   u.onerror=()=>{if(feedback)feedback.textContent="Giọng đọc bị gián đoạn. M thử bấm Nghe mẫu lần nữa nhé.";};
+   synth.speak(u);
+ }
+ speakNext();
+}
 function pronTry(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("pronFeedback").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy nghe mẫu và tự luyện.";return}const d=pronData()[Number(document.getElementById("pronPair").value)||0];const rec=new SR();rec.lang="en-US";rec.onresult=e=>{document.getElementById("pronFeedback").textContent="Bạn vừa đọc: "+e.results[0][0].transcript+". Hãy so sánh với mẫu; nhận diện giọng nói không thay thế đánh giá phát âm chuyên sâu."};rec.onerror=()=>document.getElementById("pronFeedback").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone.";rec.start()}
 const roleData={
  cafe:{start:"Barista: Hi! What can I get for you?",steps:[{q:"Bạn muốn gọi cà phê.",a:[["I'd like a latte, please.","Lịch sự và tự nhiên.",1],["Give coffee.","Thiếu tự nhiên; cần nói rõ món và dùng lời lịch sự.",2],["I am a latte.","Sai nghĩa: câu này nói bạn chính là một ly latte.",2]]},{q:"Barista: What size would you like?",a:[["A medium, please.","Câu trả lời ngắn gọn, tự nhiên.",1],["I want middle.","Không tự nhiên; dùng a medium.",2],["Yesterday.","Không trả lời đúng câu hỏi.",2]]},{q:"Barista: Anything else?",a:[["No, that's all. Thank you.","Tự nhiên và lịch sự.",1],["No more thing.","Nên dùng No, that's all.",2],["Give me free.","Không phù hợp trong tình huống này.",2]]}]},
