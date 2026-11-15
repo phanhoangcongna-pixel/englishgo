@@ -1,4 +1,4 @@
-const CACHE_NAME = "englishgo-pwa-v1";
+const CACHE_NAME = "englishgo-pwa-v2";
 const APP_SHELL = ["./", "./index.html", "./englishgo-icon.png", "./manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
