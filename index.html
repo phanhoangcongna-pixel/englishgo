@@ -275,6 +275,86 @@ body > main{
 }
 </style>
 
+
+<style id="englishgo-header-layout-final">
+/* Final override: never squeeze the entire navigation into the account-control row. */
+body > header .nav {
+  display: grid !important;
+  grid-template-columns: minmax(150px, 1fr) auto auto !important;
+  grid-template-areas:
+    "logo login lang"
+    "links links links" !important;
+  align-items: center !important;
+  gap: 8px 12px !important;
+  width: 100% !important;
+  max-width: 1200px !important;
+  min-width: 0 !important;
+  padding: 10px 16px !important;
+}
+body > header .brand-logo {
+  grid-area: logo !important;
+  width: min(190px, 100%) !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+body > header #cloudLoginBtn {
+  grid-area: login !important;
+  justify-self: end !important;
+  width: auto !important;
+  max-width: min(260px, 35vw) !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+body > header .nav > .lang {
+  grid-area: lang !important;
+  justify-self: end !important;
+}
+body > header #mainNav {
+  grid-area: links !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 4px 6px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+body > header #mainNav > button,
+body > header #mainNav > .nav-group {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+}
+body > header #mainNav > button,
+body > header #mainNav > .nav-group > summary {
+  white-space: nowrap !important;
+}
+@media (max-width: 600px) {
+  body > header .nav {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "logo lang"
+      "login login"
+      "links links" !important;
+    gap: 7px 9px !important;
+    padding: 9px 10px !important;
+  }
+  body > header .brand-logo { width: 155px !important; height: 48px !important; }
+  body > header #cloudLoginBtn {
+    justify-self: start !important;
+    max-width: 100% !important;
+  }
+  body > header #mainNav { gap: 4px !important; }
+  body > header #mainNav > button,
+  body > header #mainNav > .nav-group > summary {
+    font-size: 11px !important;
+    padding: 7px 8px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
