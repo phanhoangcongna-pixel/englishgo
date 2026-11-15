@@ -2381,10 +2381,10 @@ function escapeThousandHTML(value){
 }
 function explainTranslationMismatch(answer,expected){
  const a=normalizeTranslation(answer),e=normalizeTranslation(expected);
- if(/\\bmy\\b/.test(a)&&/\\bour\\b/.test(e))return '“my” nghĩa là “của tôi”, còn “our” là “của chúng tôi”. Câu này cần giữ đúng ý sở hữu số nhiều: “our menu”.';
- if(/\\bour\\b/.test(a)&&/\\bmy\\b/.test(e))return '“our” nghĩa là “của chúng tôi”, còn “my” là “của tôi”. Hãy chọn đúng người sở hữu theo câu gốc.';
- if(/\\byour\\b/.test(a)&&/\\bmy\\b/.test(e))return '“your” là “của bạn”, không phải “của tôi”. Hãy kiểm tra lại đại từ sở hữu.';
- if(/\\btheir\\b/.test(a)&&/\\bour\\b/.test(e))return '“their” là “của họ”, còn “our” là “của chúng tôi”. Hai đại từ này không thay thế cho nhau.';
+ if(/\bmy\b/.test(a)&&/\bour\b/.test(e))return '“my” nghĩa là “của tôi”, còn “our” là “của chúng tôi”. Câu này cần giữ đúng ý sở hữu số nhiều: “our menu”.';
+ if(/\bour\b/.test(a)&&/\bmy\b/.test(e))return '“our” nghĩa là “của chúng tôi”, còn “my” là “của tôi”. Hãy chọn đúng người sở hữu theo câu gốc.';
+ if(/\byour\b/.test(a)&&/\bmy\b/.test(e))return '“your” là “của bạn”, không phải “của tôi”. Hãy kiểm tra lại đại từ sở hữu.';
+ if(/\btheir\b/.test(a)&&/\bour\b/.test(e))return '“their” là “của họ”, còn “our” là “của chúng tôi”. Hai đại từ này không thay thế cho nhau.';
  return 'Câu trả lời chưa khớp đáp án tham khảo. Hãy kiểm tra lại từ vựng, ngữ pháp và ý nghĩa trước khi chuyển câu.';
 }
 function checkThousandTranslation(){
