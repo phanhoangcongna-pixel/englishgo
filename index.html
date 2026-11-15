@@ -355,6 +355,35 @@ body > header #mainNav > .nav-group > summary {
 }
 </style>
 
+
+<script id="englishgo-reset-scroll-on-reload">
+/* Reloading or reopening the page should always start at the top.
+   Keep the selected learning section, but never restore the old scroll offset. */
+(function () {
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+  function resetToTop() {
+    try { window.scrollTo(0, 0); } catch (e) {}
+    try { document.documentElement.scrollTop = 0; } catch (e) {}
+    try { document.body.scrollTop = 0; } catch (e) {}
+  }
+  window.addEventListener("DOMContentLoaded", resetToTop, { once: true });
+  window.addEventListener("load", function () {
+    resetToTop();
+    requestAnimationFrame(function () {
+      resetToTop();
+      requestAnimationFrame(resetToTop);
+    });
+    setTimeout(resetToTop, 100);
+    setTimeout(resetToTop, 350);
+  }, { once: true });
+  window.addEventListener("pageshow", function () {
+    resetToTop();
+    requestAnimationFrame(resetToTop);
+    setTimeout(resetToTop, 100);
+  });
+})();
+</script>
+
 </head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
