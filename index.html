@@ -675,17 +675,7 @@ html { background: #142342; }
 </div>
 <div class="small muted">Tip: You can choose a suggested reply or write your own natural answer. Gợi ý: Bạn có thể chọn câu mẫu hoặc tự viết câu trả lời tự nhiên của mình.</div>
 </div>
-<details class="panel" id="egLearningRoadmapDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🧭 Learning Roadmap · Lộ trình học <span class="small muted">· Mở khi cần</span></summary><div id="egLearningRoadmap" style="margin-top:12px">
-<h2>EnglishGo Learning Roadmap · Lộ trình 4 giai đoạn</h2>
-<p class="small muted">Your progress updates automatically when you complete lessons, quizzes and practice. Tiến độ tự cập nhật khi mày học và làm bài.</p>
-<div class="panel" style="margin:10px 0;background:var(--surface)">
-<div class="controls" style="justify-content:space-between"><b id="egRoadmapProgress">0% complete · Hoàn thành 0%</b><span class="badge" id="egRoadmapUnlocked">Phase 1 available</span></div>
-<div style="height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0"><div id="egRoadmapBar" style="height:100%;width:0%;background:var(--primary);border-radius:99px;transition:width .25s"></div></div>
-<p class="small muted" id="egRoadmapNext" style="margin:0">Next step · Bước tiếp theo sẽ hiện ở đây.</p>
-</div>
-<div id="egRoadmapList" style="display:grid;gap:12px"></div>
-<p class="small muted">Progress is stored in your existing EnglishGo data and follows the existing Firebase sync when signed in. Tiến độ lưu cùng dữ liệu hiện có và đồng bộ Firebase khi đăng nhập.</p>
-</div></details>
+
 <details class="panel" id="rlAdvancedDetails"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">🎯 Advanced English · Giao tiếp nâng cao <span class="small muted">· B2</span></summary><div id="rlAdvanced" style="margin-top:12px">
 <div class="controls" style="justify-content:space-between;align-items:center">
 <div><h2 style="margin:0">Advanced English · Giao tiếp nâng cao</h2><p class="small muted">Longer, more natural conversations for work and everyday life. Hội thoại tự nhiên hơn trong công việc và đời sống.</p></div>
@@ -722,50 +712,7 @@ html { background: #142342; }
 </div>
 <div class="small muted" id="rlAdvScore">Completed advanced turns: 0 · Đã hoàn thành: 0</div>
 </div></details>
-<details class="panel" id="rlReviewTools"><summary style="cursor:pointer;font-weight:700;font-size:1.08rem;list-style:none">📚 Review &amp; Progress · Ôn tập và tiến độ <span class="small muted">· Các công cụ bổ trợ</span></summary><div style="margin-top:12px">
-<details id="rlMistakeBank">
-<summary style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-weight:700;font-size:1.08rem">
-<span>Review My Mistakes · Ôn lại lỗi sai</span>
-<span class="badge" id="rlMistakeCount">0</span>
-</summary>
-<p class="small muted" style="margin:10px 0">Tap to open your saved mistakes. Nhấn để xem các câu đã lưu. Dữ liệu được lưu trên thiết bị và đồng bộ Firebase khi đăng nhập.</p>
-<div style="display:flex;justify-content:flex-end;margin:8px 0">
-<button class="btn line" onclick="rlRenderMistakes()" type="button">↻ Refresh · Làm mới</button>
-</div>
-<div class="small muted" id="rlMistakeList">No mistakes saved yet. Chưa có câu sai nào được lưu.</div>
-</details>
-<details class="panel" id="rlDailyReview"><summary style="cursor:pointer;font-weight:700;list-style:none">📅 Daily Review · Ôn tập mỗi ngày</summary><div style="margin-top:10px">
-<div class="controls" style="justify-content:space-between;align-items:center">
-<div><h2 style="margin:0">Daily Review · Ôn tập mỗi ngày</h2><p class="small muted">A short mix of mistakes and fresh questions. Mỗi ngày ôn câu sai xen kẽ câu mới.</p></div>
-<span class="badge" id="rlDailyStreak">🔥 0-day streak</span>
-</div>
-<div class="controls" style="gap:16px;margin:10px 0">
-<span class="small" id="rlDailyStats">Today: 0 correct · Hôm nay: 0 câu đúng</span>
-<span class="small" id="rlDailyProgress">Ready when you are · Sẵn sàng khi bạn bắt đầu</span>
-</div>
-<div id="rlDailyStage">
-<p class="muted">Complete a quick 5-question session. It will include your saved mistakes when available, plus new questions. Hoàn thành 5 câu ngắn, gồm câu từng sai (nếu có) và câu mới.</p>
-<button class="btn" onclick="rlDailyStart()">Start daily review · Bắt đầu ôn tập</button>
-</div>
-</div></details>
-<details class="panel" id="rlLearningInsights"><summary style="cursor:pointer;font-weight:700;list-style:none">📊 Learning Insights · Phân tích tiến độ</summary><div style="margin-top:10px">
-<h2>Learning Insights · Phân tích tiến độ</h2>
-<p class="small muted">See your practice totals and the topics that need more attention. Theo dõi kết quả và những chủ đề cần luyện thêm.</p>
-<div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0">
-<div class="panel"><div class="small muted">Questions tried · Đã làm</div><b id="rlInsightAttempts">0</b></div>
-<div class="panel"><div class="small muted">Correct · Đúng</div><b id="rlInsightCorrect">0</b></div>
-<div class="panel"><div class="small muted">Accuracy · Độ chính xác</div><b id="rlInsightAccuracy">0%</b></div>
-<div class="panel"><div class="small muted">Saved mistakes · Câu cần ôn</div><b id="rlInsightMistakes">0</b></div>
-</div>
-<h3>Focus areas · Chủ đề cần tập trung</h3>
-<div class="small muted" id="rlInsightFocus">Your focus areas will appear after you practise. Chủ đề cần luyện sẽ hiện ở đây sau khi bạn học.</div>
-</div></details>
-<div class="panel">
-<h2>Review your conversation · Xem lại hội thoại</h2>
-<p class="muted small">Your answers and suggested improvements appear here. Câu trả lời và gợi ý sửa sẽ xuất hiện ở đây.</p>
-<div class="small muted" id="rlReview">Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.</div>
-</div>
-</div></details></section>
+</section>
 <section class="page" id="translation">
 <h1 class="title">Translation Reflex · Dịch phản xạ</h1>
 <p class="intro">Nhìn câu tiếng Việt và nói/viết ngay bằng tiếng Anh. Đừng dịch từng từ — hãy phản xạ theo cụm câu.</p>
