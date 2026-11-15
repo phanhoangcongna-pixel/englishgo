@@ -2326,8 +2326,7 @@ function checkTranslation(){
   document.getElementById("trFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'</div>';
   trConfident++;say(trCurrent.en);
  }else{
-  document.getElementById("trFeedback").innerHTML='<div class="feedback" id="trAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="trAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
-  document.getElementById("trAcceptAlternative").onclick=()=>{trConfident++;document.getElementById("trAlternativeReview").className="feedback good";document.getElementById("trAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Được công nhận: "+trConfident;};
+  document.getElementById("trFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa khớp đáp án tham khảo.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
  document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Được công nhận: "+trConfident;
 }
@@ -2380,6 +2379,14 @@ function renderThousandTranslation(){
 function escapeThousandHTML(value){
  return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
+function explainTranslationMismatch(answer,expected){
+ const a=normalizeTranslation(answer),e=normalizeTranslation(expected);
+ if(/\\bmy\\b/.test(a)&&/\\bour\\b/.test(e))return '“my” nghĩa là “của tôi”, còn “our” là “của chúng tôi”. Câu này cần giữ đúng ý sở hữu số nhiều: “our menu”.';
+ if(/\\bour\\b/.test(a)&&/\\bmy\\b/.test(e))return '“our” nghĩa là “của chúng tôi”, còn “my” là “của tôi”. Hãy chọn đúng người sở hữu theo câu gốc.';
+ if(/\\byour\\b/.test(a)&&/\\bmy\\b/.test(e))return '“your” là “của bạn”, không phải “của tôi”. Hãy kiểm tra lại đại từ sở hữu.';
+ if(/\\btheir\\b/.test(a)&&/\\bour\\b/.test(e))return '“their” là “của họ”, còn “our” là “của chúng tôi”. Hai đại từ này không thay thế cho nhau.';
+ return 'Câu trả lời chưa khớp đáp án tham khảo. Hãy kiểm tra lại từ vựng, ngữ pháp và ý nghĩa trước khi chuyển câu.';
+}
 function checkThousandTranslation(){
  if(thousandAnswered)return;
  const item=thousandPool[thousandIndex],dir=document.getElementById("thousandDirection").value;
@@ -2392,8 +2399,7 @@ function checkThousandTranslation(){
   document.getElementById("thousandFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
   say(item.en);
  }else{
-  document.getElementById("thousandFeedback").innerHTML='<div class="feedback" id="thousandAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="thousandAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
-  document.getElementById("thousandAcceptAlternative").onclick=()=>{document.getElementById("thousandAlternativeReview").className="feedback good";document.getElementById("thousandAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";};
+  document.getElementById("thousandFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa đúng — hãy xem lại nhé.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
 }
 function revealThousandTranslation(){
@@ -2443,8 +2449,7 @@ function checkTopicTranslation(){
   document.getElementById("topicFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
   say(item.en);
  }else{
-  document.getElementById("topicFeedback").innerHTML='<div class="feedback" id="topicAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="topicAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
-  document.getElementById("topicAcceptAlternative").onclick=()=>{document.getElementById("topicAlternativeReview").className="feedback good";document.getElementById("topicAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";};
+  document.getElementById("topicFeedback").innerHTML='<div class="feedback bad"><b>✗ Chưa khớp đáp án tham khảo.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">'+escapeThousandHTML(explainTranslationMismatch(answer,expected))+'</span></div>';
  }
 }
 function revealTopicTranslation(){
