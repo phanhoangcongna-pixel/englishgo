@@ -2640,21 +2640,43 @@ function pronData(){return [
 ]}
 function pronLoad(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];document.getElementById("pronLesson").innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";document.getElementById("pronFeedback").textContent=""}
 function pronSpeak(){
- const d=pronData()[Number(document.getElementById("pronPair").value)||0];
- if(!d||!window.speechSynthesis||!window.SpeechSynthesisUtterance)return;
- const synth=window.speechSynthesis, items=d.words.filter(Boolean), feedback=document.getElementById("pronFeedback");
+ const select=document.getElementById("pronPair");
+ const index=Number(select?.value)||0;
+ // Use the complete lesson bank so the added pronunciation lessons work too.
+ const d=(window.egPronAll||pronData())[index];
+ if(!d||!Array.isArray(d.words)||!window.speechSynthesis||!window.SpeechSynthesisUtterance){
+  const feedback=document.getElementById("pronFeedback");
+  if(feedback)feedback.textContent="Thiết bị chưa hỗ trợ giọng đọc. Hãy thử Safari/Chrome phiên bản mới.";
+  return;
+ }
+ const synth=window.speechSynthesis;
+ const items=d.words.map(x=>String(x||"").trim()).filter(Boolean);
+ const feedback=document.getElementById("pronFeedback");
  synth.cancel();
- let index=0;
- if(feedback)feedback.textContent="Đang đọc từng từ/cụm, có khoảng nghỉ để m nghe rõ…";
- const voices=synth.getVoices(), voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
+ synth.resume();
+ let cursor=0, stopped=false;
+ if(feedback)feedback.textContent="Đang đọc chậm từng từ riêng biệt. Chú ý nghe trọn âm cuối của mỗi từ…";
+ const voices=synth.getVoices();
+ const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
  function speakNext(){
-   if(index>=items.length){if(feedback)feedback.textContent="Đã đọc xong từng từ/cụm. Bấm Nghe mẫu để nghe lại.";return;}
-   const item=items[index++];
-   const u=new SpeechSynthesisUtterance(item);
-   u.lang="en-US";u.rate=0.62;u.pitch=1;u.volume=1;if(voice)u.voice=voice;
-   u.onend=()=>window.setTimeout(speakNext,850);
-   u.onerror=()=>{if(feedback)feedback.textContent="Giọng đọc bị gián đoạn. M thử bấm Nghe mẫu lần nữa nhé.";};
-   synth.speak(u);
+  if(stopped)return;
+  if(cursor>=items.length){
+   if(feedback)feedback.textContent="Đã đọc xong. M có thể bấm Nghe mẫu lần nữa để nghe lại từng từ.";
+   return;
+  }
+  const word=items[cursor++];
+  const utterance=new SpeechSynthesisUtterance(word);
+  utterance.lang=voice&&voice.lang?voice.lang:"en-US";
+  if(voice)utterance.voice=voice;
+  utterance.rate=0.70;
+  utterance.pitch=1;
+  utterance.volume=1;
+  utterance.onend=()=>window.setTimeout(speakNext,1000);
+  utterance.onerror=event=>{
+   stopped=true;
+   if(feedback)feedback.textContent="Giọng đọc bị gián đoạn ("+(event.error||"unknown")+"). Bấm Nghe mẫu để thử lại.";
+  };
+  synth.speak(utterance);
  }
  speakNext();
 }
