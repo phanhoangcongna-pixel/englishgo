@@ -1199,7 +1199,9 @@ function updateDictionaryDirection(){
 }
 async function fetchEnglishDictionaryEntry(word){
  const clean=String(word||"").trim();
- if(!clean || clean.includes(" ")) return null;
+ // The English dictionary endpoint only accepts English headwords.
+ // Skip Vietnamese words and translated phrases to avoid pointless 404 requests.
+ if(!/^[A-Za-z][A-Za-z'-]{0,69}$/.test(clean)) return null;
  try{
   const response=await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(clean));
   if(!response.ok) return null;
