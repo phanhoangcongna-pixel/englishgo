@@ -3704,22 +3704,37 @@ document.addEventListener("DOMContentLoaded",function(){
    }
    const recorder=new MediaRecorder(session.stream,options);session.recorder=recorder;
    const restoreControls=()=>{if(session.stopButton)session.stopButton.remove();if(session.trigger)session.trigger.hidden=false};
-   recorder.ondataavailable=e=>{if(e.data&&e.data.size)session.chunks.push(e.data)};
+   recorder.ondataavailable=e=>{if(e.data&&e.data.size>0)session.chunks.push(e.data)};
    recorder.onerror=()=>{
     stopSessionTracks(session);restoreControls();if(activeSession===session)activeSession=null;
     if(session.host.isConnected)session.host.textContent="Không thể ghi âm. Kiểm tra quyền microphone và thử lại.";
    };
-   recorder.onstop=()=>{
-    const type=recorder.mimeType||(session.chunks[0]&&session.chunks[0].type)||"audio/mp4";
-    const blob=new Blob(session.chunks,{type});stopSessionTracks(session);restoreControls();
+   recorder.onstop=async()=>{
+    const type=(session.chunks.find(c=>c.type)&&session.chunks.find(c=>c.type).type)||recorder.mimeType||"";
+    const blob=new Blob(session.chunks,type?{type}:{});
+    stopSessionTracks(session);restoreControls();
     if(activeSession===session)activeSession=null;
     if(!session.host.isConnected)return;
+    if(!blob.size){
+     session.host.innerHTML='<p style="color:#b45309">⚠️ Không thu được dữ liệu âm thanh. Hãy kiểm tra micro đầu vào rồi ghi âm lại.</p><button type="button" class="btn line" id="egRecordAgain_'+session.id+'">Ghi âm lại</button>';
+     const again=document.getElementById("egRecordAgain_"+session.id);if(again)again.onclick=()=>startLocalRecording(targetId,label);return;
+    }
     const url=URL.createObjectURL(blob);
-    session.host.innerHTML='<p>✅ Đã ghi âm xong · '+session.label+'</p><audio controls playsinline style="width:100%" src="'+url+'"></audio><p class="small muted">Nghe lại giọng của m, rồi so sánh với câu mẫu. Bản ghi chỉ nằm trên trình duyệt này.</p><button type="button" class="btn line" id="egRecordAgain_'+session.id+'">Ghi âm lại</button>';
-    const again=document.getElementById("egRecordAgain_"+session.id);
-    if(again)again.onclick=()=>startLocalRecording(targetId,label);
+    session.host.innerHTML='<p>✅ Đã lưu bản ghi · '+session.label+' ('+(blob.size/1024).toFixed(1)+' KB)</p><audio controls playsinline preload="metadata" style="width:100%" src="'+url+'"></audio><p class="small muted">Bấm ▶ để nghe lại. Bản ghi chỉ nằm trên trình duyệt này.</p><p class="small" id="egAudioCheck_'+session.id+'">Đang kiểm tra âm lượng bản ghi…</p><button type="button" class="btn line" id="egRecordAgain_'+session.id+'">Ghi âm lại</button>';
+    const again=document.getElementById("egRecordAgain_"+session.id);if(again)again.onclick=()=>startLocalRecording(targetId,label);
+    const check=document.getElementById("egAudioCheck_"+session.id);
+    try{
+     const AudioCtx=window.AudioContext||window.webkitAudioContext;
+     if(AudioCtx){
+      const ctx=new AudioCtx();const decoded=await ctx.decodeAudioData(await blob.arrayBuffer());
+      let energy=0,count=0;for(let ch=0;ch<decoded.numberOfChannels;ch++){const data=decoded.getChannelData(ch);const step=Math.max(1,Math.floor(data.length/50000));for(let i=0;i<data.length;i+=step){energy+=data[i]*data[i];count++}}
+      const rms=Math.sqrt(energy/Math.max(1,count));
+      if(check)check.textContent=rms<0.003?"⚠️ Bản ghi gần như không có tiếng. Có thể micro đang bị tắt, bị che hoặc đang chọn sai thiết bị đầu vào. Hãy kiểm tra micro rồi ghi lại.":"✓ Đã phát hiện âm thanh trong bản ghi. Nếu vẫn không nghe, kiểm tra âm lượng loa và thiết bị phát.";
+      await ctx.close();
+     }else if(check)check.textContent="Đã lưu file âm thanh. Hãy bấm ▶ để nghe lại.";
+    }catch(err){if(check)check.textContent="Đã lưu file âm thanh. Nếu không nghe được, thử ghi lại và kiểm tra micro/loa."}
    };
-   recorder.start();
+   recorder.start(250);
    if(session.trigger)session.trigger.hidden=true;
    if(session.controls){
     const stop=document.createElement("button");stop.type="button";stop.className="btn primary";stop.textContent="■ Dừng ghi âm";stop.id="egStopLocalRecording_"+session.id;
