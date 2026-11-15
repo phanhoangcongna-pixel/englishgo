@@ -74,11 +74,7 @@ textarea { width: 100%; }
 .nav-menu button:hover,.nav-menu button.active{background:#2f4b78;color:#fff}
 @media(max-width:700px){.navlinks{width:100%;overflow:visible;flex-wrap:wrap;gap:4px}.nav-group{position:relative}.nav-menu{position:absolute;left:0;top:100%;min-width:min(260px,85vw)}.navlinks>button,.nav-group>summary{font-size:12px;padding:8px 9px}}
 </style>
-<style id="englishgo-daily-practice-bilingual-cleanup">
-.eg-practice-prompt{font-size:clamp(19px,2.8vw,23px);font-weight:750;line-height:1.45;margin:12px 0 5px;color:var(--ink)}
-.eg-practice-translation{font-size:17px;line-height:1.5;color:var(--ink);margin:0 0 5px;font-weight:650}
-.eg-practice-instruction{font-size:13px;line-height:1.5;color:var(--muted);margin:0 0 14px;font-weight:400}
-</style>
+
 <script>
 (function(){
   try{
@@ -1391,7 +1387,6 @@ function rlCheck(){
  const exact=normalized(answer)===normalized(q[4]);
  const note=exact?"Excellent! That's the natural reply. Tuyệt vời! Đây là câu trả lời tự nhiên.":"Good try! Compare your choice with the suggested reply. Hãy so sánh lựa chọn với câu trả lời gợi ý nhé.";
  rlHistory.push({prompt:q[1],vi:q[2],answer,model:q[4],tip:q[5],exact});
- rlSaveMistake(rlCurrent,rlTurn,q,answer,exact);
  if(typeof egRoadmapTrack==="function"){const topicName=(rlTopics[rlCurrent]?.title||"").toLowerCase();egRoadmapTrack("real",{kind:topicName.includes("nail")?"nail":(/work|customer|job|office/.test(topicName)?"work":"everyday")})}
  document.querySelectorAll("#rlChoices .rl-choice").forEach((b,i)=>{
    b.disabled=true;
@@ -1409,210 +1404,6 @@ function rlCheck(){
  document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
 }
-const RL_MISTAKES_KEY="eg3-real-life-mistakes";
-function rlGetMistakes(){
- try{
-  const raw=JSON.parse(localStorage.getItem(RL_MISTAKES_KEY)||"[]");
-  if(!Array.isArray(raw))return [];
-  const unique=new Map();
-  raw.forEach((m,i)=>{
-   if(!m||!Number.isInteger(Number(m.topicIndex))||!Number.isInteger(Number(m.turnIndex)))return;
-   const key=String(m.topicIndex)+":"+String(m.turnIndex);
-   const prev=unique.get(key);
-   // Prefer the most recently updated record; otherwise keep the first valid record.
-   if(!prev || (m.updatedAt||"")>(prev.updatedAt||""))unique.set(key,{...m,key});
-  });
-  const cleaned=[...unique.values()].sort((a,b)=>(b.updatedAt||"").localeCompare(a.updatedAt||""));
-  if(cleaned.length!==raw.length)localStorage.setItem(RL_MISTAKES_KEY,JSON.stringify(cleaned));
-  return cleaned;
- }catch(e){return []}
-}
-function rlSaveMistake(topicIndex,turnIndex,q,chosen,correct){
- const list=rlGetMistakes(),key=topicIndex+":"+turnIndex,at=list.findIndex(x=>x.key===key);
- if(correct){if(at>=0)list.splice(at,1)}
- else{
-  const item={key,topicIndex,turnIndex,topic:rlTopics[topicIndex]?.title||"Conversation",level:rlTopics[topicIndex]?.level||"",prompt:q[1],vi:q[2],chosen,model:q[4],tip:q[5],updatedAt:new Date().toISOString(),count:(at>=0?list[at].count||1:0)+1};
-  if(at>=0)list[at]=item;else list.unshift(item);
- }
- localStorage.setItem(RL_MISTAKES_KEY,JSON.stringify(list));
- if(typeof cloudSchedule==="function")cloudSchedule();
- rlRenderMistakes();
- rlRenderInsights();
-}
-function rlRenderMistakes(){
- const el=document.getElementById("rlMistakeList");if(!el)return;
- const list=rlGetMistakes();
- const count=document.getElementById("rlMistakeCount");if(count)count.textContent=String(list.length);
- if(!list.length){el.innerHTML="No mistakes saved yet. Chưa có câu sai nào được lưu.";return}
- el.innerHTML=list.map((m,i)=>`<div class="panel" style="margin:10px 0">
-  <div class="controls" style="justify-content:space-between"><b>${i+1}. ${escapeHtml(m.topic||"Conversation")} · ${escapeHtml(m.level||"")}</b><span class="badge">Tried ${Number(m.count)||1}×</span></div>
-  <p><b>Client · Khách:</b> ${escapeHtml(m.prompt||"")}</p><p class="small muted">${escapeHtml(m.vi||"")}</p>
-  <p><span class="muted">Your answer · Bạn chọn:</span> <span style="color:#b45309">${escapeHtml(m.chosen||"")}</span></p>
-  <p><span class="muted">Suggested reply · Câu gợi ý:</span> <b>${escapeHtml(m.model||"")}</b></p>
-  <p class="small muted">${escapeHtml(m.tip||"")}</p>
-  <div class="controls"><button class="btn line" type="button" data-speak="${escapeHtml(m.prompt||"")}">🔊 Listen · Nghe</button><button class="btn" type="button" data-practice-topic="${Number(m.topicIndex)}" data-practice-turn="${Number(m.turnIndex)}">Practise again · Luyện lại</button></div>
- </div>`).join("");
- rlRenderInsights();
-}
-document.addEventListener("click",function(e){
- const practice=e.target.closest("[data-practice-topic]");
- if(!practice)return;
- e.preventDefault();
- rlPracticeMistake(Number(practice.dataset.practiceTopic),Number(practice.dataset.practiceTurn));
-});
-function rlPracticeMistake(topicIndex,turnIndex){
- if(typeof egRoadmapTrack==="function")egRoadmapTrack("mistakeReview");
- if(!rlTopics[topicIndex]||!rlTopics[topicIndex].turns[turnIndex]){
-  alert("This saved question is no longer available. Câu hỏi đã lưu không còn tồn tại.");
-  return;
- }
- const levelSelect=document.getElementById("rlLevel"),topicSelect=document.getElementById("rlTopic");
- if(levelSelect)levelSelect.value="all";
- rlInit();
- if(topicSelect){topicSelect.value=String(topicIndex);rlLoadTopic()}
- rlTurn=turnIndex;rlRender();
- const feedback=document.getElementById("rlFeedback");
- if(feedback)feedback.innerHTML='<div class="feedback">Try this question again. Hãy thử trả lời câu này lần nữa.</div>';
- const section=document.getElementById("realLife")||document.getElementById("realLifeConversation")||document.getElementById("rlTopic");
- if(section)section.scrollIntoView({behavior:"smooth",block:"start"});
-}
-const RL_DAILY_STATS_KEY="eg3-daily-review-stats";
-let rlDailyQueue=[],rlDailyIndex=0,rlDailySelected=-1,rlDailyChecked=false,rlDailyCorrect=0;
-function rlDailyDate(){return new Date().toLocaleDateString("en-CA")}
-function rlDailyStats(){try{return JSON.parse(localStorage.getItem(RL_DAILY_STATS_KEY)||"{}")}catch(e){return {}}}
-function rlDailySaveStats(){localStorage.setItem(RL_DAILY_STATS_KEY,JSON.stringify(rlDailyStatsData));}
-let rlDailyStatsData=rlDailyStats();
-function rlDailyRenderStats(){
- rlDailyStatsData=rlDailyStats();
- const today=rlDailyDate(),days=rlDailyStatsData.days||{};
- const todayCount=days[today]?.correct||0;
- let streak=0,d=new Date();
- while(days[d.toLocaleDateString("en-CA")]){streak++;d.setDate(d.getDate()-1)}
- const a=document.getElementById("rlDailyStreak"),b=document.getElementById("rlDailyStats");
- if(a)a.textContent="🔥 "+streak+"-day streak";
- if(b)b.textContent="Today: "+todayCount+" correct · Hôm nay: "+todayCount+" câu đúng";
-}
-function rlDailyShuffle(a){return a.sort(()=>Math.random()-.5)}
-function rlDailyStart(){
- const mistakes=rlDailyShuffle(rlGetMistakes().slice());
- const old=mistakes.slice(0,Math.min(3,mistakes.length)).map(m=>({topicIndex:m.topicIndex,turnIndex:m.turnIndex,isMistake:true}));
- const seen=new Set(old.map(x=>x.topicIndex+":"+x.turnIndex));
- const fresh=[];
- rlDailyShuffle(rlTopics.flatMap((t,ti)=>t.turns.map((q,qi)=>({topicIndex:ti,turnIndex:qi,isMistake:false}))))
-  .forEach(x=>{const k=x.topicIndex+":"+x.turnIndex;if(!seen.has(k)&&fresh.length<5-old.length){fresh.push(x);seen.add(k)}});
- rlDailyQueue=rlDailyShuffle(old.concat(fresh));rlDailyIndex=0;rlDailySelected=-1;rlDailyChecked=false;rlDailyCorrect=0;
- const stage=document.getElementById("rlDailyStage");
- if(!rlDailyQueue.length){stage.textContent="No questions available. Chưa có câu hỏi.";return}
- stage.innerHTML='<div class="badge" id="rlDailyKind"></div><h3 id="rlDailyPrompt"></h3><p class="small muted" id="rlDailyVi"></p><div id="rlDailyChoices" style="display:grid;gap:8px;margin:12px 0"></div><div id="rlDailyFeedback" aria-live="polite"></div><div class="controls"><button class="btn" id="rlDailyCheck" onclick="rlDailyCheck()">Check · Kiểm tra</button><button class="btn line" id="rlDailyNext" onclick="rlDailyNext()" disabled>Next · Tiếp theo</button></div>';
- rlDailyRenderQuestion();
-}
-function rlDailyRenderQuestion(){
- const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex];
- rlDailySelected=-1;rlDailyChecked=false;
- document.getElementById("rlDailyKind").textContent=(x.isMistake?"Review a mistake · Câu từng sai":"New question · Câu mới")+" · "+(rlDailyIndex+1)+"/"+rlDailyQueue.length;
- document.getElementById("rlDailyPrompt").textContent=q[1];
- document.getElementById("rlDailyVi").textContent=q[2];
- document.getElementById("rlDailyChoices").innerHTML=q[3].map((c,i)=>`<button class="btn line" data-daily-choice="${i}" style="text-align:left;white-space:normal" onclick="rlDailyChoose(${i})">${String.fromCharCode(65+i)}. ${c}</button>`).join("");
- document.getElementById("rlDailyFeedback").innerHTML="";
- document.getElementById("rlDailyCheck").disabled=false;document.getElementById("rlDailyNext").disabled=true;
- document.getElementById("rlDailyProgress").textContent="Question "+(rlDailyIndex+1)+" of "+rlDailyQueue.length+" · Câu "+(rlDailyIndex+1)+"/"+rlDailyQueue.length;
-}
-function rlDailyChoose(i){
- if(rlDailyChecked)return;rlDailySelected=i;
- document.querySelectorAll("#rlDailyChoices button").forEach((b,n)=>{b.style.borderColor=n===i?"var(--primary)":"";b.style.background=n===i?"var(--surface)":""});
-}
-function rlDailyCheck(){
- if(rlDailyChecked)return;
- if(rlDailySelected<0){document.getElementById("rlDailyFeedback").innerHTML='<div class="feedback">Choose an answer first. Hãy chọn đáp án trước.</div>';return}
- const x=rlDailyQueue[rlDailyIndex],q=rlTopics[x.topicIndex].turns[x.turnIndex],norm=v=>v.toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ").trim();
- const chosen=q[3][rlDailySelected],correct=norm(chosen)===norm(q[4]);
- rlDailyStatsData=rlDailyStats();const day=rlDailyDate();rlDailyStatsData.days=rlDailyStatsData.days||{};rlDailyStatsData.days[day]=rlDailyStatsData.days[day]||{correct:0,attempts:0,wrong:0};const dayStats=rlDailyStatsData.days[day];dayStats.attempts=(dayStats.attempts||0)+1;if(correct){rlDailyCorrect++;dayStats.correct=(dayStats.correct||0)+1}else{dayStats.wrong=(dayStats.wrong||0)+1}rlDailySaveStats();rlSaveMistake(x.topicIndex,x.turnIndex,q,chosen,correct);if(typeof egRoadmapTrack==="function"){egRoadmapTrack("dailyAnswer");egRoadmapTrack("accuracy",{value:Math.round((dayStats.correct||0)/(dayStats.attempts||1)*100)})}
- document.querySelectorAll("#rlDailyChoices button").forEach((b,i)=>{b.disabled=true;if(norm(q[3][i])===norm(q[4])){b.style.borderColor="#239765";b.style.background="rgba(35,151,101,.10)"}else if(i===rlDailySelected){b.style.borderColor="#d97706";b.style.background="rgba(217,119,6,.10)"}});
- document.getElementById("rlDailyFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Correct! Well done. Chính xác!":"Not quite. Keep practising. Chưa đúng, hãy tiếp tục luyện tập."}</b><p><b>Suggested reply:</b> ${q[4]}</p><p class="small">${q[5]}</p></div>`;
- rlDailyChecked=true;document.getElementById("rlDailyCheck").disabled=true;document.getElementById("rlDailyNext").disabled=false;rlDailyRenderStats();rlRenderInsights();
-}
-function rlDailyNext(){
- if(!rlDailyChecked)return;
- if(rlDailyIndex<rlDailyQueue.length-1){rlDailyIndex++;rlDailyRenderQuestion();return}
- const total=rlDailyQueue.length,correct=rlDailyCorrect;
- if(typeof egRoadmapTrack==="function")egRoadmapTrack("dailySession");
- document.getElementById("rlDailyStage").innerHTML=`<div class="feedback good"><b>Daily review complete! Hoàn thành ôn tập hôm nay!</b><p>You got ${correct}/${total} correct. Bạn trả lời đúng ${correct}/${total} câu.</p><button class="btn" onclick="rlDailyStart()">Practise another set · Làm bộ câu hỏi khác</button></div>`;
- document.getElementById("rlDailyProgress").textContent="Completed · Đã hoàn thành";rlDailyRenderStats();
-}
-const EG_ROADMAP_KEY="eg3-learning-roadmap";
-const EG_ROADMAP_ACTIVITY_KEY="eg3-roadmap-activity";
-const EG_ROADMAP=[
- {title:"Phase 1 · Foundation · Nền tảng",items:[
-  ["Complete a level test · Làm bài kiểm tra trình độ",a=>a.placement===true,"Finish the 10-question placement test."],
-  ["Learn at least 10 vocabulary words · Học ít nhất 10 từ",a=>a.words>=10,"Open Vocabulary and mark 10 words as learned."],
-  ["Practise grammar · Luyện ngữ pháp",a=>a.grammar===true,"Complete a correct grammar practice."],
-
- ]},
- {title:"Phase 2 · Real-Life Communication · Giao tiếp thực tế",items:[
-  ["Practise 5 real-life conversation turns · Luyện 5 lượt hội thoại",a=>a.realTurns>=5,"Complete five conversation questions."],
-  ["Practise work and customer-service dialogues · Luyện hội thoại công việc",a=>a.workTurns>=3,"Complete three work/customer-service turns."],
-  ["Practise Nail Salon English · Luyện tiếng Anh tiệm nail",a=>a.nailTurns>=3,"Complete three Nail Salon conversation turns."],
-  ["Practise speaking and listening regularly · Luyện nói và nghe",a=>a.dailyAttempts>=5,"Answer five Daily Review questions."]
- ]},
- {title:"Phase 3 · Personal Learning · Học cá nhân hóa",items:[
-  ["Use Review My Mistakes · Ôn lỗi sai",a=>a.mistakesReviewed>=1,"Practise one saved mistake again."],
-  ["Complete 3 Daily Review sessions · Hoàn thành 3 lượt ôn tập",a=>a.dailySessions>=3,"Finish three Daily Review sets."],
-  ["Review Learning Insights · Xem phân tích tiến độ",a=>a.insightsViewed===true,"Open Learning Insights in Real-Life Conversation."],
-  ["Improve your accuracy · Cải thiện độ chính xác",a=>a.accuracy>=80&&a.dailyAttempts>=10,"Reach 80% accuracy after at least 10 Daily Review answers."]
- ]},
- {title:"Phase 4 · Advanced English · Nâng cao",items:[
-  ["Complete advanced work scenarios · Hoàn thành hội thoại công việc nâng cao",a=>a.advancedWork>=1,"Finish one advanced work scenario."],
-  ["Complete advanced Nail Salon scenarios · Hoàn thành hội thoại nail nâng cao",a=>a.advancedNail>=1,"Finish one advanced nail scenario."],
-  ["Practise natural, polite expressions · Luyện cách nói tự nhiên, lịch sự",a=>a.advancedCorrect>=6,"Answer six advanced turns correctly."],
-  ["Complete a weekly review · Hoàn thành ôn tập tuần",a=>a.weeklyReview===true,"Finish at least five Daily Review sessions."]
- ]}
-];
-function egRoadmapRead(){try{return JSON.parse(localStorage.getItem(EG_ROADMAP_KEY)||"{}")}catch(e){return {}}}
-function egRoadmapActivity(){try{return JSON.parse(localStorage.getItem(EG_ROADMAP_ACTIVITY_KEY)||"{}")}catch(e){return {}}}
-function egRoadmapSaveActivity(a){localStorage.setItem(EG_ROADMAP_ACTIVITY_KEY,JSON.stringify(a));if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender()}
-function egRoadmapTrack(type,extra={}){
- const a=egRoadmapActivity();
- if(type==="placement")a.placement=true;
- if(type==="word")a.words=Math.max(a.words||0,extra.count||0);
- if(type==="grammar")a.grammar=true;
- if(type==="listen")a.listen=true;
- if(type==="reading")a.reading=true;
- if(type==="real"){a.realTurns=(a.realTurns||0)+1;if(extra.kind==="work")a.workTurns=(a.workTurns||0)+1;if(extra.kind==="nail")a.nailTurns=(a.nailTurns||0)+1}
- if(type==="dailyAnswer")a.dailyAttempts=(a.dailyAttempts||0)+1;
- if(type==="dailySession"){a.dailySessions=(a.dailySessions||0)+1;if(a.dailySessions>=5)a.weeklyReview=true}
- if(type==="mistakeReview")a.mistakesReviewed=(a.mistakesReviewed||0)+1;
- if(type==="insights")a.insightsViewed=true;
- if(type==="advancedAnswer"&&extra.correct)a.advancedCorrect=(a.advancedCorrect||0)+1;
- if(type==="advancedComplete"){if(extra.kind==="nail")a.advancedNail=(a.advancedNail||0)+1;else a.advancedWork=(a.advancedWork||0)+1}
- if(type==="accuracy"){a.accuracy=extra.value||0}
- egRoadmapSaveActivity(a);
-}
-function egRoadmapMetrics(){
- const activity=egRoadmapActivity(),daily=(()=>{try{return JSON.parse(localStorage.getItem("eg3-daily-review-stats")||"{}")}catch(e){return {}}})();
- let attempts=0,correct=0;Object.values(daily.days||{}).forEach(d=>{attempts+=d.attempts||0;correct+=d.correct||0});
- const mistakes=(()=>{try{return JSON.parse(localStorage.getItem("eg3-real-life-mistakes")||"[]")}catch(e){return []}})();
- return {...activity,words:Math.max(activity.words||0,(typeof known!=="undefined"?known.length:0)),dailyAttempts:Math.max(activity.dailyAttempts||0,attempts),accuracy:attempts?Math.round(correct/attempts*100):(activity.accuracy||0),mistakeCount:mistakes.length};
-}
-function egRoadmapRender(){
- const host=document.getElementById("egRoadmapList");if(!host)return;
- const a=egRoadmapMetrics();let total=0,done=0,unlocked=0,next=null;
- const phases=EG_ROADMAP.map((phase,pi)=>{
-  const checks=phase.items.map(([label,test,tip])=>{total++;const complete=!!test(a);if(complete)done++;else if(!next)next={label,tip,phase:pi+1};return {label,complete,tip}});
-  const phaseDone=checks.filter(x=>x.complete).length;
-  const canOpen=pi===0||(pi>0&&EG_ROADMAP[pi-1].items.filter(([_,test])=>test(a)).length>=3);
-  if(canOpen)unlocked=pi+1;
-  const previousDone=pi>0?EG_ROADMAP[pi-1].items.filter(([_,test])=>test(a)).length:4;
-  const locked=pi>0&&previousDone<3;
-  return `<details class="panel" style="margin:0" ${pi===0||(!locked&&phaseDone<checks.length)?"open":""}><summary style="cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center"><b>${phase.title}</b><span class="badge">${locked?"🔒 Locked · Chưa mở":phaseDone+"/"+checks.length+" · "+Math.round(phaseDone/checks.length*100)+"%"}</span></summary><div style="display:grid;gap:10px;margin-top:12px">${checks.map(c=>`<div style="display:flex;gap:10px;align-items:flex-start"><span aria-hidden="true">${c.complete?"✅":locked?"🔒":"⬜"}</span><div><b>${c.label}</b><div class="small muted">${c.complete?"Completed automatically · Đã tự ghi nhận":locked?"Complete the previous phase first · Hoàn thành giai đoạn trước":"Next: "+c.tip}</div></div></div>`).join("")}</div></details>`;
- }).join("");
- host.innerHTML=phases;
- const pct=total?Math.round(done/total*100):0;
- const out=document.getElementById("egRoadmapProgress");if(out)out.textContent=`${pct}% complete · ${done}/${total} milestones · Hoàn thành ${pct}%`;
- const bar=document.getElementById("egRoadmapBar");if(bar)bar.style.width=pct+"%";
- const badge=document.getElementById("egRoadmapUnlocked");if(badge)badge.textContent=`Phase ${Math.min(4,unlocked)} available`;
- const nextEl=document.getElementById("egRoadmapNext");if(nextEl)nextEl.textContent=next?`Next step · Bước tiếp theo: ${next.label}. ${next.tip}`:"All roadmap milestones completed! Mày đã hoàn thành toàn bộ lộ trình!";
-}
-function egRoadmapReset(){if(!confirm("Reset roadmap tracking only? This will not delete your lessons or mistakes. Đặt lại theo dõi lộ trình?"))return;localStorage.removeItem(EG_ROADMAP_ACTIVITY_KEY);localStorage.removeItem(EG_ROADMAP_KEY);if(typeof cloudSchedule==="function")cloudSchedule();egRoadmapRender();}
 const RL_ADVANCED=[
  {title:"Handling a misunderstanding",context:"A colleague thinks you missed an important deadline. Clarify the situation calmly and agree on a next step.",turns:[
   {speaker:"Colleague",prompt:"I thought we agreed you'd send the revised files yesterday. I haven't received anything.",vi:"Tôi tưởng chúng ta đã thống nhất bạn sẽ gửi bản chỉnh sửa hôm qua. Tôi vẫn chưa nhận được.",choices:["You're right to follow up. I sent the draft, but I should have confirmed it reached you. I'll resend it now.","That's not my problem. Check your email.","I don't know, maybe later."],answer:0,why:"Acknowledge the concern, clarify what happened, and offer a concrete next step."},
@@ -1759,21 +1550,6 @@ function rlAdvNext(){
  rlAdvTurn++;rlAdvChoice=-1;rlAdvChecked=false;rlAdvRender();setTimeout(rlAdvListen,250);
 }
 function rlAdvReset(){rlAdvTurn=0;rlAdvChoice=-1;rlAdvChecked=false;rlAdvLoad()}
-function rlRenderInsights(){
- if(typeof egRoadmapTrack==="function"&&!sessionStorage.getItem("eg3-insights-viewed")){sessionStorage.setItem("eg3-insights-viewed","1");egRoadmapTrack("insights")}
- const stats=rlDailyStats(),days=stats.days||{},mistakes=rlGetMistakes();
- let attempts=0,correct=0;
- Object.values(days).forEach(d=>{attempts+=(d.attempts||0);correct+=(d.correct||0)});
- const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};
- set("rlInsightAttempts",attempts);set("rlInsightCorrect",correct);
- set("rlInsightAccuracy",attempts?Math.round(correct/attempts*100)+"%":"0%");
- set("rlInsightMistakes",mistakes.length);
- const focus=document.getElementById("rlInsightFocus");if(!focus)return;
- if(!mistakes.length){focus.innerHTML="No saved mistakes right now. Great work! Hiện chưa có câu sai cần ôn. Rất tốt!";return}
- const grouped={};mistakes.forEach(m=>{const k=m.topic||"Other";grouped[k]=(grouped[k]||0)+(m.count||1)});
- const sorted=Object.entries(grouped).sort((a,b)=>b[1]-a[1]).slice(0,5);
- focus.innerHTML=sorted.map(([name,count],i)=>`<div class="controls" style="justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span><b>${i+1}. ${name}</b></span><span class="badge">${count} missed attempts</span></div>`).join("");
-}
 function rlShowHint(){const q=rlTopics[rlCurrent].turns[rlTurn];document.getElementById("rlFeedback").innerHTML=`<div class="feedback"><b>Hint · Gợi ý:</b> ${q[5]}<p><b>Useful phrase · Cụm từ hữu ích:</b> ${q[4].split(" ").slice(0,4).join(" ")}...</p></div>`;}
 function rlSpeak(){say(rlTopics[rlCurrent].turns[rlTurn][4]);}
 function rlSpeakClient(){say(rlTopics[rlCurrent].turns[rlTurn][1]);}
