@@ -3563,6 +3563,7 @@ document.addEventListener("DOMContentLoaded",function(){
   rec.onerror=()=>startLocalRecording("egSpeakFeedback","Speaking Partner");
   try{rec.start()}catch(e){startLocalRecording("egSpeakFeedback","Speaking Partner")}
  };
+ window.egSafariRecord=startLocalRecording;
  function bindExtraMics(){
   const dialogue=document.getElementById("egRecordShadow");
   if(dialogue)dialogue.onclick=()=>startLocalRecording("egDialogueFeedback","Dialogue Shadowing");
@@ -3571,6 +3572,25 @@ document.addEventListener("DOMContentLoaded",function(){
  }
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindExtraMics);else bindExtraMics();
  setTimeout(bindExtraMics,1200);
+})();
+</script>
+
+<script id="englishgo-safari-all-mic-sections-v1">
+(function(){
+ const fallback=(id,label)=>{if(typeof window.egSafariRecord==="function")window.egSafariRecord(id,label)};
+ window.recognise=function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("speechFeedback");
+  if(!SR){fallback("speechFeedback","Roleplay speaking");return}
+  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>host.textContent="You said: "+e.results[0][0].transcript;r.onerror=()=>fallback("speechFeedback","Roleplay speaking");
+  try{r.start()}catch(e){fallback("speechFeedback","Roleplay speaking")}
+ };
+ window.dailyRecognise=function(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("dailySpeakResult");
+  if(!SR){fallback("dailySpeakResult","Daily speaking practice");return}
+  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>{host.textContent="You said: "+e.results[0][0].transcript;if(typeof award==="function")award("daily-speaking-"+new Date().toDateString(),10)};
+  r.onerror=()=>fallback("dailySpeakResult","Daily speaking practice");
+  try{r.start()}catch(e){fallback("dailySpeakResult","Daily speaking practice")}
+ };
 })();
 </script>
 
