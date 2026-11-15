@@ -940,7 +940,10 @@ async function cloudInitialSync(){
  if(!egCloudUser||!egCloudDb)return;
  cloudSetStatus("Syncing… · Đang đồng bộ",egCloudUser.email,"Merging this device with your cloud progress · Đang gộp tiến độ");
  const ref=egCloudDb.collection("englishgoUsers").doc(egCloudUser.uid),snap=await ref.get();
- const local=cloudCollect(),remote=snap.exists?(snap.data().progress||{}):{};
+ const local=cloudCollect(),remoteRaw=snap.exists?(snap.data().progress||{}):{};
+ // Firestore progress must be a plain map of scalar values. Older or malformed
+ // documents may contain nested Firestore entities, so normalize them to strings.
+ const remote={};if(remoteRaw&&typeof remoteRaw==="object"&&!Array.isArray(remoteRaw)){Object.entries(remoteRaw).forEach(([k,v])=>{try{const value=typeof v==="string"?v:JSON.stringify(v);if(typeof value==="string")remote[k]=value;}catch(e){console.warn("Skipped invalid cloud progress value:",k,e)}})}
  const merged=cloudMerge(local,remote);
  Object.entries(merged).forEach(([k,v])=>{try{if(k==="eg3-simulator-history"){try{const h=JSON.parse(v||"[]");if(Array.isArray(h))v=JSON.stringify(h.slice(-15).map(x=>({...x,reply:String(x.reply||"").slice(0,1200)})))}catch(e){v="[]"}}localStorage.setItem(k,v)}catch(e){if(e&&(/QuotaExceededError|quota/i.test(e.name+" "+e.message))){console.warn("Skipped oversized local simulator history; other progress will still sync.")}else{console.warn("Could not restore local key",k,e)}}});
  await ref.set({progress:merged,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
@@ -1342,8 +1345,8 @@ function rlFilterLevel(){rlInit();}
 function rlLoadTopic(autoSpeak=false){
  const s=document.getElementById("rlTopic"); if(!s)return;
  rlCurrent=Number(s.value)||0; rlTurn=0; rlHistory=[]; rlChecked=false; rlSelected=-1;
- const t=rlTopics[rlCurrent]; document.getElementById("rlSituation").textContent=t.level+" · "+t.situation;
- document.getElementById("rlReview").textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
+ const t=rlTopics[rlCurrent]; const situation=document.getElementById("rlSituation"); if(situation)situation.textContent=t.level+" · "+t.situation;
+ const review=document.getElementById("rlReview"); if(review)review.textContent="Complete a turn to start your review. Hoàn thành một lượt để xem nhận xét.";
  rlRender();
  if(autoSpeak)rlSpeakClient();
  const nextBtn=document.getElementById("rlNextBtn");if(nextBtn){nextBtn.disabled=false;nextBtn.textContent="Next · Tiếp theo →";}
@@ -2295,7 +2298,7 @@ function pronData(){return [
  {title:"Âm cuối /p/ và /b/",words:["cap","cab","rope","robe"],tip:"/p/ vô thanh, bật hơi nhẹ; /b/ hữu thanh, dây thanh rung.",vi:"Đừng bỏ âm cuối khi nói."},
  {title:"Trọng âm từ",words:["PHOtograph","phoTOgrapher","PHOtographic"],tip:"Đặt trọng âm đúng âm tiết được viết hoa; các từ cùng họ có thể đổi trọng âm.",vi:"Chú ý vị trí nhấn âm."}
 ]}
-function pronLoad(){const d=pronData()[Number(document.getElementById("pronPair").value)||0];document.getElementById("pronLesson").innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";document.getElementById("pronFeedback").textContent=""}
+function pronLoad(){const select=document.getElementById("pronPair"),lesson=document.getElementById("pronLesson"),feedback=document.getElementById("pronFeedback");if(!select||!lesson)return;const d=(window.egPronAll||pronData())[Number(select.value)||0];if(!d)return;lesson.innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";if(feedback)feedback.textContent=""}
 function pronSpeak(){
  const select=document.getElementById("pronPair");
  const index=Number(select?.value)||0;
