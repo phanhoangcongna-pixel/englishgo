@@ -3569,29 +3569,9 @@ document.addEventListener("DOMContentLoaded",function(){
    if(host.isConnected)host.textContent=msg;
   }
  }
- window.shadowRecord=function(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){startLocalRecording("shadowTranscript","Shadowing");return}
-  const rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=1;
-  document.getElementById("shadowStatus").textContent="Đang nghe…";
-  rec.onresult=e=>{document.getElementById("shadowTranscript").textContent="Bạn nói: "+e.results[0][0].transcript;document.getElementById("shadowStatus").textContent="So sánh câu vừa nói với câu mẫu và thử lại nhé."};
-  rec.onerror=()=>startLocalRecording("shadowTranscript","Shadowing");
-  try{rec.start()}catch(e){startLocalRecording("shadowTranscript","Shadowing")}
- };
- window.pronTry=function(){
-  const host=document.getElementById("pronFeedback"),SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){startLocalRecording("pronFeedback","Pronunciation practice");return}
-  const rec=new SR();rec.lang="en-US";rec.onresult=e=>host.textContent="Bạn vừa đọc: "+e.results[0][0].transcript+". Hãy so sánh với mẫu; nhận diện giọng nói không thay thế đánh giá phát âm chuyên sâu.";
-  rec.onerror=()=>startLocalRecording("pronFeedback","Pronunciation practice");
-  try{rec.start()}catch(e){startLocalRecording("pronFeedback","Pronunciation practice")}
- };
- window.egStartSpeaking=function(){
-  const host=document.getElementById("egSpeakFeedback"),SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){startLocalRecording("egSpeakFeedback","Speaking Partner");return}
-  const rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.onresult=e=>host.textContent="Bạn đã nói: "+e.results[0][0].transcript+" · Hãy thử trả lời thành 2–4 câu và chú ý thì động từ.";
-  rec.onerror=()=>startLocalRecording("egSpeakFeedback","Speaking Partner");
-  try{rec.start()}catch(e){startLocalRecording("egSpeakFeedback","Speaking Partner")}
- };
+ window.shadowRecord=function(){startLocalRecording("shadowTranscript","Shadowing")};
+ window.pronTry=function(){startLocalRecording("pronFeedback","Pronunciation practice")};
+ window.egStartSpeaking=function(){startLocalRecording("egSpeakFeedback","Speaking Partner")};
  window.egSafariRecord=startLocalRecording;
  function bindExtraMics(){
   const dialogue=document.getElementById("egRecordShadow");
@@ -3607,20 +3587,9 @@ document.addEventListener("DOMContentLoaded",function(){
 <script id="englishgo-safari-all-mic-sections-v1">
 (function(){
  const fallback=(id,label)=>{if(typeof window.egSafariRecord==="function")window.egSafariRecord(id,label)};
- window.recognise=function(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("speechFeedback");
-  if(!SR){fallback("speechFeedback","Roleplay speaking");return}
-  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>host.textContent="You said: "+e.results[0][0].transcript;r.onerror=()=>fallback("speechFeedback","Roleplay speaking");
-  try{r.start()}catch(e){fallback("speechFeedback","Roleplay speaking")}
- };
- window.dailyRecognise=function(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("dailySpeakResult");
-  if(!SR){fallback("dailySpeakResult","Daily speaking practice");return}
-  const r=new SR();r.lang="en-US";r.interimResults=false;r.onresult=e=>{host.textContent="You said: "+e.results[0][0].transcript;if(typeof award==="function")award("daily-speaking-"+new Date().toDateString(),10)};
-  r.onerror=()=>fallback("dailySpeakResult","Daily speaking practice");
-  try{r.start()}catch(e){fallback("dailySpeakResult","Daily speaking practice")}
- };
-})();
+ window.recognise=function(){fallback("speechFeedback","Roleplay speaking")};
+ window.dailyRecognise=function(){fallback("dailySpeakResult","Daily speaking practice")};
+ })();
 </script>
 
 </body></html>
