@@ -2362,13 +2362,40 @@ function normalizeTranslation(x){
  return value.replace(/\p{P}+/gu," ").replace(/\s+/gu," ").trim()
   .split(" ").map(token=>numberWords[token]||token).join(" ");
 }
+function translationAnswersMatch(answer,expected,dir){
+ const a=normalizeTranslation(answer),e=normalizeTranslation(expected);
+ if(!a||!e)return false;
+ if(a===e)return true;
+ if(dir==="vi-en"){
+  // Common greeting openers are optional and do not change the core message.
+  const greeting=/^(hi|hello|hey)(?: there)?\\b\\s*/;
+  const stripGreeting=x=>x.replace(greeting,"").trim();
+  if(stripGreeting(a)&&stripGreeting(a)===stripGreeting(e))return true;
+  // "be from" and "come from" are equivalent ways to state someone's origin.
+  const comeVerb={i:"come",you:"come",we:"come",they:"come",he:"comes",she:"comes",it:"comes"};
+  const beVerb={i:"am",you:"are",we:"are",they:"are",he:"is",she:"is",it:"is"};
+  const variants=x=>{
+   const out=new Set([x]);
+   const m=x.match(/^(i|you|we|they|he|she|it) (am|are|is|come|comes) from (.+)$/);
+   if(m){
+    const [,subject,verb,place]=m;
+    if(verb==="am"||verb==="are"||verb==="is")out.add(subject+" "+comeVerb[subject]+" from "+place);
+    else out.add(subject+" "+beVerb[subject]+" from "+place);
+   }
+   return out;
+  };
+  const av=variants(a),ev=variants(e);
+  for(const value of av)if(ev.has(value))return true;
+ }
+ return false;
+}
 function checkTranslation(){
  if(trChecked)return;trChecked=true;trDone++;
  const dir=document.getElementById("trDirection").value,answer=document.getElementById("trAnswer").value.trim();
  const expected=dir==="vi-en"?trCurrent.en:trCurrent.vi;
  const alt=dir==="vi-en"?trCurrent.alt:"";
  const norm=x=>normalizeTranslation(x||"");
- const matched=!!answer&&(norm(answer)===norm(expected)||(alt&&norm(answer)===norm(alt)));
+ const matched=!!answer&&(translationAnswersMatch(answer,expected,dir)||(alt&&translationAnswersMatch(answer,alt,dir)));
  if(matched){
   document.getElementById("trFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'</div>';
   trConfident++;say(answer);
@@ -2580,7 +2607,7 @@ function checkThousandTranslation(){
  const expected=dir==="vi-en"?item.en:item.vi;
  const answer=document.getElementById("thousandAnswer").value.trim();
  const accepted=dir==="vi-en"?(item.acceptedEn||[]):(item.acceptedVi||[]);
- const matched=!!answer&&([expected,...accepted].some(candidate=>normalizeTranslation(answer)===normalizeTranslation(candidate)));
+ const matched=!!answer&&([expected,...accepted].some(candidate=>translationAnswersMatch(answer,candidate,dir)));
  thousandAnswered=true;
  if(matched){
   document.getElementById("thousandFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
@@ -2631,7 +2658,7 @@ function checkTopicTranslation(){
  const item=topicPool[topicIndex],dir=document.getElementById("topicDirection").value;
  const expected=dir==="vi-en"?item.en:item.vi;
  const answer=document.getElementById("topicAnswer").value.trim();
- const matched=!!answer&&normalizeTranslation(answer)===normalizeTranslation(expected);
+ const matched=!!answer&&translationAnswersMatch(answer,expected,dir);
  if(matched){
   document.getElementById("topicFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
   say(answer);
