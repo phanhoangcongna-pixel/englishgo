@@ -2814,6 +2814,36 @@ function dictCheck(){
 const phrasalData=[
 ["get up","thức dậy","I get up at six every morning."],["wake up","tỉnh giấc","I woke up early today."],["find out","tìm ra, phát hiện","I found out the truth."],["look after","chăm sóc","She looks after her little brother."],["look for","tìm kiếm","I'm looking for my keys."],["give up","từ bỏ","Don't give up on your dreams."],["put off","trì hoãn","We put off the meeting."],["run out of","hết, cạn","We've run out of milk."],["pick up","đón; nhặt lên","I'll pick you up at seven."],["turn down","từ chối; vặn nhỏ","He turned down the offer."],["get along with","hòa thuận với","I get along with my colleagues."],["carry on","tiếp tục","Please carry on working."],["break down","hỏng; suy sụp","Our car broke down."],["come across","tình cờ bắt gặp","I came across an old photo."],["work out","tập thể dục; tìm ra cách","We can work it out."],["take off","cất cánh; cởi ra","The plane takes off at noon."],["call off","hủy bỏ","They called off the match."],["hang out","đi chơi, tụ tập","We hang out at weekends."],["once in a blue moon","hiếm khi","I eat fast food once in a blue moon."],["piece of cake","dễ như ăn bánh","The test was a piece of cake."],["under the weather","hơi mệt","I'm feeling under the weather."],["break the ice","phá tan sự ngại ngùng","A joke can break the ice."]
 ];
+phrasalData.push(
+["ask around","hỏi thăm nhiều người","I asked around, but nobody knew the answer.","Phrasal verb"],
+["back up","sao lưu; ủng hộ","Back up your files before updating the computer.","Phrasal verb"],
+["bring about","gây ra, đem lại","The new policy brought about major changes.","Phrasal verb"],
+["call back","gọi lại","I'm busy now. Can I call you back later?","Phrasal verb"],
+["carry out","tiến hành, thực hiện","The team carried out a detailed survey.","Phrasal verb"],
+["catch up with","bắt kịp; cập nhật tình hình với","I need to catch up with my emails.","Phrasal verb"],
+["cut down on","cắt giảm","I'm trying to cut down on sugar.","Phrasal verb"],
+["deal with","xử lý, giải quyết","She knows how to deal with difficult customers.","Phrasal verb"],
+["drop by","ghé qua","Feel free to drop by after work.","Phrasal verb"],
+["end up","cuối cùng lại, rốt cuộc","We got lost and ended up in a small village.","Phrasal verb"],
+["get by","xoay xở, sống tạm ổn","I can get by with basic German.","Phrasal verb"],
+["get rid of","loại bỏ","We need to get rid of these outdated documents.","Phrasal verb"],
+["give in","nhượng bộ, chịu thua","After a long discussion, he finally gave in.","Phrasal verb"],
+["go through","trải qua; xem xét kỹ","Let's go through the report together.","Phrasal verb"],
+["hold on","chờ một chút; bám chắc","Hold on a second. I'll check that for you.","Phrasal verb"],
+["keep on","tiếp tục làm","If you keep on practising, you'll improve.","Phrasal verb"],
+["leave out","bỏ sót, không đưa vào","Don't leave out any important details.","Phrasal verb"],
+["let down","làm thất vọng","I don't want to let my team down.","Phrasal verb"],
+["make up for","bù đắp","He worked overtime to make up for the delay.","Phrasal verb"],
+["move on","tiếp tục, bước tiếp","It's time to learn from the mistake and move on.","Phrasal verb"],
+["pay off","mang lại kết quả; trả hết nợ","All her hard work finally paid off.","Phrasal verb"],
+["put forward","đề xuất, đưa ra","She put forward a practical solution.","Phrasal verb"],
+["take after","giống (thành viên gia đình)","Mia takes after her mother.","Phrasal verb"],
+["take over","tiếp quản, đảm nhận","A new manager will take over next month.","Phrasal verb"],
+["think over","suy nghĩ kỹ","Take your time to think it over.","Phrasal verb"],
+["wear out","làm mòn; kiệt sức","These shoes are starting to wear out.","Phrasal verb"],
+["figure out","tìm ra, hiểu ra","We need to figure out what went wrong.","Phrasal verb"],
+["get in touch with","liên hệ với","I'll get in touch with you next week.","Phrasal verb"]
+);
 function phrasalRender(){
  const q=(document.getElementById("phrasalSearch")?.value||"").toLowerCase();
  const rows=phrasalData.filter(x=>x.join(" ").toLowerCase().includes(q));
