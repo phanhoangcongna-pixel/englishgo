@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <link href="englishgo-icon.png" rel="icon" type="image/png"/>
 <link href="englishgo-icon.png" rel="apple-touch-icon"/>
 <link rel="manifest" href="manifest.webmanifest"/>
@@ -445,11 +445,14 @@ body > header #mainNav > .nav-group > summary {
 </style>
 
 <style id="englishgo-ios-statusbar-theme">
-/* Match the iPhone standalone-app status-bar safe area to the EnglishGo navy header. */
+/* Extend the navy header behind the iPhone standalone-app status bar. */
 html { background: #142342; }
 @media (display-mode: standalone), (display-mode: fullscreen) {
-  html { background: #142342; }
-  body { padding-top: env(safe-area-inset-top, 0px); }
+  body { padding-top: 0 !important; }
+  body > header {
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    background: #142342 !important;
+  }
 }
 </style>
 </head>
