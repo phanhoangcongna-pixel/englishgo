@@ -871,7 +871,7 @@ html { background: #142342; }
 <div id="reflex1500Feedback"></div>
 <p class="small muted" id="reflex1500Progress">50 chủ đề · 1.500 câu · Mỗi chủ đề 30 câu.</p>
 </div>
-<div class="panel" style="margin-top:14px">
+<div class="panel eg-notice-only" id="translationPracticeNote" style="margin-top:14px">
 <h2>Cách luyện hiệu quả</h2>
 <ol><li>Đọc câu tiếng Việt và tự nói tiếng Anh thành tiếng trong 3–5 giây.</li><li>Nhập câu bạn vừa nói, sau đó bấm “Check”.</li><li>So sánh với đáp án mẫu. Có thể có nhiều cách dịch đúng.</li><li>Bấm “Câu tiếp theo” và cố gắng trả lời nhanh hơn.</li></ol>
 <p class="small muted">Lưu ý: phần kiểm tra là gợi ý theo đáp án mẫu; nếu diễn đạt khác nhưng đúng ngữ pháp và ý nghĩa, hãy tự đánh giá là đã nhớ.</p>
@@ -4006,7 +4006,7 @@ document.addEventListener("DOMContentLoaded",function(){
   const children=Array.from(page.children);
   let blocks=[];
   children.forEach(el=>{
-   if(el.classList.contains("panel")) blocks.push(el);
+   if(el.classList.contains("panel")&&!el.classList.contains("eg-notice-only")) blocks.push(el);
    else if(el.classList.contains("grid")){
     const cards=Array.from(el.children).filter(x=>x.classList.contains("panel")||x.classList.contains("card"));
     if(cards.length>1) blocks.push(...cards);
