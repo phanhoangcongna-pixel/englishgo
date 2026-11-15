@@ -3509,8 +3509,22 @@ document.addEventListener("DOMContentLoaded",function(){
    host.textContent="Safari này chưa hỗ trợ ghi âm trên trang. Hãy cập nhật Safari và kiểm tra quyền Microphone cho website.";return;
   }
   if(activeSession){host.textContent="Một phiên ghi âm khác vẫn đang hoạt động. Hãy bấm Dừng ở đúng khung ghi âm đó trước.";return}
-  const trigger=targetId==="egDialogueFeedback"?document.getElementById("egRecordShadow"):targetId==="egPronFeedback"?document.querySelector('[onclick*="pronTry"]'):null;
-  const controls=trigger&&trigger.closest(".controls");
+  const triggerMap={
+   shadowTranscript:"shadowRecord",
+   egDialogueFeedback:"egRecordShadow",
+   egSpeakFeedback:null,
+   pronFeedback:null,
+   egPronFb:"egPronMic",
+   speechFeedback:null,
+   dailySpeakResult:null
+  };
+  let triggerId=triggerMap[targetId];
+  let trigger=triggerId?document.getElementById(triggerId):null;
+  if(!trigger&&targetId==="pronFeedback")trigger=document.querySelector('#pronunciation button[onclick*="pronTry"]');
+  if(!trigger&&targetId==="egSpeakFeedback")trigger=document.querySelector('#egSpeakingPartner button[onclick*="egStartSpeaking"]');
+  if(!trigger&&targetId==="speechFeedback")trigger=document.querySelector('#realconversation button[onclick*="recognise"]');
+  if(!trigger&&targetId==="dailySpeakResult")trigger=document.querySelector('button[onclick*="dailyRecognise"]');
+  const controls=trigger&&trigger.parentElement;
   const session={id:++recordingCounter,recorder:null,stream:null,chunks:[],host,label,trigger,controls,stopButton:null};
   activeSession=session;
   try{
@@ -3542,8 +3556,10 @@ document.addEventListener("DOMContentLoaded",function(){
    recorder.start();
    if(session.trigger)session.trigger.hidden=true;
    if(session.controls){
-    const stop=document.createElement("button");stop.type="button";stop.className="btn";stop.textContent="■ Dừng ghi âm";stop.id="egStopLocalRecording_"+session.id;
-    session.controls.insertBefore(stop,session.trigger?session.trigger.nextSibling:null);session.stopButton=stop;
+    const stop=document.createElement("button");stop.type="button";stop.className="btn primary";stop.textContent="■ Dừng ghi âm";stop.id="egStopLocalRecording_"+session.id;
+    stop.style.display="inline-flex";stop.style.margin="6px 8px 6px 0";stop.style.verticalAlign="middle";
+    if(session.trigger&&session.trigger.parentElement===session.controls)session.trigger.insertAdjacentElement("afterend",stop);else session.controls.appendChild(stop);
+    session.stopButton=stop;
     stop.onclick=()=>{if(recorder.state==="recording"){stop.disabled=true;stop.textContent="Đang lưu…";recorder.stop()}};
    }
    host.textContent="🔴 Đang ghi âm… Hãy nói tiếng Anh. Bấm Dừng ghi âm ở phía trên khi hoàn tất.";
