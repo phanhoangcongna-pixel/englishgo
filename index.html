@@ -22,7 +22,7 @@ h2{font-size:21px;margin:0 0 4px}.muted{color:var(--muted)}.small{font-size:13px
 @media(max-width:560px){.nav{flex-wrap:wrap;padding:10px 12px}.navlinks{order:3;flex-basis:100%}main{padding:0 12px 40px}.hero{padding:22px}.grid{grid-template-columns:1fr 1fr}.card,.panel{padding:14px}.wordrow{grid-template-columns:1fr auto}.wordrow .meaning{grid-column:1/-1;grid-row:2}}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}</style>
 <style>
-.flashcard{border:0;cursor:pointer;box-shadow:0 15px 35px #183b7826;transition:transform .2s}.flashcard:active{transform:scale(.99)}
+
 .btn.gold{background:#f4bd55;color:#352300}.wordlist{display:grid;gap:8px}.wordrow{grid-template-columns:minmax(110px,1fr) minmax(120px,1.2fr) auto;gap:12px}.wordrow button{white-space:nowrap}.wordrow .meaning{font-size:14px}.savedrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:12px}.savedrow button{padding:7px 10px;border-radius:9px;background:var(--pale);color:var(--blue)}
 textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}.navlinks{flex-wrap:wrap}.navlinks button{white-space:nowrap}
 @media(max-width:700px){.nav{align-items:flex-start;flex-direction:column}.navlinks{width:100%;overflow-x:auto;flex-wrap:nowrap}.savedrow{align-items:flex-start;flex-direction:column}}
@@ -486,7 +486,7 @@ html { background: #142342; }
 <button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
+<button data-page="translation">🔁 Translation Reflex </button><button data-page="placement">🎯 Level Test </button>
 </div></details>
 <button data-page="progress">📊 Progress</button><button data-page="cloud">☁ Cloud Sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
@@ -822,23 +822,7 @@ html { background: #142342; }
 </section>
 
 <section class="page" id="writing"><h1 class="title">Writing · Luyện viết</h1><p class="intro">Write a short paragraph and save it on your device. Viết đoạn văn ngắn và lưu trên thiết bị.</p><div class="panel"><h2>Introduce yourself · Giới thiệu bản thân</h2><p>Write 5–7 sentences about your name, home, work or studies, and hobbies.<br/><span class="muted">Viết 5–7 câu về tên, nơi ở, công việc hoặc học tập và sở thích.</span></p><div class="example">My name is Mai. I live in Berlin. I work in a shop. I enjoy listening to music.<em>Tôi tên Mai. Tôi sống ở Berlin. Tôi làm ở cửa hàng. Tôi thích nghe nhạc.</em></div><textarea id="writingText" placeholder="My name is... / Tôi tên là..."></textarea><div class="controls"><button class="btn" onclick="saveWriting()">Save writing · Lưu bài</button><span class="muted small" id="writingStatus"></span></div><p class="small muted">Saved only in this browser. Chỉ lưu trong trình duyệt này.</p></div></section>
-<section class="page" id="quiz"><h1 class="title">A2 Quiz · Kiểm tra A2</h1><p class="intro">Quick grammar and vocabulary quiz. Bài kiểm tra nhanh từ vựng và ngữ pháp.</p><div class="panel"><span class="badge" id="quizNo">Question 1</span><h2 id="quizQ">Loading...</h2><p class="muted" id="quizVi"></p><div class="choices" id="quizChoices"></div><div id="quizFeedback"></div><div class="controls"><button class="btn" disabled="" id="quizNext" onclick="nextQuiz()">Next · Tiếp theo</button><button class="btn line" onclick="restartQuiz()">Restart · Làm lại</button></div></div></section>
 <section class="page" id="placement"><h1 class="title">Find your level · Kiểm tra trình độ</h1><p class="intro">A short placement test from A1 to B1. Bài kiểm tra ngắn để ước lượng trình độ A1 đến B1.</p><div class="panel"><span class="badge" id="placeNo">Question 1 / 10</span><h2 id="placeQ"></h2><p class="muted" id="placeVi"></p><div class="choices" id="placeChoices"></div><div id="placeFeedback"></div><div class="controls"><button class="btn" disabled="" id="placeNext" onclick="nextPlace()">Next · Tiếp theo</button><button class="btn line" onclick="restartPlace()">Restart · Làm lại</button></div></div></section>
-
-<section class="page" id="flashcards">
-<h1 class="title">Smart flashcards · Thẻ từ vựng thông minh</h1>
-<p class="intro">Flip each card, save difficult words and review them later. Lật thẻ, lưu từ khó và ôn tập lại.</p>
-<div class="panel" style="max-width:760px;margin:auto;text-align:center">
-<div class="small muted" id="fcCount"></div>
-<button class="flashcard" id="flashCard" onclick="flipFlashcard()" style="width:100%;min-height:230px;border-radius:22px;background:linear-gradient(135deg,#183b78,#347de8);color:white;padding:28px;margin:16px 0">
-<div class="small" id="fcHint">ENGLISH WORD · NHẤN ĐỂ LẬT</div><div id="fcFront" style="font-size:clamp(30px,6vw,48px);font-weight:900;margin:20px 0">Hello</div><div id="fcBack" style="font-size:20px;display:none"></div>
-</button>
-<div class="controls" style="justify-content:center;flex-wrap:wrap">
-<button class="btn line" onclick="flashPrev()">← Previous · Trước</button><button class="btn" onclick="flashNext()">Next · Tiếp →</button><button class="btn gold" onclick="flashSave()">☆ Difficult · Từ khó</button><button class="btn line" onclick="flashKnown()">✓ I know it · Đã nhớ</button>
-</div><p class="muted" id="fcStatus"></p>
-</div>
-<div class="panel"><h2>Words to review · Từ cần ôn</h2><div class="wordlist" id="savedWords"></div></div>
-</section>
 
 <section class="page" id="progress">
 <h1 class="title">My learning progress · Tiến độ học tập</h1>
@@ -968,7 +952,7 @@ async function cloudInitialSync(){
  egCloudReady=true;cloudSetStatus("Connected · Đã kết nối",egCloudUser.email,"Your progress is synced. Use this same Google account on both devices. Tiến độ đã đồng bộ.");
  // Refresh in-memory app state from the merged local cache.
  xp=get("xp",0);known=get("known",[]);done=get("done",[]);lastDay=get("day","");streak=get("streak",0);
- updateStats();renderProgress();flashRender();
+ updateStats();renderProgress();
 }
 async function cloudSyncNow(){if(!egCloudUser){alert("Sign in first · Hãy đăng nhập trước");return}await cloudWrite()}
 async function cloudSignOut(){if(window.firebase&&firebase.apps.length){await firebase.auth().signOut()}egCloudUser=null;egCloudReady=false;cloudSetStatus("Not signed in · Chưa đăng nhập","","Progress remains saved locally · Tiến độ vẫn được lưu trên thiết bị")}
@@ -1011,7 +995,7 @@ function go(id){
  window.scrollTo({top:0,behavior:"smooth"});
  if(id==="vocab")renderWords();
  if(id==="grammar")renderGrammar();
- if(id==="quiz")renderQuiz();
+ 
  if(id==="placement")renderPlace();
  if(id==="realconversation"){
    if(typeof rlInit==="function")rlInit();
@@ -1153,44 +1137,21 @@ function listenCheck(i){let f=document.getElementById("listenFeedback");f.classN
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function saveWriting(){localStorage.setItem("eg2-writing",document.getElementById("writingText").value);document.getElementById("writingStatus").textContent="Saved · Đã lưu";if(document.getElementById("writingText").value.trim().length>20)award("writing",10)}
 document.getElementById("writingText").value=localStorage.getItem("eg2-writing")||"";
-const quiz=[["She ___ to work every day.","Cô ấy đi làm mỗi ngày.",["go","goes","going"],1],["I ___ a film yesterday.","Hôm qua tôi đã xem phim.",["watch","watched","watches"],1],["There ___ two books on the table.","Có hai quyển sách trên bàn.",["is","are","am"],1],["I'm interested ___ music.","Tôi thích âm nhạc.",["on","at","in"],2],["We are going to ___ dinner.","Chúng tôi dự định ăn tối.",["have","has","having"],0]];
-let qi=0,qs=0,qa=false;function renderQuiz(){let q=quiz[qi];document.getElementById("quizNo").textContent=`Question ${qi+1}/${quiz.length}`;document.getElementById("quizQ").textContent=q[0];document.getElementById("quizVi").textContent=q[1];document.getElementById("quizChoices").innerHTML=q[2].map((a,i)=>`<button class="choice" onclick="answerQuiz(${i})">${a}</button>`).join("");document.getElementById("quizFeedback").textContent="";document.getElementById("quizNext").disabled=true;qa=false}
-function answerQuiz(i){if(qa)return;qa=true;let q=quiz[qi],ok=i===q[3];if(ok)qs++;document.querySelectorAll("#quizChoices button").forEach((b,j)=>{if(j===q[3])b.classList.add("good");else if(j===i)b.classList.add("bad");b.disabled=true});let f=document.getElementById("quizFeedback");f.className="feedback "+(ok?"good":"bad");f.textContent=ok?"Correct! Chính xác!":"Not quite. Review the grammar. Chưa đúng, hãy ôn lại.";document.getElementById("quizNext").disabled=false}
-function nextQuiz(){if(qi<quiz.length-1){qi++;renderQuiz()}else{document.getElementById("quizQ").textContent=`Your score: ${qs}/${quiz.length} · Điểm của bạn: ${qs}/${quiz.length}`;document.getElementById("quizVi").textContent="Well done! Keep practising. Hãy tiếp tục luyện tập.";document.getElementById("quizChoices").innerHTML="";document.getElementById("quizNext").disabled=true;award("quiz",20)}}
-function restartQuiz(){qi=0;qs=0;renderQuiz()}
 let pi=0,ps=0,pa=false;function renderPlace(){let q=DATA.placement[pi];document.getElementById("placeNo").textContent=`Question ${pi+1}/10 · ${q[0]}`;document.getElementById("placeQ").textContent=q[1];document.getElementById("placeVi").textContent=q[2];document.getElementById("placeChoices").innerHTML=q[3].map((a,i)=>`<button class="choice" onclick="answerPlace(${i})">${a}</button>`).join("");document.getElementById("placeFeedback").textContent="";document.getElementById("placeNext").disabled=true;pa=false}
 function answerPlace(i){if(pa)return;pa=true;let q=DATA.placement[pi],ok=i===q[4];if(ok)ps++;document.querySelectorAll("#placeChoices button").forEach((b,j)=>{if(j===q[4])b.classList.add("good");else if(j===i)b.classList.add("bad");b.disabled=true});let f=document.getElementById("placeFeedback");f.className="feedback "+(ok?"good":"bad");f.textContent=ok?"Correct! Chính xác!":"Not quite. Review and continue. Chưa đúng, hãy ôn lại và tiếp tục.";document.getElementById("placeNext").disabled=false}
 function nextPlace(){if(pi<9){pi++;renderPlace()}else{let level=ps<=3?"A1":ps<=7?"A2":"B1";document.getElementById("placeQ").textContent=`Your estimated level: ${level} (${ps}/10) · Trình độ ước lượng: ${level}`;document.getElementById("placeVi").textContent="This is an informal practice test, not an official certificate. Đây là bài kiểm tra tham khảo, không phải chứng chỉ chính thức.";document.getElementById("placeChoices").innerHTML="";document.getElementById("placeNext").disabled=true;award("placement",25);if(typeof egRoadmapTrack==="function")egRoadmapTrack("placement")}}
 function restartPlace(){pi=0;ps=0;renderPlace()}
-updateStats();renderWords();renderQuiz();renderPlace();
+updateStats();renderWords();renderPlace();
 
 // EnglishGo 3.0 additions — all features run locally, without paid APIs.
 const EG3={
  get(k,d){try{return JSON.parse(localStorage.getItem("eg3-"+k))??d}catch(e){return d}},
  set(k,v){localStorage.setItem("eg3-"+k,JSON.stringify(v))}
 };
-let flashIndex=0,flashFlipped=false;
-function flashRender(){
- const w=DATA.vocab[flashIndex%DATA.vocab.length];
- document.getElementById("fcCount").textContent=`${flashIndex+1} / ${DATA.vocab.length} · Từ ${flashIndex+1}/${DATA.vocab.length}`;
- document.getElementById("fcFront").textContent=w.w;
- document.getElementById("fcBack").innerHTML=`${w.ipa}<br><b>${w.vi}</b><br><small>${w.ex}<br>${w.vn}</small>`;
- document.getElementById("fcBack").style.display=flashFlipped?"block":"none";
- document.getElementById("fcHint").textContent=flashFlipped?"MEANING & EXAMPLE · NGHĨA VÀ VÍ DỤ":"TAP TO FLIP · NHẤN ĐỂ LẬT";
- document.getElementById("fcStatus").textContent=EG3.get("difficult",[]).includes(w.w)?"☆ Saved for review · Đã lưu để ôn tập":"";
- renderSavedWords();
-}
-function flipFlashcard(){flashFlipped=!flashFlipped;flashRender()}
-function flashNext(){flashIndex=(flashIndex+1)%DATA.vocab.length;flashFlipped=false;flashRender()}
-function flashPrev(){flashIndex=(flashIndex+DATA.vocab.length-1)%DATA.vocab.length;flashFlipped=false;flashRender()}
-function flashSave(){let a=EG3.get("difficult",[]),w=DATA.vocab[flashIndex].w;if(!a.includes(w))a.push(w);EG3.set("difficult",a);flashRender()}
-function flashKnown(){let i=DATA.vocab.findIndex(x=>x.w===DATA.vocab[flashIndex].w);if(!known.includes(i)){known.push(i);save("known",known);award("flash-"+i,5)}flashNext();updateStats()}
-function renderSavedWords(){let a=EG3.get("difficult",[]);document.getElementById("savedWords").innerHTML=a.length?a.map(w=>`<div class="savedrow"><b>${w}</b><button onclick="say(${JSON.stringify(w)})">🔊 Listen</button><button onclick="removeDifficult(${JSON.stringify(w)})">Remove · Xóa</button></div>`).join(""):"<p class='muted'>No saved words yet. Chưa có từ nào được lưu.</p>"}
-function removeDifficult(w){EG3.set("difficult",EG3.get("difficult",[]).filter(x=>x!==w));renderSavedWords()}
 function renderProgress(){document.getElementById("progressXP").textContent=(localStorage.getItem("eg2-xp")||"0")+" XP";document.getElementById("progressWords").textContent=known.length+"/"+DATA.vocab.length;document.getElementById("progressStreak").textContent=localStorage.getItem("eg2-streak")||"0";let acts=EG3.get("completed",[]);document.getElementById("progressAchievements").textContent=acts.length;document.getElementById("achievementList").innerHTML=acts.length?acts.map(x=>`<div class="savedrow">🏅 ${x}</div>`).join(""):"<p class='muted'>Complete a lesson to earn your first achievement. Hoàn thành bài học để nhận thành tích đầu tiên.</p>";}
 function exportProgress(){let keys=["eg2-xp","eg2-streak","eg2-last","eg2-known","eg2-writing"];let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));data.eg3={difficult:EG3.get("difficult",[]),completed:EG3.get("completed",[]),dailyWriting:EG3.get("dailyWriting","")};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="englishgo-progress-backup.json";a.click();URL.revokeObjectURL(a.href)}
 function importProgressFile(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);Object.entries(d).forEach(([k,v])=>{if(k==="eg3"){Object.entries(v).forEach(([a,b])=>EG3.set(a,b))}else if(v!==null)localStorage.setItem(k,v)});alert("Progress restored · Đã khôi phục tiến độ");location.reload()}catch(err){alert("Invalid backup file · File sao lưu không hợp lệ")}};r.readAsText(f)}
-const oldGo=go;go=function(id){oldGo(id);if(id==="flashcards")flashRender();if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");};
+const oldGo=go;go=function(id){oldGo(id);if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");};
 
 // Real-Life English: 20 offline bilingual conversation scenarios (A1–B1).
 var rlTopics = [
@@ -1591,7 +1552,7 @@ document.addEventListener("keydown",e=>{
 });
 
 
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlInit();rlAdvLoad()});
+document.addEventListener("DOMContentLoaded",()=>{renderProgress();rlInit();rlAdvLoad()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
@@ -2973,16 +2934,6 @@ document.addEventListener("DOMContentLoaded",function(){
  ["Nếu trời đẹp, chúng tôi sẽ đi dạo.","If the weather is nice, we'll go for a walk.","Điều kiện loại một."],
  ["Tôi đang tìm một hiệu thuốc gần đây.","I'm looking for a pharmacy nearby.","look for = tìm kiếm."]
  ]},
- quiz:{title:"Quick Quiz · Kiểm tra nhanh",desc:"Bộ câu hỏi bổ sung để ôn từ vựng và ngữ pháp.",items:[
- ["What is the opposite of “generous”?",["selfish","kind","polite"],0,"Generous = hào phóng; selfish = ích kỷ."],
- ["Choose the natural phrase:",["do a decision","make a decision","take a decisioning"],1,"Collocation thông dụng: make a decision."],
- ["“I'm exhausted” means…",["very tired","very excited","very hungry"],0,"Exhausted = kiệt sức, rất mệt."],
- ["We arrived ___ the airport early.",["at","in","on"],0,"Arrive at + địa điểm cụ thể."],
- ["Could you ___ me a favour?",["make","do","give"],1,"Cụm cố định: do someone a favour."]
- ]},
- flashcards:{title:"Flashcard Deck · Bộ thẻ từ mới",desc:"Lật thẻ để xem nghĩa và câu ví dụ.",items:[
- ["run out of","hết, cạn","We've run out of milk."],["look forward to","mong chờ","I look forward to hearing from you."],["figure out","tìm ra, hiểu ra","I can't figure out this problem."],["on time","đúng giờ","The train arrived on time."],["take part in","tham gia","She took part in the competition."],["get along with","hòa thuận với","I get along with my teammates."],["give up","từ bỏ","Don't give up learning English."],["carry on","tiếp tục","Please carry on with your work."]
- ]},
  practice:{title:"Daily Practice · Luyện tập mỗi ngày",desc:"Viết câu trả lời, xem bản dịch đề bài, dùng từ gợi ý và nhận phản hồi/sửa lỗi.",items:[
  ["Describe your morning routine in five sentences.","Dùng hiện tại đơn và trạng từ tần suất.","Hãy miêu tả thói quen buổi sáng của bạn bằng năm câu.","wake up (thức dậy) · usually (thường) · have breakfast (ăn sáng) · get dressed (mặc quần áo) · go to work/school (đi làm/đi học)","routine"],
  ["Talk about a place you would recommend.","Dùng there is/are, tính từ miêu tả và because.","Hãy nói về một địa điểm mà bạn muốn giới thiệu.","recommend (giới thiệu) · beautiful (đẹp) · peaceful (yên bình) · there is/are (có) · because (bởi vì)","place"],
@@ -3090,9 +3041,9 @@ document.addEventListener("DOMContentLoaded",function(){
   let idx=0,show=false;
   function draw(){const d=data.items[idx];let body="";
    if(id==="reading"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><b>'+safe(d[2])+'</b><div class="choices" style="display:grid;gap:8px">'+d[3].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
-   else if(id==="grammar"||id==="quiz"){body='<h3>'+safe(d[0])+'</h3><div class="choices" style="display:grid;gap:8px">'+d[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
+   else if(id==="grammar"){body='<h3>'+safe(d[0])+'</h3><div class="choices" style="display:grid;gap:8px">'+d[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
    else if(id==="translation"){body='<h3>'+safe(d[0])+'</h3><textarea id="egTranslationInput" rows="3" placeholder="Nhập câu tiếng Anh của bạn..."></textarea><div class="controls"><button class="btn primary" id="egCheckTranslation">Check · Kiểm tra</button><button class="btn" id="egReveal_'+id+'">Xem gợi ý bản dịch</button></div><p id="egTranslationFeedback" aria-live="polite"></p><p id="egAns_'+id+'"></p>'}
-   else if(id==="flashcards"){body='<button class="card soft" style="width:100%;min-height:130px;text-align:center" id="egFlip_'+id+'"><h2>'+safe(d[0])+'</h2><p>'+ (show?safe(d[1])+"<br>"+safe(d[2]):"Nhấn để lật thẻ")+'</p></button>'}
+   
    else if(id==="progress"){body='<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-progress="'+idx+'"> '+safe(d[1])+'</label>'}
    else if(id==="cloud"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><b>'+safe(d[2])+'</b>'}
    else if(id==="practice"){body='<p class="eg-practice-prompt">'+safe(d[0])+'</p><p class="eg-practice-translation">'+safe(d[2]||"")+'</p><p class="eg-practice-instruction">'+safe(d[1])+'</p><details class="panel soft" style="margin:10px 0"><summary style="cursor:pointer;font-weight:600">💡 Từ vựng gợi ý</summary><p style="margin-bottom:0">'+safe(d[3]||"")+'</p></details><label for="egWrite_practice"><b>Your answer · Câu trả lời của bạn</b></label><textarea id="egWrite_practice" rows="5" placeholder="Write your answer in English… (Enter để nộp, Shift + Enter để xuống dòng)"></textarea><div class="controls"><button class="btn" id="egSave_practice" type="button">Check & submit · Kiểm tra lỗi (Enter ↵)</button></div><p class="small muted">Bài viết được dò lỗi ngữ pháp bằng LanguageTool nếu kết nối được. Ứng dụng chỉ nêu lỗi và gợi ý; bạn tự sửa bài.</p><div id="egFb_practice" aria-live="polite"></div>'}
@@ -3103,9 +3054,9 @@ document.addEventListener("DOMContentLoaded",function(){
    root.innerHTML='<div class="controls"><span class="badge">Bài '+(idx+1)+' / '+data.items.length+'</span><span class="muted">'+safe(data.title)+'</span></div>'+body+'<div class="controls"><button class="btn line" id="egPrev_'+id+'">← Trước</button><button class="btn" id="egNext_'+id+'">Tiếp theo →</button></div>';
    $("egPrev_"+id).onclick=()=>{idx=(idx+data.items.length-1)%data.items.length;show=false;draw()};
    $("egNext_"+id).onclick=()=>{idx=(idx+1)%data.items.length;show=false;draw()};
-   if(id==="grammar"||id==="quiz")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===d[2];const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";fb.textContent+=(d[3]||"");});
+   if(id==="grammar")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===d[2];const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";fb.textContent+=(d[3]||"");});
    if(id==="translation"){$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};$("egCheckTranslation").onclick=()=>{const input=$("egTranslationInput").value.trim();const normalize=value=>String(value).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim();const feedback=$("egTranslationFeedback");if(!input){feedback.textContent="Hãy nhập câu tiếng Anh trước khi kiểm tra nhé.";return}if(normalize(input)===normalize(d[1])){feedback.textContent="✅ Khớp với đáp án gợi ý! Rất tốt."}else{feedback.textContent="📝 Câu của bạn khác đáp án mẫu. Hãy xem gợi ý để đối chiếu; cách diễn đạt khác vẫn có thể đúng nếu đúng ngữ pháp và ý nghĩa."}};}
-   if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
+   
    if(id==="practice"){
     const answerBox=$("egWrite_practice"),submit=$("egSave_practice");
     const submitPractice=()=>egSubmitDailyWriting(d,answerBox,$("egFb_practice"),submit);
