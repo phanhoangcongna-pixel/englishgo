@@ -3346,7 +3346,8 @@ function egStartSpeaking(){
   const root=$("egBank_"+id);if(!root)return;
   let idx=0,show=false;
   function draw(){const d=data.items[idx];let body="";
-   if(id==="grammar"||id==="reading"||id==="quiz"){body='<h3>'+safe(d[0])+'</h3><div class="choices" style="display:grid;gap:8px">'+d[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
+   if(id==="reading"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><b>'+safe(d[2])+'</b><div class="choices" style="display:grid;gap:8px">'+d[3].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
+   else if(id==="grammar"||id==="quiz"){body='<h3>'+safe(d[0])+'</h3><div class="choices" style="display:grid;gap:8px">'+d[1].map((v,i)=>'<button class="choice" data-i="'+i+'">'+safe(v)+'</button>').join("")+'</div><p id="egFb_'+id+'" aria-live="polite"></p>'}
    else if(id==="translation"){body='<h3>'+safe(d[0])+'</h3><button class="btn" id="egReveal_'+id+'">Xem gợi ý bản dịch</button><p id="egAns_'+id+'"></p>'}
    else if(id==="flashcards"){body='<button class="card soft" style="width:100%;min-height:130px;text-align:center" id="egFlip_'+id+'"><h2>'+safe(d[0])+'</h2><p>'+ (show?safe(d[1])+"<br>"+safe(d[2]):"Nhấn để lật thẻ")+'</p></button>'}
    else if(id==="progress"){body='<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-progress="'+idx+'"> '+safe(d[1])+'</label>'}
@@ -3359,7 +3360,7 @@ function egStartSpeaking(){
    root.innerHTML='<div class="controls"><span class="badge">Bài '+(idx+1)+' / '+data.items.length+'</span><span class="muted">'+safe(data.title)+'</span></div>'+body+'<div class="controls"><button class="btn line" id="egPrev_'+id+'">← Trước</button><button class="btn" id="egNext_'+id+'">Tiếp theo →</button></div>';
    $("egPrev_"+id).onclick=()=>{idx=(idx+data.items.length-1)%data.items.length;show=false;draw()};
    $("egNext_"+id).onclick=()=>{idx=(idx+1)%data.items.length;show=false;draw()};
-   if(id==="grammar"||id==="reading"||id==="quiz")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===d[id==="reading"?4: id==="grammar"||id==="quiz"?2:2];const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||d[4]||"";});
+   if(id==="grammar"||id==="quiz"||id==="reading")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===(id==="reading"?d[4]:d[2]);const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||"";});
    if(id==="translation")$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};
    if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
    if(id==="practice")$("egSave_"+id).onclick=()=>{$("egFb_"+id).textContent="Đã giữ câu trả lời trong ô này. Hãy đọc to và tự kiểm tra ngữ pháp nhé."};
