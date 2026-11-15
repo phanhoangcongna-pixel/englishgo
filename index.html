@@ -1304,8 +1304,11 @@ async function lookupDictionary(){
    const mainEntry=mainItem.entry, defs=dictionaryDefinitions(mainEntry), ipa=dictionaryIpa(mainEntry);
    htmlOut+='<article class="panel dict-entry dict-entry-main"><div class="dict-entry-top"><div><span class="dict-tag">Main translation · Bản dịch chính</span><h2>'+safe(mainItem.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(mainItem.word)+'">🔊 Speak · Phát âm</button></div></div>';
    if(defs.length){
-    const localizedDefs=await Promise.all(defs.map(async d=>({ ...d, vietnamese:await translateDictionaryText(d.definition), exampleVi:d.example?await translateDictionaryText(d.example):"" })));
-    htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+localizedDefs.map(d=>'<li><small>'+safe(d.part)+'</small><span class="dict-def-en">'+safe(d.definition)+'</span>'+(d.vietnamese?'<div class="dict-def-vi">'+safe(d.vietnamese)+'</div>':'')+(d.example?'<em>Example: '+safe(d.example)+'</em>':'')+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
+    const examples=defs.filter(d=>d.example).slice(0,3);
+    if(examples.length){
+     const localizedExamples=await Promise.all(examples.map(async d=>({ ...d, exampleVi:await translateDictionaryText(d.example) })));
+     htmlOut+='<div class="dict-definitions"><b>Examples · Ví dụ</b><ol>'+localizedExamples.map(d=>'<li><em>'+safe(d.example)+'</em>'+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
+    }
     const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==mainItem.word.toLowerCase()).slice(0,8);
     if(related.length)htmlOut+='<div class="dict-related"><b>Related words · Từ gần nghĩa/liên quan</b><div class="dict-chips">'+related.map(x=>'<button type="button" class="dict-chip" data-dict-word="'+safe(x)+'">'+safe(x)+'</button>').join("")+'</div></div>';
    }else{
@@ -1320,8 +1323,11 @@ async function lookupDictionary(){
    const entry=entries[0].entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry), audio=dictionaryAudio(entry);
    htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">English word · Từ tiếng Anh</span><h2>'+safe(query)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(query)+'">🔊 Speak · Phát âm</button>'+'</div></div><div class="dict-translation"><div class="small muted">Vietnamese meaning · Nghĩa tiếng Việt</div><h3>'+safe(translated)+'</h3></div>';
    if(defs.length){
-    const localizedDefs=await Promise.all(defs.map(async d=>({ ...d, vietnamese:await translateDictionaryText(d.definition), exampleVi:d.example?await translateDictionaryText(d.example):"" })));
-    htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+localizedDefs.map(d=>'<li><small>'+safe(d.part)+'</small><span class="dict-def-en">'+safe(d.definition)+'</span>'+(d.vietnamese?'<div class="dict-def-vi">'+safe(d.vietnamese)+'</div>':'')+(d.example?'<em>Example: '+safe(d.example)+'</em>':'')+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
+    const examples=defs.filter(d=>d.example).slice(0,3);
+    if(examples.length){
+     const localizedExamples=await Promise.all(examples.map(async d=>({ ...d, exampleVi:await translateDictionaryText(d.example) })));
+     htmlOut+='<div class="dict-definitions"><b>Examples · Ví dụ</b><ol>'+localizedExamples.map(d=>'<li><em>'+safe(d.example)+'</em>'+(d.exampleVi?'<div class="dict-example-vi">Dịch: '+safe(d.exampleVi)+'</div>':'')+'</li>').join("")+'</ol></div>';
+    }
     const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==query.toLowerCase()).slice(0,10);
     if(related.length)htmlOut+='<div class="dict-related"><b>Related words · Từ gần nghĩa/liên quan</b><div class="dict-chips">'+related.map(x=>'<button type="button" class="dict-chip" data-dict-word="'+safe(x)+'">'+safe(x)+'</button>').join("")+'</div></div>';
    }else{
