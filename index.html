@@ -2736,7 +2736,6 @@ function pronSpeak(){
  }
  speakNext();
 }
-function pronTry(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("pronFeedback").textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy nghe mẫu và tự luyện.";return}const d=pronData()[Number(document.getElementById("pronPair").value)||0];const rec=new SR();rec.lang="en-US";rec.onresult=e=>{document.getElementById("pronFeedback").textContent="Bạn vừa đọc: "+e.results[0][0].transcript+". Hãy so sánh với mẫu; nhận diện giọng nói không thay thế đánh giá phát âm chuyên sâu."};rec.onerror=()=>document.getElementById("pronFeedback").textContent="Không nhận được giọng nói. Kiểm tra quyền microphone.";rec.start()}
 const roleData={
  cafe:{start:"Barista: Hi! What can I get for you?",steps:[{q:"Bạn muốn gọi cà phê.",a:[["I'd like a latte, please.","Lịch sự và tự nhiên.",1],["Give coffee.","Thiếu tự nhiên; cần nói rõ món và dùng lời lịch sự.",2],["I am a latte.","Sai nghĩa: câu này nói bạn chính là một ly latte.",2]]},{q:"Barista: What size would you like?",a:[["A medium, please.","Câu trả lời ngắn gọn, tự nhiên.",1],["I want middle.","Không tự nhiên; dùng a medium.",2],["Yesterday.","Không trả lời đúng câu hỏi.",2]]},{q:"Barista: Anything else?",a:[["No, that's all. Thank you.","Tự nhiên và lịch sự.",1],["No more thing.","Nên dùng No, that's all.",2],["Give me free.","Không phù hợp trong tình huống này.",2]]}]},
  hotel:{start:"Receptionist: Welcome! Do you have a reservation?",steps:[{q:"Bạn đã đặt phòng.",a:[["Yes, I have a reservation under Nguyen.","Cách nói tự nhiên khi nhận phòng.",1],["I book room yesterday.","Nên dùng hiện tại hoàn thành hoặc quá khứ rõ ràng.",2],["Give room.","Quá cụt và thiếu lịch sự.",2]]},{q:"Receptionist: Could I see your ID, please?",a:[["Of course. Here you are.","Lịch sự, tự nhiên.",1],["Why you need?","Thiếu trợ động từ và nghe khá gay gắt.",2],["No see.","Không phù hợp.",2]]}]},
@@ -3640,13 +3639,10 @@ document.addEventListener("DOMContentLoaded",function(){
    shadowTranscript:"shadowRecord",
    egDialogueFeedback:"egRecordShadow",
    egSpeakFeedback:null,
-   pronFeedback:null,
-   egPronFb:"egPronMic",
    speechFeedback:null,
   };
   let triggerId=triggerMap[targetId];
   let trigger=triggerId?document.getElementById(triggerId):null;
-  if(!trigger&&targetId==="pronFeedback")trigger=document.querySelector('#pronunciation button[onclick*="pronTry"]');
   if(!trigger&&targetId==="speechFeedback")trigger=document.querySelector('#realconversation button[onclick*="recognise"]');
   const controls=trigger&&trigger.parentElement;
   const session={id:++recordingCounter,recorder:null,stream:null,chunks:[],host,label,trigger,controls,stopButton:null};
@@ -3709,7 +3705,6 @@ document.addEventListener("DOMContentLoaded",function(){
   }
  }
  window.shadowRecord=function(){startLocalRecording("shadowTranscript","Shadowing")};
- window.pronTry=function(){startLocalRecording("pronFeedback","Pronunciation practice")};
  window.egStartSpeaking=function(){startLocalRecording("egSpeakFeedback","Speaking Partner")};
  window.egSafariRecord=startLocalRecording;
  function bindExtraMics(){
