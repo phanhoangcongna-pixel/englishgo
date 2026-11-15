@@ -190,6 +190,15 @@ body > main{
 }
 </style>
 
+
+<style id="englishgo-pronunciation-ipa-cards">
+.eg-pron-words{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin:14px 0 18px}
+.eg-pron-word{display:flex;flex-direction:column;justify-content:center;gap:5px;min-width:0;padding:11px 12px;border:1px solid var(--line,#e5eaf2);border-radius:12px;background:var(--card,#fff)}
+.eg-pron-word b{font-size:clamp(17px,2.8vw,21px);overflow-wrap:anywhere}
+.eg-pron-word span{font-size:15px;font-weight:650;color:#4169e1;letter-spacing:.15px}
+.eg-pron-ipa-note{margin-top:12px;font-size:12px;color:var(--muted,#68758d)}
+@media(max-width:420px){.eg-pron-words{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.eg-pron-word{padding:10px}}
+</style>
 <style id="new-practice-styles">
 .shadow-sentence{font-size:clamp(24px,4vw,34px);font-weight:800;line-height:1.35;padding:24px 0}
 .shadow-actions,.role-choices{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
@@ -3156,11 +3165,39 @@ function egLoadPronunciation(){
  select.onchange=egRenderPronunciation;
  egRenderPronunciation();
 }
+const egPronIPA=[
+ ["/ʃɪp/","/ʃiːp/","/lɪv/","/liːv/"],
+ ["/θɪŋk/","/sɪŋk/","/θriː/","/siː/"],
+ ["/ʃiː/","/siː/","/ʃɑp/","/sɑp/"],
+ ["/kæp/","/kæb/","/roʊp/","/roʊb/"],
+ ["/ˈfoʊtəˌɡræf/","/fəˈtɑɡrəfər/","/ˌfoʊtəˈɡræfɪk/"],
+ ["/kæt/","/kʌt/","/bæd/","/bʌd/"],
+ ["/vɛst/","/wɛst/","/vaɪn/","/waɪn/"],
+ ["/raɪt/","/laɪt/","/roʊd/","/loʊd/"],
+ ["/siːt/","/siːd/","/bɛt/","/bɛd/"],
+ ["/raɪs/","/raɪz/","/aɪs/","/aɪz/"],
+ ["/wɝkt/","/pleɪd/","/ˈwɑntɪd/","/ˈniːdɪd/"],
+ ["/kæts/","/dɔɡz/","/ˈbʌsɪz/","/ˈwɑtʃɪz/"],
+ ["/ðæt blæk kæt sæt ɑn ðə bæɡ/","/ə ˈhæpi ˈfæməli/"],
+ ["/tɝn ɪt ɑn/","/pɪk ɪt ʌp/","/teɪk ɪt ˈiːzi/"],
+ ["/əˈbaʊt/","/ˈtiːtʃər/","/səˈpɔrt/","/bəˈnænə/"],
+ ["/haʊs/","/əˈhɛd/","/bɪˈhaɪnd/","/hɛlp/"]
+];
+function egEscapePronText(value){
+ return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
 function egRenderPronunciation(){
  const select=document.getElementById("pronPair"),host=document.getElementById("pronLesson");
  if(!select||!host)return;
- const d=(window.egPronAll||[])[Number(select.value)||0];if(!d)return;
- host.innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";
+ const index=Number(select.value)||0;
+ const d=(window.egPronAll||[])[index];if(!d)return;
+ const ipa=egPronIPA[index]||[];
+ const wordCards=d.words.map((word,i)=>{
+  const safeWord=egEscapePronText(word);
+  const safeIPA=egEscapePronText(ipa[i]||"IPA đang được cập nhật");
+  return "<div class='eg-pron-word'><b>"+safeWord+"</b><span>"+safeIPA+"</span></div>";
+ }).join("");
+ host.innerHTML="<b>"+egEscapePronText(d.title)+"</b><div class='eg-pron-words'>"+wordCards+"</div><p>"+egEscapePronText(d.tip)+"</p><small>"+egEscapePronText(d.vi)+"</small><div class='eg-pron-ipa-note'>IPA tham khảo theo giọng Anh-Mỹ (General American).</div>";
  const feedback=document.getElementById("pronFeedback");if(feedback)feedback.textContent="";
 }
 function egSpeakPronunciation(){
