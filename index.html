@@ -3566,6 +3566,7 @@ function egStartSpeaking(){
    const data=await response.json();matches=Array.isArray(data.matches)?data.matches:[];service="LanguageTool";
   }catch(error){matches=[]}
   const localRules=[
+   {re:/\bin front of go to work\b/gi,to:"before I go to work",why:"In front of nghĩa là ở phía trước một vật/người; trước khi làm việc gì dùng before + mệnh đề (before I go to work)."},
    {re:/\bi am agree\b/gi,to:"I agree",why:"Không dùng am trước agree."},
    {re:/\bhe go\b/gi,to:"he goes",why:"Hiện tại đơn: he/she/it + động từ thêm -s."},
    {re:/\bshe go\b/gi,to:"she goes",why:"Hiện tại đơn: he/she/it + động từ thêm -s."},
@@ -3585,12 +3586,16 @@ function egStartSpeaking(){
     issues.push({text:snippet||"Cấu trúc câu",replacement,why:match.message||"Kiểm tra cách diễn đạt",context:match.context?.text||""});
     if(replacement!==null)corrected=corrected.slice(0,match.offset)+replacement+corrected.slice(match.offset+match.length);
    });
-  }else{
-   localRules.forEach(rule=>{
-    const found=rule.re.exec(answer);rule.re.lastIndex=0;
-    if(found){issues.push({text:found[0],replacement:rule.to,why:rule.why});if(rule.to)corrected=corrected.replace(rule.re,rule.to)}
-   });
   }
+  /* Run our small contextual checks even when LanguageTool is online:
+     LanguageTool can miss learner errors that need sentence-level context. */
+  localRules.forEach(rule=>{
+   const found=rule.re.exec(answer);rule.re.lastIndex=0;
+   if(found&&!issues.some(x=>x.text.toLowerCase()===found[0].toLowerCase())){
+    issues.push({text:found[0],replacement:rule.to,why:rule.why});
+    if(rule.to)corrected=corrected.replace(rule.re,rule.to);
+   }
+  });
   const criteria=String(item[4]||"").split(",");
   const hasStructure=criteria.some(k=>k==="routine"&&/\b(usually|often|every day|sometimes|always)\b/i.test(answer))
    ||criteria.some(k=>k==="place"&&/\b(there is|there are|because|recommend)\b/i.test(answer))
@@ -3603,17 +3608,20 @@ function egStartSpeaking(){
   const grammarScore=Math.max(0,50-Math.min(50,issues.length*8));
   const score=Math.max(0,Math.min(100,grammarScore+lengthScore+taskScore));
   const tips=[];
+  const sentenceCount=(answer.match(/[.!?]+(?=\\s|$)/g)||[]).length;
+  if(criteria[0]==="routine"&&sentenceCount<5)tips.push("Đề bài yêu cầu 5 câu; hiện bài của bạn có khoảng "+sentenceCount+" câu. Hãy bổ sung "+(5-sentenceCount)+" câu nữa về các hoạt động buổi sáng.");
   if(wordCount<lengthTarget)tips.push("Bài còn ngắn. Hãy phát triển thêm ý và ví dụ cụ thể (mục tiêu khoảng "+lengthTarget+" từ trở lên).");
   if(!hasStructure)tips.push("Bài chưa thể hiện rõ cấu trúc/ngôn ngữ được yêu cầu: "+(item[1]||"").replace(/[.!…]+$/,"")+".");
   if(!/[.!?]$/.test(answer))tips.push("Thêm dấu câu kết thúc phù hợp.");
   let issueHtml=issues.length?'<h4>Những chỗ cần sửa</h4><ul>'+issues.slice(0,12).map(x=>'<li><b>'+escape(x.text)+'</b>'+(x.replacement!==null&&x.replacement!==undefined?' → <b>'+escape(x.replacement)+'</b>':'')+'<br><span class="small muted">'+escape(x.why)+'</span></li>').join("")+'</ul>':'<p>✓ Không phát hiện lỗi phổ biến trong lượt kiểm tra này.</p>';
-  const correctedHtml='<div class="panel soft" style="margin-top:10px"><b>✍️ Bản chỉnh sửa đề xuất</b><p style="white-space:pre-wrap">'+escape(corrected)+'</p><button class="btn line" type="button" id="egUseCorrection">Dùng bản đã sửa</button></div>';
+  const hasCorrection=corrected.trim()!==answer.trim();
+  const correctedHtml=hasCorrection?'<div class="panel soft" style="margin-top:10px"><b>✍️ Bản chỉnh sửa đề xuất</b><p style="white-space:pre-wrap">'+escape(corrected)+'</p><button class="btn line" type="button" id="egUseCorrection">Dùng bản đã sửa</button></div>':'<div class="panel soft" style="margin-top:10px"><b>✍️ Chưa có bản sửa tự động</b><p>Trình kiểm tra chưa phát hiện lỗi có thể tự sửa. Điều này không có nghĩa bài viết chắc chắn hoàn hảo. Bạn có thể dùng nút AI bên dưới để nhận xét sâu hơn.</p></div>';
   feedback.innerHTML='<div class="feedback '+(issues.length===0&&hasStructure?"good":"")+'"><div class="controls" style="justify-content:space-between"><b>Writing feedback · Nhận xét bài viết</b><span class="badge">'+score+'/100</span></div><p><b>'+wordCount+' từ</b> · '+(service==="LanguageTool"?"Đã kiểm tra ngữ pháp trực tuyến":"Chế độ kiểm tra cơ bản (dịch vụ ngữ pháp không kết nối được)")+'</p>'+issueHtml+(tips.length?'<h4>Gợi ý cải thiện</h4><ul>'+tips.map(t=>'<li>'+escape(t)+'</li>').join("")+'</ul>':'')+correctedHtml+'<p class="small muted">Điểm là ước lượng theo lỗi ngữ pháp, độ dài và cấu trúc yêu cầu; chưa đánh giá đầy đủ độ tự nhiên hoặc độ đúng ý như giáo viên/AI đọc hiểu.</p></div>';
   const aiHost=document.createElement("div");aiHost.id="egLocalAIResult";feedback.appendChild(aiHost);
   const aiButton=document.createElement("button");aiButton.type="button";aiButton.className="btn";aiButton.textContent="🤖 Chấm sâu bằng AI miễn phí trên thiết bị";
   aiButton.onclick=()=>egRunLocalWritingAI(answer,item,aiHost,aiButton);feedback.appendChild(aiButton);
   const aiNote=document.createElement("p");aiNote.className="small muted";aiNote.textContent="AI tùy chọn: cần WebGPU và tải mô hình khoảng 1 GB ở lần đầu; không cần API key, không gửi bài viết lên máy chủ AI.";feedback.appendChild(aiNote);
-  const use=$("egUseCorrection");if(use)use.onclick=()=>{input.value=corrected;input.focus()};
+  const use=$("egUseCorrection");if(use&&hasCorrection)use.onclick=()=>{input.value=corrected;input.focus()};
   try{localStorage.setItem("eg-daily-writing-"+(item[0]||"").slice(0,40),JSON.stringify({answer,corrected,score,date:new Date().toISOString()}))}catch(e){}
   button.disabled=false;button.textContent="Check & submit · Chấm bài (Enter ↵)";
  }
