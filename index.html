@@ -484,7 +484,7 @@ html { background: #142342; }
 <nav aria-label="Main navigation" class="navlinks" id="mainNav">
 <button class="active nav-home" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learn <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="reading">📘 Reading </button><button data-page="writing">✍️ Writing </button>
+<button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="listening">🎧 Listening </button><button data-page="speaking">🗣️ Speaking </button><button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="pronunciation">🗣️ Pronunciation Lab </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
@@ -581,13 +581,13 @@ html { background: #142342; }
 </div>
 </div>
 <div>
-<div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>8 key skills and tools · 8 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
+<div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>7 key skills and tools · 7 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
 <div class="home-tools">
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
 <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
 <button class="home-tool" onclick="go('listening')"><div class="ico">🎧</div><h3>Listening · Luyện nghe</h3><p>Listen to real-life conversations · Nghe hội thoại thực tế</p></button>
 <button class="home-tool" onclick="go('speaking')"><div class="ico">🗣️</div><h3>Speaking · Luyện nói</h3><p>Practice conversation and pronunciation · Luyện giao tiếp và phát âm</p></button>
-<button class="home-tool" onclick="go('reading')"><div class="ico">📖</div><h3>Reading · Luyện đọc</h3><p>Read at your level · Đọc hiểu theo cấp độ</p></button>
+
 <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
 <button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>268 sentences + topics + 1,000 phrases · 268 câu + chủ đề + 1.000 câu</p></button>
 
@@ -877,7 +877,7 @@ html { background: #142342; }
 <p class="small muted">Lưu ý: phần kiểm tra là gợi ý theo đáp án mẫu; nếu diễn đạt khác nhưng đúng ngữ pháp và ý nghĩa, hãy tự đánh giá là đã nhớ.</p>
 </div>
 </section>
-<section class="page" id="reading"><h1 class="title">Reading · Luyện đọc</h1><p class="intro">Short A2 texts with Vietnamese support. Đoạn đọc A2 ngắn có hỗ trợ tiếng Việt.</p><div class="panel"><h2>A New Life in Berlin · Cuộc sống mới ở Berlin</h2><p>My name is Linh. I moved to Berlin six months ago. I work in a small restaurant near my home. Every morning, I take the bus to work. My colleagues are friendly, and I am learning German and English. At weekends, I like visiting parks and meeting my friends.</p><p class="muted"><i>Tôi tên Linh. Tôi chuyển đến Berlin sáu tháng trước. Tôi làm việc tại một nhà hàng nhỏ gần nhà. Mỗi sáng, tôi đi xe buýt đến chỗ làm. Đồng nghiệp của tôi thân thiện, và tôi đang học tiếng Đức và tiếng Anh. Cuối tuần, tôi thích đi công viên và gặp bạn bè.</i></p></div><div class="panel"><h2>Reading check · Kiểm tra đọc hiểu</h2><p>How long has Linh lived in Berlin? · Linh đã sống ở Berlin bao lâu?</p><div class="choices"><button class="choice" onclick="readingCheck(0)">Six months · Sáu tháng</button><button class="choice" onclick="readingCheck(1)">One year · Một năm</button><button class="choice" onclick="readingCheck(2)">Two weeks · Hai tuần</button></div><div id="readingFeedback"></div></div></section>
+
 <section class="page" id="writing"><h1 class="title">Writing · Luyện viết</h1><p class="intro">Write a short paragraph and save it on your device. Viết đoạn văn ngắn và lưu trên thiết bị.</p><div class="panel"><h2>Introduce yourself · Giới thiệu bản thân</h2><p>Write 5–7 sentences about your name, home, work or studies, and hobbies.<br/><span class="muted">Viết 5–7 câu về tên, nơi ở, công việc hoặc học tập và sở thích.</span></p><div class="example">My name is Mai. I live in Berlin. I work in a shop. I enjoy listening to music.<em>Tôi tên Mai. Tôi sống ở Berlin. Tôi làm ở cửa hàng. Tôi thích nghe nhạc.</em></div><textarea id="writingText" placeholder="My name is... / Tôi tên là..."></textarea><div class="controls"><button class="btn" onclick="saveWriting()">Save writing · Lưu bài</button><span class="muted small" id="writingStatus"></span></div><p class="small muted">Saved only in this browser. Chỉ lưu trong trình duyệt này.</p></div></section>
 <section class="page" id="quiz"><h1 class="title">A2 Quiz · Kiểm tra A2</h1><p class="intro">Quick grammar and vocabulary quiz. Bài kiểm tra nhanh từ vựng và ngữ pháp.</p><div class="panel"><span class="badge" id="quizNo">Question 1</span><h2 id="quizQ">Loading...</h2><p class="muted" id="quizVi"></p><div class="choices" id="quizChoices"></div><div id="quizFeedback"></div><div class="controls"><button class="btn" disabled="" id="quizNext" onclick="nextQuiz()">Next · Tiếp theo</button><button class="btn line" onclick="restartQuiz()">Restart · Làm lại</button></div></div></section>
 <section class="page" id="placement"><h1 class="title">Find your level · Kiểm tra trình độ</h1><p class="intro">A short placement test from A1 to B1. Bài kiểm tra ngắn để ước lượng trình độ A1 đến B1.</p><div class="panel"><span class="badge" id="placeNo">Question 1 / 10</span><h2 id="placeQ"></h2><p class="muted" id="placeVi"></p><div class="choices" id="placeChoices"></div><div id="placeFeedback"></div><div class="controls"><button class="btn" disabled="" id="placeNext" onclick="nextPlace()">Next · Tiếp theo</button><button class="btn line" onclick="restartPlace()">Restart · Làm lại</button></div></div></section>
@@ -898,11 +898,10 @@ html { background: #142342; }
 </section>
 <section class="page" id="practice">
 <h1 class="title">Daily practice · Luyện tập mỗi ngày</h1>
-<p class="intro">A small routine for all four skills. Mỗi ngày một bài luyện đủ bốn kỹ năng.</p>
+<p class="intro">A short daily routine for listening, speaking and writing. Mỗi ngày một bài luyện nghe, nói và viết.</p>
 <div class="grid">
 <div class="panel"><div class="icon">🎧</div><h2>Listening · Nghe</h2><p>Listen to the sentence and choose the correct meaning. Nghe câu và chọn nghĩa đúng.</p><button class="btn" onclick="dailyListen()">Play sentence · Nghe câu</button><p class="example" id="dailyListenText"></p><div class="choices" id="dailyListenChoices"></div><div id="dailyListenFeedback"></div></div>
 <div class="panel"><div class="icon">🗣️</div><h2>Speaking · Nói</h2><p>Say this sentence aloud. Nhấn micro và đọc câu sau.</p><div class="example"><b id="dailySpeakSentence">I usually have breakfast at seven.</b><em>Tôi thường ăn sáng lúc bảy giờ.</em></div><button class="btn" onclick="say(document.getElementById('dailySpeakSentence').textContent)">🔊 Listen · Nghe mẫu</button> <button class="btn line" onclick="dailyRecognise()">🎙️ Speak · Nói</button><p class="muted" id="dailySpeakResult"></p></div>
-<div class="panel"><div class="icon">📖</div><h2>Reading · Đọc</h2><p id="dailyReadText">Tom works in a small café. He starts work at eight and finishes at four. He enjoys his job because he meets many people.</p><p class="muted">Tom làm việc ở một quán cà phê nhỏ. Anh bắt đầu lúc tám giờ và kết thúc lúc bốn giờ. Anh thích công việc vì gặp được nhiều người.</p><p><b>When does Tom finish work? · Tom tan làm lúc mấy giờ?</b></p><div class="choices"><button class="choice" onclick="dailyReadAnswer(0)">At 3 o'clock</button><button class="choice" onclick="dailyReadAnswer(1)">At 4 o'clock</button><button class="choice" onclick="dailyReadAnswer(2)">At 8 o'clock</button></div><div id="dailyReadFeedback"></div></div>
 <div class="panel"><div class="icon">✍️</div><h2>Writing · Viết</h2><p>Write three sentences about your day. Viết ba câu về ngày hôm nay.</p><textarea id="dailyWriting" placeholder="Today, I..." rows="4"></textarea><button class="btn" onclick="saveDailyWriting()">Save writing · Lưu bài viết</button><p class="muted" id="dailyWritingStatus"></p></div>
 </div>
 </section>
@@ -1230,7 +1229,6 @@ function nextWord(){wi=(wi+1)%DATA.vocab.length;showWord()}function prevWord(){w
 function markWord(){if(!known.includes(wi)){known.push(wi);save("known",known);award("word-"+wi,5)}if(typeof egRoadmapTrack==="function")egRoadmapTrack("word",{count:known.length});updateStats();showWord()}
 function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("grammar")}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
 function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0){award("listen",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("listen")}}
-function readingCheck(i){let f=document.getElementById("readingFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Chính xác!":"Read the text again. Hãy đọc lại.";if(i===0){award("reading",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("reading")}}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 let si=0;function renderScenario(){let sel=document.getElementById("scenarioSelect");if(!sel.options.length)DATA.scenarios.forEach((s,i)=>sel.add(new Option(s[0]+" · "+s[1],i)));si=Number(sel.value||si);let s=DATA.scenarios[si];document.getElementById("scenarioLines").innerHTML=s[2].map((l,i)=>`<div class="conversation"><div class="line-en">${i%2===0?"A":"B"}: ${escapeHtml(l[0])}</div><div class="line-vi">${escapeHtml(l[1])}</div><button type="button" class="btn line" style="margin-top:6px;padding:6px 9px;font-size:12px" data-speak="${escapeHtml(l[0])}">🔊 Listen</button></div>`).join("")}
 function nextScenario(){si=(si+1)%DATA.scenarios.length;document.getElementById("scenarioSelect").value=si;renderScenario();award("scenario-"+si,5)}
@@ -1274,7 +1272,6 @@ function renderSavedWords(){let a=EG3.get("difficult",[]);document.getElementByI
 function removeDifficult(w){EG3.set("difficult",EG3.get("difficult",[]).filter(x=>x!==w));renderSavedWords()}
 function dailyListen(){const items=[["I would like a cup of tea, please.","Tôi muốn một tách trà, làm ơn.",["Tôi muốn một tách trà, làm ơn.","Tôi cần mua một chiếc áo.","Tôi đang đi đến trường."],0],["The train leaves at half past nine.","Tàu khởi hành lúc chín giờ rưỡi.",["Tàu đến lúc tám giờ.","Tàu khởi hành lúc chín giờ rưỡi.","Tôi đi làm lúc chín giờ."],1],["Could you speak more slowly?","Bạn có thể nói chậm hơn không?",["Bạn có thể nói to hơn không?","Bạn có thể đợi tôi không?","Bạn có thể nói chậm hơn không?"],2]];let q=items[new Date().getDate()%items.length];say(q[0]);document.getElementById("dailyListenText").textContent="Listen and choose · Nghe và chọn";document.getElementById("dailyListenChoices").innerHTML=q[2].map((x,i)=>`<button class="choice" onclick="dailyListenAnswer(${i},${q[3]})">${x}</button>`).join("");document.getElementById("dailyListenFeedback").textContent=""}
 function dailyListenAnswer(i,correct){let ok=i===correct;document.getElementById("dailyListenFeedback").textContent=ok?"Correct! +10 XP · Chính xác!":"Try again · Hãy thử lại.";document.getElementById("dailyListenFeedback").className="feedback "+(ok?"good":"bad");if(ok)award("daily-listen-"+new Date().toDateString(),10)}
-function dailyReadAnswer(i){let ok=i===1;document.getElementById("dailyReadFeedback").textContent=ok?"Correct! Tom finishes at four. +10 XP · Chính xác!":"Read again · Hãy đọc lại.";document.getElementById("dailyReadFeedback").className="feedback "+(ok?"good":"bad");if(ok)award("daily-read-"+new Date().toDateString(),10)}
 function dailyRecognise(){let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){document.getElementById("dailySpeakResult").textContent="Speech recognition is not supported in this browser. Try Chrome or Edge. Trình duyệt chưa hỗ trợ.";return}let r=new SR();r.lang="en-US";r.onresult=e=>{let t=e.results[0][0].transcript;document.getElementById("dailySpeakResult").textContent="You said: "+t+" · Bạn đã nói";award("daily-speaking-"+new Date().toDateString(),10)};r.onerror=()=>document.getElementById("dailySpeakResult").textContent="Please allow microphone access. Hãy cấp quyền micro.";r.start()}
 function saveDailyWriting(){let v=document.getElementById("dailyWriting").value.trim();if(v.length<10){document.getElementById("dailyWritingStatus").textContent="Write a little more. Hãy viết thêm một chút.";return}EG3.set("dailyWriting",v);document.getElementById("dailyWritingStatus").textContent="Saved on this device · Đã lưu trên thiết bị";award("daily-writing-"+new Date().toDateString(),10)}
 function renderProgress(){document.getElementById("progressXP").textContent=(localStorage.getItem("eg2-xp")||"0")+" XP";document.getElementById("progressWords").textContent=known.length+"/"+DATA.vocab.length;document.getElementById("progressStreak").textContent=localStorage.getItem("eg2-streak")||"0";let acts=EG3.get("completed",[]);document.getElementById("progressAchievements").textContent=acts.length;document.getElementById("achievementList").innerHTML=acts.length?acts.map(x=>`<div class="savedrow">🏅 ${x}</div>`).join(""):"<p class='muted'>Complete a lesson to earn your first achievement. Hoàn thành bài học để nhận thành tích đầu tiên.</p>";}
@@ -1653,7 +1650,7 @@ const EG_ROADMAP=[
   ["Complete a level test · Làm bài kiểm tra trình độ",a=>a.placement===true,"Finish the 10-question placement test."],
   ["Learn at least 10 vocabulary words · Học ít nhất 10 từ",a=>a.words>=10,"Open Vocabulary and mark 10 words as learned."],
   ["Practise grammar · Luyện ngữ pháp",a=>a.grammar===true,"Complete a correct grammar practice."],
-  ["Complete listening and reading · Hoàn thành nghe và đọc",a=>a.listen&&a.reading,"Answer one listening and one reading question correctly."]
+  ["Complete listening practice · Hoàn thành luyện nghe",a=>a.listen,"Answer one listening question correctly."]
  ]},
  {title:"Phase 2 · Real-Life Communication · Giao tiếp thực tế",items:[
   ["Practise 5 real-life conversation turns · Luyện 5 lượt hội thoại",a=>a.realTurns>=5,"Complete five conversation questions."],
@@ -3491,11 +3488,6 @@ function egStartSpeaking(){
  ["borrow","mượn","Can I borrow your charger?","daily life"],
  ["appointment","cuộc hẹn","I'd like to make an appointment.","health"]
  ]},
- reading:{title:"Reading Corner · Đọc hiểu thêm",desc:"Đọc đoạn ngắn, trả lời câu hỏi và học cụm từ.",items:[
- ["A Busy Morning","Emma usually cycles to work, but today it is raining heavily. She takes the bus instead. On the way, she listens to a podcast and makes a list of tasks for the day.","How does Emma travel to work today?",["By bike","By bus","On foot"],1,"instead = thay vào đó"],
- ["A New Neighbour","A new family moved into the flat next door last week. They introduced themselves on Saturday and invited us for coffee. They have a young daughter who loves drawing.","When did the family introduce themselves?",["Friday","Saturday","Sunday"],1,"introduce yourself = tự giới thiệu"],
- ["Learning a Language","Tom studies English for twenty minutes every day. He writes down useful phrases, listens to short conversations and tries to use new expressions at work. He believes small habits make a big difference.","What does Tom do every day?",["Studies for twenty minutes","Only memorises grammar","Watches films all day"],0,"make a big difference = tạo ra khác biệt lớn"]
- ]},
  translation:{title:"Translation Gym · Luyện dịch",desc:"Dịch câu tiếng Việt sang tiếng Anh, sau đó xem gợi ý.",items:[
  ["Tôi thường đi làm bằng xe buýt.","I usually go to work by bus.","usually = thường; by bus = bằng xe buýt"],
  ["Bạn có thể nói chậm hơn được không?","Could you speak more slowly?","Could you…? là cách nhờ lịch sự."],
@@ -3552,14 +3544,14 @@ function egStartSpeaking(){
  ["At a café","A: Could I get a flat white, please? B: Sure. For here or to go?","Gọi món và hỏi mang đi hay dùng tại chỗ."]
  ]},
  progress:{title:"Progress Check · Tự đánh giá",desc:"Đánh dấu kỹ năng đã luyện hôm nay. Trạng thái được lưu trên trình duyệt.",items:[
- ["Vocabulary","Tôi ôn ít nhất 10 từ/cụm từ."],["Listening","Tôi nghe một đoạn tiếng Anh và nắm ý chính."],["Speaking","Tôi nói thành tiếng ít nhất 2 phút."],["Reading","Tôi đọc một đoạn ngắn và tóm tắt."],["Writing","Tôi tự viết 5 câu tiếng Anh."]
+ ["Vocabulary","Tôi ôn ít nhất 10 từ/cụm từ."],["Listening","Tôi nghe một đoạn tiếng Anh và nắm ý chính."],["Speaking","Tôi nói thành tiếng ít nhất 2 phút."],["Writing","Tôi tự viết 5 câu tiếng Anh."]
  ]},
  cloud:{title:"Study Plan · Kế hoạch học",desc:"Một lịch học gợi ý ngắn để duy trì thói quen.",items:[
  ["Day 1 · Words","10 từ mới + 5 câu ví dụ","15 phút"],
  ["Day 2 · Listening","Nghe đoạn ngắn 2 lần, ghi lại từ khóa","15 phút"],
  ["Day 3 · Grammar","Ôn một chủ điểm, tự đặt 5 câu","20 phút"],
  ["Day 4 · Speaking","Trả lời 3 câu hỏi thành tiếng","10 phút"],
- ["Day 5 · Reading","Đọc bài ngắn và tóm tắt 3 câu","15 phút"],
+ ["Day 5 · Vocabulary Review","Ôn từ vựng và đặt 5 câu ví dụ","15 phút"],
  ["Day 6 · Review","Ôn flashcard và sửa lỗi cũ","15 phút"],
  ["Day 7 · Free practice","Xem video hoặc nghe podcast yêu thích","20 phút"]
  ]}
@@ -3633,7 +3625,7 @@ function egStartSpeaking(){
    root.innerHTML='<div class="controls"><span class="badge">Bài '+(idx+1)+' / '+data.items.length+'</span><span class="muted">'+safe(data.title)+'</span></div>'+body+'<div class="controls"><button class="btn line" id="egPrev_'+id+'">← Trước</button><button class="btn" id="egNext_'+id+'">Tiếp theo →</button></div>';
    $("egPrev_"+id).onclick=()=>{idx=(idx+data.items.length-1)%data.items.length;show=false;draw()};
    $("egNext_"+id).onclick=()=>{idx=(idx+1)%data.items.length;show=false;draw()};
-   if(id==="grammar"||id==="quiz"||id==="reading")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===(id==="reading"?d[4]:d[2]);const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||"";});
+   if(id==="grammar"||id==="quiz")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===d[2];const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";fb.textContent+=(d[3]||"");});
    if(id==="translation"){$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};$("egCheckTranslation").onclick=()=>{const input=$("egTranslationInput").value.trim();const normalize=value=>String(value).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim();const feedback=$("egTranslationFeedback");if(!input){feedback.textContent="Hãy nhập câu tiếng Anh trước khi kiểm tra nhé.";return}if(normalize(input)===normalize(d[1])){feedback.textContent="✅ Khớp với đáp án gợi ý! Rất tốt."}else{feedback.textContent="📝 Câu của bạn khác đáp án mẫu. Hãy xem gợi ý để đối chiếu; cách diễn đạt khác vẫn có thể đúng nếu đúng ngữ pháp và ý nghĩa."}};}
    if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
    if(id==="practice"){
@@ -3907,7 +3899,7 @@ document.addEventListener("DOMContentLoaded",function(){
  const specialTitles={
   grammar:["Grammar Topics · Các chủ điểm ngữ pháp"],
   translation:["Dịch phản xạ thông thường","Dịch theo chủ đề","Bộ 1.000 câu giao tiếp","Bộ 1.500 câu phản xạ"],
-  practice:["Luyện nghe","Luyện nói","Luyện đọc","Luyện viết"]
+  practice:["Luyện nghe","Luyện nói","Luyện viết"]
  };
  const skip=new Set(["home","cloud","dictionary"]);
  function directBlocks(page){
