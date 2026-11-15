@@ -3090,4 +3090,151 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 </script>
 
+
+<script id="englishgo-practice-expansion-v2">
+/* Pronunciation Lab: define all lesson data explicitly and populate the selector reliably. */
+const egPronExtra=[
+ {title:"/æ/ vs /ʌ/",words:["cat","cut","bad","bud"],tip:"/æ/: mở miệng rộng hơn; /ʌ/: âm ngắn, thả lỏng ở giữa miệng.",vi:"Luyện cat/cut và bad/bud."},
+ {title:"/v/ vs /w/",words:["vest","west","vine","wine"],tip:"/v/: răng trên chạm môi dưới; /w/: môi tròn, không chạm răng.",vi:"Phân biệt vest/west và vine/wine."},
+ {title:"/r/ vs /l/",words:["right","light","road","load"],tip:"/r/: đầu lưỡi không chạm vòm; /l/: đầu lưỡi chạm lợi trên.",vi:"Luyện vị trí lưỡi."},
+ {title:"/t/ vs /d/ cuối từ",words:["seat","seed","bet","bed"],tip:"/t/ vô thanh, /d/ hữu thanh. Giữ âm cuối rõ, không thêm nguyên âm.",vi:"Đọc rõ phụ âm cuối."},
+ {title:"/s/ vs /z/ cuối từ",words:["rice","rise","ice","eyes"],tip:"/s/ không rung dây thanh; /z/ có rung. Đặt tay lên cổ để cảm nhận.",vi:"Luyện âm cuối hữu thanh và vô thanh."},
+ {title:"Đuôi -ed",words:["worked","played","wanted","needed"],tip:"-ed đọc /t/ trong worked, /d/ trong played, /ɪd/ trong wanted và needed.",vi:"Ba cách phát âm đuôi -ed."},
+ {title:"Đuôi số nhiều -s",words:["cats","dogs","buses","watches"],tip:"-s đọc /s/, /z/ hoặc /ɪz/ tùy âm cuối.",vi:"Phân biệt cats, dogs, buses."},
+ {title:"Trọng âm câu",words:["I wanted the BLUE one.","I WANTED the blue one.","I wanted the blue ONE."],tip:"Nhấn từ khác nhau sẽ làm thay đổi thông tin người nói muốn nhấn mạnh.",vi:"Luyện ngữ điệu và trọng âm câu."},
+ {title:"/æ/ trong câu",words:["That black cat sat on the bag.","A happy family"],tip:"Giữ âm /æ/ rõ, không đọc thành /e/ hoặc /ʌ/.",vi:"Luyện âm /æ/ trong ngữ cảnh."},
+ {title:"Nối âm phụ âm - nguyên âm",words:["turn it on","pick it up","take it easy"],tip:"Khi một từ kết thúc bằng phụ âm và từ sau bắt đầu bằng nguyên âm, chúng thường nối liền khi nói.",vi:"Luyện nối âm tự nhiên."},
+ {title:"Âm schwa /ə/",words:["about","teacher","support","banana"],tip:"Schwa là âm yếu, ngắn, thường xuất hiện ở âm tiết không nhấn.",vi:"Luyện âm trung tính trong tiếng Anh."},
+ {title:"Phụ âm /h/",words:["house","ahead","behind","help"],tip:"Thổi hơi nhẹ ở /h/, không bỏ âm đầu trong house và help.",vi:"Luyện âm /h/."}
+];
+function egLoadPronunciation(){
+ const select=document.getElementById("pronPair"); if(!select)return;
+ const base=typeof pronData==="function"?pronData():[];
+ const all=base.concat(egPronExtra);
+ select.innerHTML=all.map((d,i)=>'<option value="'+i+'">'+(d.title||("Lesson "+(i+1)))+'</option>').join("");
+ window.egPronAll=all;
+ select.onchange=egRenderPronunciation;
+ egRenderPronunciation();
+}
+function egRenderPronunciation(){
+ const select=document.getElementById("pronPair"),host=document.getElementById("pronLesson");
+ if(!select||!host)return;
+ const d=(window.egPronAll||[])[Number(select.value)||0];if(!d)return;
+ host.innerHTML="<b>"+d.title+"</b><div class='pron-example'>"+d.words.join(" · ")+"</div><p>"+d.tip+"</p><small>"+d.vi+"</small>";
+ const feedback=document.getElementById("pronFeedback");if(feedback)feedback.textContent="";
+}
+function egSpeakPronunciation(){
+ const d=(window.egPronAll||[])[Number(document.getElementById("pronPair")?.value)||0];if(!d)return;
+ const u=new SpeechSynthesisUtterance(d.words.join(". "));u.lang="en-US";u.rate=.78;speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+
+/* Listening challenge: short, levelled clips with comprehension questions. */
+const egListenBank=[
+ ["A1","At the bakery","Good morning. Could I have two rolls, please? Of course. Anything else? No, thank you.","What does the customer buy?",["Two rolls","A cake","A coffee"],0,"Khách hàng mua hai ổ bánh mì."],
+ ["A1","Daily routine","I get up at six thirty. I have breakfast and walk to work.","What time does the speaker get up?",["Six","Six thirty","Seven"],1,"Người nói thức dậy lúc sáu giờ rưỡi."],
+ ["A1","Finding a place","Excuse me, where is the bus station? Go straight and turn left.","What should the listener do?",["Turn right","Go back","Go straight and turn left"],2,"Đi thẳng rồi rẽ trái."],
+ ["A2","Changing a plan","I'm afraid I can't meet at five. Could we meet at half past six instead?","What time do they agree to meet?",["5:00","6:30","7:30"],1,"Họ hẹn gặp lúc sáu giờ rưỡi."],
+ ["A2","At the station","The train to Berlin is delayed by twenty minutes. We apologise for the inconvenience.","How long is the delay?",["10 minutes","20 minutes","30 minutes"],1,"Chuyến tàu bị trễ 20 phút."],
+ ["A2","Weekend plans","We wanted to go hiking, but the weather forecast says it will rain all day.","Why might they change their plan?",["The weather","The cost","The distance"],0,"Dự báo thời tiết có mưa cả ngày."],
+ ["B1","Work update","I've finished the first draft, but I still need feedback from the design team before Friday.","What does the speaker still need?",["A new computer","Feedback","More time off"],1,"Người nói vẫn cần phản hồi từ nhóm thiết kế."],
+ ["B1","Travel problem","Our connecting flight was cancelled, so the airline put us on a later flight and provided a hotel.","What did the airline provide?",["A rental car","A meal only","A hotel"],2,"Hãng hàng không cung cấp khách sạn."],
+ ["B1","Learning strategy","Rather than memorising isolated words, try learning them in short phrases and using them in your own examples.","What is recommended?",["Learning words in context","Avoiding examples","Studying only grammar"],0,"Nên học từ trong cụm và tự đặt ví dụ."]
+];
+let egListenIndex=0,egListenScore=0,egListenDone={};
+function egRenderListening(){
+ const root=document.getElementById("egListeningChallenge");if(!root)return;
+ const d=egListenBank[egListenIndex];
+ root.innerHTML='<div class="controls"><span class="badge">'+d[0]+'</span><b>Lesson '+(egListenIndex+1)+' / '+egListenBank.length+'</b><span class="muted">Score: '+egListenScore+'</span></div><h3>'+d[1]+'</h3><p>Nghe đoạn hội thoại, sau đó chọn đáp án đúng.</p><button class="btn primary" onclick="egPlayListening()">🔊 Nghe đoạn hội thoại</button><div class="choices" style="display:grid;gap:8px;margin-top:14px">'+d[4].map((v,i)=>'<button class="choice" onclick="egAnswerListening('+i+')" '+(egListenDone[egListenIndex]?'disabled':'')+'>'+String.fromCharCode(65+i)+'. '+v+'</button>').join('')+'</div><p id="egListenFeedback" aria-live="polite">'+(egListenDone[egListenIndex]===undefined?'':d[6])+'</p><div class="controls"><button class="btn line" onclick="egListenIndex=Math.max(0,egListenIndex-1);egRenderListening()">← Trước</button><button class="btn" onclick="egListenIndex=(egListenIndex+1)%egListenBank.length;egRenderListening()">Bài tiếp →</button></div>';
+}
+function egPlayListening(){const d=egListenBank[egListenIndex];const u=new SpeechSynthesisUtterance(d[2]);u.lang="en-US";u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function egAnswerListening(i){if(egListenDone[egListenIndex]!==undefined)return;const d=egListenBank[egListenIndex];egListenDone[egListenIndex]=i;if(i===d[5])egListenScore++;egRenderListening();const p=document.getElementById("egListenFeedback");if(p)p.innerHTML=(i===d[5]?"✅ Chính xác! ":"❌ Chưa đúng. ")+d[6]}
+
+/* Sentence Builder: reorder words and check exact sentence. */
+const egSentenceBank=[
+ ["A1","She goes to school every day.","Cô ấy đi học mỗi ngày."],
+ ["A1","There are two books on the table.","Có hai quyển sách trên bàn."],
+ ["A1","I would like a glass of water.","Tôi muốn một cốc nước."],
+ ["A1","My brother can swim very well.","Anh/em trai tôi bơi rất giỏi."],
+ ["A2","I have never visited London before.","Tôi chưa từng đến London."],
+ ["A2","We were watching TV when the phone rang.","Chúng tôi đang xem TV thì điện thoại reo."],
+ ["A2","Could you tell me where the station is?","Bạn có thể cho tôi biết nhà ga ở đâu không?"],
+ ["A2","She has been working here for three years.","Cô ấy đã làm việc ở đây được ba năm."],
+ ["B1","If I had more free time, I would learn another language.","Nếu có nhiều thời gian rảnh hơn, tôi sẽ học thêm ngôn ngữ khác."],
+ ["B1","The book that you lent me was really interesting.","Cuốn sách bạn cho tôi mượn thực sự rất thú vị."],
+ ["B1","Although it was raining, they decided to continue playing.","Mặc dù trời mưa, họ vẫn quyết định tiếp tục chơi."],
+ ["B1","By the time we arrived, the presentation had already begun.","Khi chúng tôi đến, bài thuyết trình đã bắt đầu."]
+];
+let egSentenceIndex=0,egSentenceWords=[];
+function egRenderSentence(){
+ const root=document.getElementById("egSentenceBuilder");if(!root)return;
+ const d=egSentenceBank[egSentenceIndex];egSentenceWords=d[1].replace(/[?.!,]/g,"").split(" ").sort(()=>Math.random()-.5);
+ root.innerHTML='<div class="controls"><span class="badge">'+d[0]+'</span><b>Sentence '+(egSentenceIndex+1)+' / '+egSentenceBank.length+'</b></div><h3>'+d[2]+'</h3><p>Chọn các từ theo đúng thứ tự để tạo thành câu tiếng Anh.</p><div id="egSentenceAnswer" class="card soft" style="min-height:52px"></div><div class="choices" style="display:flex;flex-wrap:wrap;gap:8px">'+egSentenceWords.map((w,i)=>'<button class="choice" id="egWord'+i+'" onclick="egPickWord('+i+')">'+w+'</button>').join('')+'</div><div class="controls"><button class="btn primary" onclick="egCheckSentence()">Kiểm tra</button><button class="btn line" onclick="egResetSentence()">Xóa câu</button><button class="btn" onclick="egNextSentence()">Câu tiếp →</button></div><p id="egSentenceFeedback" aria-live="polite"></p>';
+ window.egSentencePicked=[];
+}
+function egPickWord(i){const b=document.getElementById("egWord"+i);if(!b||b.disabled)return;b.disabled=true;window.egSentencePicked.push({i,w:egSentenceWords[i]});document.getElementById("egSentenceAnswer").textContent=window.egSentencePicked.map(x=>x.w).join(" ")}
+function egResetSentence(){window.egSentencePicked=[];document.querySelectorAll("#egSentenceBuilder .choice").forEach(b=>b.disabled=false);document.getElementById("egSentenceAnswer").textContent="";document.getElementById("egSentenceFeedback").textContent=""}
+function egCheckSentence(){const d=egSentenceBank[egSentenceIndex],answer=window.egSentencePicked.map(x=>x.w).join(" "),clean=x=>x.toLowerCase().replace(/[?.!,]/g,"").replace(/\s+/g," ").trim();document.getElementById("egSentenceFeedback").textContent=clean(answer)===clean(d[1])?"✅ Chính xác!":"Chưa đúng. Đáp án: "+d[1]}
+function egNextSentence(){egSentenceIndex=(egSentenceIndex+1)%egSentenceBank.length;egRenderSentence()}
+
+/* Monthly assessment: 20-question rotating diagnostic covering grammar and vocabulary. */
+const egMonthlyQuestions=[
+ ["She ___ to work by bus every day.",["go","goes","going"],1,"Present simple with she."],
+ ["I have lived here ___ 2021.",["for","since","during"],1,"Since + starting point."],
+ ["If it rains, we ___ at home.",["stay","will stay","stayed"],1,"First conditional."],
+ ["There isn't ___ milk left.",["many","a few","much"],2,"Milk is uncountable."],
+ ["He is interested ___ learning languages.",["in","on","at"],0,"Interested in + noun/gerund."],
+ ["I ___ dinner when you called.",["cook","was cooking","have cooked"],1,"Past continuous."],
+ ["This is the ___ film I've ever seen.",["better","best","good"],1,"Superlative form."],
+ ["You ___ wear a seat belt.",["should","might to","can to"],0,"Should + base verb."],
+ ["She asked me where I ___.",["live","lived","am live"],1,"Reported question backshift."],
+ ["The meeting was cancelled ___ the storm.",["because","because of","although"],1,"Because of + noun."],
+ ["I look forward to ___ you.",["see","seeing","seen"],1,"Look forward to + gerund."],
+ ["By 8 pm, they ___ home.",["had arrived","have arrive","arrives"],0,"Past perfect for earlier past event."],
+ ["Neither of the answers ___ correct.",["are","is","be"],1,"Neither is singular in standard usage."],
+ ["We need to ___ a decision soon.",["do","make","take"],1,"Collocation: make a decision."],
+ ["The woman ___ lives next door is a doctor.",["which","who","where"],1,"Who for people."],
+ ["I wish I ___ more time.",["have","had","will have"],1,"Wish + past form for present unreal situation."],
+ ["Despite ___ tired, he continued.",["be","being","was"],1,"Despite + noun/gerund."],
+ ["The report ___ by Friday.",["must finish","must be finished","must finished"],1,"Passive after modal."],
+ ["She succeeded ___ passing the exam.",["in","at","to"],0,"Succeed in + gerund."],
+ ["Had I known, I ___ earlier.",["would come","would have come","will come"],1,"Third conditional inversion."]
+];
+let egMonthlyIndex=0,egMonthlyAnswers={},egMonthlySubmitted=false;
+function egRenderMonthly(){
+ const root=document.getElementById("egMonthlyAssessment");if(!root)return;
+ const q=egMonthlyQuestions[egMonthlyIndex];
+ root.innerHTML='<div class="controls"><span class="badge">Monthly assessment · A1–B2</span><b>Question '+(egMonthlyIndex+1)+' / '+egMonthlyQuestions.length+'</b></div><h3>'+q[0]+'</h3><div class="choices" style="display:grid;gap:8px">'+q[1].map((v,i)=>'<button class="choice" style="'+(egMonthlyAnswers[egMonthlyIndex]===i?'outline:2px solid var(--primary)':'')+'" onclick="egMonthlyAnswers['+egMonthlyIndex+']='+i+';egRenderMonthly()">'+String.fromCharCode(65+i)+'. '+v+'</button>').join('')+'</div><div class="controls"><button class="btn line" onclick="egMonthlyIndex=Math.max(0,egMonthlyIndex-1);egRenderMonthly()">← Trước</button><button class="btn" onclick="egMonthlyIndex=Math.min(egMonthlyQuestions.length-1,egMonthlyIndex+1);egRenderMonthly()">Tiếp →</button><button class="btn primary" onclick="egSubmitMonthly()">Nộp bài</button></div><p id="egMonthlyResult" aria-live="polite"></p>';
+}
+function egSubmitMonthly(){
+ let score=0,review=[];egMonthlyQuestions.forEach((q,i)=>{const ok=egMonthlyAnswers[i]===q[2];if(ok)score++;review.push((ok?"✅ ":"❌ ")+(i+1)+". "+q[0]+" — "+q[1][q[2]]+". "+q[3])});
+ const root=document.getElementById("egMonthlyAssessment");
+ root.innerHTML='<h3>Kết quả: '+score+'/'+egMonthlyQuestions.length+'</h3><p>'+Math.round(score/egMonthlyQuestions.length*100)+'% chính xác</p><p>'+ (score>=17?"Rất tốt!":score>=13?"Khá tốt, hãy ôn các câu sai.":"Hãy ôn lại kiến thức rồi thử lần nữa.")+'</p><div style="display:grid;gap:7px">'+review.map(x=>'<p>'+x+'</p>').join("")+'</div><button class="btn primary" onclick="egMonthlyIndex=0;egMonthlyAnswers={};egRenderMonthly()">Làm lại bài kiểm tra</button>';
+ try{localStorage.setItem("eg3-monthly-assessment",JSON.stringify({date:new Date().toISOString(),score,total:egMonthlyQuestions.length}))}catch(e){}
+}
+document.addEventListener("DOMContentLoaded",function(){
+ egLoadPronunciation();
+ const listen=document.getElementById("listening");
+ if(listen&&!document.getElementById("egListeningChallenge")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🎧 Listening Challenge · Thử thách nghe</h2><p>Chọn cấp độ A1–B1, nghe đoạn hội thoại và trả lời câu hỏi. Có '+egListenBank.length+' bài nghe ngắn.</p><div id="egListeningChallenge"></div>';listen.appendChild(card);egRenderListening()}
+ const writing=document.getElementById("writing");
+ if(writing&&!document.getElementById("egSentenceBuilder")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🧩 Sentence Builder · Xây dựng câu</h2><p>'+egSentenceBank.length+' bài sắp xếp từ thành câu, từ A1 đến B1.</p><div id="egSentenceBuilder"></div>';writing.appendChild(card);egRenderSentence()}
+ const placement=document.getElementById("placement");
+ if(placement&&!document.getElementById("egMonthlyAssessment")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>📊 Monthly Assessment · Kiểm tra định kỳ</h2><p>20 câu hỏi ngữ pháp và từ vựng. Kết quả có giải thích từng câu.</p><div id="egMonthlyAssessment"></div>';placement.appendChild(card);egRenderMonthly()}
+ const speaking=document.getElementById("speaking");
+ if(speaking&&!document.getElementById("egSpeakingPartner")){const card=document.createElement("div");card.className="panel";card.innerHTML='<h2>🗣️ Speaking Partner · Luyện phản xạ</h2><p>Chọn chủ đề, nghe câu hỏi và trả lời bằng micro. Tính năng nhận diện giọng nói phụ thuộc trình duyệt.</p><select id="egSpeakTopic"><option value="daily">Daily life · Cuộc sống</option><option value="travel">Travel · Du lịch</option><option value="work">Work · Công việc</option><option value="opinions">Opinions · Quan điểm</option></select><p id="egSpeakPrompt" style="font-size:20px"></p><button class="btn" onclick="egSpeakPrompt()">🔊 Nghe câu hỏi</button><button class="btn primary" onclick="egStartSpeaking()">🎙️ Trả lời bằng micro</button><button class="btn line" onclick="egNextSpeaking()">Câu hỏi tiếp →</button><p id="egSpeakFeedback" aria-live="polite"></p>';card.id="egSpeakingPartner";speaking.appendChild(card);egNextSpeaking()}
+});
+const egSpeakingPrompts={
+ daily:["What do you usually do after work?","Describe your typical morning.","What do you enjoy doing at weekends?","Tell me about a meal you can cook.","How do you keep in touch with friends?"],
+ travel:["Where would you like to travel and why?","What do you usually pack for a trip?","Describe a memorable journey.","What would you do if you missed your train?","Do you prefer travelling alone or with others?"],
+ work:["What skills are important in your job?","Describe a task you recently completed.","How do you organise a busy day?","What would make a good team?","What are your goals for next year?"],
+ opinions:["Is it better to study in the morning or evening?","What makes a good friend?","Should people use phones less often?","Is learning languages useful for everyone?","What is one change that would improve your town?"]
+};
+let egSpeakIndex=0,egSpeakRecognition=null;
+function egNextSpeaking(){const topic=document.getElementById("egSpeakTopic")?.value||"daily";const arr=egSpeakingPrompts[topic];egSpeakIndex=(egSpeakIndex+1)%arr.length;const p=document.getElementById("egSpeakPrompt");if(p)p.textContent=arr[egSpeakIndex]}
+function egSpeakPrompt(){const p=document.getElementById("egSpeakPrompt");if(!p)return;const u=new SpeechSynthesisUtterance(p.textContent);u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u)}
+function egStartSpeaking(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition,host=document.getElementById("egSpeakFeedback");if(!SR){host.textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói. Hãy thử Chrome hoặc Edge và cấp quyền microphone.";return}
+ egSpeakRecognition=new SR();egSpeakRecognition.lang="en-US";egSpeakRecognition.interimResults=false;egSpeakRecognition.onresult=e=>{const said=e.results[0][0].transcript;host.innerHTML="<b>Bạn đã nói:</b> "+said+"<br><small>Gợi ý: thử trả lời thành 2–4 câu, dùng ví dụ cụ thể và chú ý thì động từ. Bản ghi được xử lý bởi trình duyệt.</small>"};egSpeakRecognition.onerror=()=>host.textContent="Không nhận được giọng nói. Kiểm tra quyền microphone và thử lại.";egSpeakRecognition.start()
+}
+</script>
+
 </body></html>
