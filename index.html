@@ -2322,9 +2322,14 @@ function checkTranslation(){
  const alt=dir==="vi-en"?trCurrent.alt:"";
  const norm=x=>normalizeTranslation(x||"");
  const matched=!!answer&&(norm(answer)===norm(expected)||(alt&&norm(answer)===norm(alt)));
- document.getElementById("trFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+(matched?'✓ Chính xác!':'✗ Chưa khớp đáp án mẫu. Hãy xem lại nhé.')+'<br><b>Đáp án:</b> '+expected+(alt?'<br><b>Cách nói khác:</b> '+alt:'')+'<br><span class="small">Lưu ý: Có thể có nhiều cách dịch đúng. Nếu câu của bạn cùng ý và tự nhiên, bạn vẫn có thể tự tính là đúng.</span></div>';
- if(matched){trConfident++;say(trCurrent.en);}
- document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Khớp đáp án mẫu: "+trConfident;
+ if(matched){
+  document.getElementById("trFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'</div>';
+  trConfident++;say(trCurrent.en);
+ }else{
+  document.getElementById("trFeedback").innerHTML='<div class="feedback" id="trAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+(alt?'<br><b>Cách nói khác:</b> '+escapeThousandHTML(alt):'')+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="trAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
+  document.getElementById("trAcceptAlternative").onclick=()=>{trConfident++;document.getElementById("trAlternativeReview").className="feedback good";document.getElementById("trAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Được công nhận: "+trConfident;};
+ }
+ document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Được công nhận: "+trConfident;
 }
 function showTranslationAnswer(){
  if(trChecked)return;trChecked=true;trDone++;
@@ -2382,11 +2387,13 @@ function checkThousandTranslation(){
  const answer=document.getElementById("thousandAnswer").value.trim();
  const accepted=dir==="vi-en"?(item.acceptedEn||[]):(item.acceptedVi||[]);\n const matched=!!answer&&([expected,...accepted].some(candidate=>normalizeTranslation(answer)===normalizeTranslation(candidate)));
  thousandAnswered=true;
- document.getElementById("thousandFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+
- (matched?'✓ Chính xác!':'✗ Chưa khớp đáp án gốc. Hãy xem lại nhé.')+
- '<br><b>Đáp án trong PDF:</b> '+escapeThousandHTML(expected)+
- '<br><span class="small">Có thể có cách dịch khác cùng nghĩa. Bộ kiểm tra so sánh với đáp án mẫu nên không thể tự xác nhận mọi cách diễn đạt tương đương.</span></div>';
- if(matched)say(item.en);
+ if(matched){
+  document.getElementById("thousandFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
+  say(item.en);
+ }else{
+  document.getElementById("thousandFeedback").innerHTML='<div class="feedback" id="thousandAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="thousandAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
+  document.getElementById("thousandAcceptAlternative").onclick=()=>{document.getElementById("thousandAlternativeReview").className="feedback good";document.getElementById("thousandAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";};
+ }
 }
 function revealThousandTranslation(){
  if(thousandAnswered)return;
@@ -2431,8 +2438,13 @@ function checkTopicTranslation(){
  const expected=dir==="vi-en"?item.en:item.vi;
  const answer=document.getElementById("topicAnswer").value.trim();
  const matched=!!answer&&normalizeTranslation(answer)===normalizeTranslation(expected);
- document.getElementById("topicFeedback").innerHTML='<div class="feedback '+(matched?'good':'bad')+'">'+(matched?'✓ Chính xác!':'✗ Chưa khớp đáp án mẫu. Hãy xem lại nhé.')+'<br><b>Đáp án:</b> '+expected+'<br><span class="small">Có thể có cách dịch khác. Nếu câu của bạn cùng ý và tự nhiên, bạn vẫn có thể tự tính là đúng.</span></div>';
- if(matched)say(item.en);
+ if(matched){
+  document.getElementById("topicFeedback").innerHTML='<div class="feedback good">✓ Chính xác!<br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'</div>';
+  say(item.en);
+ }else{
+  document.getElementById("topicFeedback").innerHTML='<div class="feedback" id="topicAlternativeReview"><b>Câu của bạn khác đáp án mẫu — chưa kết luận sai.</b><br><b>Đáp án tham khảo:</b> '+escapeThousandHTML(expected)+'<br><span class="small">Nếu câu bạn viết đúng ngữ pháp và giữ nguyên ý nghĩa, hãy tự công nhận là đúng.</span><br><button class="btn" id="topicAcceptAlternative" type="button">Công nhận câu trả lời của tôi đúng</button></div>';
+  document.getElementById("topicAcceptAlternative").onclick=()=>{document.getElementById("topicAlternativeReview").className="feedback good";document.getElementById("topicAlternativeReview").innerHTML="✓ Đã ghi nhận câu trả lời đúng theo đánh giá của bạn.";};
+ }
 }
 function revealTopicTranslation(){
  if(topicAnswered)return;
