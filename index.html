@@ -3710,8 +3710,6 @@ document.addEventListener("DOMContentLoaded",function(){
  function bindExtraMics(){
   const dialogue=document.getElementById("egRecordShadow");
   if(dialogue)dialogue.onclick=()=>startLocalRecording("egDialogueFeedback","Dialogue Shadowing");
-  const pron=document.getElementById("egPronMic");
-  if(pron)pron.onclick=()=>startLocalRecording("egPronFb","Pronunciation Drill");
  }
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindExtraMics);else bindExtraMics();
  setTimeout(bindExtraMics,1200);
