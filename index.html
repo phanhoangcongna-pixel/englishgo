@@ -1266,9 +1266,13 @@ async function lookupDictionary(){
   if(direction==="vi-en"){
    htmlOut+='<div class="panel dict-translation"><div class="small muted">Vietnamese · Tiếng Việt</div><h3>'+safe(query)+'</h3><div class="small muted">Possible English translations · Các cách dịch tiếng Anh</div><p class="small muted">Choose the word that matches your meaning. · Chọn từ phù hợp với ý bạn muốn diễn đạt.</p></div>';
    for(const item of entries){
-    const entry=item.entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry), audio=dictionaryAudio(entry);
-    const translationLabel=item.word===translated?"Main translation · Bản dịch chính":"Alternative · Cách dịch khác";
-    htmlOut+='<article class="panel dict-entry"><div class="dict-entry-top"><div><span class="dict-tag">'+translationLabel+'</span><h2>'+safe(item.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(item.word)+'">🔊 Speak · Phát âm</button>'+'</div></div>';
+    const isMain=item.word.toLowerCase()===translated.toLowerCase();
+    if(!isMain){
+     htmlOut+='<article class="panel dict-entry dict-entry-alternative"><span class="dict-tag">Alternative · Cách dịch khác</span><h2>'+safe(item.word)+'</h2></article>';
+     continue;
+    }
+    const entry=item.entry, defs=dictionaryDefinitions(entry), ipa=dictionaryIpa(entry);
+    htmlOut+='<article class="panel dict-entry dict-entry-main"><div class="dict-entry-top"><div><span class="dict-tag">Main translation · Bản dịch chính</span><h2>'+safe(item.word)+'</h2><div class="dict-ipa">'+(ipa?safe(ipa):"IPA not available · Chưa có phiên âm")+(defs.length?' · '+safe(defs[0].part):"")+'</div></div><div class="dict-sounds"><button class="btn line" type="button" data-speak="'+safe(item.word)+'">🔊 Speak · Phát âm</button></div></div>';
     if(defs.length){
      htmlOut+='<div class="dict-definitions"><b>Meaning & usage · Nghĩa và cách dùng</b><ol>'+defs.slice(0,3).map(d=>'<li><span>'+safe(d.definition)+'</span>'+(d.example?'<em>Example: '+safe(d.example)+'</em>':"")+'</li>').join("")+'</ol></div>';
      const related=[...new Set(defs.flatMap(d=>d.synonyms||[]))].filter(x=>x.toLowerCase()!==item.word.toLowerCase()).slice(0,8);
