@@ -3981,6 +3981,127 @@ document.addEventListener("DOMContentLoaded",function(){
 </script>
 
 
+
+<style id="englishgo-section-picker-styles">
+.eg-section-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0 22px}
+.eg-picker-card{display:flex;flex-direction:column;align-items:flex-start;gap:9px;width:100%;min-height:150px;padding:19px;text-align:left;background:var(--card,#fff);border:1px solid var(--line,#e5eaf2);border-radius:16px;box-shadow:var(--shadow,0 8px 22px #1d31500c);color:var(--ink,#17233c);transition:transform .16s,border-color .16s,box-shadow .16s}
+.eg-picker-card:hover{transform:translateY(-2px);border-color:var(--blue,#4169e1);box-shadow:0 10px 26px #1d315018}
+.eg-picker-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--pale,#edf2ff);font-size:22px}
+.eg-picker-title{font-size:17px;font-weight:800;line-height:1.3}
+.eg-picker-desc{font-size:13px;line-height:1.45;color:var(--muted,#68758d)}
+.eg-picker-open{margin-top:auto;font-size:13px;font-weight:800;color:var(--blue,#4169e1)}
+.eg-picker-back{margin:4px 0 14px}
+@media(max-width:560px){.eg-section-picker{grid-template-columns:1fr 1fr;gap:9px}.eg-picker-card{min-height:138px;padding:13px}.eg-picker-title{font-size:15px}}
+@media(max-width:380px){.eg-section-picker{grid-template-columns:1fr}}
+</style>
+<script id="englishgo-all-sections-card-navigation">
+(function(){
+ const specialTitles={
+  translation:["Dịch phản xạ thông thường","Dịch theo chủ đề","Kho 1.000 câu giao tiếp","Bộ 1.500 câu phản xạ"],
+  practice:["Luyện nghe","Luyện nói","Luyện đọc","Luyện viết"]
+ };
+ const skip=new Set(["home","cloud"]);
+ function directBlocks(page){
+  const children=Array.from(page.children);
+  let blocks=[];
+  children.forEach(el=>{
+   if(el.classList.contains("panel")) blocks.push(el);
+   else if(el.classList.contains("grid")){
+    const cards=Array.from(el.children).filter(x=>x.classList.contains("panel")||x.classList.contains("card"));
+    if(cards.length>1) blocks.push(...cards);
+    else if(cards.length===1) blocks.push(el);
+   }
+  });
+  if(blocks.length<2){
+   const outer=children.find(el=>el.classList.contains("panel"));
+   if(outer){
+    const nested=Array.from(outer.children).filter(el=>el.classList.contains("panel")||el.classList.contains("grid"));
+    if(nested.length>1) blocks=nested;
+   }
+  }
+  return [...new Set(blocks)];
+ }
+ function cleanText(el){
+  return (el&&el.textContent||"").replace(/\s+/g," ").trim();
+ }
+ function getTitle(block,index,pageId){
+  if(specialTitles[pageId]&&specialTitles[pageId][index])return specialTitles[pageId][index];
+  const heading=block.querySelector("h2,h3,h4,summary");
+  let title=cleanText(heading);
+  if(!title||/^(loading|đang tải|question \d|câu \d)/i.test(title)){
+   const first=block.querySelector("label,b,strong");
+   title=cleanText(first)||"Nội dung luyện tập "+(index+1);
+  }
+  return title.length>64?title.slice(0,61)+"…":title;
+ }
+ function getDescription(block,title){
+  const p=Array.from(block.querySelectorAll(":scope > p, :scope > div > p")).find(x=>cleanText(x));
+  let desc=cleanText(p);
+  if(!desc)desc="Mở phần học này để bắt đầu luyện tập.";
+  if(desc.length>112)desc=desc.slice(0,109)+"…";
+  return desc;
+ }
+ function iconFor(title,index){
+  const match=title.match(/[🎯📚🗣️🎧📖✍️🧠💬🃏🗓️📊🔥🏅☁️🔤🧪🔁]/u);
+  return match?match[0]:["📘","🎯","🧩","✨","📝","🎧"][index%6];
+ }
+ function openMenu(page,blocks,menu,back){
+  blocks.forEach(el=>el.hidden=true);
+  menu.hidden=false;back.hidden=true;
+  page.scrollIntoView({block:"start",behavior:"smooth"});
+ }
+ function openBlock(page,blocks,menu,back,index){
+  menu.hidden=true;
+  blocks.forEach((el,i)=>el.hidden=i!==index);
+  back.hidden=false;
+  page.scrollIntoView({block:"start",behavior:"smooth"});
+ }
+ function prepare(page){
+  if(!page||skip.has(page.id)||!page.classList.contains("page"))return;
+  const blocks=directBlocks(page);
+  if(blocks.length<2)return;
+  let menu=page.querySelector(":scope > .eg-section-picker");
+  let back=page.querySelector(":scope > .eg-picker-back");
+  if(!menu){
+   menu=document.createElement("div");menu.className="eg-section-picker";menu.setAttribute("aria-label","Chọn nội dung học");
+   back=document.createElement("button");back.type="button";back.className="btn line eg-picker-back";back.textContent="← Quay lại danh sách";
+   back.hidden=true;
+   blocks[0].parentNode.insertBefore(menu,blocks[0]);
+   menu.parentNode.insertBefore(back,menu.nextSibling);
+   blocks.forEach((block,index)=>{
+    const title=getTitle(block,index,page.id);
+    const card=document.createElement("button");card.type="button";card.className="eg-picker-card";card.setAttribute("aria-label","Mở "+title);
+    const icon=document.createElement("span");icon.className="eg-picker-icon";icon.textContent=iconFor(title,index);
+    const name=document.createElement("span");name.className="eg-picker-title";name.textContent=title;
+    const desc=document.createElement("span");desc.className="eg-picker-desc";desc.textContent=getDescription(block,title);
+    const open=document.createElement("span");open.className="eg-picker-open";open.textContent="Vào học →";
+    card.append(icon,name,desc,open);
+    card.addEventListener("click",()=>openBlock(page,blocks,menu,back,index));
+    menu.appendChild(card);
+   });
+   back.addEventListener("click",()=>openMenu(page,blocks,menu,back));
+  }
+  openMenu(page,blocks,menu,back);
+ }
+ function prepareActive(){
+  const active=document.querySelector("main .page.active");
+  if(active)prepare(active);
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",prepareActive);
+ else prepareActive();
+ const observer=new MutationObserver(records=>{
+  if(records.some(r=>r.attributeName==="class"))prepareActive();
+ });
+ function observe(){
+  document.querySelectorAll("main .page").forEach(page=>observer.observe(page,{attributes:true,attributeFilter:["class"]}));
+  prepareActive();
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",observe,{once:true});
+ else observe();
+ window.addEventListener("pageshow",prepareActive);
+})();
+</script>
+
 <script id="englishgo-pwa-registration">
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
