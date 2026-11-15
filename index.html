@@ -197,7 +197,85 @@ body > main{
 .pron-example{font-size:22px;font-weight:750;margin:10px 0}
 #dictAnswer{width:100%;margin:14px 0}
 @media(max-width:650px){.shadow-actions .btn{flex:1 1 100%}.phrasal-grid{grid-template-columns:1fr}}
-</style></head>
+</style>
+<style id="englishgo-header-overlap-fix">
+/* Keep the brand, account controls and navigation in separate rows when space is tight. */
+@media (max-width: 1100px) {
+  body > header .nav {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
+    grid-template-areas:
+      "logo login lang"
+      "links links links" !important;
+    align-items: center !important;
+    gap: 8px 10px !important;
+    width: 100% !important;
+    padding: 10px 14px !important;
+  }
+  body > header .brand-logo {
+    grid-area: logo !important;
+    width: clamp(130px, 17vw, 180px) !important;
+    max-width: 100% !important;
+    height: 52px !important;
+  }
+  body > header #cloudLoginBtn {
+    grid-area: login !important;
+    width: auto !important;
+    max-width: 100% !important;
+    justify-self: end !important;
+    white-space: nowrap !important;
+  }
+  body > header .nav > .lang {
+    grid-area: lang !important;
+    justify-self: end !important;
+  }
+  body > header #mainNav {
+    grid-area: links !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+  body > header #mainNav > button,
+  body > header #mainNav > .nav-group > summary {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    font-size: 12px !important;
+    padding: 8px 9px !important;
+  }
+}
+@media (max-width: 480px) {
+  body > header .nav {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "logo lang"
+      "login login"
+      "links links" !important;
+    gap: 7px 9px !important;
+    padding: 9px 10px !important;
+  }
+  body > header .brand-logo {
+    width: 155px !important;
+    height: 48px !important;
+  }
+  body > header #cloudLoginBtn {
+    justify-self: start !important;
+  }
+  body > header #mainNav > button,
+  body > header #mainNav > .nav-group > summary {
+    font-size: 11px !important;
+    padding: 7px 8px !important;
+  }
+}
+</style>
+
+</head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
 <nav aria-label="Main navigation" class="navlinks" id="mainNav">
