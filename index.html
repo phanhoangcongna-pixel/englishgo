@@ -855,7 +855,7 @@ html { background: #142342; }
  <div class="card"><div class="row"><label for="dictLevel">Cấp độ</label><select id="dictLevel" onchange="dictNew()"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option></select></div><div class="row"><button class="btn primary" onclick="dictSpeak(0.82)">🔊 Nghe chậm</button><button class="btn" onclick="dictSpeak(1)">▶ Nghe bình thường</button><button class="btn line" onclick="dictNew()">Câu mới →</button></div><textarea id="dictAnswer" rows="3" placeholder="Type what you hear... · Nhập câu bạn nghe được"></textarea><button class="btn primary" onclick="dictCheck()">Kiểm tra</button><div id="dictFeedback" aria-live="polite"></div></div>
 </section>
 <section class="page" id="stories">
- <div class="page-header"><div><p class="eyebrow">READ, LISTEN & UNDERSTAND</p><h1>📖 Short Stories · Truyện ngắn tiếng Anh</h1><p>Đọc truyện ngắn theo cấp độ A1–B1, nghe phát âm, xem bản dịch và trả lời câu hỏi đọc hiểu.</p></div></div>
+ <div class="page-header"><div><p class="eyebrow">READ, LISTEN & UNDERSTAND</p><h1>📖 Short Stories · Truyện ngắn tiếng Anh</h1><p>Đọc truyện dài hơn theo cấp độ A1–B1, học từ vựng trong ngữ cảnh, nghe phát âm và kiểm tra khả năng đọc hiểu.</p></div></div>
  <div class="card">
   <div class="controls">
    <label for="storyLevel">Cấp độ · Level</label>
@@ -869,10 +869,11 @@ html { background: #142342; }
    <button class="btn soft" id="storyTranslationBtn" type="button" onclick="egStoryToggleTranslation()">Hiện bản dịch · Show translation</button>
   </div>
   <div id="storyContent" aria-live="polite"></div>
+  <div id="storyVocab" style="margin-top:16px"></div>
  </div>
  <div class="card" style="margin-top:14px">
   <h2>Comprehension · Câu hỏi đọc hiểu</h2>
-  <p class="small muted">Đọc truyện rồi chọn đáp án đúng. Mỗi truyện có 3 câu hỏi.</p>
+  <p class="small muted">Đọc kỹ nội dung rồi trả lời 5 câu hỏi cho mỗi truyện.</p>
   <div id="storyQuestions"></div>
   <div class="controls"><button class="btn primary" type="button" onclick="egStoryCheck()">Kiểm tra đáp án</button><button class="btn line" type="button" onclick="egStoryReset()">Làm lại</button></div>
   <div id="storyResult" aria-live="polite"></div>
@@ -3511,100 +3512,92 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
-<script id="englishgo-short-stories-v1">
+<script id="englishgo-short-stories-v2">
 const egShortStories = [
- {level:"A1",title:"A Busy Morning · Buổi sáng bận rộn",paragraphs:[
-  ["Emma gets up at seven o'clock every morning. She makes breakfast and drinks a cup of tea. Then she walks to the bus stop.","Emma thức dậy lúc bảy giờ mỗi sáng. Cô chuẩn bị bữa sáng và uống một tách trà. Sau đó cô đi bộ đến trạm xe buýt."],
-  ["Today, the bus is late. Emma waits for ten minutes and reads a message from her friend. She arrives at work at nine o'clock.","Hôm nay xe buýt đến muộn. Emma đợi mười phút và đọc tin nhắn từ bạn. Cô đến chỗ làm lúc chín giờ."]
- ],questions:[
-  ["What time does Emma get up?",["At six","At seven","At eight"],1],
-  ["What does she drink for breakfast?",["Tea","Coffee","Milk"],0],
-  ["Why does Emma wait at the bus stop?",["She is early","The bus is late","She lost her phone"],1]
- ]},
- {level:"A1",title:"The Missing Wallet · Chiếc ví bị mất",paragraphs:[
-  ["Tom is at the supermarket. He buys some bread, eggs and apples. When he gets to the checkout, he cannot find his wallet.","Tom đang ở siêu thị. Anh mua bánh mì, trứng và táo. Khi đến quầy thanh toán, anh không tìm thấy ví."],
-  ["He looks in his bag and checks his pockets. A shop assistant finds the wallet near the door. Tom thanks her and pays for his food.","Anh tìm trong túi và kiểm tra các túi áo. Một nhân viên cửa hàng tìm thấy chiếc ví gần cửa ra vào. Tom cảm ơn cô ấy và thanh toán tiền hàng."]
- ],questions:[
-  ["Where is Tom?",["At a supermarket","At a school","At a station"],0],
-  ["What does Tom buy?",["A jacket and shoes","Bread, eggs and apples","A book and a pen"],1],
-  ["Where is the wallet?",["In the car","Near the door","At home"],1]
- ]},
- {level:"A2",title:"A Weekend by the Sea · Cuối tuần bên bờ biển",paragraphs:[
-  ["Last Saturday, Mia and her cousin travelled to a small town by the sea. They left early because they wanted to avoid the traffic. The weather was sunny but a little windy.","Thứ Bảy tuần trước, Mia và em họ đi đến một thị trấn nhỏ bên bờ biển. Họ khởi hành sớm vì muốn tránh tắc đường. Trời nắng nhưng hơi có gió."],
-  ["After lunch, they walked along the beach and took photos of the boats. Before going home, they bought ice cream from a little shop near the harbour. They both agreed to visit again.","Sau bữa trưa, họ đi dạo dọc bãi biển và chụp ảnh những chiếc thuyền. Trước khi về nhà, họ mua kem ở một cửa hàng nhỏ gần bến cảng. Cả hai đều đồng ý sẽ quay lại."]
- ],questions:[
-  ["Why did they leave early?",["To catch a train","To avoid traffic","To buy breakfast"],1],
-  ["What did they photograph?",["Boats","Mountains","Old houses"],0],
-  ["Where did they buy ice cream?",["Near the harbour","At the hotel","At the station"],0]
- ]},
- {level:"A2",title:"The Helpful Neighbour · Người hàng xóm tốt bụng",paragraphs:[
-  ["When Daniel moved into his new flat, he did not know anyone in the building. One evening, his neighbour Mrs Green knocked on his door. She had made too much soup and wanted to share it.","Khi Daniel chuyển đến căn hộ mới, anh không quen ai trong tòa nhà. Một buổi tối, bà Green, hàng xóm của anh, gõ cửa. Bà nấu quá nhiều súp và muốn chia sẻ với anh."],
-  ["They talked for half an hour. Daniel learned that Mrs Green had lived there for twenty years and knew the area very well. A few days later, he helped her carry some shopping upstairs. They soon became good friends.","Họ trò chuyện nửa tiếng. Daniel biết bà Green đã sống ở đó hai mươi năm và rất hiểu khu vực này. Vài ngày sau, anh giúp bà mang đồ mua sắm lên tầng. Họ nhanh chóng trở thành bạn tốt."]
- ],questions:[
-  ["Why did Mrs Green visit Daniel?",["To complain about noise","To share some soup","To borrow money"],1],
-  ["How long had she lived there?",["Two years","Twelve years","Twenty years"],2],
-  ["How did Daniel help her later?",["He carried her shopping","He cleaned her flat","He cooked dinner"],0]
- ]},
- {level:"B1",title:"A Change of Career · Thay đổi nghề nghiệp",paragraphs:[
-  ["For several years, Laura worked in an office where she had a stable salary but very little opportunity to be creative. Although she was grateful for the job, she often felt that something was missing.","Trong nhiều năm, Laura làm việc tại một văn phòng, nơi cô có mức lương ổn định nhưng rất ít cơ hội sáng tạo. Mặc dù biết ơn công việc đó, cô thường cảm thấy còn thiếu điều gì đó."],
-  ["After taking an evening course in graphic design, she decided to build a small portfolio. It took months of practice, and she made plenty of mistakes. Eventually, a local company offered her a junior designer position. The change was challenging, but she felt more motivated than ever.","Sau khi tham gia một khóa thiết kế đồ họa buổi tối, cô quyết định xây dựng một hồ sơ năng lực nhỏ. Việc đó mất nhiều tháng luyện tập và cô mắc không ít sai lầm. Cuối cùng, một công ty địa phương đề nghị cô vị trí thiết kế viên mới vào nghề. Sự thay đổi đầy thử thách, nhưng cô cảm thấy có động lực hơn bao giờ hết."]
- ],questions:[
-  ["What was missing from Laura's old job?",["A regular salary","Creative opportunities","A friendly manager"],1],
-  ["What did she study in the evening?",["Graphic design","Accounting","Marketing"],0],
-  ["How did she feel about her new position?",["Less confident","Bored","More motivated"],2]
- ]},
- {level:"B1",title:"The Community Garden · Khu vườn cộng đồng",paragraphs:[
-  ["An empty piece of land behind the library had become a place where people left rubbish. A group of residents suggested turning it into a community garden. At first, the idea seemed difficult because nobody had much experience or money.","Một mảnh đất trống phía sau thư viện đã trở thành nơi mọi người vứt rác. Một nhóm cư dân đề xuất biến nó thành khu vườn cộng đồng. Ban đầu, ý tưởng có vẻ khó thực hiện vì không ai có nhiều kinh nghiệm hay tiền bạc."],
-  ["They contacted local businesses for spare tools and organised weekend work sessions. Some residents planted vegetables, while others built small wooden boxes. Six months later, the garden was full of colour. More importantly, neighbours who had never spoken before were now working together.","Họ liên hệ các doanh nghiệp địa phương để xin dụng cụ còn dư và tổ chức các buổi làm việc cuối tuần. Một số cư dân trồng rau, trong khi những người khác đóng các thùng gỗ nhỏ. Sáu tháng sau, khu vườn rực rỡ sắc màu. Quan trọng hơn, những người hàng xóm trước đây chưa từng nói chuyện giờ đã cùng nhau làm việc."]
- ],questions:[
-  ["What was the land used for before the project?",["A playground","A rubbish area","A car park"],1],
-  ["How did the residents get tools?",["They contacted local businesses","They bought expensive equipment","The library donated everything"],0],
-  ["What was an important result besides the garden?",["The library became larger","The neighbours worked together","The project made a profit"],1]
- ]}
+{level:"A1",title:"A Busy Morning · Buổi sáng bận rộn",paragraphs:[
+["Emma gets up at seven o'clock every morning. She opens the curtains and looks outside. Today the sky is grey, but it is not raining. She washes her face, brushes her teeth and gets dressed. Then she goes to the kitchen to make breakfast. She usually has toast, an egg and a cup of tea. Her little brother Ben is still sleeping, so she prepares his school bag quietly.","Emma thức dậy lúc bảy giờ mỗi sáng. Cô mở rèm và nhìn ra ngoài. Hôm nay bầu trời nhiều mây nhưng không mưa. Cô rửa mặt, đánh răng và mặc quần áo. Sau đó cô vào bếp chuẩn bị bữa sáng. Cô thường ăn bánh mì nướng, một quả trứng và uống một tách trà. Em trai cô, Ben, vẫn đang ngủ nên cô chuẩn bị cặp sách cho em thật nhẹ nhàng."],
+["At half past seven, Ben comes into the kitchen. He cannot find his blue school sweater. Emma helps him look under the table and behind the sofa. They finally find it in the washing basket. Ben puts it on and eats a banana. Their mother gives them two sandwiches for lunch. Before they leave, Emma checks that the front door is locked.","Lúc bảy giờ rưỡi, Ben bước vào bếp. Cậu không tìm thấy chiếc áo len đồng phục màu xanh. Emma giúp cậu tìm dưới bàn và sau ghế sofa. Cuối cùng họ tìm thấy nó trong giỏ quần áo. Ben mặc áo và ăn một quả chuối. Mẹ đưa cho hai anh em hai chiếc bánh mì kẹp để ăn trưa. Trước khi đi, Emma kiểm tra cửa trước đã khóa chưa."],
+["They walk to the bus stop together. The bus is five minutes late, but they are not worried because they have plenty of time. Emma gets off near her office, and Ben continues to school. When Emma arrives, she makes a cup of coffee and says hello to her colleagues. It is a busy morning, but everything has gone well.","Họ cùng nhau đi bộ đến trạm xe buýt. Xe đến muộn năm phút nhưng họ không lo vì vẫn còn nhiều thời gian. Emma xuống xe gần văn phòng, còn Ben tiếp tục đến trường. Khi Emma đến nơi, cô pha một tách cà phê và chào đồng nghiệp. Đó là một buổi sáng bận rộn, nhưng mọi việc đều diễn ra suôn sẻ."]
+],vocab:[["curtains","rèm cửa"],["get dressed","mặc quần áo"],["washing basket","giỏ đựng quần áo"],["front door","cửa trước"],["colleague","đồng nghiệp"]],questions:[
+["What time does Emma get up?",["At six","At seven","At eight","At half past seven"],1],
+["Where do they find Ben's sweater?",["Under the table","Behind the sofa","In the washing basket","In his school bag"],2],
+["What does Ben eat before leaving?",["An apple","A banana","An egg","A sandwich"],1],
+["How late is the bus?",["Five minutes","Ten minutes","Fifteen minutes","It is early"],0],
+["Where does Emma get off the bus?",["At school","Near her office","At the supermarket","At home"],1]
+]},
+{level:"A1",title:"The Missing Wallet · Chiếc ví bị mất",paragraphs:[
+["On Saturday morning, Tom goes to the town centre to buy a birthday present for his sister. He takes the bus and gets off outside a large shopping centre. First, he visits a bookshop and chooses a colourful storybook. Then he goes to a supermarket to buy some fruit and a bottle of orange juice. He puts everything in his backpack.","Sáng thứ Bảy, Tom đến trung tâm thành phố để mua quà sinh nhật cho em gái. Anh đi xe buýt và xuống trước một trung tâm mua sắm lớn. Đầu tiên, anh ghé hiệu sách và chọn một cuốn truyện nhiều màu sắc. Sau đó anh đến siêu thị mua trái cây và một chai nước cam. Anh bỏ tất cả vào ba lô."],
+["When Tom reaches the checkout, he opens his backpack to find his wallet. It is not there. He checks his jacket and his trousers, but he cannot find it. He begins to feel worried. The shop assistant asks him to wait while she calls the security desk. Tom remembers that he paid for the book in the bookshop, so perhaps he left the wallet there.","Khi đến quầy thanh toán, Tom mở ba lô để tìm ví. Ví không ở đó. Anh kiểm tra áo khoác và quần nhưng vẫn không tìm thấy. Anh bắt đầu lo lắng. Nhân viên cửa hàng bảo anh chờ trong lúc cô gọi bộ phận an ninh. Tom nhớ mình đã trả tiền mua sách ở hiệu sách, có lẽ anh để quên ví ở đó."],
+["A few minutes later, a security guard arrives with a small black wallet. A customer found it on the floor near the bookshop counter and gave it to a member of staff. Tom checks inside. His bank card and some money are still there. He thanks the guard and the helpful customer. Then he pays for his shopping and calls his sister. He tells her that he has a present and a funny story to share.","Vài phút sau, một nhân viên bảo vệ đến cùng chiếc ví màu đen nhỏ. Một khách hàng tìm thấy ví trên sàn gần quầy hiệu sách và đưa cho nhân viên. Tom kiểm tra bên trong. Thẻ ngân hàng và một ít tiền vẫn còn nguyên. Anh cảm ơn nhân viên bảo vệ và vị khách tốt bụng. Sau đó anh thanh toán đồ mua sắm và gọi cho em gái. Anh nói rằng mình có một món quà và một câu chuyện thú vị để kể."]
+],vocab:[["town centre","trung tâm thị trấn"],["present","món quà"],["checkout","quầy thanh toán"],["security guard","nhân viên bảo vệ"],["on the floor","trên sàn nhà"]],questions:[
+["Why does Tom go to the town centre?",["To meet a friend","To buy a birthday present","To visit his office","To take a train"],1],
+["What does he buy at the bookshop?",["A map","A magazine","A storybook","A notebook"],2],
+["Where does Tom notice his wallet is missing?",["At the bus stop","At the checkout","At home","In the bookshop"],1],
+["Who finds the wallet?",["A customer","Tom's sister","The bus driver","The shop manager"],0],
+["What is still inside the wallet?",["Only a photograph","His keys","His bank card and money","A bus ticket"],2]
+]},
+{level:"A2",title:"A Weekend by the Sea · Cuối tuần bên bờ biển",paragraphs:[
+["Mia had been looking forward to the weekend for weeks. She and her cousin Daniel planned a short trip to a seaside town about two hours from home. They checked the weather forecast on Friday evening and packed their bags. Mia brought a camera, a light jacket and a notebook, while Daniel packed snacks and a small first-aid kit. They agreed to leave early on Saturday to avoid the busiest traffic.","Mia đã mong chờ kỳ nghỉ cuối tuần suốt nhiều tuần. Cô và người em họ Daniel lên kế hoạch cho chuyến đi ngắn đến một thị trấn ven biển cách nhà khoảng hai giờ. Tối thứ Sáu, họ xem dự báo thời tiết và chuẩn bị hành lý. Mia mang theo máy ảnh, áo khoác mỏng và sổ tay, còn Daniel chuẩn bị đồ ăn nhẹ và một bộ sơ cứu nhỏ. Họ thống nhất khởi hành sớm vào thứ Bảy để tránh giờ cao điểm."],
+["The journey was comfortable, although they had to stop once because a road was closed. When they arrived, the sun was shining and the sea looked bright blue. They walked along the harbour, watched fishermen repairing their nets and took photographs of the boats. At lunchtime, they found a small café with tables outside. Mia ordered grilled fish, while Daniel chose a vegetable sandwich. The owner recommended a local cake, which they shared for dessert.","Chuyến đi khá thoải mái, mặc dù họ phải dừng lại một lần vì một con đường bị đóng. Khi đến nơi, mặt trời đang chiếu sáng và biển có màu xanh rực rỡ. Họ đi dọc bến cảng, xem ngư dân sửa lưới và chụp ảnh những chiếc thuyền. Đến giờ ăn trưa, họ tìm thấy một quán cà phê nhỏ có bàn ngoài trời. Mia gọi cá nướng, còn Daniel chọn bánh mì kẹp rau. Chủ quán giới thiệu một loại bánh địa phương và họ cùng ăn tráng miệng."],
+["In the afternoon, they rented bicycles and followed a path beside the beach. The wind became stronger, so they stopped near a lighthouse to rest and enjoy the view. Daniel noticed a family trying to take a group photograph and offered to help. Before returning the bicycles, Mia bought two postcards for her parents. They arrived home tired but happy, and both agreed that the town was worth visiting again.","Buổi chiều, họ thuê xe đạp và đi theo con đường bên bờ biển. Gió mạnh hơn nên họ dừng gần một ngọn hải đăng để nghỉ ngơi và ngắm cảnh. Daniel thấy một gia đình đang cố chụp ảnh chung nên đề nghị giúp đỡ. Trước khi trả xe, Mia mua hai tấm bưu thiếp cho bố mẹ. Họ về nhà trong trạng thái mệt nhưng vui, và cả hai đều đồng ý rằng thị trấn này đáng để quay lại."]
+],vocab:[["look forward to","mong chờ"],["weather forecast","dự báo thời tiết"],["first-aid kit","bộ sơ cứu"],["harbour","bến cảng"],["lighthouse","ngọn hải đăng"],["worth visiting","đáng để ghé thăm"]],questions:[
+["Why did Mia and Daniel leave early?",["To meet the fishermen","To avoid heavy traffic","To rent bicycles","To buy breakfast"],1],
+["Why did they stop during the journey?",["The car broke down","They were hungry","A road was closed","They needed petrol"],2],
+["What did the café owner recommend?",["A local cake","A seafood soup","A bicycle path","A postcard"],0],
+["Where did they stop to enjoy the view?",["At the station","Near a lighthouse","Inside a museum","At the supermarket"],1],
+["How did they feel when they got home?",["Disappointed","Angry","Tired but happy","Bored"],2]
+]},
+{level:"A2",title:"The Helpful Neighbour · Người hàng xóm tốt bụng",paragraphs:[
+["When Daniel moved into a new flat, he was excited but also a little nervous. The building was in a quiet street, and most people seemed to know one another. Daniel worked long hours and usually came home late, so he had not had much time to meet his neighbours. One evening, while he was unpacking a box of kitchen things, someone knocked on his door. It was Mrs Green, the woman who lived next door. She introduced herself and offered him a bowl of homemade soup because she had cooked too much.","Khi Daniel chuyển đến căn hộ mới, anh vừa hào hứng vừa hơi lo lắng. Tòa nhà nằm trên một con phố yên tĩnh và dường như mọi người đều quen biết nhau. Daniel làm việc nhiều giờ và thường về nhà muộn nên chưa có nhiều thời gian gặp hàng xóm. Một buổi tối, khi đang mở thùng đồ dùng nhà bếp, có người gõ cửa. Đó là bà Green, người sống ở căn hộ bên cạnh. Bà giới thiệu bản thân và mời anh một bát súp tự nấu vì bà đã nấu quá nhiều."],
+["They talked in the kitchen for nearly an hour. Mrs Green told Daniel about the local shops, the best bus routes and a small park nearby. She also explained which day the rubbish was collected. Daniel was surprised by how much useful information she knew. Before leaving, she invited him to a community coffee morning on Saturday. He was not sure at first, but he decided it would be a good way to meet people.","Họ trò chuyện trong bếp gần một tiếng. Bà Green kể cho Daniel về các cửa hàng địa phương, những tuyến xe buýt thuận tiện nhất và một công viên nhỏ gần đó. Bà cũng giải thích ngày thu gom rác. Daniel ngạc nhiên vì bà biết nhiều thông tin hữu ích đến vậy. Trước khi về, bà mời anh tham gia buổi cà phê cộng đồng vào sáng thứ Bảy. Ban đầu anh hơi do dự nhưng quyết định đó sẽ là cách tốt để làm quen mọi người."],
+["On Saturday, Daniel went to the community room with a box of biscuits. Several neighbours welcomed him and asked about his new job. He discovered that one neighbour enjoyed cycling and another was learning Spanish. A week later, Mrs Green needed help carrying some shopping upstairs, so Daniel offered to help. They soon became friends. Daniel realised that moving to a new place did not have to feel lonely when people were willing to be kind.","Sáng thứ Bảy, Daniel đến phòng sinh hoạt cộng đồng với một hộp bánh quy. Một vài người hàng xóm chào đón anh và hỏi về công việc mới. Anh phát hiện một người hàng xóm thích đạp xe, người khác đang học tiếng Tây Ban Nha. Một tuần sau, bà Green cần giúp mang đồ mua sắm lên tầng nên Daniel đề nghị giúp. Họ nhanh chóng trở thành bạn bè. Daniel nhận ra rằng chuyển đến nơi ở mới không nhất thiết phải cô đơn khi mọi người sẵn lòng đối xử tử tế."]
+],vocab:[["unpack","dỡ đồ khỏi thùng"],["homemade","tự làm tại nhà"],["rubbish collection","việc thu gom rác"],["community room","phòng sinh hoạt cộng đồng"],["willing","sẵn lòng"],["feel lonely","cảm thấy cô đơn"]],questions:[
+["Why had Daniel not met many neighbours?",["He disliked them","He worked long hours","He travelled every week","He had lived there for years"],1],
+["What did Mrs Green bring him?",["A bowl of soup","A cup of coffee","A new key","A map"],0],
+["What happened on Saturday morning?",["Daniel went cycling","Daniel attended a community coffee morning","Daniel moved again","Daniel visited his office"],1],
+["What did Daniel bring to the meeting?",["A cake","A box of biscuits","Some flowers","A bottle of juice"],1],
+["What did Daniel learn from the experience?",["Moving is always difficult","Neighbours should not talk","Kindness can make a new place feel less lonely","It is better to live alone"],2]
+]},
+{level:"B1",title:"A Change of Career · Thay đổi nghề nghiệp",paragraphs:[
+["For almost eight years, Laura worked as an administrator for a large insurance company. The job provided a reliable income and a predictable routine, but she rarely felt excited about going to work. She enjoyed solving problems and helping colleagues, yet most of her day involved repeating the same tasks. In the evenings, she often watched design videos and experimented with simple projects on her laptop. Gradually, she began to wonder whether she could turn this interest into a career.","Trong gần tám năm, Laura làm nhân viên hành chính cho một công ty bảo hiểm lớn. Công việc mang lại thu nhập ổn định và lịch trình dễ đoán, nhưng cô hiếm khi cảm thấy hào hứng khi đi làm. Cô thích giải quyết vấn đề và giúp đỡ đồng nghiệp, tuy nhiên phần lớn thời gian trong ngày cô lặp lại những nhiệm vụ giống nhau. Buổi tối, cô thường xem video thiết kế và thử làm các dự án đơn giản trên máy tính. Dần dần, cô bắt đầu tự hỏi liệu mình có thể biến sở thích này thành nghề nghiệp hay không."],
+["After discussing the idea with a friend, Laura enrolled in an evening course in graphic design. At first, she found the software confusing and struggled to understand basic design principles. She considered giving up more than once, especially when she compared her work with professional examples online. Her tutor encouraged her to focus on progress rather than perfection. Laura started practising for thirty minutes every day and asked classmates for honest feedback. By the end of the course, she had created a small portfolio of posters, logos and website layouts.","Sau khi thảo luận ý tưởng với một người bạn, Laura đăng ký khóa học thiết kế đồ họa buổi tối. Ban đầu, cô thấy phần mềm khó hiểu và chật vật để nắm các nguyên tắc thiết kế cơ bản. Cô đã hơn một lần nghĩ đến việc bỏ cuộc, đặc biệt khi so sánh sản phẩm của mình với các ví dụ chuyên nghiệp trên mạng. Người hướng dẫn khuyên cô tập trung vào sự tiến bộ thay vì sự hoàn hảo. Laura bắt đầu luyện tập ba mươi phút mỗi ngày và xin nhận xét chân thành từ bạn học. Cuối khóa, cô đã tạo được một hồ sơ năng lực nhỏ gồm áp phích, logo và bố cục trang web."],
+["Changing careers was not as simple as handing in her resignation. Laura updated her CV, contacted local businesses and applied for several junior positions. Some employers did not reply, while others invited her to interviews but chose more experienced candidates. Although the process was discouraging, she used each interview to improve her answers and presentation. Eventually, a small marketing agency offered her a paid three-month trial. The salary was lower than her previous one, but the role gave her the chance to learn from experienced designers.","Thay đổi nghề nghiệp không đơn giản chỉ là nộp đơn xin nghỉ việc. Laura cập nhật CV, liên hệ các doanh nghiệp địa phương và ứng tuyển một số vị trí cấp thấp. Một số nhà tuyển dụng không phản hồi, trong khi những nơi khác mời cô phỏng vấn nhưng chọn ứng viên giàu kinh nghiệm hơn. Mặc dù quá trình này khiến cô nản lòng, cô tận dụng mỗi buổi phỏng vấn để cải thiện câu trả lời và cách trình bày. Cuối cùng, một công ty tiếp thị nhỏ đề nghị cô thử việc có lương trong ba tháng. Mức lương thấp hơn công việc cũ, nhưng vị trí này cho cô cơ hội học hỏi từ các nhà thiết kế giàu kinh nghiệm."],
+["Six months later, Laura was offered a permanent contract. She still had difficult days and sometimes needed to work late to meet a deadline, but she felt that her effort had a clear purpose. Looking back, she understood that the most important step had not been finding the perfect course or waiting for the perfect opportunity. It had been making time to practise consistently and being willing to start again as a beginner.","Sáu tháng sau, Laura được đề nghị ký hợp đồng lâu dài. Cô vẫn có những ngày khó khăn và đôi khi phải làm muộn để kịp thời hạn, nhưng cô cảm thấy nỗ lực của mình có mục đích rõ ràng. Nhìn lại, cô hiểu rằng bước quan trọng nhất không phải là tìm được khóa học hoàn hảo hay chờ đợi cơ hội hoàn hảo. Đó là dành thời gian luyện tập đều đặn và sẵn sàng bắt đầu lại với tư cách một người mới."]
+],vocab:[["predictable routine","lịch trình dễ đoán"],["enrol in","đăng ký tham gia"],["design principles","nguyên tắc thiết kế"],["portfolio","hồ sơ năng lực"],["discouraging","khiến nản lòng"],["permanent contract","hợp đồng lâu dài"],["consistently","một cách đều đặn"]],questions:[
+["What did Laura dislike about her previous job?",["The salary was unreliable","The work was repetitive","Her colleagues were unfriendly","The office was far away"],1],
+["Why did Laura nearly give up the design course?",["The software and principles were difficult","She had no computer","Her friend discouraged her","The course was cancelled"],0],
+["What advice did her tutor give?",["Work faster","Copy professional designs","Focus on progress rather than perfection","Stop asking for feedback"],2],
+["Why was the three-month trial attractive to Laura?",["It paid more than her old job","It allowed her to learn from experienced designers","It required no work","It was a permanent contract"],1],
+["According to the final paragraph, what was the key to her change?",["Waiting for a perfect opportunity","Finding the cheapest course","Practising consistently and accepting being a beginner","Leaving her job immediately"],2]
+]},
+{level:"B1",title:"The Community Garden · Khu vườn cộng đồng",paragraphs:[
+["Behind the public library in Westbrook stood a neglected piece of land. For years, people had used it as an informal place to leave rubbish, and the area had become unpleasant. A local resident named Priya believed that the space could serve a better purpose. During a neighbourhood meeting, she suggested creating a community garden where residents could grow vegetables, share gardening skills and spend time outdoors. Some people were enthusiastic, but others worried about the cost and the amount of work involved.","Phía sau thư viện công cộng ở Westbrook có một mảnh đất bị bỏ hoang. Suốt nhiều năm, mọi người dùng nơi này như chỗ tự phát để vứt rác, khiến khu vực trở nên nhếch nhác. Một cư dân địa phương tên Priya tin rằng không gian này có thể có mục đích tốt đẹp hơn. Trong một cuộc họp khu phố, cô đề xuất tạo một khu vườn cộng đồng nơi cư dân có thể trồng rau, chia sẻ kỹ năng làm vườn và dành thời gian ngoài trời. Một số người hào hứng, nhưng những người khác lo ngại về chi phí và khối lượng công việc."],
+["Rather than abandoning the idea, Priya suggested starting with a small area. The group contacted the council to ask for permission and approached local businesses for unused tools, soil and seeds. A nearby school offered wooden boxes that students had built during a technology project. Volunteers met every Saturday morning to clear rubbish, prepare the ground and plan where each plant would grow. The first few weeks were difficult because the soil was poor and the weather was unpredictable. However, people shared advice and gradually solved the problems together.","Thay vì từ bỏ ý tưởng, Priya đề xuất bắt đầu với một khu vực nhỏ. Nhóm liên hệ hội đồng địa phương để xin phép và hỏi các doanh nghiệp gần đó về dụng cụ không dùng đến, đất trồng và hạt giống. Một trường học gần đó tặng những thùng gỗ do học sinh làm trong dự án công nghệ. Các tình nguyện viên gặp nhau vào sáng thứ Bảy hằng tuần để dọn rác, chuẩn bị đất và lên kế hoạch trồng cây. Vài tuần đầu khá khó khăn vì đất kém màu mỡ và thời tiết thất thường. Tuy nhiên, mọi người chia sẻ lời khuyên và dần giải quyết vấn đề cùng nhau."],
+["By the middle of summer, the garden looked completely different. There were tomatoes, beans, herbs and colourful flowers. The group agreed that anyone who helped with the work could take some vegetables home. They also organised an open afternoon for families, where children learned how to plant seeds and older residents shared traditional gardening methods. The project began to attract people who had never attended a neighbourhood meeting before.","Đến giữa mùa hè, khu vườn đã thay đổi hoàn toàn. Ở đó có cà chua, đậu, rau thơm và hoa nhiều màu sắc. Nhóm thống nhất rằng bất kỳ ai tham gia làm việc đều có thể mang một ít rau về nhà. Họ cũng tổ chức một buổi chiều mở cửa cho các gia đình, nơi trẻ em học cách gieo hạt và người lớn tuổi chia sẻ phương pháp làm vườn truyền thống. Dự án bắt đầu thu hút cả những người trước đây chưa từng tham dự cuộc họp khu phố."],
+["The garden did not solve every problem in Westbrook, and it required regular care. Nevertheless, it changed how neighbours viewed the area and one another. People who had previously only exchanged quick greetings began organising events and helping each other with small tasks. Priya felt proud, not simply because the land was cleaner, but because the project had created a stronger sense of community. The group now hopes to add a small greenhouse next year.","Khu vườn không giải quyết được mọi vấn đề ở Westbrook và vẫn cần được chăm sóc thường xuyên. Dù vậy, nó đã thay đổi cách hàng xóm nhìn nhận khu vực và nhìn nhận lẫn nhau. Những người trước đây chỉ chào hỏi qua loa bắt đầu tổ chức sự kiện và giúp nhau những việc nhỏ. Priya cảm thấy tự hào không chỉ vì mảnh đất sạch hơn mà còn vì dự án đã tạo ra tinh thần cộng đồng gắn kết hơn. Nhóm hiện hy vọng sẽ xây thêm một nhà kính nhỏ vào năm tới."]
+],vocab:[["neglected","bị bỏ bê"],["serve a purpose","có một mục đích"],["approach a business","liên hệ một doanh nghiệp"],["volunteer","tình nguyện viên"],["unpredictable","khó đoán, thất thường"],["greenhouse","nhà kính"],["sense of community","tinh thần cộng đồng"]],questions:[
+["What was the land used for before the project?",["A sports field","A place to leave rubbish","A school garden","A car park"],1],
+["How did the group reduce the initial costs?",["They borrowed or received donated materials","They hired a large company","They bought expensive machines","They moved the garden"],0],
+["Why were the first weeks challenging?",["There were too many visitors","The soil was poor and the weather unpredictable","The council closed the area","Nobody wanted vegetables"],1],
+["What happened during the open afternoon?",["Children learned to plant seeds","Residents sold their houses","The library closed","Only gardeners could attend"],0],
+["What was one important result of the project?",["The area no longer needed care","All local problems disappeared","Neighbours became more connected","The group made a large profit"],2]
+]}
 ];
 let egStoryTranslationVisible=false;
-function egStoryCurrent(){
- const level=document.getElementById("storyLevel")?.value||"A1";
- const rows=egShortStories.filter(x=>x.level===level);
- const select=document.getElementById("storySelect");
- return rows[Math.max(0,Number(select?.value||0))]||rows[0]||egShortStories[0];
-}
-function egStoryLevelChanged(){
- const level=document.getElementById("storyLevel").value;
- const rows=egShortStories.filter(x=>x.level===level);
- const select=document.getElementById("storySelect");
- select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");
- egStoryTranslationVisible=false;
- egStoryRender();
-}
+function egStoryCurrent(){const level=document.getElementById("storyLevel")?.value||"A1";const rows=egShortStories.filter(x=>x.level===level);const select=document.getElementById("storySelect");return rows[Math.max(0,Number(select?.value||0))]||rows[0]||egShortStories[0]}
+function egStoryLevelChanged(){const level=document.getElementById("storyLevel").value;const rows=egShortStories.filter(x=>x.level===level);const select=document.getElementById("storySelect");select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");egStoryTranslationVisible=false;egStoryRender()}
 function egStoryRender(){
- const story=egStoryCurrent();
- if(!story)return;
- const content=document.getElementById("storyContent");
- content.innerHTML='<h2>'+story.title+'</h2><p class="small muted">Level '+story.level+' · '+story.paragraphs.length+' đoạn văn</p>'+story.paragraphs.map((p,i)=>'<div style="padding:12px 0;border-bottom:1px solid var(--line)"><p style="line-height:1.8;margin:0 0 7px"><b>'+(i+1)+'.</b> '+p[0]+'</p><p class="story-translation" style="display:'+(egStoryTranslationVisible?'block':'none')+';color:var(--muted);margin:0">'+p[1]+'</p></div>').join("");
+ const story=egStoryCurrent();if(!story)return;
+ document.getElementById("storyContent").innerHTML='<h2>'+story.title+'</h2><p class="small muted">Level '+story.level+' · '+story.paragraphs.length+' đoạn văn</p>'+story.paragraphs.map((p,i)=>'<div style="padding:12px 0;border-bottom:1px solid var(--line)"><p style="line-height:1.85;margin:0 0 8px"><b>'+(i+1)+'.</b> '+p[0]+'</p><p style="display:'+(egStoryTranslationVisible?'block':'none')+';color:var(--muted);line-height:1.8;margin:0">'+p[1]+'</p></div>').join("");
  document.getElementById("storyTranslationBtn").textContent=egStoryTranslationVisible?"Ẩn bản dịch · Hide translation":"Hiện bản dịch · Show translation";
- document.getElementById("storyQuestions").innerHTML=story.questions.map((q,i)=>'<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0"><legend><b>'+(i+1)+'. '+q[0]+'</b></legend>'+q[1].map((a,j)=>'<label style="display:block;padding:6px 2px"><input type="radio" name="egStoryQ'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+a+'</label>').join("")+'</fieldset>').join("");
+ document.getElementById("storyVocab").innerHTML='<h3>Key Vocabulary · Từ vựng quan trọng</h3><div class="controls" style="display:flex;flex-wrap:wrap;gap:8px">'+story.vocab.map(v=>'<span class="badge" style="padding:7px 10px">'+v[0]+' · '+v[1]+'</span>').join("")+'</div>';
+ document.getElementById("storyQuestions").innerHTML=story.questions.map((q,i)=>'<fieldset style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0"><legend><b>'+(i+1)+'. '+q[0]+'</b></legend>'+q[1].map((answer,j)=>'<label style="display:block;padding:7px 2px"><input type="radio" name="egStoryQ'+i+'" value="'+j+'"> '+String.fromCharCode(65+j)+'. '+answer+'</label>').join("")+'</fieldset>').join("");
  document.getElementById("storyResult").textContent="";
 }
 function egStoryToggleTranslation(){egStoryTranslationVisible=!egStoryTranslationVisible;egStoryRender()}
-function egStorySpeak(){
- const story=egStoryCurrent();if(!story)return;
- if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("storyResult").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}
- const utterance=new SpeechSynthesisUtterance(story.paragraphs.map(p=>p[0]).join(" "));
- utterance.lang="en-US";utterance.rate=0.88;utterance.volume=1;
- const voices=speechSynthesis.getVoices();
- utterance.voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;
- speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.speak(utterance);
-}
+function egStorySpeak(){const story=egStoryCurrent();if(!story)return;if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("storyResult").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}const utterance=new SpeechSynthesisUtterance(story.paragraphs.map(p=>p[0]).join(" "));utterance.lang="en-US";utterance.rate=0.88;utterance.volume=1;const voices=speechSynthesis.getVoices();utterance.voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.speak(utterance)}
 function egStoryStop(){if("speechSynthesis" in window)speechSynthesis.cancel()}
-function egStoryCheck(){
- const story=egStoryCurrent();if(!story)return;
- let score=0,unanswered=0;
- story.questions.forEach((q,i)=>{const chosen=document.querySelector('input[name="egStoryQ'+i+'"]:checked');if(!chosen)unanswered++;else if(Number(chosen.value)===q[2])score++});
- const result=document.getElementById("storyResult");
- if(unanswered){result.textContent="Bạn còn "+unanswered+" câu chưa trả lời. Hãy hoàn thành cả 3 câu nhé.";return}
- result.innerHTML='<b>Kết quả: '+score+'/'+story.questions.length+' câu đúng.</b> '+(score===3?'Xuất sắc! 🎉':score===2?'Tốt lắm! Hãy xem lại câu còn sai.':'Hãy đọc lại truyện và thử lần nữa nhé.');
-}
+function egStoryCheck(){const story=egStoryCurrent();if(!story)return;let score=0,unanswered=0;const details=[];story.questions.forEach((q,i)=>{const chosen=document.querySelector('input[name="egStoryQ'+i+'"]:checked');if(!chosen){unanswered++;details.push((i+1)+'. Chưa trả lời · Đáp án: '+q[1][q[2]])}else if(Number(chosen.value)===q[2]){score++;details.push((i+1)+'. ✓ Chính xác')}else details.push((i+1)+'. ✗ Đáp án đúng: '+q[1][q[2]])});const result=document.getElementById("storyResult");if(unanswered){result.textContent="Bạn còn "+unanswered+" câu chưa trả lời. Hãy hoàn thành cả 5 câu nhé.";return}result.innerHTML='<h3>Kết quả: '+score+'/'+story.questions.length+' câu đúng</h3><p>'+(score===5?'Xuất sắc! 🎉':score>=3?'Tốt lắm! Hãy xem lại câu còn sai.':'Hãy đọc lại truyện và thử lần nữa nhé.')+'</p><p>'+details.join('<br>')+'</p>'}
 function egStoryReset(){document.querySelectorAll('#storyQuestions input[type="radio"]').forEach(x=>x.checked=false);document.getElementById("storyResult").textContent=""}
 document.addEventListener("DOMContentLoaded",()=>egStoryLevelChanged());
 </script>
