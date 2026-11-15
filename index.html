@@ -2368,7 +2368,7 @@ function translationAnswersMatch(answer,expected,dir){
  if(a===e)return true;
  if(dir==="vi-en"){
   // Common greeting openers are optional and do not change the core message.
-  const greeting=/^(hi|hello|hey)(?: there)?\\b\\s*/;
+  const greeting=/^(hi|hello|hey)(?: there)?\b\s*/;
   const stripGreeting=x=>x.replace(greeting,"").trim();
   if(stripGreeting(a)&&stripGreeting(a)===stripGreeting(e))return true;
   // "be from" and "come from" are equivalent ways to state someone's origin.
