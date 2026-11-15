@@ -3505,6 +3505,47 @@ function egStartSpeaking(){
  const $=id=>document.getElementById(id);
  function addPanel(id,html){const sec=$(id);if(!sec||$("egExtra_"+id))return;const p=document.createElement("div");p.className="panel";p.id="egExtra_"+id;p.innerHTML=html;sec.appendChild(p)}
  function safe(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+ let egLocalAIEngine=null,egLocalAIEnginePromise=null;
+ async function egGetLocalAI(onProgress){
+  if(!("gpu" in navigator))throw new Error("Thiết bị/trình duyệt chưa hỗ trợ WebGPU. Hãy dùng Chrome hoặc Edge mới trên thiết bị tương thích.");
+  if(egLocalAIEngine)return egLocalAIEngine;
+  if(!egLocalAIEnginePromise){
+   egLocalAIEnginePromise=(async()=>{
+    const webllm=await import("https://esm.run/@mlc-ai/web-llm");
+    const model="Qwen2.5-0.5B-Instruct-q4f16_1-MLC";
+    egLocalAIEngine=await webllm.CreateMLCEngine(model,{initProgressCallback:p=>{if(onProgress)onProgress(p.text||"Đang tải mô hình AI…")}});
+    return egLocalAIEngine;
+   })().catch(err=>{egLocalAIEnginePromise=null;throw err});
+  }
+  return egLocalAIEnginePromise;
+ }
+ async function egRunLocalWritingAI(answer,item,host,trigger){
+  trigger.disabled=true;trigger.textContent="Đang chuẩn bị AI…";
+  host.innerHTML='<div class="feedback">AI chạy ngay trên thiết bị của bạn. Lần đầu cần tải mô hình (khoảng 1 GB); có thể mất vài phút và dùng tài nguyên máy.</div>';
+  try{
+   const engine=await egGetLocalAI(msg=>{host.innerHTML='<div class="feedback">'+safe(msg)+'</div>'});
+   trigger.textContent="AI đang đọc bài…";
+   const prompt="Evaluate this English learner writing. Return ONLY valid JSON with keys: score (0-100 integer), strengths (array of short Vietnamese strings), issues (array of objects {quote, correction, explanation} in Vietnamese), improved (full corrected natural English version), task_feedback (Vietnamese string). Be fair: accept valid paraphrases, do not invent errors, preserve the writer's intended meaning, and distinguish grammar from style. Task: "+String(item[1]||"").slice(0,1000)+"\nVietnamese task: "+String(item[2]||"").slice(0,1000)+"\nLearner writing:\n"+answer.slice(0,6000);
+   const result=await engine.chat.completions.create({messages:[
+    {role:"system",content:"You are a careful, encouraging English teacher for Vietnamese learners. Assess meaning, task fulfilment, grammar, vocabulary and naturalness. Never penalize a correct alternative just because it differs from a sample answer. Return JSON only."},
+    {role:"user",content:prompt}
+   ],temperature:0.2,max_tokens:900});
+   let raw=result.choices?.[0]?.message?.content||"";
+   raw=raw.replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/,"").trim();
+   const data=JSON.parse(raw);
+   const esc=safe;
+   const issues=Array.isArray(data.issues)?data.issues:[];
+   host.innerHTML='<div class="feedback good"><h4>🤖 AI Writing Feedback · Chấm bằng AI trên thiết bị</h4><p><b>Điểm AI: '+Math.max(0,Math.min(100,Number(data.score)||0))+'/100</b></p><p>'+esc(data.task_feedback||"")+'</p>'+
+    (Array.isArray(data.strengths)&&data.strengths.length?'<h4>Điểm tốt</h4><ul>'+data.strengths.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'')+
+    (issues.length?'<h4>Điểm cần cải thiện</h4><ul>'+issues.slice(0,10).map(x=>'<li><b>'+esc(x.quote||"")+'</b>'+(x.correction?' → <b>'+esc(x.correction)+'</b>':'')+'<br>'+esc(x.explanation||"")+'</li>').join("")+'</ul>':'<p>Không thấy lỗi rõ ràng trong bài.</p>')+
+    '<h4>Bản viết đề xuất</h4><p style="white-space:pre-wrap">'+esc(data.improved||answer)+'</p><button type="button" class="btn line" id="egUseLocalAIEdit">Dùng bản AI chỉnh sửa</button><p class="small muted">Mô hình nhỏ chạy cục bộ trong trình duyệt; nhận xét có thể chưa chính xác như giáo viên hoặc mô hình lớn.</p></div>';
+   const use=host.querySelector("#egUseLocalAIEdit");if(use)use.onclick=()=>{const area=document.getElementById("egWrite_practice");if(area){area.value=data.improved||answer;area.focus()}};
+   trigger.textContent="✓ AI đã chấm xong";
+  }catch(err){
+   host.innerHTML='<div class="feedback">Không khởi động được AI trên thiết bị này: '+safe(err&&err.message||"Lỗi tải mô hình")+'. Bạn vẫn có thể dùng kết quả kiểm tra ngữ pháp bên trên.</div>';
+   trigger.disabled=false;trigger.textContent="Thử chấm lại bằng AI";
+  }
+ }
  async function egSubmitDailyWriting(item,input,feedback,button){
   const answer=(input.value||"").trim();
   if(!answer){feedback.innerHTML='<div class="feedback">Hãy viết câu trả lời trước nhé.</div>';input.focus();return}
@@ -3563,6 +3604,10 @@ function egStartSpeaking(){
   let issueHtml=issues.length?'<h4>Những chỗ cần sửa</h4><ul>'+issues.slice(0,12).map(x=>'<li><b>'+escape(x.text)+'</b>'+(x.replacement!==null&&x.replacement!==undefined?' → <b>'+escape(x.replacement)+'</b>':'')+'<br><span class="small muted">'+escape(x.why)+'</span></li>').join("")+'</ul>':'<p>✓ Không phát hiện lỗi phổ biến trong lượt kiểm tra này.</p>';
   const correctedHtml='<div class="panel soft" style="margin-top:10px"><b>✍️ Bản chỉnh sửa đề xuất</b><p style="white-space:pre-wrap">'+escape(corrected)+'</p><button class="btn line" type="button" id="egUseCorrection">Dùng bản đã sửa</button></div>';
   feedback.innerHTML='<div class="feedback '+(issues.length===0&&hasStructure?"good":"")+'"><div class="controls" style="justify-content:space-between"><b>Writing feedback · Nhận xét bài viết</b><span class="badge">'+score+'/100</span></div><p><b>'+wordCount+' từ</b> · '+(service==="LanguageTool"?"Đã kiểm tra ngữ pháp trực tuyến":"Chế độ kiểm tra cơ bản (dịch vụ ngữ pháp không kết nối được)")+'</p>'+issueHtml+(tips.length?'<h4>Gợi ý cải thiện</h4><ul>'+tips.map(t=>'<li>'+escape(t)+'</li>').join("")+'</ul>':'')+correctedHtml+'<p class="small muted">Điểm là ước lượng theo lỗi ngữ pháp, độ dài và cấu trúc yêu cầu; chưa đánh giá đầy đủ độ tự nhiên hoặc độ đúng ý như giáo viên/AI đọc hiểu.</p></div>';
+  const aiHost=document.createElement("div");aiHost.id="egLocalAIResult";feedback.appendChild(aiHost);
+  const aiButton=document.createElement("button");aiButton.type="button";aiButton.className="btn";aiButton.textContent="🤖 Chấm sâu bằng AI miễn phí trên thiết bị";
+  aiButton.onclick=()=>egRunLocalWritingAI(answer,item,aiHost,aiButton);feedback.appendChild(aiButton);
+  const aiNote=document.createElement("p");aiNote.className="small muted";aiNote.textContent="AI tùy chọn: cần WebGPU và tải mô hình khoảng 1 GB ở lần đầu; không cần API key, không gửi bài viết lên máy chủ AI.";feedback.appendChild(aiNote);
   const use=$("egUseCorrection");if(use)use.onclick=()=>{input.value=corrected;input.focus()};
   try{localStorage.setItem("eg-daily-writing-"+(item[0]||"").slice(0,40),JSON.stringify({answer,corrected,score,date:new Date().toISOString()}))}catch(e){}
   button.disabled=false;button.textContent="Check & submit · Chấm bài (Enter ↵)";
