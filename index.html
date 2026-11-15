@@ -490,9 +490,9 @@ html { background: #142342; }
 <button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="practice">📅 Daily Practice </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
+<button data-page="translation">🔁 Translation Reflex </button><button data-page="flashcards">🃏 Flashcards </button><button data-page="quiz">🧠 Quiz </button><button data-page="placement">🎯 Level Test </button>
 </div></details>
-<button data-page="progress">📊 Progress</button><button data-page="learninglab">🧪 Learning Lab</button><button data-page="cloud">☁ Cloud Sync</button></nav>
+<button data-page="progress">📊 Progress</button><button data-page="cloud">☁ Cloud Sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
 <main>
 <section class="page" id="spokenenglish">
@@ -577,11 +577,11 @@ html { background: #142342; }
 <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
 <h1>Hello! 👋<br/>What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
 <p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
-<div class="actions"><button class="btn" onclick="go('practice')">Bắt đầu học ngay →</button></div>
+<div class="actions"><button class="btn" onclick="go('vocab')">Bắt đầu học ngay →</button></div>
 </div>
 </div>
 <div>
-<div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>7 key skills and tools · 7 kỹ năng và công cụ chính</p></div><span class="badge">A1–B1</span></div>
+<div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>Core learning tools · Công cụ học tập chính</p></div><span class="badge">A1–B1</span></div>
 <div class="home-tools">
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
 <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
@@ -597,8 +597,8 @@ html { background: #142342; }
 <div class="home-section-head"><div><h2>Study Tools · Công cụ học tập</h2><p>Your learning tools in one place · Các tiện ích được gom gọn tại đây</p></div></div>
 <div class="home-secondary">
 <button onclick="go('realconversation')"><span class="ico">💬</span><span><b>Real-Life Conversation · Hội thoại thực tế</b><small>Practise everyday English · Luyện giao tiếp đời thường</small></span></button>
-<button onclick="go('practice')"><span class="ico">🎯</span><span><b>Daily Practice · Luyện tập hằng ngày</b><small>Flashcards, exercises and quizzes · Flashcards, bài tập và quiz</small></span></button>
-<button onclick="go('progress')"><span class="ico">📈</span><span><b>Learning Progress · Tiến độ học tập</b><small>Track your learning journey · Theo dõi quá trình học</small></span></button>
+
+
 <button onclick="go('placement')"><span class="ico">📝</span><span><b>Level Test · Kiểm tra trình độ</b><small>Check your English level · Đánh giá cấp độ tiếng Anh</small></span></button>
 </div>
 </div>
@@ -843,15 +843,7 @@ html { background: #142342; }
 </div>
 <div class="panel"><h2>Words to review · Từ cần ôn</h2><div class="wordlist" id="savedWords"></div></div>
 </section>
-<section class="page" id="practice">
-<h1 class="title">Daily practice · Luyện tập mỗi ngày</h1>
-<p class="intro">A short daily writing routine. Mỗi ngày một bài luyện viết ngắn.</p>
-<div class="grid">
-</div>
 
-<div class="panel"><div class="icon">✍️</div><h2>Writing · Viết</h2><p>Write three sentences about your day. Viết ba câu về ngày hôm nay.</p><textarea id="dailyWriting" placeholder="Today, I..." rows="4"></textarea><button class="btn" onclick="saveDailyWriting()">Save writing · Lưu bài viết</button><p class="muted" id="dailyWritingStatus"></p></div>
-</div>
-</section>
 <section class="page" id="progress">
 <h1 class="title">My learning progress · Tiến độ học tập</h1>
 <p class="intro">Your learning data is saved on this device. Dữ liệu học tập được lưu trên thiết bị này.</p>
@@ -875,34 +867,7 @@ html { background: #142342; }
 </div>
 </section>
 
-<section class="page" id="learninglab">
-<h1 class="title">Learning Lab · Trung tâm luyện tập</h1>
-<p class="intro">Vocabulary, role-play, writing, achievements and weekly progress. Tất cả công cụ nâng cao trong một nơi.</p>
-<div class="panel" style="margin-bottom:12px">
-<h2>🗓️ Daily Learning Path · Lộ trình mỗi ngày</h2>
-<p class="small muted">A short 15–20 minute routine. Tick each activity as you finish; your progress is saved on this device and included in cloud sync.</p>
-<div id="dailyPath"></div><p aria-live="polite" class="small muted" id="dailyPathStatus"></p>
-</div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
-<div class="panel"><h2>🧠 Smart Vocabulary · Ôn từ thông minh</h2><p class="small muted">Save words and review them with spaced repetition. Lưu từ mới và ôn theo lịch lặp lại.</p>
-<div class="controls"><input id="svWord" placeholder="English word or phrase"/><input id="svMeaning" placeholder="Nghĩa tiếng Việt"/></div><div class="controls"><input id="svExample" placeholder="Example sentence (optional)"/><button class="btn" onclick="svAdd()" type="button">Add word · Thêm từ</button></div>
-<div class="small muted" id="svStats"></div><div class="panel" style="background:var(--surface)"><p id="svPrompt">Add a word to start. Thêm từ để bắt đầu.</p><div hidden="" id="svAnswer"></div><div class="controls"><button class="btn line" onclick="svReveal()">Show meaning · Hiện nghĩa</button><button class="btn line" onclick="svRate(1)">Again · Chưa nhớ</button><button class="btn" onclick="svRate(3)">Got it · Đã nhớ</button></div></div><div class="small" id="svList"></div>
-</div>
-<div class="panel"><h2>💬 Conversation Simulator · Mô phỏng hội thoại</h2><p class="small muted">Answer in your own words. Trả lời bằng câu của mày.</p>
-<select id="simScenario" onchange="simLoad()"><option value="0">Nail salon · New design</option><option value="1">Work · Explain a delay</option><option value="2">Daily life · Return an item</option><option value="3">Customer service · Complaint</option></select>
-<div class="panel" style="background:var(--surface);margin-top:10px"><b id="simRole">Client</b><p id="simPrompt"></p><p class="small muted" id="simVi"></p><textarea id="simReply" placeholder="Type your reply in English..." rows="3"></textarea><div class="controls"><button class="btn" onclick="simSubmit()">Send reply · Gửi câu trả lời</button><button class="btn line" onclick="simHint()">Useful phrase · Câu gợi ý</button></div><div id="simFeedback"></div></div><div class="small" id="simHistory"></div>
-</div>
-<div class="panel"><h2>✍️ Writing Coach · Luyện viết</h2><p class="small muted">Rule-based feedback for common mistakes; not an AI grammar grader. Gợi ý sửa lỗi phổ biến.</p>
-<select id="wcType"><option>Message to a customer</option><option>Work email</option><option>Daily journal</option><option>Nail salon appointment reply</option></select><textarea id="wcText" placeholder="Write 3–6 sentences in English..." rows="6"></textarea><div class="controls"><button class="btn" onclick="wcCheck()">Check my writing · Kiểm tra</button><button class="btn line" onclick="wcSave()">Save draft · Lưu bản nháp</button></div><div class="panel" id="wcFeedback" style="background:var(--surface)">Suggestions will appear here.</div>
-</div>
-<div class="panel"><h2>📓 My English Notebook · Sổ tay tiếng Anh</h2><p class="small muted">Save useful sentences, work phrases and personal notes. Stored locally and synced with your EnglishGo account when cloud sync is enabled.</p>
-<input id="nbTitle" placeholder="Title / Chủ đề (e.g. At work)"/><textarea id="nbPhrase" placeholder="English phrase or sentence..." rows="3"></textarea><input id="nbMeaning" placeholder="Vietnamese meaning / Nghĩa tiếng Việt"/><div class="controls"><button class="btn" onclick="nbAdd()">Save note · Lưu ghi chú</button></div><div id="notebookList"></div>
-</div>
-<div class="panel"><h2>🔥 30-Day Challenge · Thử thách 30 ngày</h2><p class="small muted">Build a steady habit with one small English activity each day. No paid service required.</p><div id="challengePanel"></div>
-</div>
-<div class="panel"><h2>📊 Weekly Report · Báo cáo tuần</h2><p class="small muted">Summary of Learning Lab activities recorded in the last 7 days.</p><div id="weeklyReport"></div><button class="btn line" onclick="labRenderReports()">Refresh report · Làm mới</button></div>
-</div>
-</section>
+
 
 
 <section class="page" id="shadowing">
@@ -1031,7 +996,6 @@ function go(id){
  if(id==="grammar")renderGrammar();
  if(id==="quiz")renderQuiz();
  if(id==="placement")renderPlace();
- if(id==="learninglab")labInit();
  if(id==="realconversation"){
    if(typeof rlInit==="function")rlInit();
    setTimeout(()=>{
@@ -1206,11 +1170,10 @@ function flashSave(){let a=EG3.get("difficult",[]),w=DATA.vocab[flashIndex].w;if
 function flashKnown(){let i=DATA.vocab.findIndex(x=>x.w===DATA.vocab[flashIndex].w);if(!known.includes(i)){known.push(i);save("known",known);award("flash-"+i,5)}flashNext();updateStats()}
 function renderSavedWords(){let a=EG3.get("difficult",[]);document.getElementById("savedWords").innerHTML=a.length?a.map(w=>`<div class="savedrow"><b>${w}</b><button onclick="say(${JSON.stringify(w)})">🔊 Listen</button><button onclick="removeDifficult(${JSON.stringify(w)})">Remove · Xóa</button></div>`).join(""):"<p class='muted'>No saved words yet. Chưa có từ nào được lưu.</p>"}
 function removeDifficult(w){EG3.set("difficult",EG3.get("difficult",[]).filter(x=>x!==w));renderSavedWords()}
-function saveDailyWriting(){let v=document.getElementById("dailyWriting").value.trim();if(v.length<10){document.getElementById("dailyWritingStatus").textContent="Write a little more. Hãy viết thêm một chút.";return}EG3.set("dailyWriting",v);document.getElementById("dailyWritingStatus").textContent="Saved on this device · Đã lưu trên thiết bị";award("daily-writing-"+new Date().toDateString(),10)}
 function renderProgress(){document.getElementById("progressXP").textContent=(localStorage.getItem("eg2-xp")||"0")+" XP";document.getElementById("progressWords").textContent=known.length+"/"+DATA.vocab.length;document.getElementById("progressStreak").textContent=localStorage.getItem("eg2-streak")||"0";let acts=EG3.get("completed",[]);document.getElementById("progressAchievements").textContent=acts.length;document.getElementById("achievementList").innerHTML=acts.length?acts.map(x=>`<div class="savedrow">🏅 ${x}</div>`).join(""):"<p class='muted'>Complete a lesson to earn your first achievement. Hoàn thành bài học để nhận thành tích đầu tiên.</p>";}
 function exportProgress(){let keys=["eg2-xp","eg2-streak","eg2-last","eg2-known","eg2-writing"];let data={};keys.forEach(k=>data[k]=localStorage.getItem(k));data.eg3={difficult:EG3.get("difficult",[]),completed:EG3.get("completed",[]),dailyWriting:EG3.get("dailyWriting","")};let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="englishgo-progress-backup.json";a.click();URL.revokeObjectURL(a.href)}
 function importProgressFile(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);Object.entries(d).forEach(([k,v])=>{if(k==="eg3"){Object.entries(v).forEach(([a,b])=>EG3.set(a,b))}else if(v!==null)localStorage.setItem(k,v)});alert("Progress restored · Đã khôi phục tiến độ");location.reload()}catch(err){alert("Invalid backup file · File sao lưu không hợp lệ")}};r.readAsText(f)}
-const oldGo=go;go=function(id){oldGo(id);if(id==="flashcards")flashRender();if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");if(id==="practice"){document.getElementById("dailyWriting").value=EG3.get("dailyWriting","")}};
+const oldGo=go;go=function(id){oldGo(id);if(id==="flashcards")flashRender();if(id==="progress")renderProgress();if(id==="cloud")cloudSetStatus(egCloudUser?"Connected · Đã kết nối":"Not signed in · Chưa đăng nhập",egCloudUser?.email||"","Use the same Google account on every device. Dùng cùng tài khoản trên mọi thiết bị.");};
 
 // Real-Life English: 20 offline bilingual conversation scenarios (A1–B1).
 var rlTopics = [
@@ -1831,92 +1794,7 @@ document.addEventListener("keydown",e=>{
 });
 
 
-const LAB_KEYS={words:"eg3-smart-vocab",stats:"eg3-learning-lab-stats",draft:"eg3-writing-draft",sim:"eg3-simulator-history"};
-function labRead(k,d){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d}}
-function labWrite(k,v){localStorage.setItem(k,JSON.stringify(v));if(typeof cloudSchedule==="function")cloudSchedule();labRenderReports()}
-function labLog(k){const day=new Date().toISOString().slice(0,10),st=labRead(LAB_KEYS.stats,{});st[day]=st[day]||{};st[day][k]=(st[day][k]||0)+1;localStorage.setItem(LAB_KEYS.stats,JSON.stringify(st));if(typeof cloudSchedule==="function")cloudSchedule();labRenderReports()}
-function labEsc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function labInit(){svRender();labRenderReports();simLoad();wcRestore()}
-function svAdd(){const word=svWord.value.trim(),meaning=svMeaning.value.trim(),example=svExample.value.trim();if(!word||!meaning){alert("Enter a word and its meaning. Hãy nhập từ và nghĩa.");return}const list=labRead(LAB_KEYS.words,[]);if(list.some(x=>x.word.toLowerCase()===word.toLowerCase())){alert("Word already saved. Từ đã có.");return}list.push({id:Date.now(),word,meaning,example,due:Date.now(),interval:0,reps:0});labWrite(LAB_KEYS.words,list);svWord.value=svMeaning.value=svExample.value="";svRender();labLog("wordsAdded")}
-let svCurrentId=null,svIsRevealed=false;
-function svRender(){const list=labRead(LAB_KEYS.words,[]),due=list.filter(x=>(x.due||0)<=Date.now());svStats.textContent=`${list.length} saved · ${due.length} due for review`;const cur=due[0];svCurrentId=cur?.id??null;svIsRevealed=false;svPrompt.textContent=cur?`What does “${cur.word}” mean? · Nghĩa là gì?`:"No words due. Add a word or come back later.";svAnswer.hidden=true;svAnswer.textContent=cur?`${cur.meaning}${cur.example?" · "+cur.example:""}`:"";svList.innerHTML=list.slice(-8).reverse().map(x=>`<div style="padding:5px 0;border-bottom:1px solid var(--line)"><b>${labEsc(x.word)}</b> — ${labEsc(x.meaning)}</div>`).join("")}
-function svReveal(){if(svCurrentId===null)return;svAnswer.hidden=false;svIsRevealed=true}
-function svRate(r){if(svCurrentId===null||!svIsRevealed){alert("Show the meaning first. Hãy xem nghĩa trước.");return}const list=labRead(LAB_KEYS.words,[]),w=list.find(x=>x.id===svCurrentId);if(!w)return;if(r===1){w.interval=0;w.reps=0;w.due=Date.now()+600000}else{w.reps=(w.reps||0)+1;w.interval=w.reps===1?1:w.reps===2?3:w.reps===3?7:Math.min(60,(w.interval||7)*2);w.due=Date.now()+w.interval*86400000}labWrite(LAB_KEYS.words,list);labLog("wordsReviewed");svRender()}
-function pcListen(){const t=pcTarget.value.trim();if(!t)return;if(typeof say==="function")say(t);else if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
-function pcCompare(heardText){const heard=(heardText||pcManualTranscript.value||"").trim(),target=pcTarget.value.trim();if(!heard){pcStatus.textContent="Enter or dictate what you said first. Hãy đọc hoặc nhập câu bạn vừa nói.";return}const norm=x=>x.toLowerCase().replace(/[^a-z' ]/g," ").split(/\s+/).filter(Boolean),a=new Set(norm(heard)),b=norm(target),matched=b.filter(x=>a.has(x)),score=Math.round(matched.length/Math.max(1,b.length)*100);pcResult.innerHTML=`<b>You said:</b> ${labEsc(heard)}<p><b>Target:</b> ${labEsc(target)}</p><p><b>${score}% word match</b> · ${matched.length}/${b.length} words matched.</p><p class="small muted">This checks words only, not accent or actual pronunciation. Đây chỉ là so khớp từ, không chấm chính xác phát âm.</p>`;pcStatus.textContent="Comparison complete · Đã so sánh";labLog("pronunciationPractised")}
-let pcRecorder=null,pcStream=null,pcChunks=[],pcRecordingUrl=null,pcRecordedBlob=null,pcModelUtterance=null;
-async function pcRecordStart(){
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){pcStatus.textContent="Direct audio recording is not available in this browser. Please update Safari and use HTTPS. · Trình duyệt chưa hỗ trợ ghi âm trực tiếp.";return}
- try{pcStream=await navigator.mediaDevices.getUserMedia({audio:true});pcChunks=[];let opts={};if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported('audio/mp4'))opts.mimeType='audio/mp4';else if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported('audio/webm'))opts.mimeType='audio/webm';pcRecorder=new MediaRecorder(pcStream,opts);pcRecorder.ondataavailable=e=>{if(e.data&&e.data.size)pcChunks.push(e.data)};pcRecorder.onstop=()=>{pcRecordedBlob=new Blob(pcChunks,{type:pcRecorder.mimeType||'audio/mp4'});if(pcRecordingUrl)URL.revokeObjectURL(pcRecordingUrl);pcRecordingUrl=URL.createObjectURL(pcRecordedBlob);pcPlayback.src=pcRecordingUrl;pcPlayback.style.display='block';pcPlayModelThenYours.disabled=false;pcDeleteBtn.disabled=false;pcStatus.textContent="Recording saved on this device. Tap play to listen. · Đã ghi âm, bấm phát để nghe lại.";pcAnalyzeRecording(pcRecordedBlob);pcStream&&pcStream.getTracks().forEach(t=>t.stop());pcStream=null;pcRecordBtn.disabled=false;pcStopBtn.disabled=true};pcRecorder.start();pcRecordBtn.disabled=true;pcStopBtn.disabled=false;pcStatus.textContent="Recording… Speak clearly in English. · Đang ghi âm, hãy nói tiếng Anh rõ ràng."}
- catch(e){pcStatus.textContent=(e&&e.name==='NotAllowedError')?"Microphone access was denied. Allow microphone access for this website in Safari settings. · Hãy cấp quyền micro cho website.":"Could not start recording: "+(e.name||'unknown')+". Check microphone access and try again. · Không thể bắt đầu ghi âm.";if(pcStream)pcStream.getTracks().forEach(t=>t.stop());pcStream=null;pcRecordBtn.disabled=false;pcStopBtn.disabled=true}
-}
-async function pcAnalyzeRecording(blob){
- const box=document.getElementById("pcAcoustic");
- box.innerHTML=`<b>📊 Free voice analysis · Phân tích giọng nói miễn phí</b><p class="small muted">Đang phân tích âm thanh ngay trên thiết bị… · Local analysis in progress</p>`;
- let ctx;
- try{
-  const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)throw new Error("Audio analysis unavailable");
-  ctx=new Ctx();const buf=await ctx.decodeAudioData(await blob.arrayBuffer());const data=buf.getChannelData(0),sr=buf.sampleRate;
-  let sum=0,peak=0;const win=Math.max(1,Math.floor(sr*.1));let active=0,total=0;
-  for(let i=0;i<data.length;i++){const v=Math.abs(data[i]);sum+=v*v;if(v>peak)peak=v}
-  for(let i=0;i<data.length;i+=win){let e=0,n=Math.min(win,data.length-i);for(let j=0;j<n;j++)e+=data[i+j]*data[i+j];const rms=Math.sqrt(e/n);if(rms>.012)active++;total++}
-  const rms=Math.sqrt(sum/data.length),duration=buf.duration,speech=Math.round(active/Math.max(1,total)*100),silence=100-speech;
-  const loud=rms<.018?"Low recording level · Âm lượng thu khá nhỏ":rms>.22?"Strong recording level · Âm lượng thu lớn":"Recording level looks usable · Âm lượng thu ổn";
-  box.innerHTML=`<b>📊 Free voice analysis · Phân tích giọng nói miễn phí</b><div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:8px;margin-top:8px"><div class="panel"><b>${duration.toFixed(1)} s</b><div class="small muted">Duration · Thời lượng</div></div><div class="panel"><b>${Math.round(rms*1000)/10}%</b><div class="small muted">Average level · Mức âm trung bình</div></div><div class="panel"><b>${speech}%</b><div class="small muted">Active sound · Đoạn có tiếng</div></div><div class="panel"><b>${silence}%</b><div class="small muted">Quiet intervals · Khoảng lặng</div></div></div><p class="small">${loud}. ${silence>55?"Try speaking in smoother phrases with fewer long pauses. Hãy nối câu mượt hơn, giảm khoảng ngắt dài.":"Good: keep a steady pace and clear endings. Hãy giữ nhịp đều và phát âm rõ âm cuối."}</p><p class="small muted">All analysis stays on this device. These are acoustic practice indicators, not phoneme or accent scoring. Phân tích trên thiết bị, không tải âm thanh lên máy chủ; không phải chấm âm vị hay giọng vùng miền.</p>`;
- }catch(e){box.innerHTML=`<b>📊 Voice analysis · Phân tích giọng nói</b><p class="small muted">Your recording is ready. This browser could not decode it for local analysis; you can still play it back. Bản ghi vẫn nghe được, nhưng trình duyệt chưa phân tích được dạng âm thanh này.</p>`}
- finally{if(ctx)try{await ctx.close()}catch(e){}}
-}
-function pcRecordStop(){if(pcRecorder&&pcRecorder.state==='recording'){pcRecorder.stop();pcStatus.textContent="Finishing recording… · Đang lưu bản ghi"}}
-function pcDeleteRecording(){pcPlayback.pause();pcPlayback.removeAttribute('src');pcPlayback.load();pcPlayback.style.display='none';if(pcRecordingUrl)URL.revokeObjectURL(pcRecordingUrl);pcRecordingUrl=null;pcRecordedBlob=null;pcPlayModelThenYours.disabled=true;pcDeleteBtn.disabled=true;pcStatus.textContent="Recording deleted. · Đã xóa bản ghi"}
-function pcCompareListening(){if(!pcRecordedBlob)return;pcListen();setTimeout(()=>{if(pcRecordingUrl){pcPlayback.currentTime=0;pcPlayback.play().catch(()=>{pcStatus.textContent="Tap Play on your recording to listen. · Hãy bấm phát bản ghi."})}},Math.max(1800,pcTarget.value.trim().length*75))}
-
-const SIM_CASES=[{role:"Client",prompt:"I'm thinking about a simple nude manicure, but I have a short nail on one finger. What would you recommend?",vi:"Tôi muốn làm móng nude đơn giản nhưng có một móng ngắn. Bạn khuyên gì?",hint:"We could… / I'd recommend… / Would you prefer…"},{role:"Manager",prompt:"The client meeting has been moved forward, and the report isn't ready. How will you handle this?",vi:"Cuộc họp khách hàng được chuyển sớm và báo cáo chưa xong. Bạn xử lý thế nào?",hint:"I'll prioritise… / Could we agree on… / I'll send an update by…"},{role:"Shop assistant",prompt:"I'm afraid this item doesn't fit, and I'd like to return it. What can you do?",vi:"Món đồ không vừa và tôi muốn trả lại. Bạn hỗ trợ thế nào?",hint:"Of course… / Do you have the receipt? / We can…"},{role:"Customer",prompt:"I've been waiting for an update, but nobody has contacted me. This is disappointing.",vi:"Tôi đã chờ cập nhật nhưng không ai liên hệ. Tôi thất vọng.",hint:"I understand… / I'm sorry… / Let me check…"}];
-function simLoad(){
- const get=id=>document.getElementById(id);
- const scenario=get("simScenario"),c=SIM_CASES[Number(scenario&&scenario.value)||0];
- if(!c)return;
- get("simRole").textContent=c.role;
- get("simPrompt").textContent=c.prompt;
- get("simVi").textContent=c.vi;
- get("simReply").value="";
- get("simFeedback").innerHTML="";
-}
-function simHint(){
- const scenario=document.getElementById("simScenario"),c=SIM_CASES[Number(scenario&&scenario.value)||0],out=document.getElementById("simFeedback");
- if(out&&c)out.textContent="Useful phrases: "+c.hint;
-}
-function simSubmit(){
- const get=id=>document.getElementById(id),replyBox=get("simReply"),out=get("simFeedback"),historyBox=get("simHistory"),scenario=get("simScenario");
- if(!replyBox||!out||!scenario)return;
- const reply=replyBox.value.trim();
- if(reply.length<8){out.innerHTML='<div class="feedback">Please write a little more in English. · Hãy viết câu trả lời dài hơn nhé.</div>';replyBox.focus();return}
- const c=SIM_CASES[Number(scenario.value)||0];
- if(!c){out.textContent="Please choose a conversation scenario. · Hãy chọn tình huống hội thoại.";return}
- const tips=[];
- if(!/\b(please|could|would|thank|sorry|appreciate)\b/i.test(reply))tips.push("Try adding a polite expression.");
- if(!/[.!?]$/.test(reply))tips.push("Add punctuation at the end (optional for this practice).");
- if(reply.split(/\s+/).length<8)tips.push("Consider adding a reason or a next step.");
- if(!tips.length)tips.push("Good effort. Read your reply aloud and check that it answers the concern.");
- // Render feedback first so a storage/sync issue can never make Send appear to do nothing.
- out.innerHTML=`<div class="feedback"><b>Practice feedback · Gợi ý luyện tập</b><p>${tips.map(x=>labEsc(x)).join("<br>")}</p><p><b>Your reply · Câu trả lời của bạn:</b><br>${labEsc(reply)}</p><small>This is a guided checklist, not an AI assessment. · Đây là gợi ý luyện tập, không phải chấm điểm AI.</small></div>`;
- try{
-   const hist=labRead(LAB_KEYS.sim,[]);
-   hist.push({scenario:c.role,prompt:c.prompt,reply:reply.slice(0,1200),date:new Date().toISOString()});
-   labWrite(LAB_KEYS.sim,hist.slice(-15));
-   try{labLog("simulatorReplies")}catch(e){}
-   if(historyBox)historyBox.textContent=`Saved practice replies: ${hist.length}`;
-   if(typeof cloudSchedule==="function"){try{cloudSchedule()}catch(e){}}
- }catch(e){
-   const note=document.createElement("p");note.className="small muted";note.textContent="Your feedback is shown, but this reply could not be saved on this device.";out.appendChild(note);
- }
- replyBox.value="";
-}
-function wcRestore(){if(!wcText.value)wcText.value=localStorage.getItem(LAB_KEYS.draft)||""}
-function wcSave(){localStorage.setItem(LAB_KEYS.draft,wcText.value);if(typeof cloudSchedule==="function")cloudSchedule();labLog("writingDrafts");wcFeedback.textContent="Draft saved on this device. Bản nháp đã lưu."}
-function wcCheck(){const text=wcText.value.trim();if(!text){alert("Write something first.");return}const tips=[];if(/\bi am agree\b/i.test(text))tips.push("Use “I agree”, not “I am agree”.");if(/\bi am interested to\b/i.test(text))tips.push("Use “I am interested in + noun/-ing”.");if(/\byesterday\b/i.test(text)&&/\bwill\b/i.test(text))tips.push("Check the tense after “yesterday”.");if(/\bhe go\b|\bshe go\b|\bit go\b/i.test(text))tips.push("Use “goes” with he/she/it in the present simple.");if(/\bi have went\b/i.test(text))tips.push("Use “I have gone”, not “I have went”.");if(!/[.!?]$/.test(text))tips.push("Add punctuation at the end.");if(text.split(/\s+/).length<15)tips.push("Add context or a clear next step.");if(!tips.length)tips.push("No common pattern detected. Review tone, articles and verb tenses.");wcFeedback.innerHTML=`<b>${text.split(/\s+/).length} words · ${labEsc(wcType.value)}</b><ul>${tips.map(x=>`<li>${labEsc(x)}</li>`).join("")}</ul><small>Rule-based suggestions only, not an AI grammar grader.</small>`;labLog("writingChecks")}
-function labRenderReports(){const weeklyReportEl=document.getElementById("weeklyReport"),achievementsListEl=document.getElementById("achievementsList");const st=labRead(LAB_KEYS.stats,{}),now=new Date(),dates=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);dates.push(d.toISOString().slice(0,10))}const sums={};dates.forEach(d=>Object.entries(st[d]||{}).forEach(([k,v])=>sums[k]=(sums[k]||0)+v));const total=Object.values(sums).reduce((a,b)=>a+b,0),words=labRead(LAB_KEYS.words,[]).length;if(weeklyReportEl)weeklyReportEl.innerHTML=`<div class="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"><div class="panel"><b>${total}</b><div class="small muted">Recorded activities</div></div><div class="panel"><b>${sums.wordsReviewed||0}</b><div class="small muted">Words reviewed</div></div><div class="panel"><b>${sums.pronunciationPractised||0}</b><div class="small muted">Pronunciation</div></div><div class="panel"><b>${sums.simulatorReplies||0}</b><div class="small muted">Role-play replies</div></div><div class="panel"><b>${sums.writingChecks||0}</b><div class="small muted">Writing checks</div></div></div><p class="small muted">Saved vocabulary: ${words} · Last 7 days · Learning Lab activities only.</p>`;const badges=[["First words",words>=1,"Save your first word"],["Word explorer",words>=20,"Save 20 vocabulary items"],["Daily speaker",(sums.pronunciationPractised||0)>=5,"Practise pronunciation 5 times"],["Role-play starter",(sums.simulatorReplies||0)>=3,"Send 3 simulator replies"],["Writing habit",(sums.writingChecks||0)>=3,"Check 3 writing drafts"],["Weekly learner",total>=10,"Record 10 Learning Lab activities"]];if(achievementsListEl)achievementsListEl.innerHTML=badges.map(([n,u,d])=>`<div style="padding:7px 0;border-bottom:1px solid var(--line)">${u?"🏅":"🔒"} <b>${n}</b> <small class="muted">${u?"Unlocked · Đã mở khóa":d}</small></div>`).join("")}
-
-document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlInit();rlRenderMistakes();rlDailyRenderStats();rlRenderInsights();rlAdvLoad();egRoadmapRender();labInit()});
+document.addEventListener("DOMContentLoaded",()=>{flashRender();renderProgress();rlInit();rlAdvLoad()});
 
 
 // Expanded vocabulary pack: additional A1-B1 words with part of speech and examples.
