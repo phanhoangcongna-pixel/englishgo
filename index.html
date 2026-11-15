@@ -2286,7 +2286,12 @@ function renderTranslation(){
  document.getElementById("trScore").textContent="Đã luyện: "+trDone+" · Tự tin: "+trConfident;
 }
 function normalizeTranslation(x){
- let value=String(x||"").normalize("NFC").toLocaleLowerCase().replace(/[’‘]/g,"'");
+ // Compare wording, not typography: tolerate punctuation, repeated spaces,
+ // line breaks, non-breaking spaces and invisible characters from PDF copy/paste.
+ let value=String(x||"").normalize("NFKC")
+  .replace(/[\u200B-\u200D\uFEFF]/g,"")
+  .toLocaleLowerCase()
+  .replace(/[’‘´]/g,"'");
  const contractions={
   "can't":"cannot","won't":"will not","shan't":"shall not","ain't":"is not",
   "i'm":"i am","i've":"i have","i'll":"i will","i'd":"i would",
@@ -2306,10 +2311,9 @@ function normalizeTranslation(x){
   "that'd":"that would","who'd":"who would","there've":"there have"
  };
  for(const [shortForm,longForm] of Object.entries(contractions).sort((a,b)=>b[0].length-a[0].length)){
-  const escaped=shortForm.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-  value=value.replace(new RegExp("(^|\\s)"+escaped+"(?=$|\\s|[.,!?;:])","g"),(m,prefix)=>prefix+longForm);
+  value=value.replace(new RegExp("(^|\\s)"+shortForm+"(?=$|\\s|\\p{P})","gu"),(m,prefix)=>prefix+longForm);
  }
- return value.replace(/[.,!?;:;"“”()\\[\\]{}]/g," ").replace(/\s+/g," ").trim();
+ return value.replace(/\p{P}+/gu," ").replace(/\s+/gu," ").trim();
 }
 function checkTranslation(){
  if(trChecked)return;trChecked=true;trDone++;
