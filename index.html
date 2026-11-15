@@ -2643,35 +2643,31 @@ function nextTopicTranslation(){
 function speakTopicTranslation(){if(topicPool.length)say(topicPool[topicIndex].en);}
 
 document.addEventListener("keydown",function(e){
- const el=e.target;
- if(!el)return;
- if(["trAnswer","topicAnswer","thousandAnswer"].includes(el.id)){
+ const el=e.target;if(!el)return;
+ if(["trAnswer","topicAnswer","thousandAnswer","reflex1500Answer"].includes(el.id)){
   if(e.key==="Enter"&&!e.shiftKey){
    e.preventDefault();
    if(el.id==="trAnswer")checkTranslation();
    else if(el.id==="topicAnswer")checkTopicTranslation();
-   else if(el.id==="thousandAnswer")checkThousandTranslation();else checkReflex1500();
-   return;
-  }
-  if(el.id==="trAnswer"&&e.altKey&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){
-   e.preventDefault();
-   if(e.key==="ArrowLeft")prevTranslation();else nextTranslation();
+   else if(el.id==="thousandAnswer")checkThousandTranslation();
+   else checkReflex1500();
    return;
   }
   if(e.key==="ArrowRight"){
-   const checked=el.id==="trAnswer"?trChecked:(el.id==="topicAnswer"?topicAnswered:thousandAnswered);
+   const checked=el.id==="trAnswer"?trChecked:el.id==="topicAnswer"?topicAnswered:el.id==="thousandAnswer"?thousandAnswered:reflex1500Answered;
    if(checked){
     e.preventDefault();
     if(el.id==="trAnswer")nextTranslation();
     else if(el.id==="topicAnswer")nextTopicTranslation();
-    else nextThousandTranslation();
+    else if(el.id==="thousandAnswer")nextThousandTranslation();
+    else nextReflex1500();
    }
   }
  }
 });
 
 document.addEventListener("DOMContentLoaded",()=>{
- ["trAnswer","topicAnswer","thousandAnswer","reflex1500Answer"].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.addEventListener("input",()=>{if(id==="trAnswer"){trChecked=false;document.getElementById("trFeedback").innerHTML="";}else if(id==="topicAnswer"){topicAnswered=false;document.getElementById("topicFeedback").innerHTML="";}else{thousandAnswered=false;document.getElementById("thousandFeedback").innerHTML="";}})});
+ ["trAnswer","topicAnswer","thousandAnswer","reflex1500Answer"].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.addEventListener("input",()=>{if(id==="trAnswer"){trChecked=false;document.getElementById("trFeedback").innerHTML="";}else if(id==="topicAnswer"){topicAnswered=false;document.getElementById("topicFeedback").innerHTML="";}else if(id==="thousandAnswer"){thousandAnswered=false;document.getElementById("thousandFeedback").innerHTML="";}else{reflex1500Answered=false;document.getElementById("reflex1500Feedback").innerHTML="";}})});
  startTranslation();startTopicTranslation();startThousandTranslation();startReflex1500();renderGrammar();startGrammarPractice();rlInit();
 });
 </script>
