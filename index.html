@@ -2982,7 +2982,8 @@ phrasalData.push(
    if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)))return;
    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
    const page=document.querySelector('.page.active');
-   if(!page)return;
+   /* Grammar Quiz has its own checked-answer navigation handler below. */
+   if(!page || page.id==='grammar')return;
    const buttons=[...page.querySelectorAll('button:not(:disabled)')].filter(isVisible);
    const pattern=e.key==='ArrowRight'?/(next|continue|câu tiếp|tiếp theo|tiếp tục|→)/i:/(previous|prev|back|câu trước|trước đó|←)/i;
    const button=buttons.find(b=>pattern.test((b.innerText||b.textContent||'').trim()));
