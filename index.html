@@ -3451,12 +3451,12 @@ function egStartSpeaking(){
  flashcards:{title:"Flashcard Deck · Bộ thẻ từ mới",desc:"Lật thẻ để xem nghĩa và câu ví dụ.",items:[
  ["run out of","hết, cạn","We've run out of milk."],["look forward to","mong chờ","I look forward to hearing from you."],["figure out","tìm ra, hiểu ra","I can't figure out this problem."],["on time","đúng giờ","The train arrived on time."],["take part in","tham gia","She took part in the competition."],["get along with","hòa thuận với","I get along with my teammates."],["give up","từ bỏ","Don't give up learning English."],["carry on","tiếp tục","Please carry on with your work."]
  ]},
- practice:{title:"Daily Practice · Luyện tập mỗi ngày",desc:"Bài luyện ngắn kết hợp nói, viết và ghi nhớ.",items:[
- ["Describe your morning routine in five sentences.","Dùng hiện tại đơn và trạng từ tần suất."],
- ["Talk about a place you would recommend.","Dùng there is/are, tính từ miêu tả và because."],
- ["Explain a problem you solved recently.","Dùng quá khứ đơn và first, then, finally."],
- ["Give your opinion about working from home.","Dùng I think, in my opinion, however."],
- ["Make a polite request in a shop.","Thử Could I…? hoặc Could you…?"]
+ practice:{title:"Daily Practice · Luyện tập mỗi ngày",desc:"Viết câu trả lời, xem bản dịch đề bài, dùng từ gợi ý và nhận phản hồi/sửa lỗi.",items:[
+ ["Describe your morning routine in five sentences.","Dùng hiện tại đơn và trạng từ tần suất.","Hãy miêu tả thói quen buổi sáng của bạn bằng năm câu.","wake up (thức dậy) · usually (thường) · have breakfast (ăn sáng) · get dressed (mặc quần áo) · go to work/school (đi làm/đi học)","routine"],
+ ["Talk about a place you would recommend.","Dùng there is/are, tính từ miêu tả và because.","Hãy nói về một địa điểm mà bạn muốn giới thiệu.","recommend (giới thiệu) · beautiful (đẹp) · peaceful (yên bình) · there is/are (có) · because (bởi vì)","place"],
+ ["Explain a problem you solved recently.","Dùng quá khứ đơn và first, then, finally.","Hãy giải thích một vấn đề mà gần đây bạn đã giải quyết.","problem (vấn đề) · recently (gần đây) · noticed (nhận ra) · decided (quyết định) · solution (giải pháp) · finally (cuối cùng)","problem"],
+ ["Give your opinion about working from home.","Dùng I think, in my opinion, however.","Hãy nêu ý kiến của bạn về việc làm việc tại nhà.","in my opinion (theo ý kiến của tôi) · flexible (linh hoạt) · save time (tiết kiệm thời gian) · convenient (thuận tiện) · however (tuy nhiên)","opinion"],
+ ["Make a polite request in a shop.","Thử Could I…? hoặc Could you…?","Hãy đưa ra một lời yêu cầu lịch sự trong cửa hàng.","Could I…? (Tôi có thể… được không?) · Could you…? (Bạn có thể… được không?) · please (làm ơn) · size (kích cỡ) · try on (thử đồ) · help (giúp)","request"]
  ]},
  dictionary:{title:"Dictionary Builder · Từ điển theo ngữ cảnh",desc:"Tra nhanh nghĩa, cách dùng và collocation hữu ích.",items:[
  ["issue","vấn đề; số phát hành","deal with an issue · a serious issue","We need to discuss this issue."],
@@ -3505,6 +3505,68 @@ function egStartSpeaking(){
  const $=id=>document.getElementById(id);
  function addPanel(id,html){const sec=$(id);if(!sec||$("egExtra_"+id))return;const p=document.createElement("div");p.className="panel";p.id="egExtra_"+id;p.innerHTML=html;sec.appendChild(p)}
  function safe(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+ async function egSubmitDailyWriting(item,input,feedback,button){
+  const answer=(input.value||"").trim();
+  if(!answer){feedback.innerHTML='<div class="feedback">Hãy viết câu trả lời trước nhé.</div>';input.focus();return}
+  if(answer.length>8000){feedback.innerHTML='<div class="feedback">Bài viết quá dài. Hãy rút gọn dưới 8.000 ký tự.</div>';return}
+  button.disabled=true;button.textContent="Đang chấm bài…";
+  feedback.innerHTML='<div class="feedback">Đang kiểm tra ngữ pháp và gợi ý chỉnh sửa…</div>';
+  const escape=safe,wordCount=(answer.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[]).length;
+  let matches=[],service="local";
+  try{
+   const body=new URLSearchParams({text:answer,language:"en-US",level:"default"});
+   const response=await fetch("https://api.languagetool.org/v2/check",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:body.toString()});
+   if(!response.ok)throw new Error("Grammar service unavailable");
+   const data=await response.json();matches=Array.isArray(data.matches)?data.matches:[];service="LanguageTool";
+  }catch(error){matches=[]}
+  const localRules=[
+   {re:/\bi am agree\b/gi,to:"I agree",why:"Không dùng am trước agree."},
+   {re:/\bhe go\b/gi,to:"he goes",why:"Hiện tại đơn: he/she/it + động từ thêm -s."},
+   {re:/\bshe go\b/gi,to:"she goes",why:"Hiện tại đơn: he/she/it + động từ thêm -s."},
+   {re:/\bi have went\b/gi,to:"I have gone",why:"Sau have/has dùng quá khứ phân từ gone."},
+   {re:/\byesterday\b[^.!?]*\bwill\b/gi,to:null,why:"Có yesterday thì thường cần dùng thì quá khứ, không dùng will."},
+   {re:/\bpeople is\b/gi,to:"people are",why:"People là danh từ số nhiều."},
+   {re:/\bmore better\b/gi,to:"better",why:"Không dùng đồng thời more và dạng so sánh hơn better."},
+   {re:/\binformations\b/gi,to:"information",why:"Information là danh từ không đếm được."},
+   {re:/\badvices\b/gi,to:"advice",why:"Advice là danh từ không đếm được."}
+  ];
+  let corrected=answer,issues=[];
+  if(service==="LanguageTool"){
+   const sorted=matches.slice().sort((a,b)=>b.offset-a.offset);
+   sorted.forEach(match=>{
+    const replacement=match.replacements&&match.replacements[0]?match.replacements[0].value:null;
+    const snippet=answer.slice(match.offset,match.offset+match.length);
+    issues.push({text:snippet||"Cấu trúc câu",replacement,why:match.message||"Kiểm tra cách diễn đạt",context:match.context?.text||""});
+    if(replacement!==null)corrected=corrected.slice(0,match.offset)+replacement+corrected.slice(match.offset+match.length);
+   });
+  }else{
+   localRules.forEach(rule=>{
+    const found=rule.re.exec(answer);rule.re.lastIndex=0;
+    if(found){issues.push({text:found[0],replacement:rule.to,why:rule.why});if(rule.to)corrected=corrected.replace(rule.re,rule.to)}
+   });
+  }
+  const criteria=String(item[4]||"").split(",");
+  const hasStructure=criteria.some(k=>k==="routine"&&/\b(usually|often|every day|sometimes|always)\b/i.test(answer))
+   ||criteria.some(k=>k==="place"&&/\b(there is|there are|because|recommend)\b/i.test(answer))
+   ||criteria.some(k=>k==="problem"&&/\b(first|then|finally|solved|fixed)\b/i.test(answer))
+   ||criteria.some(k=>k==="opinion"&&/\b(i think|in my opinion|however|i believe)\b/i.test(answer))
+   ||criteria.some(k=>k==="request"&&/\b(could i|could you|would you|please)\b/i.test(answer));
+  const lengthTarget=criteria[0]==="routine"?40:criteria[0]==="place"?25:criteria[0]==="problem"?25:criteria[0]==="opinion"?25:12;
+  const lengthScore=Math.min(25,Math.round(wordCount/lengthTarget*25));
+  const taskScore=hasStructure?25:10;
+  const grammarScore=Math.max(0,50-Math.min(50,issues.length*8));
+  const score=Math.max(0,Math.min(100,grammarScore+lengthScore+taskScore));
+  const tips=[];
+  if(wordCount<lengthTarget)tips.push("Bài còn ngắn. Hãy phát triển thêm ý và ví dụ cụ thể (mục tiêu khoảng "+lengthTarget+" từ trở lên).");
+  if(!hasStructure)tips.push("Bài chưa thể hiện rõ cấu trúc/ngôn ngữ được yêu cầu: "+(item[1]||"").replace(/[.!…]+$/,"")+".");
+  if(!/[.!?]$/.test(answer))tips.push("Thêm dấu câu kết thúc phù hợp.");
+  let issueHtml=issues.length?'<h4>Những chỗ cần sửa</h4><ul>'+issues.slice(0,12).map(x=>'<li><b>'+escape(x.text)+'</b>'+(x.replacement!==null&&x.replacement!==undefined?' → <b>'+escape(x.replacement)+'</b>':'')+'<br><span class="small muted">'+escape(x.why)+'</span></li>').join("")+'</ul>':'<p>✓ Không phát hiện lỗi phổ biến trong lượt kiểm tra này.</p>';
+  const correctedHtml='<div class="panel soft" style="margin-top:10px"><b>✍️ Bản chỉnh sửa đề xuất</b><p style="white-space:pre-wrap">'+escape(corrected)+'</p><button class="btn line" type="button" id="egUseCorrection">Dùng bản đã sửa</button></div>';
+  feedback.innerHTML='<div class="feedback '+(issues.length===0&&hasStructure?"good":"")+'"><div class="controls" style="justify-content:space-between"><b>Writing feedback · Nhận xét bài viết</b><span class="badge">'+score+'/100</span></div><p><b>'+wordCount+' từ</b> · '+(service==="LanguageTool"?"Đã kiểm tra ngữ pháp trực tuyến":"Chế độ kiểm tra cơ bản (dịch vụ ngữ pháp không kết nối được)")+'</p>'+issueHtml+(tips.length?'<h4>Gợi ý cải thiện</h4><ul>'+tips.map(t=>'<li>'+escape(t)+'</li>').join("")+'</ul>':'')+correctedHtml+'<p class="small muted">Điểm là ước lượng theo lỗi ngữ pháp, độ dài và cấu trúc yêu cầu; chưa đánh giá đầy đủ độ tự nhiên hoặc độ đúng ý như giáo viên/AI đọc hiểu.</p></div>';
+  const use=$("egUseCorrection");if(use)use.onclick=()=>{input.value=corrected;input.focus()};
+  try{localStorage.setItem("eg-daily-writing-"+(item[0]||"").slice(0,40),JSON.stringify({answer,corrected,score,date:new Date().toISOString()}))}catch(e){}
+  button.disabled=false;button.textContent="Check & submit · Chấm bài (Enter ↵)";
+ }
  function mountBank(id,data){
   const root=$("egBank_"+id);if(!root)return;
   let idx=0,show=false;
@@ -3515,7 +3577,7 @@ function egStartSpeaking(){
    else if(id==="flashcards"){body='<button class="card soft" style="width:100%;min-height:130px;text-align:center" id="egFlip_'+id+'"><h2>'+safe(d[0])+'</h2><p>'+ (show?safe(d[1])+"<br>"+safe(d[2]):"Nhấn để lật thẻ")+'</p></button>'}
    else if(id==="progress"){body='<label style="display:flex;gap:10px;align-items:center"><input type="checkbox" data-progress="'+idx+'"> '+safe(d[1])+'</label>'}
    else if(id==="cloud"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><b>'+safe(d[2])+'</b>'}
-   else if(id==="practice"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><textarea id="egWrite_'+id+'" rows="3" placeholder="Write your answer in English…"></textarea><button class="btn" id="egSave_'+id+'">Lưu câu trả lời</button><p id="egFb_'+id+'"></p>'}
+   else if(id==="practice"){body='<h3>'+safe(d[0])+'</h3><div class="panel soft" style="margin:10px 0"><b>🇻🇳 Dịch đề bài</b><p>'+safe(d[2]||"")+'</p></div><p>'+safe(d[1])+'</p><details class="panel soft" style="margin:10px 0"><summary style="cursor:pointer;font-weight:600">💡 Từ vựng gợi ý</summary><p style="margin-bottom:0">'+safe(d[3]||"")+'</p></details><label for="egWrite_practice"><b>Your answer · Câu trả lời của bạn</b></label><textarea id="egWrite_practice" rows="5" placeholder="Write your answer in English… (Enter để nộp, Shift + Enter để xuống dòng)"></textarea><div class="controls"><button class="btn" id="egSave_practice" type="button">Check & submit · Chấm bài (Enter ↵)</button></div><p class="small muted">Bài viết sẽ được kiểm tra ngữ pháp bằng LanguageTool nếu kết nối được; điểm là điểm luyện tập tham khảo, không phải đánh giá AI về toàn bộ ý nghĩa.</p><div id="egFb_practice" aria-live="polite"></div>'}
    else if(id==="dictionary"){body='<h3>'+safe(d[0])+' · '+safe(d[1])+'</h3><p><b>Collocations:</b> '+safe(d[2])+'</p><p><i>'+safe(d[3])+'</i></p>'}
    else if(id==="learninglab"){body='<h3>'+safe(d[0])+'</h3><p>'+safe(d[1])+'</p><p><b>Thử ngay:</b> '+safe(d[2])+'</p>'}
    else if(id==="phrasal"){body='<h3>'+safe(d[0])+' — '+safe(d[1])+'</h3><p>'+safe(d[2])+'</p><small>'+safe(d[3])+'</small>'}
@@ -3526,7 +3588,12 @@ function egStartSpeaking(){
    if(id==="grammar"||id==="quiz"||id==="reading")root.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{const ok=Number(b.dataset.i)===(id==="reading"?d[4]:d[2]);const fb=$("egFb_"+id);fb.textContent=ok?"✅ Chính xác! ":"❌ Chưa đúng. ";if(id==="grammar"||id==="quiz")fb.textContent+=(d[3]||"");else if(id==="reading")fb.textContent+=d[5]||"";});
    if(id==="translation"){$("egReveal_"+id).onclick=()=>{$("egAns_"+id).innerHTML="<b>"+safe(d[1])+"</b><br>"+safe(d[2])};$("egCheckTranslation").onclick=()=>{const input=$("egTranslationInput").value.trim();const normalize=value=>String(value).toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g," ").replace(/\s+/g," ").trim();const feedback=$("egTranslationFeedback");if(!input){feedback.textContent="Hãy nhập câu tiếng Anh trước khi kiểm tra nhé.";return}if(normalize(input)===normalize(d[1])){feedback.textContent="✅ Khớp với đáp án gợi ý! Rất tốt."}else{feedback.textContent="📝 Câu của bạn khác đáp án mẫu. Hãy xem gợi ý để đối chiếu; cách diễn đạt khác vẫn có thể đúng nếu đúng ngữ pháp và ý nghĩa."}};}
    if(id==="flashcards")$("egFlip_"+id).onclick=()=>{show=!show;draw()};
-   if(id==="practice")$("egSave_"+id).onclick=()=>{$("egFb_"+id).textContent="Đã giữ câu trả lời trong ô này. Hãy đọc to và tự kiểm tra ngữ pháp nhé."};
+   if(id==="practice"){
+    const answerBox=$("egWrite_practice"),submit=$("egSave_practice");
+    const submitPractice=()=>egSubmitDailyWriting(d,answerBox,$("egFb_practice"),submit);
+    submit.onclick=submitPractice;
+    answerBox.addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();submitPractice()}});
+   }
    if(id==="progress"){root.querySelector("input").checked=JSON.parse(localStorage.getItem("eg-progress-"+idx)||"false");root.querySelector("input").onchange=e=>localStorage.setItem("eg-progress-"+idx,JSON.stringify(e.target.checked))}
   }
   draw()
