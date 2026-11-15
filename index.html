@@ -483,7 +483,7 @@ html { background: #142342; }
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button><button data-page="stories">📖 Short Stories </button><button data-page="context">🌱 English in Context </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
+<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button><button data-page="shadowing">🗣️ Shadowing Practice </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="translation">🔁 Translation Reflex </button>
@@ -901,6 +901,37 @@ html { background: #142342; }
   <div class="controls"><button class="btn primary" type="button" onclick="egListeningCheck()">Kiểm tra đáp án</button><button class="btn line" type="button" onclick="egListeningReset()">Làm lại</button></div>
   <div id="listeningResult" aria-live="polite"></div>
   <p class="small muted" id="listeningVoiceNote">Ưu tiên giọng tiếng Anh tự nhiên có sẵn trên thiết bị. Bạn có thể chọn giọng và điều chỉnh tốc độ nghe.</p>
+ </div>
+</section>
+
+<section class="page" id="shadowing">
+ <div class="page-header"><div><p class="eyebrow">LISTEN · COPY · SPEAK NATURALLY</p><h1>🗣️ Shadowing Practice · Luyện nói nhại</h1><p>Nghe một câu, nói đuổi theo người đọc, bắt chước nhịp điệu và ngữ điệu. Luyện từng đoạn ngắn để nói tự nhiên hơn.</p></div></div>
+ <div class="card">
+  <h2>Phương pháp luyện hiệu quả · 10–15 phút</h2>
+  <ol style="line-height:1.8;padding-left:22px">
+   <li><b>Listen:</b> Nghe toàn bài một lần, chưa nhìn bản dịch.</li>
+   <li><b>Understand:</b> Mở transcript, hiểu nghĩa và chú ý cụm từ được nhấn.</li>
+   <li><b>Shadow:</b> Phát từng câu, nói đuổi theo gần như đồng thời. Bắt chước nối âm, trọng âm và cảm xúc.</li>
+   <li><b>Repeat:</b> Lặp lại mỗi câu 2–3 lần, sau đó thử nói cả đoạn không nhìn chữ.</li>
+   <li><b>Review:</b> Tự đánh giá độ rõ, nhịp điệu và sự trôi chảy. Ngày mai ôn lại một lượt.</li>
+  </ol>
+  <p class="small muted">Mẹo: Đừng cố nói nhanh ngay. Ưu tiên phát âm rõ và đúng nhịp; tăng tốc khi đã theo kịp audio.</p>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <div class="controls"><label for="shadowLevel">Cấp độ</label><select id="shadowLevel" onchange="egShadowLevelChanged()"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><label for="shadowSelect">Bài luyện</label><select id="shadowSelect" onchange="egShadowRender()"></select></div>
+  <div class="controls"><label for="shadowVoice">Giọng đọc</label><select id="shadowVoice" aria-label="Chọn giọng đọc tiếng Anh"></select><label for="shadowSpeed">Tốc độ</label><select id="shadowSpeed"><option value="0.78">Rất chậm</option><option value="0.88">Chậm</option><option value="0.98" selected>Tự nhiên</option><option value="1.05">Nhanh</option></select></div>
+  <div class="controls"><button class="btn primary" type="button" onclick="egShadowPlayAll()">▶ Nghe toàn bài</button><button class="btn line" type="button" id="shadowStopBtn" onclick="egShadowStop()" style="display:none">■ Dừng</button><button class="btn soft" type="button" id="shadowTranscriptBtn" onclick="egShadowToggleTranscript()">Ẩn transcript</button></div>
+  <div id="shadowIntro" class="small muted"></div>
+  <div id="shadowTranscript"></div>
+  <div id="shadowProgress" style="margin:14px 0"></div>
+  <div id="shadowChunks"></div>
+  <div class="controls"><button class="btn line" type="button" onclick="egShadowReset()">Đặt lại tiến độ bài này</button></div>
+  <div id="shadowFeedback" aria-live="polite"></div>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <h2>Self-check · Tự đánh giá sau khi luyện</h2>
+  <p class="small muted">Đánh dấu điều bạn đã làm được. Không cần hoàn hảo ngay từ lần đầu.</p>
+  <div id="shadowChecklist"></div>
  </div>
 </section>
 </main>
@@ -3689,5 +3720,89 @@ function egListeningStop(){if("speechSynthesis" in window)speechSynthesis.cancel
 function egListeningCheck(){const d=egListeningCurrent();let score=0,missing=0;const notes=[];d.questions.forEach((q,i)=>{const a=document.querySelector('input[name="egListenQ'+i+'"]:checked');if(!a)missing++;else if(Number(a.value)===q[2])score++});if(missing){document.getElementById("listeningResult").textContent="Bạn còn "+missing+" câu chưa trả lời.";return}d.questions.forEach((q,i)=>{const a=document.querySelector('input[name="egListenQ'+i+'"]:checked');notes.push((i+1)+". "+(Number(a.value)===q[2]?"✓ Đúng":"✗ Đáp án: "+q[1][q[2]]))});document.getElementById("listeningResult").innerHTML='<h3>Kết quả: '+score+'/'+d.questions.length+'</h3><p>'+notes.join("<br>")+'</p>'}
 function egListeningReset(){document.querySelectorAll('#listeningQuestions input[type="radio"]').forEach(x=>x.checked=false);document.getElementById("listeningResult").textContent=""}
 document.addEventListener("DOMContentLoaded",()=>{egContextRender();egListeningPopulateVoices();egListeningLevelChanged();if("speechSynthesis" in window)speechSynthesis.onvoiceschanged=egListeningPopulateVoices});
+</script>
+
+<script id="englishgo-shadowing-v1">
+const egShadowLessons=[
+{level:"A1",title:"Introducing Yourself · Giới thiệu bản thân",goal:"Luyện chào hỏi, giới thiệu tên, quê quán và sở thích.",chunks:[
+["Hello! My name is Anna.","Xin chào! Mình tên là Anna."],
+["I'm twenty years old, and I come from Spain.","Mình hai mươi tuổi và đến từ Tây Ban Nha."],
+["I live in a small town near the sea.","Mình sống ở một thị trấn nhỏ gần biển."],
+["I'm learning English because I want to travel and meet new people.","Mình học tiếng Anh vì muốn đi du lịch và gặp gỡ những người mới."],
+["In my free time, I enjoy reading books and listening to music.","Khi rảnh, mình thích đọc sách và nghe nhạc."],
+["It's nice to meet you. I hope we can be friends!","Rất vui được gặp bạn. Mình hy vọng chúng ta có thể trở thành bạn!"]
+]},
+{level:"A1",title:"A Morning Routine · Thói quen buổi sáng",goal:"Luyện kể về thói quen hằng ngày và cách nối các hoạt động.",chunks:[
+["I usually wake up at half past six.","Mình thường thức dậy lúc sáu giờ rưỡi."],
+["First, I wash my face and get dressed.","Đầu tiên, mình rửa mặt và thay quần áo."],
+["Then I make a cup of tea and prepare breakfast.","Sau đó, mình pha một tách trà và chuẩn bị bữa sáng."],
+["I leave home at seven thirty and walk to the bus stop.","Mình rời nhà lúc bảy giờ rưỡi và đi bộ đến trạm xe buýt."],
+["It takes about twenty minutes to get to work.","Mình mất khoảng hai mươi phút để đến chỗ làm."],
+["I like starting the day early because I feel more energetic.","Mình thích bắt đầu ngày mới sớm vì cảm thấy tràn đầy năng lượng hơn."]
+]},
+{level:"A2",title:"Making Weekend Plans · Lên kế hoạch cuối tuần",goal:"Luyện đề xuất, đồng ý, từ chối lịch sự và thống nhất thời gian.",chunks:[
+["Are you doing anything interesting this weekend?","Cuối tuần này bạn có dự định gì thú vị không?"],
+["I was thinking about going to the new art exhibition downtown.","Mình đang nghĩ đến việc đi xem triển lãm nghệ thuật mới ở trung tâm."],
+["That sounds great! What time does it open?","Nghe tuyệt đấy! Mấy giờ nơi đó mở cửa?"],
+["It opens at ten, so we could meet outside around half past nine.","Nơi đó mở cửa lúc mười giờ, vậy chúng ta có thể gặp bên ngoài khoảng chín giờ rưỡi."],
+["I'd love to, but I have to finish some work in the morning.","Mình rất muốn đi, nhưng buổi sáng mình phải hoàn thành một số công việc."],
+["No problem. We can have lunch first and visit the exhibition afterwards.","Không sao. Chúng ta có thể ăn trưa trước rồi đi xem triển lãm sau."],
+["Perfect. I'll send you the address later.","Tuyệt. Lát nữa mình sẽ gửi địa chỉ cho bạn."]
+]},
+{level:"A2",title:"At the Doctor's · Ở phòng khám",goal:"Luyện mô tả triệu chứng và hiểu hướng dẫn đơn giản.",chunks:[
+["Good morning. What seems to be the problem?","Chào buổi sáng. Bạn đang gặp vấn đề gì?"],
+["I've had a sore throat and a headache since yesterday.","Tôi bị đau họng và đau đầu từ hôm qua."],
+["Do you have a temperature or a cough?","Bạn có bị sốt hoặc ho không?"],
+["I have a slight temperature, but I haven't been coughing.","Tôi hơi sốt nhưng không bị ho."],
+["I'll examine your throat and check your temperature.","Tôi sẽ kiểm tra họng và đo nhiệt độ cho bạn."],
+["You should get plenty of rest and drink more water.","Bạn nên nghỉ ngơi nhiều và uống thêm nước."],
+["If you don't feel better in a few days, please contact us again.","Nếu vài ngày nữa bạn vẫn không thấy khá hơn, vui lòng liên hệ lại với chúng tôi."]
+]},
+{level:"B1",title:"Sharing an Opinion at Work · Nêu ý kiến ở nơi làm việc",goal:"Luyện diễn đạt quan điểm, đưa lý do và đề xuất giải pháp.",chunks:[
+["I understand why the team wants to launch the product as soon as possible.","Tôi hiểu vì sao nhóm muốn ra mắt sản phẩm sớm nhất có thể."],
+["However, I think we should spend a little more time testing it.","Tuy nhiên, tôi nghĩ chúng ta nên dành thêm một chút thời gian để kiểm thử."],
+["A few users have reported problems with the latest version.","Một vài người dùng đã báo cáo vấn đề với phiên bản mới nhất."],
+["If we ignore these issues, we may receive more complaints after the launch.","Nếu bỏ qua những vấn đề này, chúng ta có thể nhận thêm nhiều khiếu nại sau khi ra mắt."],
+["I'd suggest running one final test and fixing the most important bugs.","Tôi đề xuất chạy thêm một lần kiểm thử cuối và sửa những lỗi quan trọng nhất."],
+["This might delay the release by a day, but it could improve the user experience.","Việc này có thể khiến ngày phát hành chậm một ngày, nhưng có thể cải thiện trải nghiệm người dùng."],
+["I'd rather deliver a reliable product than rush something that isn't ready.","Tôi muốn bàn giao một sản phẩm đáng tin cậy hơn là vội vàng phát hành thứ chưa sẵn sàng."]
+]},
+{level:"B1",title:"A Memorable Travel Experience · Một chuyến đi đáng nhớ",goal:"Luyện kể chuyện ở thì quá khứ và diễn đạt cảm xúc.",chunks:[
+["Last summer, I took a trip to a small village in the mountains.","Mùa hè năm ngoái, tôi có chuyến đi đến một ngôi làng nhỏ trên núi."],
+["I had planned to stay for just two days, but I ended up spending a whole week there.","Tôi dự định chỉ ở lại hai ngày, nhưng cuối cùng đã dành cả tuần ở đó."],
+["The locals were incredibly welcoming and often invited visitors to share a meal.","Người dân địa phương vô cùng thân thiện và thường mời du khách dùng bữa cùng."],
+["One morning, a guide took us along a narrow path to a beautiful waterfall.","Một buổi sáng, hướng dẫn viên đưa chúng tôi theo con đường hẹp đến một thác nước tuyệt đẹp."],
+["Although the walk was tiring, the view at the top was absolutely worth it.","Mặc dù chuyến đi bộ khá mệt, cảnh nhìn từ trên cao thực sự rất đáng công."],
+["What made the trip special was not just the scenery, but the people I met.","Điều khiến chuyến đi đặc biệt không chỉ là phong cảnh mà còn là những người tôi gặp."],
+["I still think about that experience whenever I need a reminder to slow down and enjoy life.","Tôi vẫn nghĩ về trải nghiệm đó mỗi khi cần được nhắc nhở hãy sống chậm lại và tận hưởng cuộc sống."]
+]}
+];
+let egShadowVisible=true,egShadowCurrentUtterance=null,egShadowQueue=[],egShadowQueueIndex=0,egShadowVoiceList=[];
+const egShadowDone={};
+function egShadowKey(){const d=egShadowCurrent();return d?d.level+"|"+d.title:""}
+function egShadowCurrent(){const level=document.getElementById("shadowLevel")?.value||"A1";const rows=egShadowLessons.filter(x=>x.level===level);return rows[Math.max(0,Number(document.getElementById("shadowSelect")?.value||0))]||rows[0]}
+function egShadowLoadVoices(){if(!("speechSynthesis" in window))return;egShadowVoiceList=speechSynthesis.getVoices().filter(v=>/^en(-|_)/i.test(v.lang||""));const select=document.getElementById("shadowVoice");if(!select)return;const old=select.value;select.innerHTML=egShadowVoiceList.map((v,i)=>'<option value="'+i+'">'+v.name+' · '+v.lang+'</option>').join("")||'<option value="">Giọng mặc định của thiết bị</option>';if(old&&egShadowVoiceList[Number(old)])select.value=old}
+function egShadowSelectedVoice(){return egShadowVoiceList[Number(document.getElementById("shadowVoice")?.value||0)]||null}
+function egShadowLevelChanged(){egShadowStop();const rows=egShadowLessons.filter(x=>x.level===document.getElementById("shadowLevel").value);document.getElementById("shadowSelect").innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");egShadowRender()}
+function egShadowRender(){
+ egShadowStop();const d=egShadowCurrent();if(!d)return;
+ document.getElementById("shadowIntro").textContent=d.goal;
+ document.getElementById("shadowTranscriptBtn").textContent=egShadowVisible?"Ẩn transcript":"Hiện transcript";
+ document.getElementById("shadowTranscript").style.display=egShadowVisible?"block":"none";
+ document.getElementById("shadowTranscript").innerHTML='<h3>Transcript · Bản chép lời</h3>'+d.chunks.map((x,i)=>'<p style="line-height:1.8"><b>'+(i+1)+'.</b> '+x[0]+'</p>').join("");
+ document.getElementById("shadowChunks").innerHTML='<h3>Practice sentence by sentence · Luyện từng câu</h3>'+d.chunks.map((x,i)=>'<div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0"><p style="line-height:1.8;margin:0 0 5px"><b>'+(i+1)+'. '+x[0]+'</b></p><p class="small muted" style="margin:0 0 10px">'+x[1]+'</p><div class="controls"><button class="btn soft" type="button" onclick="egShadowPlayChunk('+i+')">🔊 Nghe câu này</button><button class="btn line" type="button" onclick="egShadowMark('+i+')">'+(egShadowDone[egShadowKey()]?.includes(i)?"✓ Đã shadow":"Đánh dấu đã luyện")+'</button></div></div>').join("");
+ document.getElementById("shadowChecklist").innerHTML=['Mình nghe hết bài một lần trước khi nhìn transcript.','Mình bắt chước đúng âm cuối và cách nối âm.','Mình chú ý từ được nhấn và ngữ điệu lên xuống.','Mình shadow mỗi câu ít nhất 2–3 lần.','Mình thử nói lại cả đoạn mà không nhìn chữ.'].map((x,i)=>'<label style="display:block;padding:8px 0"><input type="checkbox" class="shadow-self-check"> '+x+'</label>').join("");
+ egShadowUpdateProgress();document.getElementById("shadowFeedback").textContent="";
+}
+function egShadowUpdateProgress(){const d=egShadowCurrent();if(!d)return;const done=egShadowDone[egShadowKey()]||[];const total=d.chunks.length;const pct=Math.round(done.length/total*100);document.getElementById("shadowProgress").innerHTML='<b>Tiến độ shadowing: '+done.length+'/'+total+' câu</b><div style="height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:7px"><div style="height:100%;width:'+pct+'%;background:var(--primary);border-radius:20px"></div></div><p class="small muted">'+(pct===100?'Hoàn thành bài luyện! Hãy thử nói lại toàn bài không nhìn transcript.':'Đánh dấu mỗi câu sau khi bạn đã shadow 2–3 lần.')+'</p>'}
+function egShadowMark(i){const key=egShadowKey();egShadowDone[key]=egShadowDone[key]||[];const at=egShadowDone[key].indexOf(i);if(at>=0)egShadowDone[key].splice(at,1);else egShadowDone[key].push(i);egShadowRender()}
+function egShadowToggleTranscript(){egShadowVisible=!egShadowVisible;egShadowRender()}
+function egShadowSpeakNext(){if(egShadowQueueIndex>=egShadowQueue.length){egShadowStop();return}const text=egShadowQueue[egShadowQueueIndex++];const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=Number(document.getElementById("shadowSpeed")?.value||.98);u.pitch=1;u.voice=egShadowSelectedVoice();egShadowCurrentUtterance=u;u.onend=()=>{if(egShadowCurrentUtterance===u)egShadowSpeakNext()};u.onerror=()=>{if(egShadowCurrentUtterance===u)egShadowStop()};speechSynthesis.speak(u);document.getElementById("shadowStopBtn").style.display="inline-flex"}
+function egShadowPlayAll(){const d=egShadowCurrent();if(!d)return;egShadowStart(d.chunks.map(x=>x[0]))}
+function egShadowPlayChunk(i){const d=egShadowCurrent();if(!d||!d.chunks[i])return;egShadowStart([d.chunks[i][0]])}
+function egShadowStart(queue){if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("shadowFeedback").textContent="Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.";return}egShadowStop();egShadowQueue=queue.slice();egShadowQueueIndex=0;egShadowSpeakNext()}
+function egShadowStop(){if("speechSynthesis" in window)speechSynthesis.cancel();egShadowCurrentUtterance=null;egShadowQueue=[];egShadowQueueIndex=0;const b=document.getElementById("shadowStopBtn");if(b)b.style.display="none"}
+function egShadowReset(){delete egShadowDone[egShadowKey()];egShadowRender();document.querySelectorAll(".shadow-self-check").forEach(x=>x.checked=false)}
+document.addEventListener("DOMContentLoaded",()=>{egShadowLoadVoices();egShadowLevelChanged();if("speechSynthesis" in window)speechSynthesis.onvoiceschanged=egShadowLoadVoices});
 </script>
 </body></html>
