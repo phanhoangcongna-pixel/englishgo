@@ -2362,7 +2362,7 @@ function showTranslationHint(){
  const dir=document.getElementById("trDirection").value;
  const target=dir==="vi-en"?trCurrent.en:trCurrent.vi;
  const stop=new Set(["the","a","an","is","am","are","to","of","and","in","on","at","for","my","your","i","you","we","it","me","this","that","do","does","can","could","please","mình","tôi","bạn","là","của","và","có","một","cho","để","thì","đã","đang"]);
- const words=target.replace(/[^\\p{L}\\p{N}’' -]/gu," ").split(/\\s+/).filter(w=>w.length>2&&!stop.has(w.toLowerCase()));
+ const words=target.replace(/[^\p{L}\p{N}’' -]/gu," ").split(/\s+/).filter(w=>w.length>2&&!stop.has(w.toLowerCase()));
  const unique=[...new Set(words)].slice(0,5);
  document.getElementById("trHintBox").textContent=unique.length?"💡 Từ khóa: "+unique.join(" · "):"💡 Hãy nghĩ đến các từ khóa chính trong câu.";
 }
