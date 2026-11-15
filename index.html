@@ -1088,7 +1088,6 @@ function go(id){
  window.scrollTo({top:0,behavior:"smooth"});
  if(id==="vocab")renderWords();
  if(id==="grammar")renderGrammar();
- if(id==="speaking")renderScenario();
  if(id==="quiz")renderQuiz();
  if(id==="placement")renderPlace();
  if(id==="learninglab")labInit();
@@ -1241,7 +1240,7 @@ let pi=0,ps=0,pa=false;function renderPlace(){let q=DATA.placement[pi];document.
 function answerPlace(i){if(pa)return;pa=true;let q=DATA.placement[pi],ok=i===q[4];if(ok)ps++;document.querySelectorAll("#placeChoices button").forEach((b,j)=>{if(j===q[4])b.classList.add("good");else if(j===i)b.classList.add("bad");b.disabled=true});let f=document.getElementById("placeFeedback");f.className="feedback "+(ok?"good":"bad");f.textContent=ok?"Correct! Chính xác!":"Not quite. Review and continue. Chưa đúng, hãy ôn lại và tiếp tục.";document.getElementById("placeNext").disabled=false}
 function nextPlace(){if(pi<9){pi++;renderPlace()}else{let level=ps<=3?"A1":ps<=7?"A2":"B1";document.getElementById("placeQ").textContent=`Your estimated level: ${level} (${ps}/10) · Trình độ ước lượng: ${level}`;document.getElementById("placeVi").textContent="This is an informal practice test, not an official certificate. Đây là bài kiểm tra tham khảo, không phải chứng chỉ chính thức.";document.getElementById("placeChoices").innerHTML="";document.getElementById("placeNext").disabled=true;award("placement",25);if(typeof egRoadmapTrack==="function")egRoadmapTrack("placement")}}
 function restartPlace(){pi=0;ps=0;renderPlace()}
-updateStats();renderWords();renderScenario();renderQuiz();renderPlace();
+updateStats();renderWords();renderQuiz();renderPlace();
 
 // EnglishGo 3.0 additions — all features run locally, without paid APIs.
 const EG3={
