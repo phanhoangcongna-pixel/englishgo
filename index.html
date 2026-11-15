@@ -4045,13 +4045,15 @@ document.addEventListener("DOMContentLoaded",function(){
   const match=title.match(/[🎯📚🗣️🎧📖✍️🧠💬🃏🗓️📊🔥🏅☁️🔤🧪🔁]/u);
   return match?match[0]:["📘","🎯","🧩","✨","📝","🎧"][index%6];
  }
- function openMenu(page,blocks,menu,back){
+ function openMenu(page,blocks,menu,back,gridParent){
   blocks.forEach(el=>el.hidden=true);
+  if(gridParent)gridParent.style.display="";
   menu.hidden=false;back.hidden=true;
   page.scrollIntoView({block:"start",behavior:"smooth"});
  }
- function openBlock(page,blocks,menu,back,index){
+ function openBlock(page,blocks,menu,back,index,gridParent){
   menu.hidden=true;
+  if(gridParent)gridParent.style.display="block";
   blocks.forEach((el,i)=>el.hidden=i!==index);
   back.hidden=false;
   page.scrollIntoView({block:"start",behavior:"smooth"});
@@ -4066,7 +4068,9 @@ document.addEventListener("DOMContentLoaded",function(){
    menu=document.createElement("div");menu.className="eg-section-picker";menu.setAttribute("aria-label","Chọn nội dung học");
    back=document.createElement("button");back.type="button";back.className="btn line eg-picker-back";back.textContent="← Quay lại danh sách";
    back.hidden=true;
-   blocks[0].parentNode.insertBefore(menu,blocks[0]);
+   const gridParent=blocks[0].parentElement.classList.contains("grid")?blocks[0].parentElement:null;
+   const anchor=gridParent||blocks[0];
+   anchor.parentNode.insertBefore(menu,anchor);
    menu.parentNode.insertBefore(back,menu.nextSibling);
    blocks.forEach((block,index)=>{
     const title=getTitle(block,index,page.id);
@@ -4076,12 +4080,17 @@ document.addEventListener("DOMContentLoaded",function(){
     const desc=document.createElement("span");desc.className="eg-picker-desc";desc.textContent=getDescription(block,title);
     const open=document.createElement("span");open.className="eg-picker-open";open.textContent="Vào học →";
     card.append(icon,name,desc,open);
-    card.addEventListener("click",()=>openBlock(page,blocks,menu,back,index));
+    const gridParent=blocks[0].parentElement.classList.contains("grid")?blocks[0].parentElement:null;
+    card.addEventListener("click",()=>openBlock(page,blocks,menu,back,index,gridParent));
     menu.appendChild(card);
    });
-   back.addEventListener("click",()=>openMenu(page,blocks,menu,back));
+   back.addEventListener("click",()=>{
+    const gridParent=blocks[0].parentElement.classList.contains("grid")?blocks[0].parentElement:null;
+    openMenu(page,blocks,menu,back,gridParent);
+   });
   }
-  openMenu(page,blocks,menu,back);
+  const gridParent=blocks[0].parentElement.classList.contains("grid")?blocks[0].parentElement:null;
+  openMenu(page,blocks,menu,back,gridParent);
  }
  function prepareActive(){
   const active=document.querySelector("main .page.active");
