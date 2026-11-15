@@ -1404,7 +1404,7 @@ function rlCheck(){
   document.getElementById("rlFeedback").innerHTML+=`<div class="feedback good"><b>🎉 Topic completed! · Đã hoàn thành chủ đề!</b><p>You have finished all ${rlTopics[rlCurrent].turns.length} turns. Choose another topic to continue. Bạn đã hoàn thành tất cả ${rlTopics[rlCurrent].turns.length} lượt. Hãy chọn chủ đề khác để tiếp tục.</p></div>`;
   if(nextBtn){nextBtn.disabled=true;nextBtn.textContent="Topic completed · Đã hoàn thành";}
  }
- document.getElementById("rlReview").innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
+ const review=document.getElementById("rlReview");if(review)review.innerHTML=rlHistory.map((h,i)=>`<div class="panel" style="margin:8px 0"><b>${i+1}. ${h.prompt}</b><p><span class="muted">Your choice · Bạn đã chọn:</span> ${h.answer}</p><p><span class="muted">Natural example · Câu tự nhiên:</span> ${h.model}</p><p class="small muted">${h.tip}</p></div>`).join("");
  document.getElementById("rlScore").textContent=`Completed: ${rlDone} · Đã hoàn thành: ${rlDone}`;
 }
 const RL_ADVANCED=[
