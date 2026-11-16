@@ -474,6 +474,11 @@ html { background: #142342; }
   }
 }
 </style>
+<style id="shadow-mode-visibility-fix">
+/* Keep the three practice modes and the lesson workspace mutually exclusive. */
+#shadowModePicker[hidden],
+#shadowWorkspace[hidden]{display:none!important}
+</style>
 </head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
@@ -843,7 +848,7 @@ html { background: #142342; }
   <button class="card" type="button" onclick="shadowChooseMode('sentences')" style="text-align:left;cursor:pointer"><div style="font-size:28px">📝</div><h2>Câu</h2><p class="small muted">Luyện từng câu riêng lẻ, nghe mẫu, nhắc lại và đánh dấu câu đã thành thạo.</p></button>
   <button class="card" type="button" onclick="shadowChooseMode('dialogues')" style="text-align:left;cursor:pointer"><div style="font-size:28px">💬</div><h2>Hội thoại</h2><p class="small muted">Luyện các lượt nói qua lại trong tình huống giao tiếp thực tế.</p></button>
  </div>
- <div id="shadowWorkspace" style="display:none">
+ <div id="shadowWorkspace" style="display:none" hidden>
   <div class="controls"><button class="btn line" type="button" onclick="shadowBackToModes()">← Chọn kiểu học khác</button><span id="shadowModeTitle"></span></div>
  <div class="card">
   <h2>Cách luyện hiệu quả · 10–15 phút mỗi ngày</h2>
@@ -2319,8 +2324,8 @@ function shadowSelectedVoice(){return shadowVoices[Number(document.getElementByI
 function shadowLevelChanged(){shadowStop();const level=document.getElementById("shadowLevel")?.value||"A1";const category=document.getElementById("shadowTopic")?.value||"all";const rows=shadowLessons.filter(x=>x.level===level&&(category==="all"||x.category===category)&&(shadowMode==="sentences"||((shadowMode==="dialogues")?x.type==="dialogue":x.type!=="dialogue")));const select=document.getElementById("shadowLessonSelect");select.innerHTML=rows.map((x,i)=>'<option value="'+i+'">'+x.title+'</option>').join("");const count=document.getElementById("shadowLessonCount");if(count)count.textContent=rows.length+" bài trong mục này";if(!rows.length){document.getElementById("shadowGoal").textContent="Chưa có bài ở cấp độ này. Hãy chọn cấp độ hoặc chủ đề khác.";document.getElementById("shadowTranscript").innerHTML="";document.getElementById("shadowChunks").innerHTML="";document.getElementById("shadowProgress").innerHTML="";document.getElementById("shadowChecklist").innerHTML="";return}shadowRender()}
 function shadowKey(){const d=shadowCurrent();return d?d.level+"|"+d.title:""}
 let shadowMode="shadowing";
-function shadowChooseMode(mode){shadowMode=mode;document.getElementById("shadowModePicker").style.display="none";document.getElementById("shadowWorkspace").style.display="block";shadowLevelChanged()}
-function shadowBackToModes(){shadowStop();document.getElementById("shadowWorkspace").style.display="none";document.getElementById("shadowModePicker").style.display="grid"}
+function shadowChooseMode(mode){shadowMode=mode;const picker=document.getElementById("shadowModePicker");const workspace=document.getElementById("shadowWorkspace");picker.hidden=true;picker.style.display="none";workspace.hidden=false;workspace.style.display="block";shadowLevelChanged()}
+function shadowBackToModes(){shadowStop();const picker=document.getElementById("shadowModePicker");const workspace=document.getElementById("shadowWorkspace");workspace.hidden=true;workspace.style.display="none";picker.hidden=false;picker.style.display="grid"}
 
 function shadowRender(){shadowStop();const d=shadowCurrent();if(!d)return;document.getElementById("shadowModeTitle").textContent=shadowMode==="shadowing"?"🗣️ Luyện nói đuổi":shadowMode==="sentences"?"📝 Luyện từng câu":"💬 Luyện hội thoại";document.getElementById("shadowGoal").textContent=d.goal;document.getElementById("shadowTranscript").style.display=shadowVisible?"block":"none";document.getElementById("shadowTranscript").innerHTML='<h3>Transcript · Bản chép lời</h3>'+d.chunks.map((x,i)=>'<p style="line-height:1.8"><b>'+(i+1)+'.</b> '+x[0]+'<br><span class="small muted">'+x[1]+'</span></p>').join("");document.getElementById("shadowTranscriptBtn").textContent=shadowVisible?"Ẩn transcript":"Hiện transcript";const done=shadowDone[shadowKey()]||[];document.getElementById("shadowChunks").innerHTML='<h3>'+(shadowMode==="dialogues"?"Dialogue practice · Luyện theo lượt hội thoại":shadowMode==="sentences"?"Sentence practice · Luyện từng câu":"Shadow từng câu · Sentence practice") +'</h3>'+d.chunks.map((x,i)=>'<div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0"><p style="line-height:1.8;margin:0 0 5px"><b>'+(i+1)+'. '+(shadowMode==="dialogues"?(i%2===0?"A: ":"B: "):"")+x[0]+'</b></p><p class="small muted" style="margin:0 0 10px">'+x[1]+'</p><div class="controls"><button class="btn soft" type="button" onclick="shadowPlayChunk('+i+')">🔊 Nghe câu</button><button class="btn line" type="button" onclick="shadowRecordChunk('+i+')">🎙️ Thử nói</button><button class="btn '+(done.includes(i)?'primary':'line')+'" type="button" onclick="shadowMark('+i+')">'+(done.includes(i)?'✓ Đã luyện':'Đánh dấu đã luyện')+'</button></div></div>').join("");document.getElementById("shadowChecklist").innerHTML=['Mình nghe hết bài một lần trước khi nhìn transcript.','Mình bắt chước âm cuối và cách nối âm.','Mình chú ý trọng âm từ và ngữ điệu của câu.','Mình shadow mỗi câu ít nhất 2–3 lần.','Mình thử nói lại cả bài mà không nhìn chữ.'].map(x=>'<label style="display:block;padding:8px 0"><input type="checkbox" class="shadow-self-check"> '+x+'</label>').join("");shadowUpdateProgress();document.getElementById("shadowFeedback").textContent=""}
 function shadowUpdateProgress(){const d=shadowCurrent();if(!d)return;const done=shadowDone[shadowKey()]||[];const pct=Math.round(done.length/d.chunks.length*100);document.getElementById("shadowProgress").innerHTML='<b>Tiến độ: '+done.length+'/'+d.chunks.length+' câu đã luyện</b><div style="height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:7px"><div style="height:100%;width:'+pct+'%;background:var(--primary);border-radius:20px"></div></div><p class="small muted">'+(pct===100?'Hoàn thành! Hãy thử nói lại toàn bài không nhìn chữ.':'Đánh dấu mỗi câu sau khi đã shadow 2–3 lần.')+'</p>'}
