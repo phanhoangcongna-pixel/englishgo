@@ -641,11 +641,6 @@ html { background: #142342; }
 <section class="page" id="shadowing">
 <h1 class="title">🎙️ Shadowing · Luyện nói nhại</h1>
 <p class="intro">Nghe một câu tiếng Anh, nhại lại ngay theo nhịp và ngữ điệu. Listen, repeat and build speaking confidence.</p>
-<div class="panel" id="shadowDialogueEntry" style="margin-bottom:14px;border:2px solid var(--blue)">
-<h2>🎭 Shadowing hội thoại · Dialogue Shadowing</h2>
-<p class="muted">Luyện các cuộc hội thoại hoàn chỉnh theo tình huống thực tế. Chọn một bài để xem toàn bộ lời thoại, nghe và luyện nói từng lượt.</p>
-<div class="controls"><button class="btn" type="button" onclick="egOpenShadowDialogues()">Mở phần Shadowing hội thoại →</button></div>
-</div>
 <div class="panel">
 <div class="controls"><label class="small" for="shadowMode">Dạng bài · Practice type</label><select id="shadowMode" onchange="egShadowModeChanged()"><option value="sentences">Câu đơn · Sentences</option><option value="dialogues">Hội thoại · Dialogues</option></select><label class="small" for="shadowLesson">Chủ đề · Topic</label><select id="shadowLesson" onchange="egShadowLoad()"></select><label class="small" for="shadowRate">Tốc độ</label><select id="shadowRate" style="max-width:140px"><option value="0.75">Chậm · 0.75×</option><option value="0.9" selected>Bình thường · 0.9×</option><option value="1">Tự nhiên · 1×</option></select></div>
 <div class="badge" id="shadowLevel">A1 · Câu 1</div><div class="shadow-sentence" id="shadowSentence" aria-live="polite">I usually get up at seven.</div>
@@ -2308,7 +2303,7 @@ let shadowSelectedLessonIndex=0;
 function shadowCurrent(){return shadowLessons[shadowSelectedLessonIndex]||null}
 function shadowLoadVoices(){if(!("speechSynthesis" in window))return;shadowVoices=speechSynthesis.getVoices().filter(v=>/^en(-|_)/i.test(v.lang||"")).sort((a,b)=>{const score=v=>((/^en-US/i.test(v.lang)?35:/^en-GB/i.test(v.lang)?25:10)+(/natural|neural|online|google/i.test(v.name)?60:0)-(/compact|espeak/i.test(v.name)?50:0));return score(b)-score(a)});const sel=document.getElementById("shadowVoice");if(!sel)return;const old=sel.value;sel.innerHTML=shadowVoices.map((v,i)=>'<option value="'+i+'">'+v.name+' · '+v.lang+'</option>').join("")||'<option value="">Giọng mặc định của thiết bị</option>';if(old&&shadowVoices[Number(old)])sel.value=old}
 function shadowSelectedVoice(){return shadowVoices[Number(document.getElementById("shadowVoice")?.value||0)]||null}
-function shadowLevelChanged(){const list=document.getElementById("shadowLessonList");if(!list)return;list.innerHTML=shadowLessons.map((lesson,i)=>'<button class="card" type="button" onclick="shadowOpenLesson('+i+')" style="text-align:left;cursor:pointer"><div class="small muted">'+lesson.level+' · '+(lesson.type==="dialogue"?"Hội thoại":"Luyện nói") +'</div><h2>'+lesson.title+'</h2><p class="small muted">'+lesson.goal+'</p><span class="small">Mở bài luyện →</span></button>').join("")}
+function shadowLevelChanged(){const list=document.getElementById("shadowLessonList");if(!list)return;list.innerHTML=shadowLessons.map((lesson,i)=>'<button class="card" type="button" onclick="shadowOpenLesson('+i+')" style="text-align:left;cursor:pointer"><div class="small muted">'+lesson.level+' · '+(lesson.type==="dialogue"?"Hội thoại":"Luyện nói") +'</div><h2>'+lesson.title+'</h2><p class="small muted">'+lesson.goal+'</p><span class="small">Chọn bài để bắt đầu →</span></button>').join("")}
 function shadowOpenLesson(index){shadowStop();shadowSelectedLessonIndex=index;shadowMode=shadowCurrent()?.type==="dialogue"?"dialogues":"shadowing";document.getElementById("shadowLessonList").style.display="none";document.getElementById("shadowWorkspace").style.display="block";shadowRender()}
 function shadowKey(){const d=shadowCurrent();return d?d.level+"|"+d.title:""}
 let shadowMode="shadowing";
