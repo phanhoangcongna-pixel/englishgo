@@ -483,7 +483,7 @@ html { background: #142342; }
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button><button data-page="stories">📖 Short Stories </button><button data-page="context">🌱 English in Context </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
+<button data-page="shadowing">🎙️ Shadowing</button><button data-page="realconversation">💬 Real-life Conversation </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="translation">🔁 Translation Reflex </button>
@@ -586,6 +586,7 @@ html { background: #142342; }
 
 <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
 <button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>268 sentences + topics + 1,000 phrases · 268 câu + chủ đề + 1.000 câu</p></button>
+<button class="home-tool" onclick="go('shadowing')"><div class="ico">🎙️</div><h3>Shadowing · Luyện nói nhại</h3><p>Listen, repeat and practise natural rhythm · Nghe, nhại lại và luyện ngữ điệu</p></button>
 
 </div>
 </div>
@@ -636,6 +637,21 @@ html { background: #142342; }
 </div>
 </section>
 
+
+<section class="page" id="shadowing">
+<h1 class="title">🎙️ Shadowing · Luyện nói nhại</h1>
+<p class="intro">Nghe một câu tiếng Anh, nhại lại ngay theo nhịp và ngữ điệu. Listen, repeat and build speaking confidence.</p>
+<div class="panel">
+<div class="controls"><label class="small" for="shadowLesson">Chủ đề · Topic</label><select id="shadowLesson" onchange="egShadowLoad()"><option value="0">Daily routines · Sinh hoạt hằng ngày</option><option value="1">At a café · Ở quán cà phê</option><option value="2">Work and plans · Công việc và kế hoạch</option></select><label class="small" for="shadowRate">Tốc độ</label><select id="shadowRate" style="max-width:140px"><option value="0.75">Chậm · 0.75×</option><option value="0.9" selected>Bình thường · 0.9×</option><option value="1">Tự nhiên · 1×</option></select></div>
+<div class="badge" id="shadowLevel">A1 · Câu 1/6</div><div class="shadow-sentence" id="shadowSentence" aria-live="polite">I usually get up at seven.</div>
+<p class="muted" id="shadowMeaning">Tôi thường thức dậy lúc bảy giờ.</p>
+<div class="shadow-actions"><button class="btn" onclick="egShadowSpeak()">🔊 Nghe mẫu · Listen</button><button class="btn soft" onclick="egShadowSpeakSlow()">🐢 Nghe chậm · Slow</button><button class="btn line" onclick="egShadowNext()">Câu tiếp theo →</button></div>
+<div class="controls"><button class="btn line" onclick="egShadowPrev()">← Câu trước</button><button class="btn line" onclick="egShadowToggleTip()">💡 Mẹo luyện tập</button><button class="btn line" onclick="egShadowStop()">■ Dừng audio</button></div>
+<div id="shadowTip" class="feedback" hidden>Nghe hết câu trước, chú ý nối âm và trọng âm; sau đó nhại lại 2–3 lần, cố gắng bắt chước nhịp điệu thay vì đọc từng từ rời rạc.</div>
+<div class="bar"><span id="shadowProgress" style="width:0%"></span></div><p class="small muted" id="shadowCount">Đã luyện 0/18 câu trong bộ bài này.</p>
+</div>
+<div class="panel" style="margin-top:14px"><h2>Cách học hiệu quả · How to practise</h2><ol><li>Nghe mẫu một lần để hiểu nội dung.</li><li>Nghe lại và nhại theo ngay khi người nói phát âm.</li><li>Lặp lại 2–3 lần, bắt chước trọng âm, nối âm và ngữ điệu.</li><li>Thử nói lại mà không nhìn câu tiếng Anh.</li></ol><p class="small muted">Audio dùng giọng đọc tiếng Anh có sẵn trên thiết bị/trình duyệt. Nếu chưa nghe được, hãy thử Chrome hoặc Edge.</p></div>
+</section>
 
 <section class="page" id="realconversation">
 <h1 class="title">Real-Life English · Giao tiếp thực tế</h1>
@@ -3659,4 +3675,22 @@ document.addEventListener("DOMContentLoaded",()=>{egContextRender();egListeningP
 </script>
 
 
+
+<script id="englishgo-shadowing-practice">
+const egShadowLessons=[
+{level:"A1",items:[["I usually get up at seven.","Tôi thường thức dậy lúc bảy giờ."],["I make a cup of tea before work.","Tôi pha một tách trà trước khi đi làm."],["I take the bus to the city centre.","Tôi đi xe buýt đến trung tâm thành phố."],["I have lunch with my colleagues.","Tôi ăn trưa cùng đồng nghiệp."],["I finish work at half past five.","Tôi tan làm lúc năm giờ rưỡi."],["I like to read for a few minutes before bed.","Tôi thích đọc sách vài phút trước khi đi ngủ."]]},
+{level:"A1–A2",items:[["Could I have a cappuccino, please?","Cho tôi một ly cappuccino được không?"],["Can I get that with oat milk?","Tôi có thể gọi món đó với sữa yến mạch không?"],["Would you like anything else?","Bạn có muốn dùng thêm gì không?"],["That's everything, thank you.","Vậy là đủ rồi, cảm ơn."],["Could I pay by card?","Tôi có thể thanh toán bằng thẻ không?"],["Have a lovely day!","Chúc bạn một ngày vui vẻ!"]]},
+{level:"A2–B1",items:[["I'm working on a new project this week.","Tuần này tôi đang làm một dự án mới."],["We need to finish the report by Friday.","Chúng ta cần hoàn thành báo cáo trước thứ Sáu."],["Could we move the meeting to tomorrow morning?","Chúng ta có thể chuyển cuộc họp sang sáng mai không?"],["I'll send you the updated version this afternoon.","Tôi sẽ gửi bạn bản cập nhật vào chiều nay."],["Let me know if you have any questions.","Hãy cho tôi biết nếu bạn có câu hỏi."],["Thanks for your help. I really appreciate it.","Cảm ơn bạn đã giúp đỡ. Tôi thực sự trân trọng điều đó."]]}
+];
+let egShadowIndex=0;
+function egShadowCurrent(){return egShadowLessons[Number(document.getElementById("shadowLesson")?.value||0)]}
+function egShadowLoad(){egShadowIndex=0;egShadowStop();egShadowRender()}
+function egShadowRender(){const d=egShadowCurrent();if(!d)return;const item=d.items[egShadowIndex];document.getElementById("shadowLevel").textContent=d.level+" · Câu "+(egShadowIndex+1)+"/"+d.items.length;document.getElementById("shadowSentence").textContent=item[0];document.getElementById("shadowMeaning").textContent=item[1];document.getElementById("shadowProgress").style.width=((egShadowIndex+1)/d.items.length*100)+"%";document.getElementById("shadowCount").textContent="Câu "+(egShadowIndex+1)+"/"+d.items.length+" · Hãy nhại lại câu này 2–3 lần."}
+function egShadowSpeak(rate){if(!("speechSynthesis"in window)||!("SpeechSynthesisUtterance"in window)){alert("Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(egShadowCurrent().items[egShadowIndex][0]);u.lang="en-US";u.rate=rate||Number(document.getElementById("shadowRate").value||.9);u.pitch=1;speechSynthesis.speak(u)}
+function egShadowSpeakSlow(){egShadowSpeak(.72)}function egShadowStop(){if("speechSynthesis"in window)speechSynthesis.cancel()}
+function egShadowNext(){egShadowStop();egShadowIndex=(egShadowIndex+1)%egShadowCurrent().items.length;egShadowRender()}
+function egShadowPrev(){egShadowStop();egShadowIndex=(egShadowIndex-1+egShadowCurrent().items.length)%egShadowCurrent().items.length;egShadowRender()}
+function egShadowToggleTip(){const e=document.getElementById("shadowTip");e.hidden=!e.hidden}
+document.addEventListener("DOMContentLoaded",egShadowRender);
+</script>
 </body></html>
