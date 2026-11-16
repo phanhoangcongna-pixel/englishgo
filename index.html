@@ -647,6 +647,17 @@ html { background: #142342; }
 <p class="muted" id="shadowMeaning">Tôi thường thức dậy lúc bảy giờ.</p><div id="shadowDialogueLines" style="display:grid;gap:8px;margin:12px 0"></div>
 <div class="shadow-actions"><button class="btn" onclick="egShadowSpeak()">🔊 Nghe mẫu · Listen</button><button class="btn soft" onclick="egShadowSpeakSlow()">🐢 Nghe chậm · Slow</button><button class="btn line" onclick="egShadowNext()">Câu tiếp theo →</button></div>
 <div class="controls"><button class="btn line" onclick="egShadowPrev()">← Câu trước</button><button class="btn line" onclick="egShadowToggleTip()">💡 Mẹo luyện tập</button><button class="btn line" onclick="egShadowStop()">■ Dừng audio</button></div>
+<div class="panel" id="shadowRecorder" style="margin:14px 0;background:#f8faff">
+<b>🎙️ Ghi âm giọng nói của bạn · Record your voice</b>
+<p class="small muted">Nhấn ghi âm, đọc lại câu tiếng Anh, rồi dừng để nghe lại và tự so sánh với giọng mẫu.</p>
+<div class="controls">
+<button class="btn" id="shadowRecordBtn" onclick="egShadowRecordStart()">🔴 Bắt đầu ghi âm</button>
+<button class="btn line" id="shadowRecordStopBtn" onclick="egShadowRecordStop()" disabled>■ Dừng ghi âm</button>
+<button class="btn soft" id="shadowPlaybackBtn" onclick="egShadowPlayRecording()" disabled>▶ Nghe bản ghi</button>
+</div>
+<p class="small muted" id="shadowRecordStatus" aria-live="polite">Chưa có bản ghi. Trình duyệt sẽ hỏi quyền dùng micro khi bạn nhấn ghi âm.</p>
+<audio id="shadowRecordingAudio" controls style="display:none;width:100%;margin-top:8px"></audio>
+</div>
 <div id="shadowTip" class="feedback" hidden>Nghe hết câu trước, chú ý nối âm và trọng âm; sau đó nhại lại 2–3 lần, cố gắng bắt chước nhịp điệu thay vì đọc từng từ rời rạc.</div>
 <div class="bar"><span id="shadowProgress" style="width:0%"></span></div><p class="small muted" id="shadowCount">Đã luyện 0/18 câu trong bộ bài này.</p>
 </div>
@@ -3713,6 +3724,42 @@ function egShadowSpeakSlow(){egShadowSpeak(.72)}function egShadowStop(){if("spee
 function egShadowNext(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn+1)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex+1)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowPrev(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn-1+egShadowCurrent().lines.length)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex-1+egShadowCurrent().items.length)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowToggleTip(){const e=document.getElementById("shadowTip");e.hidden=!e.hidden}
+let egShadowRecorder=null,egShadowStream=null,egShadowChunks=[],egShadowRecordingUrl=null;
+async function egShadowRecordStart(){
+ const status=document.getElementById("shadowRecordStatus");
+ if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==="undefined"){status.textContent="Trình duyệt này chưa hỗ trợ ghi âm. Hãy mở trang bằng Chrome hoặc Edge phiên bản mới và dùng HTTPS.";return}
+ try{
+  egShadowStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  egShadowChunks=[];
+  egShadowRecorder=new MediaRecorder(egShadowStream);
+  egShadowRecorder.ondataavailable=e=>{if(e.data&&e.data.size)egShadowChunks.push(e.data)};
+  egShadowRecorder.onstop=()=>{
+   const blob=new Blob(egShadowChunks,{type:egShadowRecorder?.mimeType||"audio/webm"});
+   if(egShadowRecordingUrl)URL.revokeObjectURL(egShadowRecordingUrl);
+   egShadowRecordingUrl=URL.createObjectURL(blob);
+   const audio=document.getElementById("shadowRecordingAudio");
+   audio.src=egShadowRecordingUrl;audio.style.display="block";
+   document.getElementById("shadowPlaybackBtn").disabled=false;
+   document.getElementById("shadowRecordStatus").textContent="Đã ghi âm xong. Nhấn “Nghe bản ghi” để nghe lại.";
+   if(egShadowStream)egShadowStream.getTracks().forEach(t=>t.stop());
+   egShadowStream=null;
+  };
+  egShadowRecorder.start();
+  document.getElementById("shadowRecordBtn").disabled=true;
+  document.getElementById("shadowRecordStopBtn").disabled=false;
+  document.getElementById("shadowPlaybackBtn").disabled=true;
+  status.textContent="Đang ghi âm… Hãy đọc câu tiếng Anh, sau đó nhấn “Dừng ghi âm”.";
+ }catch(e){status.textContent=e.name==="NotAllowedError"?"Bạn chưa cấp quyền micro. Hãy cho phép Microphone trong trình duyệt rồi thử lại.":"Không thể mở micro. Kiểm tra micro và quyền truy cập của trình duyệt."}
+}
+function egShadowRecordStop(){
+ if(egShadowRecorder&&egShadowRecorder.state!=="inactive")egShadowRecorder.stop();
+ document.getElementById("shadowRecordBtn").disabled=false;
+ document.getElementById("shadowRecordStopBtn").disabled=true;
+}
+function egShadowPlayRecording(){
+ const audio=document.getElementById("shadowRecordingAudio");
+ if(audio.src)audio.play().catch(()=>{document.getElementById("shadowRecordStatus").textContent="Không phát được bản ghi. Hãy thử nhấn phát trực tiếp trên thanh audio."});
+}
 document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 </script>
 </body></html>
