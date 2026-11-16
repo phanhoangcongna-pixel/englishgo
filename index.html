@@ -641,6 +641,11 @@ html { background: #142342; }
 <section class="page" id="shadowing">
 <h1 class="title">🎙️ Shadowing · Luyện nói nhại</h1>
 <p class="intro">Nghe một câu tiếng Anh, nhại lại ngay theo nhịp và ngữ điệu. Listen, repeat and build speaking confidence.</p>
+<div class="panel" id="shadowDialogueEntry" style="margin-bottom:14px;border:2px solid var(--blue)">
+<h2>🎭 Shadowing hội thoại · Dialogue Shadowing</h2>
+<p class="muted">Luyện các cuộc hội thoại hoàn chỉnh theo tình huống thực tế. Chọn một bài để xem toàn bộ lời thoại, nghe và luyện nói từng lượt.</p>
+<div class="controls"><button class="btn" type="button" onclick="egOpenShadowDialogues()">Mở phần Shadowing hội thoại →</button></div>
+</div>
 <div class="panel">
 <div class="controls"><label class="small" for="shadowMode">Dạng bài · Practice type</label><select id="shadowMode" onchange="egShadowModeChanged()"><option value="sentences">Câu đơn · Sentences</option><option value="dialogues">Hội thoại · Dialogues</option></select><label class="small" for="shadowLesson">Chủ đề · Topic</label><select id="shadowLesson" onchange="egShadowLoad()"></select><label class="small" for="shadowRate">Tốc độ</label><select id="shadowRate" style="max-width:140px"><option value="0.75">Chậm · 0.75×</option><option value="0.9" selected>Bình thường · 0.9×</option><option value="1">Tự nhiên · 1×</option></select></div>
 <div class="badge" id="shadowLevel">A1 · Câu 1</div><div class="shadow-sentence" id="shadowSentence" aria-live="polite">I usually get up at seven.</div>
@@ -3820,6 +3825,7 @@ const egShadowDialogueLessons=[
 {title:"Making an appointment · Đặt lịch hẹn",level:"A2–B1",lines:[["Receptionist","Good afternoon, how can I help you?","Chào buổi chiều, tôi có thể giúp gì cho bạn?"],["Caller","I'd like to make an appointment with the doctor, please.","Tôi muốn đặt lịch hẹn với bác sĩ."],["Receptionist","Certainly. Would tomorrow morning work for you?","Được ạ. Sáng mai có phù hợp với bạn không?"],["Caller","I'm afraid I'm working tomorrow. Do you have anything on Thursday?","Tiếc là ngày mai tôi phải làm việc. Thứ Năm còn lịch nào không?"],["Receptionist","We have an opening at half past two.","Chúng tôi còn lịch lúc hai giờ rưỡi."],["Caller","That would be perfect. How long should I expect to wait?","Giờ đó rất phù hợp. Tôi nên dự kiến chờ bao lâu?"],["Receptionist","The appointment usually takes about twenty minutes.","Buổi hẹn thường kéo dài khoảng hai mươi phút."],["Caller","Thank you. I'll be there a little early.","Cảm ơn. Tôi sẽ đến sớm một chút."]]}
 ];
 let egShadowIndex=0,egShadowDialogueTurn=0;
+function egOpenShadowDialogues(){const mode=document.getElementById("shadowMode");if(!mode)return;mode.value="dialogues";egShadowModeChanged();document.getElementById("shadowMode").scrollIntoView({behavior:"smooth",block:"center"});}
 function egShadowMode(){return document.getElementById("shadowMode")?.value||"sentences"}
 function egShadowData(){return egShadowMode()==="dialogues"?egShadowDialogueLessons:egShadowSentenceLessons}
 function egShadowPopulate(){const sel=document.getElementById("shadowLesson");if(!sel)return;sel.innerHTML=egShadowData().map((d,i)=>'<option value="'+i+'">'+d.title+'</option>').join("");egShadowIndex=0;egShadowDialogueTurn=0;egShadowRender()}
