@@ -651,8 +651,7 @@ html { background: #142342; }
 <b>🎙️ Ghi âm giọng nói của bạn · Record your voice</b>
 <p class="small muted">Nhấn ghi âm, đọc lại câu tiếng Anh, rồi dừng để nghe lại và tự so sánh với giọng mẫu.</p>
 <div class="controls">
-<button class="btn" id="shadowRecordBtn" onclick="egShadowRecordStart()">🔴 Bắt đầu ghi âm</button>
-<button class="btn line" id="shadowRecordStopBtn" onclick="egShadowRecordStop()" disabled>■ Dừng ghi âm</button>
+<button class="btn" id="shadowRecordBtn" onclick="egShadowRecordToggle()">🔴 Bắt đầu ghi âm</button>
 <button class="btn soft" id="shadowPlaybackBtn" onclick="egShadowPlayRecording()" disabled>▶ Nghe bản ghi</button>
 </div>
 <p class="small muted" id="shadowRecordStatus" aria-live="polite">Chưa có bản ghi. Trình duyệt sẽ hỏi quyền dùng micro khi bạn nhấn ghi âm.</p>
@@ -3725,6 +3724,10 @@ function egShadowNext(){egShadowStop();if(egShadowMode()==="dialogues")egShadowD
 function egShadowPrev(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn-1+egShadowCurrent().lines.length)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex-1+egShadowCurrent().items.length)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowToggleTip(){const e=document.getElementById("shadowTip");e.hidden=!e.hidden}
 let egShadowRecorder=null,egShadowStream=null,egShadowChunks=[],egShadowRecordingUrl=null;
+function egShadowRecordToggle(){
+ if(egShadowRecorder&&egShadowRecorder.state==="recording"){egShadowRecordStop();return}
+ egShadowRecordStart();
+}
 async function egShadowRecordStart(){
  const status=document.getElementById("shadowRecordStatus");
  if(!navigator.mediaDevices?.getUserMedia||typeof MediaRecorder==="undefined"){status.textContent="Trình duyệt này chưa hỗ trợ ghi âm. Hãy mở trang bằng Chrome hoặc Edge phiên bản mới và dùng HTTPS.";return}
@@ -3745,16 +3748,21 @@ async function egShadowRecordStart(){
    egShadowStream=null;
   };
   egShadowRecorder.start();
-  document.getElementById("shadowRecordBtn").disabled=true;
-  document.getElementById("shadowRecordStopBtn").disabled=false;
+  const recordBtn=document.getElementById("shadowRecordBtn");
+  recordBtn.textContent="■ Dừng ghi âm";
+  recordBtn.classList.remove("btn");recordBtn.classList.add("btn","line");
   document.getElementById("shadowPlaybackBtn").disabled=true;
-  status.textContent="Đang ghi âm… Hãy đọc câu tiếng Anh, sau đó nhấn “Dừng ghi âm”.";
- }catch(e){status.textContent=e.name==="NotAllowedError"?"Bạn chưa cấp quyền micro. Hãy cho phép Microphone trong trình duyệt rồi thử lại.":"Không thể mở micro. Kiểm tra micro và quyền truy cập của trình duyệt."}
+  status.textContent="Đang ghi âm… Hãy đọc câu tiếng Anh, sau đó nhấn nút “Dừng ghi âm”.";
+ }catch(e){
+  const recordBtn=document.getElementById("shadowRecordBtn");
+  recordBtn.textContent="🔴 Bắt đầu ghi âm";recordBtn.classList.remove("btn","line");recordBtn.classList.add("btn");
+  status.textContent=e.name==="NotAllowedError"?"Bạn chưa cấp quyền micro. Hãy cho phép Microphone trong trình duyệt rồi thử lại.":"Không thể mở micro. Kiểm tra micro và quyền truy cập của trình duyệt.";
+ }
 }
 function egShadowRecordStop(){
  if(egShadowRecorder&&egShadowRecorder.state!=="inactive")egShadowRecorder.stop();
- document.getElementById("shadowRecordBtn").disabled=false;
- document.getElementById("shadowRecordStopBtn").disabled=true;
+ const recordBtn=document.getElementById("shadowRecordBtn");
+ recordBtn.textContent="🔴 Bắt đầu ghi âm";recordBtn.classList.remove("btn","line");recordBtn.classList.add("btn");
 }
 function egShadowPlayRecording(){
  const audio=document.getElementById("shadowRecordingAudio");
