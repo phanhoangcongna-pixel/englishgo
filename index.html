@@ -483,7 +483,7 @@ html { background: #142342; }
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button><button data-page="stories">📖 Short Stories </button><button data-page="context">🌱 English in Context </button>
 </div></details>
 <details class="nav-group"><summary>🎧 Listen & Speak <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="shadowing">🎧 Shadowing </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
+<button data-page="realconversation">💬 Real-life Conversation </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="translation">🔁 Translation Reflex </button>
@@ -837,37 +837,7 @@ html { background: #142342; }
 
 
 <section class="page" id="shadowing">
- <div class="page-header"><div><p class="eyebrow">LISTEN · COPY · SPEAK NATURALLY</p><h1>🗣️ Shadowing Practice · Luyện nói đuổi</h1><p>Toàn bộ bài luyện được hiển thị ngay bên dưới. Chọn bài muốn học để mở thẳng nội dung, không cần chọn mục trung gian.</p></div></div>
- <div class="card" style="margin:14px 0">
-  <h2>Cách luyện hiệu quả · 10–15 phút mỗi ngày</h2>
-  <ol style="line-height:1.8;padding-left:22px">
-   <li><b>Nghe trước:</b> Nghe toàn bài một lần, chưa nhìn transcript để làm quen âm thanh và ý chính.</li>
-   <li><b>Hiểu nội dung:</b> Mở transcript, hiểu nghĩa từng câu và chú ý cụm từ được nhấn.</li>
-   <li><b>Shadow từng câu:</b> Phát một câu rồi nói đuổi theo gần như đồng thời. Bắt chước nhịp, nối âm và cảm xúc.</li>
-   <li><b>Lặp lại:</b> Mỗi câu 2–3 lần; sau đó nói lại cả bài mà không nhìn chữ.</li>
-   <li><b>Tự kiểm tra:</b> Ghi âm bằng thiết bị nếu muốn, nghe lại và chú ý độ rõ, nhịp điệu, sự trôi chảy.</li>
-  </ol>
-  <p class="small muted">Đừng cố nói nhanh ngay. Ưu tiên phát âm rõ và đúng nhịp trước, sau đó mới tăng tốc.</p>
- </div>
- <div id="shadowLessonList" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:18px 0"></div>
- <div id="shadowWorkspace" style="display:none">
-  <div class="controls"><button class="btn line" type="button" onclick="shadowBackToModes()">← Danh sách bài tập</button><span id="shadowModeTitle"></span></div>
-  <div class="card">
-   <div class="controls"><label for="shadowVoice">Giọng đọc</label><select id="shadowVoice" aria-label="Chọn giọng đọc tiếng Anh"></select><label for="shadowSpeed">Tốc độ</label><select id="shadowSpeed"><option value="0.78">Rất chậm</option><option value="0.88">Chậm</option><option value="0.98" selected>Tự nhiên</option><option value="1.05">Nhanh</option></select></div>
-   <div class="controls"><button class="btn primary" type="button" onclick="shadowPlayAll()">▶ Nghe toàn bài</button><button class="btn line" id="shadowStopBtn" type="button" onclick="shadowStop()" style="display:none">■ Dừng</button><button class="btn soft" id="shadowTranscriptBtn" type="button" onclick="shadowToggleTranscript()">Hiện transcript</button></div>
-   <p id="shadowGoal" class="small muted"></p>
-   <div id="shadowTranscript" style="display:none"></div>
-   <div id="shadowProgress" style="margin:14px 0"></div>
-   <div id="shadowChunks"></div>
-   <div id="shadowFeedback" aria-live="polite"></div>
-  </div>
-  <div class="card" style="margin-top:14px"><h2>Self-check · Tự đánh giá</h2><p class="small muted">Đánh dấu sau khi hoàn thành bài luyện. Hãy thành thật với bản thân, không cần đạt hoàn hảo ngay.</p><div id="shadowChecklist"></div></div>
- </div>
-</section>
-
-
-<section class="page" id="dictation">
- <div class="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
+ <div class="p="page-header"><div><p class="eyebrow">LISTEN AND TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, nhập lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
  <div class="card"><div class="row"><label for="dictLevel">Cấp độ</label><select id="dictLevel" onchange="dictNew()"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option></select></div><div class="row"><button class="btn primary" onclick="dictSpeak(0.82)">🔊 Nghe chậm</button><button class="btn" onclick="dictSpeak(1)">▶ Nghe bình thường</button><button class="btn line" onclick="dictNew()">Câu mới →</button></div><textarea id="dictAnswer" rows="3" placeholder="Type what you hear... · Nhập câu bạn nghe được"></textarea><button class="btn primary" onclick="dictCheck()">Kiểm tra</button><div id="dictFeedback" aria-live="polite"></div></div>
 </section>
 <section class="page" id="stories">
