@@ -1109,7 +1109,7 @@ html { background: #142342; }
   <p class="small muted" style="margin-top:12px">Lưu ý: đọc đoạn hội thoại không thay thế nghe audio. Hãy bật đọc thành tiếng/Voice hoặc dùng audio thật; lượt nghe đầu tiên nên không nhìn transcript.</p>
  </div>
  <div class="section"><div><h2>📖 Nhật ký bài học</h2><p>Đánh dấu bài đã hoàn thành. Tiến độ được lưu trên trình duyệt này.</p></div></div>
- <div class="panel"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px"><label for="egJourneyFilter"><b>Lọc:</b></label><select id="egJourneyFilter" style="max-width:230px"><option value="all">Tất cả bài học</option><option value="done">Đã hoàn thành</option><option value="todo">Chưa hoàn thành</option></select><span class="small muted" id="egJourneyCount"></span></div><div id="egJourneyLessons"></div></div>
+ <div class="panel"><div class="small muted" id="egJourneyCount" style="margin-bottom:12px"></div><div id="egJourneyLessons"></div></div>
  <div class="section"><div><h2>🎯 Mục tiêu sau 6 tháng</h2><p>Đích đến thực tế, đánh giá qua cả nghe và nói.</p></div></div>
  <div class="two-col"><div class="card"><h3>Con có thể làm được</h3><ul class="small"><li>Giới thiệu bản thân, gia đình và công việc tự nhiên hơn.</li><li>Giao tiếp với khách tại tiệm nail: hỏi nhu cầu, tư vấn màu/kiểu/dáng móng.</li><li>Gọi món, mua sắm, đặt phòng và trò chuyện khi đi du lịch.</li><li>Nghe ý chính của hội thoại quen thuộc và biết nhờ người khác nói chậm/lặp lại.</li><li>Nói về trải nghiệm, kế hoạch, cảm xúc và sở thích bằng nhiều câu nối ý.</li></ul></div><div class="card"><h3>Nguyên tắc học</h3><ul class="small"><li>Học đều mỗi ngày, không cần hoàn hảo.</li><li>Ưu tiên câu dùng được ngoài đời thay vì chỉ học thuộc quy tắc.</li><li>Ghi âm câu trả lời để tự nghe lại phát âm.</li><li>Ôn lỗi cũ trước khi tăng độ khó.</li><li>Đánh giá tiến bộ qua nghe và nói, không chỉ bài viết.</li></ul></div></div>
  <div class="controls"><button class="btn" type="button" onclick="egJourneyGoNext()">▶ Tiếp tục bài tiếp theo</button><button class="btn line" type="button" onclick="egJourneyExport()">⬇ Tải tiến độ học</button><button class="btn line" type="button" onclick="egJourneyReset()">Đặt lại dấu hoàn thành</button></div><p class="small muted" id="egJourneyStatus" aria-live="polite">Tiến độ được lưu cục bộ trên trình duyệt này.</p>
@@ -4837,32 +4837,64 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
  ["Making Friends & Small Talk","Bắt chuyện, hỏi sở thích, duy trì hội thoại."],
  ["Travel & Booking a Hotel","Present Perfect: have been; đặt phòng và hỏi giờ check-out."],
  ["Review 2 · Days 8–13","Ôn quá khứ, tương lai, cảm xúc và tình huống du lịch."],
- ["Everyday Conversations","Small talk; nhờ nhắc lại/nói chậm; phản xạ hội thoại và shadowing."]
- ];
- const extra=[
+ ["Everyday Conversations","Small talk; nhờ nhắc lại/nói chậm; phản xạ hội thoại và shadowing."],
  ["Talking About Your Hometown","Miêu tả nơi sống, quê hương, con người và văn hoá."],
  ["Giving Directions & Getting Around","Hỏi đường, phương tiện công cộng, chỉ đường."],
  ["At a Restaurant · Real Conversations","Gọi món, hỏi nguyên liệu, yêu cầu và thanh toán."],
  ["At the Nail Salon · Customer Role-play","Đóng vai khách–thợ nail với yêu cầu thực tế."],
  ["Pronunciation Clinic 1","Âm cuối, /θ/, /ð/, /r/, trọng âm từ và câu."]
  ];
- const key="eg-personal-english-journey-v1";
- const read=()=>{try{return JSON.parse(localStorage.getItem(key)||"{}")}catch(e){return {}}};
+ const key="eg-personal-english-journey-v2";
+ const legacyKey="eg-personal-english-journey-v1";
+ const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+ const read=()=>{try{return JSON.parse(localStorage.getItem(key)||'{"completedAt":{}}')}catch(e){return {completedAt:{}}}};
  const write=d=>{try{localStorage.setItem(key,JSON.stringify(d));return true}catch(e){return false}};
- const all=()=>lessons.map((x,i)=>({day:i+1,title:x[0],desc:x[1]})).concat(extra.map((x,i)=>({day:i+16,title:x[0],desc:x[1]})));
+ function current(data){
+  for(let i=1;i<=lessons.length;i++){
+   const done=data.completedAt&&data.completedAt[i];
+   if(!done)return {day:i,locked:false,done:false};
+   if(done>=today())return {day:i,locked:true,done:true};
+  }
+  return {day:lessons.length,locked:true,done:true,finished:true};
+ }
  function render(){
   const host=document.getElementById("egJourneyLessons");if(!host)return;
-  const data=read(),filter=document.getElementById("egJourneyFilter")?.value||"all";
-  const list=all().filter(x=>filter==="all"||(filter==="done"?!!data[x.day]:!data[x.day]));
-  host.innerHTML=list.map(x=>'<div class="row" style="align-items:flex-start;gap:12px"><div style="flex:1;min-width:0"><div><b>Day '+x.day+' · '+x.title+'</b> '+(data[x.day]?'<span class="badge">✓ Hoàn thành</span>':'<span class="tag">Chưa hoàn thành</span>')+'</div><div class="small muted">'+x.desc+'</div></div><label style="display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:13px"><input type="checkbox" data-eg-day="'+x.day+'" '+(data[x.day]?'checked':'')+'> Xong</label></div>').join("")||'<p class="muted">Không có bài học trong bộ lọc này.</p>';
-  const done=Object.keys(data).filter(k=>data[k]&&Number(k)>=1&&Number(k)<=180).length,pct=Math.round(done/180*100);
-  document.getElementById("egJourneyDone").textContent=done;document.getElementById("egJourneyPercent").textContent=pct+"%";document.getElementById("egJourneyBar").style.width=pct+"%";document.getElementById("egJourneyCount").textContent=done+" / 180 ngày đã hoàn thành";
-  host.querySelectorAll("[data-eg-day]").forEach(box=>box.addEventListener("change",()=>{const d=read();if(box.checked)d[box.dataset.egDay]=true;else delete d[box.dataset.egDay];const ok=write(d);document.getElementById("egJourneyStatus").textContent=ok?"Đã lưu tiến độ trên thiết bị này.":"Không thể lưu trong trình duyệt.";render()}));
+  const data=read(),cur=current(data),lesson=lessons[cur.day-1];
+  const completed=Object.keys(data.completedAt||{}).filter(k=>Number(k)>=1&&Number(k)<=lessons.length).length;
+  const pct=Math.round(completed/180*100);
+  document.getElementById("egJourneyDone").textContent=completed;
+  document.getElementById("egJourneyPercent").textContent=pct+"%";
+  document.getElementById("egJourneyBar").style.width=pct+"%";
+  document.getElementById("egJourneyCount").textContent="Đã hoàn thành "+completed+" ngày · Chỉ mở một bài mỗi ngày";
+  if(cur.finished){
+   host.innerHTML='<div class="card"><span class="badge">🎉 HOÀN THÀNH</span><h3>Bạn đã hoàn thành các bài học hiện có!</h3><p class="muted">Các bài tiếp theo sẽ được bổ sung vào lộ trình.</p></div>';
+   return;
+  }
+  host.innerHTML='<div class="card" style="border:2px solid #b7c9ff"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag">BÀI HỌC HÔM NAY</span><span class="small muted">Day '+cur.day+' / 180</span></div><h2 style="margin:12px 0 6px">Day '+cur.day+' · '+lesson[0]+'</h2><p class="muted">'+lesson[1]+'</p>'+(cur.done?'<div class="feedback good">✓ Hôm nay bạn đã hoàn thành bài này. Bài tiếp theo sẽ mở vào ngày mai.</div>':'<p class="small muted">Học xong bài hôm nay rồi nhấn nút bên dưới. Ngày mai bài tiếp theo mới được mở.</p><button class="btn" id="egJourneyCompleteToday" type="button">✓ Hoàn thành bài hôm nay</button>')+'</div>';
+  const btn=document.getElementById("egJourneyCompleteToday");
+  if(btn)btn.addEventListener("click",()=>{
+   const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();
+   const ok=write(d);
+   document.getElementById("egJourneyStatus").textContent=ok?"Đã ghi nhận Day "+cur.day+". Day tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";
+   render();
+  });
  }
- window.egJourneyGoNext=function(){const d=read(),next=all().find(x=>!d[x.day]);document.getElementById("egJourneyFilter").value="all";document.getElementById("egJourneyStatus").textContent=next?"Bài tiếp theo: Day "+next.day+" · "+next.title+". Học trong các mục tương ứng của EnglishGo rồi quay lại đánh dấu hoàn thành.":"Bạn đã đánh dấu toàn bộ 180 ngày!";render();document.getElementById("egJourneyLessons").scrollIntoView({behavior:"smooth",block:"start"})};
- window.egJourneyExport=function(){const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),completedDays:read()},null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="englishgo-learning-progress.json";a.click();URL.revokeObjectURL(url)};
- window.egJourneyReset=function(){if(!confirm("Xoá tất cả dấu hoàn thành của lộ trình này trên thiết bị?"))return;localStorage.removeItem(key);render();document.getElementById("egJourneyStatus").textContent="Đã đặt lại dấu hoàn thành."};
- document.addEventListener("DOMContentLoaded",()=>{document.getElementById("egJourneyFilter")?.addEventListener("change",render);render()});
+ window.egJourneyGoNext=function(){
+  const d=read(),cur=current(d);
+  const msg=cur.done?"Bài hôm nay đã xong. Bài tiếp theo sẽ mở vào ngày mai.":"Hôm nay hãy học Day "+cur.day+" · "+lessons[cur.day-1][0]+". Hoàn thành xong, ngày mai mới mở bài kế tiếp.";
+  document.getElementById("egJourneyStatus").textContent=msg;
+  document.getElementById("egJourneyLessons").scrollIntoView({behavior:"smooth",block:"start"});
+ };
+ window.egJourneyExport=function(){
+  const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),completedAt:read().completedAt||{}},null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="englishgo-learning-progress.json";a.click();URL.revokeObjectURL(url);
+ };
+ window.egJourneyReset=function(){
+  if(!confirm("Xoá tất cả dấu hoàn thành của lộ trình này trên thiết bị?"))return;
+  localStorage.removeItem(key);localStorage.removeItem(legacyKey);render();
+  document.getElementById("egJourneyStatus").textContent="Đã đặt lại lộ trình về Day 1.";
+ };
+ document.addEventListener("DOMContentLoaded",render);
 })();
 </script>
 
