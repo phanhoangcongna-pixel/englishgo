@@ -1972,8 +1972,22 @@ function normalizeTranslation(x){
   "thirty":"30","forty":"40","fifty":"50","sixty":"60","seventy":"70",
   "eighty":"80","ninety":"90"
  };
+ const spellingVariants={
+  // Accept common British and American spellings as equivalent.
+  "colour":"color","favourite":"favorite","honour":"honor","honourable":"honorable",
+  "humour":"humor","neighbour":"neighbor","neighbourhood":"neighborhood",
+  "behaviour":"behavior","labour":"labor","centre":"center","theatre":"theater",
+  "metre":"meter","litre":"liter","kilometre":"kilometer",
+  "organise":"organize","organises":"organizes","organised":"organized","organising":"organizing",
+  "realise":"realize","realises":"realizes","realised":"realized","realising":"realizing",
+  "recognise":"recognize","recognises":"recognizes","recognised":"recognized","recognising":"recognizing",
+  "apologise":"apologize","apologises":"apologizes","apologised":"apologized","apologising":"apologizing",
+  "travelling":"traveling","travelled":"traveled","traveller":"traveler",
+  "cancelled":"canceled","cancelling":"canceling","counsellor":"counselor",
+  "grey":"gray","mould":"mold"
+ };
  return value.replace(/\p{P}+/gu," ").replace(/\s+/gu," ").trim()
-  .split(" ").map(token=>numberWords[token]||token).join(" ");
+  .split(" ").map(token=>spellingVariants[token]||numberWords[token]||token).join(" ");
 }
 function translationAnswersMatch(answer,expected,dir){
  const a=normalizeTranslation(answer),e=normalizeTranslation(expected);
