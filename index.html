@@ -4676,7 +4676,7 @@ function render(){
  let passage=esc(l.passage);
  const highlightTerms=l.words.map(w=>w[0]).filter(Boolean).sort((a,b)=>b.length-a.length);
  if(highlightTerms.length){
-  const escapeRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\  const escapeRe=s=>s.replace(/[-/\\^$*+?.()|[\]{}]/g,"\\$&").replace(/\s+/g,"\\s+");").replace(/\s+/g,"\\s+");
+    const escapeRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,ch=>"\\"+ch).replace(/\s+/g,"\\s+");
   const pattern=highlightTerms.map(escapeRe).join("|");
   const re=new RegExp("(^|[^A-Za-z0-9])("+pattern+")(?=$|[^A-Za-z0-9])","gi");
   passage=passage.replace(re,(_,prefix,match)=>prefix+"<mark class=\"eg100-highlight\">"+match+"</mark>");
