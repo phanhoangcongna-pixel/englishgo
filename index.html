@@ -4614,12 +4614,13 @@ function render(){
  $("eg100Count").textContent=p+"/100 ngày";
  $("eg100Bar").style.width=p+"%";
  $("eg100Status").textContent=p>=100?"🎉 Bạn đã hoàn thành thử thách 100 ngày!": "Đã ghi nhận "+p+" ngày học khác nhau. Ngày học tiếp theo: "+Math.min(100,p+1)+".";
- $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+w.w+'</b><div class="small muted">'+(w.ipa||"")+' · '+(w.pos||"")+'</div><div>'+w.vi+'</div><button class="btn line" style="margin-top:7px" onclick="say('+JSON.stringify(w.w).replace(/</g,"\\u003c")+')">🔊 Nghe</button></div>').join("")||"<p>Chưa có dữ liệu từ.</p>";
- $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+x.en+'</b><div class="small muted">'+x.vi+'</div><button class="btn line" style="margin-top:7px" onclick="say('+JSON.stringify(x.en)+')">🔊 Nghe</button></div>').join("");
+ $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+w.w+'</b><div class="small muted">'+(w.ipa||"")+' · '+(w.pos||"")+'</div><div>'+w.vi+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="' + esc(w.w) + '">🔊 Nghe</button></div>').join("")||"<p>Chưa có dữ liệu từ.</p>";
+ $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+x.en+'</b><div class="small muted">'+x.vi+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="' + esc(x.en) + '">🔊 Nghe</button></div>').join("");
  $("eg100Passage").textContent=l.para;
  $("eg100Prev").disabled=d===1;$("eg100Next").disabled=d===100;
  $("eg100HomeProgress").textContent=p+"/100 ngày đã học"+(p>=100?" · Hoàn thành!":"");
 }
+document.addEventListener("click",e=>{const b=e.target.closest("[data-eg100-audio]");if(b&&typeof say==="function")say(b.getAttribute("data-eg100-audio"))});
 window.eg100Enter=function(){
  const t=today();if(!dates.includes(t)&&progress()<100)dates.push(t);
  selected=Math.min(100,Math.max(1,progress()));save();render();if(typeof go==="function")go("daily100");
