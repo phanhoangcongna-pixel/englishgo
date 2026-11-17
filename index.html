@@ -556,8 +556,8 @@ html { background: #142342; }
 .home-welcome{border-radius:24px;padding:30px;color:#fff;background:linear-gradient(120deg,#102b4c 0%,#1c4773 58%,#477bd0 100%);display:grid;grid-template-columns:1.35fr .75fr;gap:22px;align-items:center;box-shadow:0 14px 35px #14234220}
 .home-welcome .eyebrow{color:#c9ddff;font-weight:800;letter-spacing:1.3px;font-size:11px;text-transform:uppercase}
 .home-welcome h1{font-size:clamp(30px,4vw,43px);line-height:1.12;margin:10px 0}
-.home-welcome{grid-template-columns:1fr}.home-welcome h1{font-size:clamp(19px,2.35vw,30px);white-space:nowrap;letter-spacing:-.35px}
-@media(max-width:760px){.home-welcome h1{white-space:normal;font-size:clamp(22px,5vw,30px)}}
+.home-welcome{grid-template-columns:1fr}.home-welcome h1.home-greeting{font-size:clamp(22px,3vw,34px);line-height:1.25;white-space:normal;letter-spacing:0}
+@media(max-width:760px){.home-welcome h1.home-greeting{font-size:clamp(20px,5.2vw,28px);line-height:1.3;white-space:normal}}
 .home-welcome p{color:#e2edff;max-width:600px;margin:0 0 18px}
 .home-welcome .btn{background:#fff;color:#173b67}
 .home-xp{border:1px solid #ffffff35;background:#ffffff14;border-radius:18px;padding:19px}
@@ -590,7 +590,7 @@ html { background: #142342; }
 <div class="home-welcome">
 <div>
 <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
-<h1>Hello! 👋 What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
+<h1 class="home-greeting">Hello! 👋<br/>What would you like to learn today ?<br/>Hôm nay bạn muốn học gì ?</h1>
 <p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
 
 </div>
