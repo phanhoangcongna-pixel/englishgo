@@ -609,7 +609,7 @@ html { background: #142342; }
 
 
 <button class="home-tool" onclick="go('writing')"><div class="ico">✍️</div><h3>Writing · Luyện viết</h3><p>Write sentences, paragraphs and emails · Viết câu, đoạn văn và email</p></button>
-<button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p id="translationHomeStats">Đang cập nhật số bài học…</p></button>
+<button class="home-tool" onclick="go('translation')"><div class="ico">🔁</div><h3>Translation Reflex · Dịch phản xạ</h3><p>Luyện dịch phản xạ theo trình độ, chủ đề và các bộ câu giao tiếp · Practise English translation by level and topic</p></button>
 <button class="home-tool" onclick="go('shadowing')"><div class="ico">🎙️</div><h3>Shadowing · Luyện nói nhại</h3><p>Listen, repeat and practise natural rhythm · Nghe, nhại lại và luyện ngữ điệu</p></button>
 <button class="home-tool" onclick="go('dictation')"><div class="ico">✍️</div><h3>Dictation · Nghe và chép chính tả</h3><p>Listen and type sentences or phrases · Nghe và chép câu hoặc cụm từ</p></button>
 
@@ -4608,21 +4608,5 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 })();
 </script>
 
-<script id="englishgo-translation-home-live-count">
-(function(){
- function updateTranslationHomeStats(){
-  const el=document.getElementById("translationHomeStats");
-  if(!el)return;
-  const base=typeof translationDeck!=="undefined"&&Array.isArray(translationDeck)?translationDeck.length:0;
-  const topics=typeof topicTranslationDeck!=="undefined"&&Array.isArray(topicTranslationDeck)?topicTranslationDeck.length:0;
-  const packs=typeof thousandTranslationTopics!=="undefined"&&Array.isArray(thousandTranslationTopics)?thousandTranslationTopics:[];
-  const thousand=packs.reduce((sum,topic)=>sum+(Array.isArray(topic.items)?topic.items.length:0),0);
-  const topicCount=typeof topicTranslationDeck!=="undefined"&&Array.isArray(topicTranslationDeck)?new Set(topicTranslationDeck.map(x=>x.topic)).size:0;
-  const total=base+topics+thousand;
-  el.textContent=base.toLocaleString("vi-VN")+" câu phản xạ · "+topicCount+" chủ đề ("+topics.toLocaleString("vi-VN")+" câu) · "+packs.length+" chủ đề giao tiếp ("+thousand.toLocaleString("vi-VN")+" câu) · Tổng "+total.toLocaleString("vi-VN")+" câu";
- }
- if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",updateTranslationHomeStats,{once:true});else updateTranslationHomeStats();
- setTimeout(updateTranslationHomeStats,500);
-})();
-</script>
+
 </body></html>
