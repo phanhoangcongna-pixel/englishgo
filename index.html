@@ -814,11 +814,13 @@ html { background: #142342; }
 <h3 id="topicPrompt" style="font-size:22px;line-height:1.5;margin:16px 0">Chọn chủ đề để bắt đầu.</h3>
 <textarea id="topicAnswer" placeholder="Nhập bản dịch của bạn..." rows="3"></textarea>
 <div class="controls">
+<button class="btn line" type="button" id="topicHintToggle" onclick="toggleTopicHints()">💡 Gợi ý từ</button>
 <button class="btn" onclick="checkTopicTranslation()">Check · Kiểm tra</button>
 <button class="btn line" onclick="revealTopicTranslation()">Show answer · Xem đáp án</button>
 <button class="btn soft" onclick="speakTopicTranslation()">🔊 Nghe tiếng Anh</button>
 <button class="btn" onclick="nextTopicTranslation()">Câu tiếp theo →</button>
 </div>
+<div id="topicHints" class="panel" style="display:none;margin-top:10px;background:var(--soft);border:1px solid var(--line)" aria-live="polite"></div>
 <div id="topicFeedback"></div>
 <p class="small muted" id="topicProgress">Chủ đề gồm 25 câu.</p>
 </div>
@@ -2250,8 +2252,24 @@ function renderTopicTranslation(){
  document.getElementById("topicPrompt").textContent=dir==="vi-en"?item.vi:item.en;
  document.getElementById("topicAnswer").value="";
  document.getElementById("topicFeedback").innerHTML="";
+ const hintBox=document.getElementById("topicHints");
+ if(hintBox){hintBox.style.display="none";hintBox.innerHTML="";}
+ const hintButton=document.getElementById("topicHintToggle");
+ if(hintButton){hintButton.textContent="💡 Gợi ý từ";hintButton.setAttribute("aria-expanded","false");}
  document.getElementById("topicCounter").textContent="Câu "+(topicIndex+1)+"/25";
  document.getElementById("topicProgress").textContent="Chủ đề gồm 25 câu · Đã xem "+(topicIndex+1)+"/25 câu.";
+}
+function toggleTopicHints(){
+ if(!topicPool.length)return;
+ const box=document.getElementById("topicHints"),button=document.getElementById("topicHintToggle");
+ if(!box||!button)return;
+ if(box.style.display!=="none"&&box.style.display!==""){
+  box.style.display="none";button.textContent="💡 Gợi ý từ";button.setAttribute("aria-expanded","false");return;
+ }
+ const item=topicPool[topicIndex],dir=document.getElementById("topicDirection").value;
+ const hints=buildThousandHints(item,dir);
+ box.innerHTML='<b>💡 Từ khóa gợi ý</b><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px">'+hints.map(h=>'<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px"><b>'+escapeThousandHTML(h.word)+'</b>'+(h.ipa?'<div style="color:var(--primary);font-weight:600;margin-top:4px">'+escapeThousandHTML(h.ipa)+'</div>':'')+'<div class="small muted" style="margin-top:3px">'+escapeThousandHTML(h.meaning)+'</div></div>').join("")+'</div><p class="small muted" style="margin:8px 0 0">Gợi ý từ vựng, không phải đáp án hoàn chỉnh. IPA theo giọng Anh-Mỹ.</p>';
+ box.style.display="block";button.textContent="Ẩn gợi ý";button.setAttribute("aria-expanded","true");
 }
 function checkTopicTranslation(){
  if(topicAnswered)return;
