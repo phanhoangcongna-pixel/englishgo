@@ -4842,55 +4842,29 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
  ["At the Nail Salon · Customer Role-play","Đóng vai khách–thợ nail với yêu cầu thực tế."],
  ["Pronunciation Clinic 1","Âm cuối, /θ/, /ð/, /r/, trọng âm từ và câu."]
  ];
- const key="eg-personal-english-journey-v2";
- const legacyKey="eg-personal-english-journey-v1";
+ const key="eg-personal-english-journey-v2",legacyKey="eg-personal-english-journey-v1";
  const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
  const read=()=>{try{return JSON.parse(localStorage.getItem(key)||'{"completedAt":{}}')}catch(e){return {completedAt:{}}}};
  const write=d=>{try{localStorage.setItem(key,JSON.stringify(d));return true}catch(e){return false}};
- function current(data){
-  for(let i=1;i<=lessons.length;i++){
-   const done=data.completedAt&&data.completedAt[i];
-   if(!done)return {day:i,locked:false,done:false};
-   if(done>=today())return {day:i,locked:true,done:true};
-  }
-  return {day:lessons.length,locked:true,done:true,finished:true};
+ function current(data){for(let i=1;i<=lessons.length;i++){const done=data.completedAt&&data.completedAt[i];if(!done)return {day:i,done:false};if(done>=today())return {day:i,done:true}}return {day:lessons.length,done:true,finished:true}}
+ function lessonContent(day){
+  if(day===1)return '<div class="eg-lesson-content"><h3>1. Từ vựng & cụm từ</h3><ul><li><b>Hello / Hi</b> – Xin chào</li><li><b>My name is…</b> – Tên tôi là…</li><li><b>I’m from Vietnam.</b> – Tôi đến từ Việt Nam.</li><li><b>I live in Germany.</b> – Tôi sống ở Đức.</li><li><b>I work as a nail technician.</b> – Tôi làm nghề thợ nail.</li><li><b>In my free time…</b> – Khi rảnh tôi…</li><li><b>I enjoy listening to music.</b> – Tôi thích nghe nhạc.</li><li><b>Nice to meet you.</b> – Rất vui được gặp bạn.</li></ul><h3>2. Ngữ pháp hôm nay</h3><p><b>I am / I’m + thông tin</b>: I’m from Vietnam. · I’m a nail technician.</p><p><b>I live in + địa điểm</b>: I live in Germany.</p><p><b>I like / enjoy + danh từ hoặc V-ing</b>: I enjoy hiking. · I like listening to music.</p><h3>3. Hội thoại mẫu</h3><p><b>A:</b> Hi! What’s your name?<br><b>B:</b> My name is Anna. What about you?<br><b>A:</b> I’m Tom. Where are you from?<br><b>B:</b> I’m from Vietnam, but I live in Germany. Nice to meet you!<br><b>A:</b> Nice to meet you, too.</p><h3>4. Luyện nói</h3><p>Đọc to đoạn giới thiệu này, sau đó thay thông tin bằng câu của bạn:</p><blockquote>Hi, my name is ___. I’m from ___. I live in ___. I work as a ___. In my free time, I enjoy ___. Nice to meet you!</blockquote><h3>5. Bài tập nhỏ</h3><ol><li>Viết 5 câu giới thiệu bản thân bằng tiếng Anh.</li><li>Đọc thành tiếng 3 lần, chú ý âm cuối trong <i>live</i>, <i>work</i> và <i>like</i>.</li><li>Tự nói lại mà không nhìn đoạn mẫu.</li></ol><p class="small muted">Gợi ý: luyện nghe bằng cách bật đọc thành tiếng/Voice cho hội thoại mẫu; đọc văn bản không thay thế bài nghe audio.</p></div>';
+  return '<div class="eg-lesson-content"><h3>Nội dung hôm nay</h3><p>'+lessons[day-1][1]+'</p><p>Bài học chi tiết đang được bổ sung. Hãy ôn chủ đề này và thực hành nói thành tiếng trước khi đánh dấu hoàn thành.</p></div>';
  }
- function render(){
+ function render(showStudy){
   const host=document.getElementById("egJourneyLessons");if(!host)return;
-  const data=read(),cur=current(data),lesson=lessons[cur.day-1];
-  const completed=Object.keys(data.completedAt||{}).filter(k=>Number(k)>=1&&Number(k)<=lessons.length).length;
-  const countEl=document.getElementById("egJourneyCount");
-  if(countEl)countEl.textContent="Đã hoàn thành "+completed+" ngày · Chỉ mở một bài mỗi ngày";
-  const homeProgress=document.getElementById("egJourneyHomeProgress");if(homeProgress)homeProgress.textContent=completed+" ngày hoàn thành · "+(completed? "Tiếp tục hành trình của bạn":"Bắt đầu hành trình của bạn");
-  if(cur.finished){
-   host.innerHTML='<div class="card"><span class="badge">🎉 HOÀN THÀNH</span><h3>Bạn đã hoàn thành các bài học hiện có!</h3><p class="muted">Các bài tiếp theo sẽ được bổ sung vào lộ trình.</p></div>';
-   return;
-  }
-  host.innerHTML='<div class="card" style="border:2px solid #b7c9ff"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag">BÀI HỌC HÔM NAY</span><span class="small muted">Day '+cur.day+' / 180</span></div><h2 style="margin:12px 0 6px">Day '+cur.day+' · '+lesson[0]+'</h2><p class="muted">'+lesson[1]+'</p>'+(cur.done?'<div class="feedback good">✓ Hôm nay bạn đã hoàn thành bài này. Bài tiếp theo sẽ mở vào ngày mai.</div>':'<p class="small muted">Học xong bài hôm nay rồi nhấn nút bên dưới. Ngày mai bài tiếp theo mới được mở.</p><button class="btn" id="egJourneyCompleteToday" type="button">✓ Hoàn thành bài hôm nay</button>')+'</div>';
-  const btn=document.getElementById("egJourneyCompleteToday");
-  if(btn)btn.addEventListener("click",()=>{
-   const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();
-   const ok=write(d);
-   document.getElementById("egJourneyStatus").textContent=ok?"Đã ghi nhận Day "+cur.day+". Day tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";
-   render();
-  });
+  const data=read(),cur=current(data),lesson=lessons[cur.day-1],completed=Object.keys(data.completedAt||{}).filter(k=>Number(k)>=1&&Number(k)<=180).length;
+  const countEl=document.getElementById("egJourneyCount");if(countEl)countEl.textContent="Đã hoàn thành "+completed+" ngày · Mỗi ngày mở một bài";
+  const homeProgress=document.getElementById("egJourneyHomeProgress");if(homeProgress)homeProgress.textContent=completed+" ngày hoàn thành · "+(completed?"Tiếp tục hành trình của bạn":"Bắt đầu hành trình của bạn");
+  if(cur.finished){host.innerHTML='<div class="card"><h3>🎉 Bạn đã hoàn thành các bài học hiện có!</h3></div>';return}
+  host.innerHTML='<div class="card" style="border:2px solid #b7c9ff"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag">BÀI HỌC HÔM NAY</span><span class="small muted">Day '+cur.day+' / 180</span></div><h2 style="margin:12px 0 6px">Day '+cur.day+' · '+lesson[0]+'</h2><p class="muted">'+lesson[1]+'</p>'+(cur.done?'<div class="feedback good">✓ Bạn đã hoàn thành bài hôm nay. Bài tiếp theo sẽ mở vào ngày mai.</div>':(showStudy?lessonContent(cur.day)+'<button class="btn" id="egJourneyCompleteToday" type="button">✓ Hoàn thành bài học hôm nay</button>':'<p class="small muted">Nhấn bắt đầu để mở nội dung và bài tập của hôm nay.</p><button class="btn" id="egJourneyStartToday" type="button">▶ Bắt đầu học Day '+cur.day+'</button>'))+'</div>';
+  const startBtn=document.getElementById("egJourneyStartToday");if(startBtn)startBtn.addEventListener("click",()=>render(true));
+  const doneBtn=document.getElementById("egJourneyCompleteToday");if(doneBtn)doneBtn.addEventListener("click",()=>{const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();const ok=write(d);const status=document.getElementById("egJourneyStatus");if(status)status.textContent=ok?"Đã ghi nhận Day "+cur.day+". Bài tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";render(false)});
  }
- window.egJourneyGoNext=function(){
-  const d=read(),cur=current(d);
-  const msg=cur.done?"Bài hôm nay đã xong. Bài tiếp theo sẽ mở vào ngày mai.":"Hôm nay hãy học Day "+cur.day+" · "+lessons[cur.day-1][0]+". Hoàn thành xong, ngày mai mới mở bài kế tiếp.";
-  document.getElementById("egJourneyStatus").textContent=msg;
-  document.getElementById("egJourneyLessons").scrollIntoView({behavior:"smooth",block:"start"});
- };
- window.egJourneyExport=function(){
-  const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),completedAt:read().completedAt||{}},null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="englishgo-learning-progress.json";a.click();URL.revokeObjectURL(url);
- };
- window.egJourneyReset=function(){
-  if(!confirm("Xoá tất cả dấu hoàn thành của lộ trình này trên thiết bị?"))return;
-  localStorage.removeItem(key);localStorage.removeItem(legacyKey);render();
-  document.getElementById("egJourneyStatus").textContent="Đã đặt lại lộ trình về Day 1.";
- };
- document.addEventListener("DOMContentLoaded",render);
+ window.egJourneyGoNext=function(){const d=read(),cur=current(d),status=document.getElementById("egJourneyStatus");if(status)status.textContent=cur.done?"Bài hôm nay đã xong. Bài tiếp theo sẽ mở vào ngày mai.":"Nhấn “Bắt đầu học” để mở nội dung Day "+cur.day+".";document.getElementById("egJourneyLessons")?.scrollIntoView({behavior:"smooth",block:"start"})};
+ window.egJourneyExport=function(){const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),completedAt:read().completedAt||{}},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="englishgo-learning-progress.json";a.click();URL.revokeObjectURL(url)};
+ window.egJourneyReset=function(){if(!confirm("Xoá tất cả dấu hoàn thành của lộ trình này trên thiết bị?"))return;localStorage.removeItem(key);localStorage.removeItem(legacyKey);render(false);const status=document.getElementById("egJourneyStatus");if(status)status.textContent="Đã đặt lại lộ trình về Day 1."};
+ document.addEventListener("DOMContentLoaded",()=>render(false));
 })();
 </script>
 
