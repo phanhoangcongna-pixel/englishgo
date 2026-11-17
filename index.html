@@ -687,6 +687,17 @@ body > header #mainNav > .nav-group {flex:0 0 auto !important}
   body > header .nav,#mainNav,.de-nav,.de-nav nav {min-width:0 !important}
 }
 </style>
+
+<style id="language-wordmark-refinement">
+/* Give the redesigned wordmarks a little more room and keep their full aspect ratio. */
+body > header .brand-logo {width:250px !important;min-width:250px !important;max-width:250px !important;height:62px !important;padding:5px 10px !important}
+body > header .brand-logo img {object-fit:contain !important}
+.de-brand {width:250px !important;min-width:250px !important;max-width:250px !important;height:62px !important;padding:5px 10px !important}
+.de-brand img {object-fit:contain !important}
+@media(max-width:520px) {
+ body > header .brand-logo,.de-brand {width:210px !important;min-width:210px !important;max-width:210px !important;height:56px !important}
+}
+</style>
 </head>
 <body>
 <div id="languageChooser" class="language-chooser">
