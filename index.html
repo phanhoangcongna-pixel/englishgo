@@ -556,6 +556,8 @@ html { background: #142342; }
 .home-welcome{border-radius:24px;padding:30px;color:#fff;background:linear-gradient(120deg,#102b4c 0%,#1c4773 58%,#477bd0 100%);display:grid;grid-template-columns:1.35fr .75fr;gap:22px;align-items:center;box-shadow:0 14px 35px #14234220}
 .home-welcome .eyebrow{color:#c9ddff;font-weight:800;letter-spacing:1.3px;font-size:11px;text-transform:uppercase}
 .home-welcome h1{font-size:clamp(30px,4vw,43px);line-height:1.12;margin:10px 0}
+.home-welcome{grid-template-columns:1fr}.home-welcome h1{font-size:clamp(19px,2.35vw,30px);white-space:nowrap;letter-spacing:-.35px}
+@media(max-width:760px){.home-welcome h1{white-space:normal;font-size:clamp(22px,5vw,30px)}}
 .home-welcome p{color:#e2edff;max-width:600px;margin:0 0 18px}
 .home-welcome .btn{background:#fff;color:#173b67}
 .home-xp{border:1px solid #ffffff35;background:#ffffff14;border-radius:18px;padding:19px}
@@ -585,20 +587,20 @@ html { background: #142342; }
 @media(max-width:760px){.home-welcome{grid-template-columns:1fr;padding:23px}.home-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.home-secondary{grid-template-columns:1fr}.home-tool{min-height:120px}}
 </style>
 <div class="home-v2">
-<div class="home-feature" id="englishgo-100day-home" style="background:linear-gradient(110deg,#eaf2ff,#f0fbf5);border-color:#cbdcf5">
- <div><span class="badge">100-DAY CHALLENGE · THỬ THÁCH 100 NGÀY</span><h2>🌱 100 ngày chinh phục tiếng Anh</h2><p>Mỗi ngày: 10 từ vựng · 10 cụm từ · 1 đoạn đọc · Shadowing. Học đều đặn để hoàn thành hành trình 100 ngày.</p><p id="eg100HomeProgress" class="small" style="margin-top:7px;font-weight:700">0/100 ngày hoàn thành</p></div>
- <button class="btn" onclick="eg100Enter()">Bắt đầu học · Start →</button>
-</div>
 <div class="home-welcome">
 <div>
 <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
-<h1>Hello! 👋<br/>What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
+<h1>Hello! 👋 What would you like to learn today? · Hôm nay bạn muốn học gì?</h1>
 <p>Small steps. Big progress. Học từng chút mỗi ngày với hướng dẫn song ngữ dễ hiểu.</p>
 
 </div>
 </div>
 <div>
 <div class="home-section-head"><div><h2>Learn English · Học tiếng Anh</h2><p>Core learning tools · Công cụ học tập chính</p></div><span class="badge">A1–B1</span></div>
+<div class="home-feature" id="englishgo-100day-home" style="background:linear-gradient(110deg,#eaf2ff,#f0fbf5);border-color:#cbdcf5">
+ <div><span class="badge">100-DAY CHALLENGE · THỬ THÁCH 100 NGÀY</span><h2>🌱 100 ngày chinh phục tiếng Anh</h2><p>Mỗi ngày: 10 từ vựng · 10 cụm từ · 1 đoạn đọc · Shadowing. Học đều đặn để hoàn thành hành trình 100 ngày.</p><p id="eg100HomeProgress" class="small" style="margin-top:7px;font-weight:700">0/100 ngày hoàn thành</p></div>
+ <button class="btn" onclick="eg100Enter()">Bắt đầu học · Start →</button>
+</div>
 <div class="home-tools">
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
 <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
