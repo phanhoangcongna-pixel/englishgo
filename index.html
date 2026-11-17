@@ -931,6 +931,33 @@ html { background: #142342; }
   A2:["I have been waiting for the bus for twenty minutes.","Could you tell me how to get to the station?","She usually takes a short break after lunch.","I forgot to bring my umbrella this morning.","We are going to visit our friends this weekend.","Please let me know if you need any help.","I'm looking forward to seeing you again.","Would you mind opening the window?"],
   B1:["Although it was raining, we decided to walk to the city centre.","I would appreciate it if you could send me the details by email.","The meeting has been postponed until next Thursday.","She has been working here since she moved to Germany.","If I had more free time, I would take a cooking course.","We need to figure out what went wrong before making a decision."]
  };
+ const sentenceTranslations={
+  "I get up at seven every morning.":"Tôi thức dậy lúc bảy giờ mỗi sáng.",
+  "She works in a small shop.":"Cô ấy làm việc trong một cửa hàng nhỏ.",
+  "Could you please help me?":"Bạn có thể vui lòng giúp tôi được không?",
+  "The bus is late today.":"Hôm nay xe buýt đến muộn.",
+  "I would like a glass of water.":"Tôi muốn một cốc nước.",
+  "We usually have dinner at home.":"Chúng tôi thường ăn tối ở nhà.",
+  "He is learning English.":"Anh ấy đang học tiếng Anh.",
+  "My appointment is on Monday.":"Lịch hẹn của tôi là vào thứ Hai.",
+  "Please speak more slowly.":"Làm ơn nói chậm hơn.",
+  "I need to buy some food.":"Tôi cần mua một ít thức ăn.",
+  "I have been waiting for the bus for twenty minutes.":"Tôi đã chờ xe buýt được hai mươi phút rồi.",
+  "Could you tell me how to get to the station?":"Bạn có thể chỉ cho tôi đường đến nhà ga được không?",
+  "She usually takes a short break after lunch.":"Cô ấy thường nghỉ giải lao một lát sau bữa trưa.",
+  "I forgot to bring my umbrella this morning.":"Sáng nay tôi quên mang ô.",
+  "We are going to visit our friends this weekend.":"Cuối tuần này chúng tôi sẽ đến thăm bạn bè.",
+  "Please let me know if you need any help.":"Hãy cho tôi biết nếu bạn cần giúp đỡ nhé.",
+  "I'm looking forward to seeing you again.":"Tôi rất mong được gặp lại bạn.",
+  "Would you mind opening the window?":"Bạn có phiền mở cửa sổ giúp tôi không?",
+  "Although it was raining, we decided to walk to the city centre.":"Mặc dù trời đang mưa, chúng tôi vẫn quyết định đi bộ đến trung tâm thành phố.",
+  "I would appreciate it if you could send me the details by email.":"Tôi sẽ rất cảm kích nếu bạn có thể gửi thông tin chi tiết cho tôi qua email.",
+  "The meeting has been postponed until next Thursday.":"Cuộc họp đã được hoãn đến thứ Năm tuần tới.",
+  "She has been working here since she moved to Germany.":"Cô ấy đã làm việc ở đây kể từ khi chuyển đến Đức.",
+  "If I had more free time, I would take a cooking course.":"Nếu có nhiều thời gian rảnh hơn, tôi sẽ tham gia một khóa học nấu ăn.",
+  "We need to figure out what went wrong before making a decision.":"Chúng ta cần tìm hiểu điều gì đã xảy ra trước khi đưa ra quyết định."
+ };
+ function sentenceMeaning(text){return sentenceTranslations[text]||"Chưa có bản dịch cho câu này."}
  const chunks={
   A1:[
    ["a cup of tea","một tách trà"],["in the morning","vào buổi sáng"],["at the bus stop","ở trạm xe buýt"],["How are you doing?","Bạn khỏe không?"],["a little bit of water","một chút nước"],["see you tomorrow","hẹn gặp bạn ngày mai"],["on the left side","ở phía bên trái"],["after work","sau giờ làm"],["have a nice day","chúc một ngày tốt lành"],["I don't know","tôi không biết"],["a bottle of milk","một chai sữa"],["in front of the house","phía trước ngôi nhà"],["every single day","mỗi ngày"],["Where are you from?","Bạn đến từ đâu?"],["I'd like some coffee","Tôi muốn một chút cà phê"],["wait a minute","đợi một chút"],["go to school","đi học"],["take a photo","chụp một bức ảnh"],["close the door","đóng cửa lại"],["What's your name?","Bạn tên là gì?"],["a pair of shoes","một đôi giày"],["have breakfast","ăn sáng"],["come with me","đi cùng tôi"],["I'm ready","Tôi sẵn sàng rồi"],["not right now","không phải lúc này"],["see you later","hẹn gặp lại sau"],["a glass of water","một cốc nước"],["turn left here","rẽ trái ở đây"],["How much is it?","Cái này giá bao nhiêu?"],["I'm just looking","Tôi chỉ xem thôi"]
@@ -953,8 +980,8 @@ html { background: #142342; }
  function nextSentence(){const level=el("dictationLevel").value;current=pick(sentences[level],usedSentence);el("dictationAnswer").value="";el("dictationResult").textContent="Bấm “Nghe câu” để bắt đầu.";el("dictationExpected").style.display="none"}
  function nextChunk(){const level=el("dictationLevel").value;chunkCurrent=pick(chunks[level],usedChunk);el("dictationChunkAnswer").value="";el("dictationChunkResult").textContent="Bấm “Nghe cụm từ” để bắt đầu.";el("dictationChunkExpected").style.display="none"}
  window.egDictationMode=function(next){mode=next;el("dictationSentenceMode").style.display=next==="sentence"?"block":"none";el("dictationChunkMode").style.display=next==="chunk"?"block":"none";el("dictationSentenceTab").className="btn "+(next==="sentence"?"primary":"line");el("dictationChunkTab").className="btn "+(next==="chunk"?"primary":"line");window.speechSynthesis?.cancel?.()};
- window.egDictationNew=function(){nextSentence();speak(current)};window.egDictationPlay=()=>speak(current);window.egDictationSlow=()=>speak(current,true);window.egDictationCheck=function(){const v=el("dictationAnswer").value;if(!v.trim()){el("dictationResult").textContent="Bạn hãy nhập câu trả lời trước nhé.";return}el("dictationResult").textContent=norm(v)===norm(current)?"✓ Chính xác! Well done!":"Chưa chính xác. Hãy nghe lại và thử lần nữa nhé."};window.egDictationReveal=()=>{el("dictationExpected").textContent="Đáp án: "+current;el("dictationExpected").style.display="block"};window.egDictationClear=()=>{el("dictationAnswer").value="";el("dictationResult").textContent=""};
- window.egDictationChunkNew=function(){nextChunk();speak(chunkCurrent[0])};window.egDictationChunkPlay=()=>speak(chunkCurrent[0]);window.egDictationChunkSlow=()=>speak(chunkCurrent[0],true);window.egDictationChunkCheck=function(){const v=el("dictationChunkAnswer").value;if(!v.trim()){el("dictationChunkResult").textContent="Bạn hãy nhập cụm từ trước nhé.";return}el("dictationChunkResult").textContent=norm(v)===norm(chunkCurrent[0])?"✓ Chính xác! Bạn nghe rất tốt!":"Chưa chính xác. Nghe lại cụm từ nhé."};window.egDictationChunkReveal=()=>{el("dictationChunkExpected").textContent="Đáp án: "+chunkCurrent[0];el("dictationChunkExpected").style.display="block"};window.egDictationChunkClear=()=>{el("dictationChunkAnswer").value="";el("dictationChunkResult").textContent=""};
+ window.egDictationNew=function(){nextSentence();speak(current)};window.egDictationPlay=()=>speak(current);window.egDictationSlow=()=>speak(current,true);window.egDictationCheck=function(){const v=el("dictationAnswer").value;if(!v.trim()){el("dictationResult").textContent="Bạn hãy nhập câu trả lời trước nhé.";return}const ok=norm(v)===norm(current);el("dictationResult").textContent=ok?"✓ Chính xác! Well done!\nDịch nghĩa: "+sentenceMeaning(current):"Chưa chính xác. Hãy nghe lại và thử lần nữa nhé.";};window.egDictationReveal=()=>{el("dictationExpected").textContent="Đáp án: "+current;el("dictationExpected").style.display="block"};window.egDictationClear=()=>{el("dictationAnswer").value="";el("dictationResult").textContent=""};
+ window.egDictationChunkNew=function(){nextChunk();speak(chunkCurrent[0])};window.egDictationChunkPlay=()=>speak(chunkCurrent[0]);window.egDictationChunkSlow=()=>speak(chunkCurrent[0],true);window.egDictationChunkCheck=function(){const v=el("dictationChunkAnswer").value;if(!v.trim()){el("dictationChunkResult").textContent="Bạn hãy nhập cụm từ trước nhé.";return}const ok=norm(v)===norm(chunkCurrent[0]);el("dictationChunkResult").textContent=ok?"✓ Chính xác! Bạn nghe rất tốt!\nDịch nghĩa: "+chunkCurrent[1]:"Chưa chính xác. Nghe lại cụm từ nhé.";};window.egDictationChunkReveal=()=>{el("dictationChunkExpected").textContent="Đáp án: "+chunkCurrent[0];el("dictationChunkExpected").style.display="block"};window.egDictationChunkClear=()=>{el("dictationChunkAnswer").value="";el("dictationChunkResult").textContent=""};
  let chunkQuizPool=[],chunkQuizIndex=0,chunkQuizScore=0,chunkQuizTotal=0,chunkQuizAnswered=false;
  function renderChunkQuizQuestion(){
   const box=el("dictationChunkQuiz"),result=el("dictationChunkQuizResult");
@@ -977,7 +1004,7 @@ html { background: #142342; }
   result.textContent=(correct?"✓ Chính xác! ":"✗ Chưa đúng. Đáp án: "+chunkQuizPool[chunkQuizIndex][1]+". ")+"Điểm: "+chunkQuizScore+"/"+chunkQuizTotal;
   const next=document.createElement("button");next.className="btn primary";next.type="button";next.textContent=chunkQuizIndex===chunkQuizPool.length-1?"Xem kết quả":"Câu tiếp theo →";next.onclick=()=>{chunkQuizIndex++;renderChunkQuizQuestion()};box.appendChild(next);
  };
- window.egDictationQuizCheck=function(type){const box=el(type==="sentence"?"dictationSentenceQuiz":"dictationChunkQuiz");const result=el(type==="sentence"?"dictationSentenceQuizResult":"dictationChunkQuizResult");const selected=box.querySelector('input[type="radio"]:checked');if(!selected){result.textContent="Hãy chọn một đáp án nhé.";return}result.textContent=Number(selected.value)===Number(box.dataset.answer)?"✓ Chính xác!":"Chưa đúng, hãy nghe lại và thử lần nữa."};
+ window.egDictationQuizCheck=function(type){const box=el(type==="sentence"?"dictationSentenceQuiz":"dictationChunkQuiz");const result=el(type==="sentence"?"dictationSentenceQuizResult":"dictationChunkQuizResult");const selected=box.querySelector('input[type="radio"]:checked');if(!selected){result.textContent="Hãy chọn một đáp án nhé.";return}const ok=Number(selected.value)===Number(box.dataset.answer);result.textContent=ok?"✓ Chính xác!\nDịch nghĩa: "+(type==="sentence"?sentenceMeaning(quizAnswer):quizAnswer):"Chưa đúng, hãy nghe lại và thử lần nữa."};
  el("dictationLevel").addEventListener("change",()=>{usedSentence=[];usedChunk=[];nextSentence();nextChunk();el("dictationSentenceQuiz").innerHTML="";el("dictationChunkQuiz").innerHTML=""});
  loadDictationVoices();if("speechSynthesis"in window)speechSynthesis.onvoiceschanged=loadDictationVoices;
  document.addEventListener("keydown",function(event){if(!["ArrowRight","ArrowDown"].includes(event.key)||event.altKey||event.ctrlKey||event.metaKey)return;const target=event.target;if(target&&(/INPUT|TEXTAREA|SELECT/.test(target.tagName)||target.isContentEditable))return;if(!el("dictation")?.classList.contains("active"))return;event.preventDefault();if(mode==="sentence"){nextSentence();speak(current)}else{nextChunk();speak(chunkCurrent[0])}});
