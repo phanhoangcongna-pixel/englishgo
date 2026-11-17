@@ -634,8 +634,8 @@ html { background: #142342; }
 </section>
 <section class="page" id="daily100">
 <h1 class="title">🌱 100 ngày chinh phục tiếng Anh <span class="badge" id="eg100Count">1/100</span></h1>
-<p class="intro" id="eg100DayTitle">Day 1 · My Morning — Buổi sáng của tôi</p>
-<div class="panel"><div class="bar"><span id="eg100Bar" style="width:1%"></span></div><p class="small muted" id="eg100Status">Tiến độ học của bạn</p></div>
+<p class="intro" id="eg100DayTitle">Day 1/100 · My Morning — Buổi sáng của tôi</p>
+<div class="panel"><div class="row" style="align-items:center;justify-content:space-between;gap:12px"><b id="eg100Count">0/100 ngày</b><label class="small">Chọn ngày học <select id="eg100DaySelect" aria-label="Chọn ngày học" style="max-width:150px"></select></label></div><div class="bar"><span id="eg100Bar" style="width:0%"></span></div><p class="small muted" id="eg100Status">Tiến độ học của bạn</p></div>
 <div class="panel"><h2>📚 10 từ vựng · Vocabulary</h2><p class="small muted" id="eg100TopicVi">Chủ đề: Buổi sáng của tôi</p><div id="eg100Words" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:12px"></div></div>
 <div class="panel"><h2>💬 10 cụm từ · Useful phrases</h2><div id="eg100Phrases" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div></div>
 <div class="panel"><h2>📖 Đoạn văn · Reading</h2><p class="small muted">Các từ vựng trong bài được tô màu để dễ nhận biết.</p><div id="eg100Passage" class="example" style="line-height:1.9"></div><div id="eg100PassageVi" class="example" style="line-height:1.9;margin-top:12px;background:#f5f8ff"></div></div>
@@ -4583,12 +4583,13 @@ const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function progress(){return Math.min(100,Array.isArray(dates)?new Set(dates).size:0)}
 function save(){try{localStorage.setItem(key,JSON.stringify([...new Set(dates)].slice(-100)));localStorage.setItem(lessonKey,String(selected))}catch(e){}}
-function lesson(day){const group=themes[Math.floor((day-1)/10)%themes.length];return {group,title:group.topics[(day-1)%10],words:group.words,phrases:group.phrases,passage:group.passage,translation:group.translation}}
+function lesson(day){const index=Math.max(0,Math.min(99,day-1)),group=themes[Math.floor(index/10)%10];return {day:index+1,group,title:group.topics[index%10],words:group.words,phrases:group.phrases,passage:group.passage,translation:group.translation}}
 function render(){
  const p=progress(),d=Math.max(1,Math.min(100,selected)),l=lesson(d),$=id=>document.getElementById(id);
- $("eg100DayTitle").textContent="Day "+d+" · "+l.title+" — "+l.group.vi;
+ $("eg100DayTitle").textContent="Day "+d+"/100 · "+l.title+" — "+l.group.vi;
  $("eg100TopicVi").textContent="Chủ đề: "+l.title+" — "+l.group.vi;
- $("eg100Count").textContent=p+"/100";$("eg100Bar").style.width=p+"%";
+ $("eg100Count").textContent=p+"/100 ngày";$("eg100Bar").style.width=p+"%";
+ const daySelect=$("eg100DaySelect");if(daySelect){if(!daySelect.options.length){for(let n=1;n<=100;n++){const opt=document.createElement("option");opt.value=String(n);opt.textContent="Ngày "+n;daySelect.appendChild(opt)}}daySelect.value=String(d)}
  $("eg100Status").textContent=p>=100?"🎉 Bạn đã hoàn thành 100/100 ngày!":"Đã hoàn thành "+p+"/100 ngày học.";
  const homeProgress=document.getElementById("eg100HomeProgress");if(homeProgress)homeProgress.textContent=p+"/100 ngày đã học"+(p>=100?" · Hoàn thành!":"");
  $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(w[0])+'</b><div class="small muted">'+esc(w[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(w[0])+'">🔊 Nghe</button></div>').join("");
@@ -4597,7 +4598,8 @@ function render(){
  $("eg100Passage").innerHTML=passage;$("eg100PassageVi").innerHTML="<b>Bản dịch tiếng Việt</b><p>"+esc(l.translation)+"</p>";
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-eg100-audio]");if(b&&typeof say==="function")say(b.getAttribute("data-eg100-audio"))});
-window.eg100Enter=function(){const t=today();if(!dates.includes(t)&&progress()<100)dates.push(t);selected=Math.min(100,Math.max(1,progress()));save();render();if(typeof go==="function")go("daily100")};
+window.eg100Enter=function(){const t=today();if(!dates.includes(t)&&progress()<100)dates.push(t);selected=Math.min(100,Math.max(1,progress()||1));save();render();if(typeof go==="function")go("daily100")};
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="eg100DaySelect"){selected=Math.max(1,Math.min(100,Number(e.target.value)||1));save();render();eg100Stop()}});
 window.eg100Speak=function(rate){const el=document.getElementById("eg100Passage");if(!el||!("speechSynthesis"in window))return;eg100Stop();const u=new SpeechSynthesisUtterance(el.innerText);u.lang="en-US";u.rate=rate||Number(document.getElementById("eg100Rate").value)||.9;speechSynthesis.speak(u);document.getElementById("eg100ShadowStatus").textContent="Đang phát đoạn văn…"};
 window.eg100SpeakSlow=function(){eg100Speak(.72)};
 window.eg100Stop=function(){if("speechSynthesis"in window)speechSynthesis.cancel();const e=document.getElementById("eg100ShadowStatus");if(e)e.textContent="Đã dừng audio."};
