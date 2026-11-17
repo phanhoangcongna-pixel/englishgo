@@ -4827,8 +4827,19 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    if(!value)throw new Error("empty translation");return value;
   });
  }
+ const curatedVietnamese={
+  "stay":{ipa:"steɪ",meaning:"ĐỘNG TỪ: ở lại; lưu lại; lưu trú (ở một nơi). Ví dụ: stay at home = ở nhà; stay in Hanoi = ở lại Hà Nội; stay here = ở lại đây.\nCỤM TỪ: stay up = thức khuya; stay calm = giữ bình tĩnh; stay away = tránh xa.\nDANH TỪ: thời gian lưu trú; kỳ nghỉ (ít dùng hơn).",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "stays":{ipa:"steɪz",meaning:"ĐỘNG TỪ: ở lại; lưu lại; lưu trú (ngôi thứ ba số ít).",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "stayed":{ipa:"steɪd",meaning:"ĐỘNG TỪ: đã ở lại; đã lưu trú.",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "staying":{ipa:"ˈsteɪɪŋ",meaning:"ĐỘNG TỪ: đang ở lại; việc lưu trú.",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "wake":{ipa:"weɪk",meaning:"ĐỘNG TỪ: thức dậy; đánh thức. wake up = thức dậy / đánh thức.",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "wakes":{ipa:"weɪks",meaning:"ĐỘNG TỪ: thức dậy; đánh thức (ngôi thứ ba số ít).",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "woke":{ipa:"woʊk",meaning:"ĐỘNG TỪ: đã thức dậy; đã đánh thức.",source:"EnglishGo · nghĩa thông dụng đã biên tập"},
+  "woken":{ipa:"ˈwoʊkən",meaning:"ĐỘNG TỪ: đã thức dậy; đã được đánh thức.",source:"EnglishGo · nghĩa thông dụng đã biên tập"}
+ };
  function fetchMeaning(word){
   const key=String(word).toLowerCase();
+  if(curatedVietnamese[key])return Promise.resolve(curatedVietnamese[key]);
   if(lookupMemory.has(key))return Promise.resolve(lookupMemory.get(key));
   try{
    const cached=localStorage.getItem("eg-dict-v3:"+key);
