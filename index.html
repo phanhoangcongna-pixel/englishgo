@@ -2161,25 +2161,29 @@ const thousandHintDictionary={
 const thousandHintStopWords=new Set("a an the is am are was were be been being do does did have has had can could would should will shall may might must to of in on at for from with by as and or but if it its this that these those i you he she we they me him her us them my your his our their who what where when why how not no yes so very just than then there here".split(" "));
 function buildThousandHints(item,dir){
  if(!item)return [];
- // Show useful English keywords for either translation direction, not the full answer.
+ // Use the English model sentence to provide vocabulary hints in either direction.
  const text=String(item.en||"");
  const words=text.match(/[A-Za-z]+(?:['’][A-Za-z]+)*/g)||[];
  const seen=new Set(),found=[];
+ const candidates=[];
  for(const raw of words){
   const word=raw.toLowerCase().replace(/[’]/g,"'");
   if(seen.has(word)||thousandHintStopWords.has(word))continue;
   seen.add(word);
-  const entry=thousandHintDictionary[word];
-  if(entry)found.push({word:raw,ipa:entry[0],meaning:entry[1]});
+  candidates.push({raw,word});
+ }
+ // Prefer dictionary entries with IPA and Vietnamese meanings.
+ for(const candidate of candidates){
+  const entry=thousandHintDictionary[candidate.word];
+  if(entry)found.push({word:candidate.raw,ipa:entry[0],meaning:entry[1]});
   if(found.length>=5)break;
  }
+ // Always show useful keywords even when a word is not in the small dictionary.
  if(found.length<3){
-  for(const raw of words){
-   const word=raw.toLowerCase().replace(/[’]/g,"'");
-   if(seen.has(word)||thousandHintStopWords.has(word))continue;
-   seen.add(word);
-   found.push({word:raw,ipa:"",meaning:"Từ khóa trong câu"});
-   if(found.length>=3)break;
+  for(const candidate of candidates){
+   if(found.some(h=>h.word.toLowerCase()===candidate.word))continue;
+   found.push({word:candidate.raw,ipa:"",meaning:"Từ khóa trong câu"});
+   if(found.length>=5)break;
   }
  }
  return found.slice(0,5);
