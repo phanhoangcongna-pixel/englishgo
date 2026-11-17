@@ -4585,21 +4585,30 @@ const phraseFrames=[
 ["I usually {a}.","Tôi thường {b}."],["I need to {a}.","Tôi cần {b}."],["Could you help me with {c}?","Bạn có thể giúp tôi về {d} không?"],["Where can I find {c}?","Tôi có thể tìm {d} ở đâu?"],["I would like to {a}.","Tôi muốn {b}."],["I prefer {c} because it is {e}.","Tôi thích {d} hơn vì nó {f}."],["How much time do we need for {c}?","Chúng ta cần bao nhiêu thời gian cho {d}?"],["I think {c} is important.","Tôi nghĩ {d} rất quan trọng."],["Can we do {c} together?","Chúng ta có thể cùng nhau {d} không?"],["That sounds good to me.","Nghe có vẻ ổn với tôi."]
 ];
 function lesson(day){
- const index=Math.max(0,Math.min(99,day-1)),bankIndex=index%10,sub=index%10;
- const baseWords=wordBanks[bankIndex],basePhrases=phraseBanks[bankIndex];
+ const index=Math.max(0,Math.min(99,day-1));
  const topic=dayTitles[index],topicVi=dayTitlesVi[index];
+ const bankIndex=Math.floor(index/10);
+ const baseWords=themes[bankIndex].words;
  const rotate=(arr,n)=>arr.map((_,i)=>arr[(i+n)%arr.length]);
- const words=rotate(baseWords,(sub*3)%baseWords.length).map((w,i)=>[w[0],w[1]]);
- const seed=basePhrases.slice();
- const phrases=rotate(seed,(sub*2)%seed.length).map((p,i)=>[i===0?"Today, I want to talk about "+topic+".":(p[0].charAt(0).toLowerCase()+p[0].slice(1)),p[1]]);
- const uniqueWords=words.map(w=>w[0]);
- const passageParts=[
- "Today I want to talk about "+topic.toLowerCase()+". It is a useful part of everyday life. "+phrases[0][0]+" "+phrases[1][0]+" "+phrases[2][0],
- "I also remember to use words such as "+uniqueWords.slice(0,4).join(", ")+". They help me explain what I need and understand other people.",
- "Sometimes things do not go exactly as planned, but I can ask questions, listen carefully and try again. Little by little, I feel more confident using English in this situation."
+ const words=rotate(baseWords,(index%10*3)%baseWords.length).slice(0,10).map(w=>[w[0],w[1]]);
+ const topicLower=topic.toLowerCase(),topicViLower=topicVi.toLowerCase();
+ const phraseTemplates=[
+  ["Today, I’d like to talk about "+topicLower+".","Hôm nay, tôi muốn nói về "+topicViLower+"."],
+  ["I often need to deal with "+topicLower+" in everyday life.","Tôi thường cần xử lý "+topicViLower+" trong cuộc sống hằng ngày."],
+  ["Could you tell me more about "+topicLower+"?","Bạn có thể nói thêm cho tôi về "+topicViLower+" không?"],
+  ["What is the most important thing to remember about "+topicLower+"?","Điều quan trọng nhất cần nhớ về "+topicViLower+" là gì?"],
+  ["I usually prepare everything before I start.","Tôi thường chuẩn bị mọi thứ trước khi bắt đầu."],
+  ["If I have a problem, I ask someone for help.","Nếu gặp vấn đề, tôi sẽ nhờ ai đó giúp đỡ."],
+  ["I try to speak clearly and listen carefully.","Tôi cố gắng nói rõ ràng và lắng nghe cẩn thận."],
+  ["Could you show me what I should do next?","Bạn có thể chỉ tôi bước tiếp theo cần làm gì không?"],
+  ["I’m becoming more confident with practice.","Tôi đang trở nên tự tin hơn nhờ luyện tập."],
+  ["That is why I think this topic is useful.","Đó là lý do tôi nghĩ chủ đề này rất hữu ích."]
  ];
- const translation="Hôm nay tôi muốn nói về "+topicVi.toLowerCase()+". Đây là một phần hữu ích trong cuộc sống hằng ngày. "+phrases[0][1]+" "+phrases[1][1]+" "+phrases[2][1]+" Tôi cũng nhớ sử dụng những từ như "+words.slice(0,4).map(w=>w[1]).join(", ")+". Chúng giúp tôi diễn đạt điều mình cần và hiểu người khác. Đôi khi mọi việc không diễn ra đúng như kế hoạch, nhưng tôi có thể đặt câu hỏi, lắng nghe cẩn thận và thử lại. Từng chút một, tôi cảm thấy tự tin hơn khi dùng tiếng Anh trong tình huống này.";
- return {day:index+1,title:topic,group:{vi:topicVi},words,phrases,passage:passageParts.join(" "),translation};
+ const phrases=phraseTemplates;
+ const vocab=words.slice(0,5).map(w=>w[0]).join(", ");
+ const passage="Today I am learning about "+topicLower+". This is a useful topic because it can come up in everyday situations. I try to understand the key words, such as "+vocab+", and use them in short, clear sentences. Before I do anything, I make sure I understand what is needed. If I am not sure, I ask a question and listen to the answer. With a little practice each day, I can handle "+topicLower+" more naturally and feel more confident speaking English.";
+ const translation="Hôm nay tôi học về "+topicViLower+". Đây là một chủ đề hữu ích vì nó có thể xuất hiện trong những tình huống hằng ngày. Tôi cố gắng hiểu các từ khóa như "+words.slice(0,5).map(w=>w[1]).join(", ")+" và sử dụng chúng trong những câu ngắn, rõ ràng. Trước khi làm việc gì, tôi đảm bảo mình hiểu điều cần thiết. Nếu chưa chắc chắn, tôi đặt câu hỏi và lắng nghe câu trả lời. Với một chút luyện tập mỗi ngày, tôi có thể xử lý "+topicViLower+" tự nhiên hơn và tự tin hơn khi nói tiếng Anh.";
+ return {day:index+1,title:topic,group:{vi:topicVi},words,phrases,passage,translation};
 }
 function render(){
  const p=progress(),d=Math.max(1,Math.min(100,p+1)),l=lesson(d),$=id=>document.getElementById(id);selected=d;
