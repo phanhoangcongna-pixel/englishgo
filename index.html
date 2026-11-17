@@ -5407,7 +5407,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   const day5Check=document.getElementById("egDay5Check");if(day5Check)day5Check.addEventListener("click",()=>{
    const ids=Array.from({length:10},(_,i)=>"egDay5Q"+(i+1));
    const answers=ids.map(id=>(document.getElementById(id)?.value||"").trim());
-   const normalized=answers.map(a=>a.toLowerCase().replace(/[.!?]/g,"").replace(/\\s+/g," ").trim());
+   const normalized=answers.map(a=>a.toLowerCase().replace(/[.!?]/g,"").replace(/\s+/g," ").trim());
    const expected=["much","many","these","this"];
    const missing=answers.filter(a=>a.length===0).length;
    const firstFour=normalized.slice(0,4).filter((a,i)=>a===expected[i]).length;
