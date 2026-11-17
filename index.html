@@ -1341,7 +1341,6 @@ function egAudioStop(){
  if(egAudioQueueTimer){clearTimeout(egAudioQueueTimer);egAudioQueueTimer=null;}
  if(window.speechSynthesis)window.speechSynthesis.cancel();
  if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}
- const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="none";
 }
 function egAudioSpeak(text,rate=0.88,triggerButton=null){
  const full=String(text||"").trim();if(!full)return;
@@ -1354,16 +1353,15 @@ function egAudioSpeak(text,rate=0.88,triggerButton=null){
  // Split by sentence punctuation so the voice pauses naturally between sentences.
  const parts=full.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[full];
  let index=0;
- const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="inline-flex";
  const playNext=()=>{
   if(requestId!==speechRequestId)return;
-  if(index>=parts.length){if(stop)stop.style.display="none";if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}return;}
+  if(index>=parts.length){if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}return;}
   const chunk=parts[index++].trim();if(!chunk){playNext();return;}
   const utterance=new SpeechSynthesisUtterance(chunk);
   utterance.lang=voice&&voice.lang?voice.lang:"en-US";if(voice)utterance.voice=voice;
   utterance.rate=rate;utterance.pitch=1;utterance.volume=1;
   utterance.onend=()=>{if(requestId!==speechRequestId)return;egAudioQueueTimer=setTimeout(playNext,420);};
-  utterance.onerror=event=>{if(requestId===speechRequestId){if(stop)stop.style.display="none";if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
+  utterance.onerror=event=>{if(requestId===speechRequestId){if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
   synth.speak(utterance);
  };
  try{synth.cancel();synth.resume();playNext();}
@@ -5067,5 +5065,5 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 })();
 </script>
 
-<button id="egGlobalAudioStop" type="button" onclick="egAudioStop()" style="display:none;position:fixed;right:18px;bottom:22px;z-index:99999;border:0;border-radius:999px;padding:12px 18px;background:#b42318;color:#fff;font-weight:700;box-shadow:0 4px 16px #0003">■ Dừng phát</button>
+
 </body></html>
