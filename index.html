@@ -1787,8 +1787,8 @@ const EG_POS = {
 };
 DATA.vocab.forEach(w=>{if(!w.pos)w.pos=EG_POS[w.w]||"n";});
 function posLabel(p){return ({n:"Noun · Danh từ",v:"Verb · Động từ",adj:"Adjective · Tính từ",adv:"Adverb · Trạng từ",prep:"Preposition · Giới từ",conj:"Conjunction · Liên từ",det:"Determiner · Từ hạn định","v/n":"Verb / Noun · Động từ / Danh từ","n/v":"Noun / Verb · Danh từ / Động từ","adv/adj":"Adverb / Adjective · Trạng từ / Tính từ"})[p]||p;}
-const EG_VOCAB_LEVELS={"daily life":"A1","food and shopping":"A1","home and city":"A1","feelings and people":"A1","travel":"A2","health":"A2","technology":"A2","nature and weather":"A2","culture":"A2","work and study":"B1"};
-function vocabLevel(word){return word.level||EG_VOCAB_LEVELS[word.cat]||"A2";}
+var EG_VOCAB_LEVELS={"daily life":"A1","food and shopping":"A1","home and city":"A1","feelings and people":"A1","travel":"A2","health":"A2","technology":"A2","nature and weather":"A2","culture":"A2","work and study":"B1"};
+function vocabLevel(word){return word.level||((EG_VOCAB_LEVELS||{})[word.cat])||"A2";}
 function renderWords(){
  const cat=document.getElementById("wordCat"),level=document.getElementById("wordLevel"),q=document.getElementById("wordSearch").value.trim().toLowerCase();
  if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].sort((a,b)=>a.localeCompare(b)).forEach(c=>cat.add(new Option(c,c)));
@@ -3500,7 +3500,7 @@ document.addEventListener("DOMContentLoaded",function(){
 "I see your point, although I think it depends on the person.":"Tôi hiểu ý bạn, mặc dù tôi nghĩ điều đó còn tùy từng người.",
 "That's true. Some people find it difficult to concentrate at home.":"Đúng vậy. Một số người thấy khó tập trung khi ở nhà.",
 "Exactly. A flexible arrangement might be the best solution.":"Chính xác. Một hình thức làm việc linh hoạt có thể là giải pháp tốt nhất.",
-"I agree. It gives people more control over their schedule.":"Tôi đồng ý. Điều đó giúp mọi người chủ động hơn về lịch trình."
+"I agree. It gives people more control over their schedule.":"Tôi đồng ý. Điều đó giúp mọi người chủ động hơn về lịch trình.",
 "Could I see the colour samples before we start?":"Tôi có thể xem bảng màu trước khi bắt đầu không?",
 "Of course. These are our most popular light pink shades.":"Tất nhiên. Đây là những màu hồng nhạt được yêu thích nhất.",
 "I like this one. Is the glitter quite subtle?":"Tôi thích màu này. Phần nhũ có nhẹ nhàng không?",
@@ -4562,6 +4562,12 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 <script id="englishgo-100-day-course">
 (function(){
 const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const EG100_STORAGE_KEY="eg100-completed-lessons-v2";
+let completed=[];
+try{const saved=JSON.parse(localStorage.getItem(EG100_STORAGE_KEY)||"[]");if(Array.isArray(saved))completed=saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=100)}catch(e){}
+let selected=1;
+function progress(){let n=0;while(completed.includes(n+1))n++;return n}
+function save(){try{localStorage.setItem(EG100_STORAGE_KEY,JSON.stringify(completed))}catch(e){}}
 const themes=[
 {topics:["My Morning","Waking Up","Making the Bed","Morning Hygiene","Getting Dressed","A Quick Breakfast","Leaving Home","My Morning Commute","Starting the Day","A Productive Morning"],vi:"Buổi sáng và thói quen đầu ngày",words:[["wake up","thức dậy"],["alarm","đồng hồ báo thức"],["get up","ra khỏi giường"],["make the bed","dọn giường"],["brush","đánh răng/chải"],["shower","tắm vòi sen"],["get dressed","mặc quần áo"],["breakfast","bữa sáng"],["hurry","vội vàng"],["on time","đúng giờ"]],phrases:[["I usually wake up at seven.","Tôi thường thức dậy lúc bảy giờ."],["My alarm goes off at 6:30.","Chuông báo thức reo lúc 6 giờ 30."],["I get out of bed straight away.","Tôi ra khỏi giường ngay."],["I make my bed every morning.","Tôi dọn giường mỗi sáng."],["I need to brush my teeth.","Tôi cần đánh răng."],["I’m going to take a quick shower.","Tôi sẽ tắm nhanh."],["What should I wear today?","Hôm nay tôi nên mặc gì?"],["I usually have breakfast at home.","Tôi thường ăn sáng ở nhà."],["I’m running a little late.","Tôi hơi muộn rồi."],["I need to leave on time.","Tôi cần đi đúng giờ."]],passage:"I usually wake up early when my alarm goes off. I get up, make the bed and brush my teeth. Then I take a shower and get dressed. I have a quick breakfast before I leave home. I sometimes hurry, but I try to arrive on time and start my day calmly.",translation:"Tôi thường thức dậy sớm khi chuông báo thức reo. Tôi ra khỏi giường, dọn giường và đánh răng. Sau đó tôi tắm và mặc quần áo. Tôi ăn sáng nhanh trước khi rời nhà. Đôi khi tôi vội, nhưng tôi cố gắng đến đúng giờ và bắt đầu ngày mới thật bình tĩnh."},
 {topics:["My Home","Rooms in My House","The Living Room","The Kitchen","My Bedroom","Cleaning the House","Doing the Laundry","家庭 Chores","A Comfortable Home","At the Weekend"],vi:"Nhà cửa và việc nhà",words:[["house","ngôi nhà"],["room","căn phòng"],["kitchen","nhà bếp"],["living room","phòng khách"],["bedroom","phòng ngủ"],["bathroom","phòng tắm"],["tidy","gọn gàng"],["clean","lau dọn/sạch"],["laundry","quần áo cần giặt/việc giặt"],["chores","việc nhà"]],phrases:[["I live in a small house.","Tôi sống trong một ngôi nhà nhỏ."],["The kitchen is next to the living room.","Nhà bếp ở cạnh phòng khách."],["My bedroom is upstairs.","Phòng ngủ của tôi ở tầng trên."],["Could you tidy your room?","Bạn có thể dọn phòng không?"],["I clean the house every Saturday.","Tôi dọn nhà mỗi thứ Bảy."],["The bathroom is being cleaned.","Phòng tắm đang được lau dọn."],["I have a lot of laundry today.","Hôm nay tôi có nhiều quần áo cần giặt."],["We share the household chores.","Chúng tôi chia sẻ việc nhà."],["Please put it back in its place.","Làm ơn đặt nó lại chỗ cũ."],["Home is my favourite place.","Nhà là nơi tôi yêu thích nhất."]],passage:"My house has a kitchen, a living room, a bedroom and a bathroom. I like to keep every room tidy and clean. On Saturdays, I do the laundry and finish my household chores. A comfortable home helps me relax after a busy day.",translation:"Nhà tôi có nhà bếp, phòng khách, phòng ngủ và phòng tắm. Tôi thích giữ mọi căn phòng gọn gàng và sạch sẽ. Vào thứ Bảy, tôi giặt quần áo và hoàn thành việc nhà. Một ngôi nhà thoải mái giúp tôi thư giãn sau một ngày bận rộn."},
