@@ -1882,7 +1882,9 @@ function startGrammarPractice(){
  const mode=document.getElementById("grammarPracticeMode")?.value||"10";
  const level=document.getElementById("grammarPracticeLevel")?.value||"all";
  const key="englishgo_grammar_seen_"+level;
- let pool=grammarQuizData.map((q,id)=>({...q,_qid:id})).filter(x=>level==="all"||x.level===level);
+ const questionBank=(typeof grammarQuizData!=="undefined"&&Array.isArray(grammarQuizData))?grammarQuizData:[];
+ if(!questionBank.length){const box=document.getElementById("grammarQuizQ");if(box)box.textContent="Ngân hàng câu hỏi chưa tải được. Hãy tải lại trang.";return;}
+ let pool=questionBank.map((q,id)=>({...q,_qid:id})).filter(x=>level==="all"||x.level===level);
  let seen=[];
  try{seen=JSON.parse(localStorage.getItem(key)||"[]");if(!Array.isArray(seen))seen=[];}catch(e){seen=[];}
  // Ưu tiên câu chưa từng xuất hiện trong các đề trước; chỉ quay vòng khi đã dùng hết ngân hàng.
