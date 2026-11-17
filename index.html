@@ -5403,6 +5403,97 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    </div>
    <div class="example"><b>Speaking practice</b><br>Hãy nói lại hội thoại trong 45–60 giây. Thử đổi màu light pink thành màu khác và đổi dáng almond thành square hoặc round để luyện phản xạ với nhiều yêu cầu khách hàng.</div>
   </div>`;
+  if(day===7)return `<div class="eg-lesson-content">
+   <div class="panel" style="margin:12px 0;background:#f3f6ff"><b>🎯 Mục tiêu hôm nay</b><p>Ôn lại kiến thức Day 1–6, tự giới thiệu bản thân và trả lời các câu hỏi quen thuộc mà không nhìn tài liệu.</p><span class="badge">Review · 60 phút</span></div>
+   <h3>1. Review 6 ngày · 10 phút</h3>
+   <div class="example"><b>Day 1 – Introduce yourself:</b> giới thiệu bản thân<br><b>Day 2 – Daily life:</b> thói quen hằng ngày<br><b>Day 3 – Family & friends:</b> gia đình và bạn bè<br><b>Day 4 – Food & restaurants:</b> đồ ăn, gọi món<br><b>Day 5 – Shopping:</b> mua sắm<br><b>Day 6 – Work & customers:</b> giao tiếp với khách</div>
+   <p>Đọc lại từng chủ đề và tự nói ít nhất 3 câu cho mỗi chủ đề mà không nhìn tài liệu.</p>
+   <h3>2. Grammar Review · 10 phút</h3>
+   <div class="example"><b>Present Simple:</b> I work every day.<br><b>Present Continuous:</b> I'm learning English.<br><b>Have / Has:</b> I have two brothers.<br><b>Some / Any:</b> I don't have any milk.<br><b>Much / Many:</b> How many apples?<br><b>Would like:</b> I'd like a coffee.<br><b>Can I...?:</b> Can I pay by card?<br><b>Would you prefer...?:</b> Would you prefer red or pink?</div>
+   <h3>3. Tổng hợp ngữ pháp · 15 phút</h3>
+   <div class="eg-quiz">
+    <label>1. She ______ in Germany.<select id="egDay7Q1"><option value="">-- Chọn --</option><option value="a">A. live</option><option value="b">B. lives</option><option value="c">C. living</option></select></label>
+    <label>2. I ______ learning English right now.<select id="egDay7Q2"><option value="">-- Chọn --</option><option value="a">A. am</option><option value="b">B. is</option><option value="c">C. are</option></select></label>
+    <label>3. I don't have ______ milk.<select id="egDay7Q3"><option value="">-- Chọn --</option><option value="a">A. some</option><option value="b">B. any</option><option value="c">C. many</option></select></label>
+    <label>4. How ______ brothers do you have?<select id="egDay7Q4"><option value="">-- Chọn --</option><option value="a">A. much</option><option value="b">B. many</option><option value="c">C. any</option></select></label>
+    <label>5. Would you like ______ coffee?<select id="egDay7Q5"><option value="">-- Chọn --</option><option value="a">A. a cup of</option><option value="b">B. a</option><option value="c">C. many</option></select></label>
+   </div>
+   <h3>4. Sửa lỗi và dịch câu · 10 phút</h3>
+   <div class="eg-quiz">
+    <label>6. Sửa câu: “She have two sisters.”<input id="egDay7Q6" placeholder="Viết câu đúng"></label>
+    <label>7. Sửa câu: “I usually go hiking in weekend.”<input id="egDay7Q7" placeholder="Viết câu đúng"></label>
+    <label>8. Sửa câu: “Can I try on it?”<input id="egDay7Q8" placeholder="Viết câu đúng"></label>
+    <label>9. Dịch: Tôi đã sống ở Đức được ba năm.<input id="egDay7Q9" placeholder="I have..."></label>
+    <label>10. Dịch: Tôi thường đi làm lúc 9 giờ sáng.<input id="egDay7Q10" placeholder="I usually..."></label>
+    <label>11. Dịch: Tôi muốn gọi một tách cà phê.<input id="egDay7Q11" placeholder="I'd like..."></label>
+    <label>12. Dịch: Bạn thích móng vuông hay móng tròn?<input id="egDay7Q12" placeholder="Would you prefer..."></label>
+   </div>
+   <h3>5. Speaking Challenge · 15 phút</h3>
+   <p>Viết đoạn giới thiệu bản thân khoảng 8–10 câu: tên, quê quán, nơi sống, công việc, gia đình, sở thích, cuối tuần, lý do học tiếng Anh và mục tiêu tương lai. Sau đó đọc thành tiếng và ghi âm.</p>
+   <label>Đoạn giới thiệu của bạn<textarea id="egDay7Q13" rows="7" placeholder="Hi! My name is..."></textarea></label>
+   <h3>6. Kiểm tra phản xạ nói · 10 phút</h3>
+   <p>Tự trả lời không nhìn tài liệu, sau đó ghi lại câu trả lời:</p>
+   <label>14. What do you usually do after work?<input id="egDay7Q14" placeholder="After work, I..."></label>
+   <label>15. What kind of music do you like?<input id="egDay7Q15" placeholder="I like..."></label>
+   <label>16. What do you usually eat for breakfast?<input id="egDay7Q16" placeholder="For breakfast..."></label>
+   <label>17. What do you like about your job?<input id="egDay7Q17" placeholder="I enjoy..."></label>
+   <label>18. Why are you learning English?<input id="egDay7Q18" placeholder="I'm learning English because..."></label>
+   <button class="btn" id="egDay7Check" type="button">Kiểm tra bài Day 7</button><p id="egDay7Feedback" class="small" aria-live="polite"></p>
+   <div class="example"><b>Mục tiêu tuần đầu:</b> Không cần nói hoàn hảo. Hãy tự tạo câu, trả lời câu hỏi quen thuộc và nói liên tục khoảng 1 phút về bản thân.</div>
+  </div>`;
+  if(day===8)return `<div class="eg-lesson-content">
+   <div class="panel" style="margin:12px 0;background:#f3f6ff"><b>🎯 Mục tiêu hôm nay</b><p>Kể về những việc đã xảy ra trong quá khứ, đặc biệt là chuyến đi, công việc và trải nghiệm cá nhân.</p><span class="badge">Beginner · A1/A2 · 60 phút</span></div>
+   <h3>1. Vocabulary · Từ vựng · 10 phút</h3>
+   <div class="wordlist">
+    <div class="wordrow"><b>Yesterday</b><span class="meaning">Hôm qua</span><button class="btn line" type="button" onclick="say('Yesterday')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Last week</b><span class="meaning">Tuần trước</span><button class="btn line" type="button" onclick="say('Last week')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Last month</b><span class="meaning">Tháng trước</span><button class="btn line" type="button" onclick="say('Last month')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Last year</b><span class="meaning">Năm ngoái</span><button class="btn line" type="button" onclick="say('Last year')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Travel</b><span class="meaning">Du lịch</span><button class="btn line" type="button" onclick="say('Travel')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Visited</b><span class="meaning">Đã ghé thăm</span><button class="btn line" type="button" onclick="say('Visited')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Went</b><span class="meaning">Đã đi</span><button class="btn line" type="button" onclick="say('Went')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Saw</b><span class="meaning">Đã nhìn thấy</span><button class="btn line" type="button" onclick="say('Saw')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Took photos</b><span class="meaning">Đã chụp ảnh</span><button class="btn line" type="button" onclick="say('Took photos')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Met</b><span class="meaning">Đã gặp</span><button class="btn line" type="button" onclick="say('Met')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Bought</b><span class="meaning">Đã mua</span><button class="btn line" type="button" onclick="say('Bought')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Enjoyed</b><span class="meaning">Đã tận hưởng</span><button class="btn line" type="button" onclick="say('Enjoyed')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Experienced</b><span class="meaning">Đã trải nghiệm</span><button class="btn line" type="button" onclick="say('Experienced')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Remember</b><span class="meaning">Nhớ</span><button class="btn line" type="button" onclick="say('Remember')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Wonderful</b><span class="meaning">Tuyệt vời</span><button class="btn line" type="button" onclick="say('Wonderful')">🔊 Nghe</button></div>
+   </div>
+   <h3>2. Grammar · Past Simple · 10 phút</h3>
+   <div class="example"><b>Khẳng định:</b> S + V2/ed → I visited Berlin last week.<br><b>Phủ định:</b> S + didn't + V nguyên mẫu → I didn't go shopping yesterday.<br><b>Câu hỏi:</b> Did + S + V nguyên mẫu? → Did you enjoy your trip?</div>
+   <p><b>Động từ bất quy tắc cần nhớ</b></p>
+   <div class="example">Go → Went<br>See → Saw<br>Eat → Ate<br>Buy → Bought<br>Meet → Met<br>Take → Took<br>Have → Had<br>Make → Made</div>
+   <div class="feedback"><b>Ghi nhớ:</b> Sau didn't và Did, luôn dùng động từ nguyên mẫu: didn't go, Did you meet...? Không dùng didn't went hoặc Did you met.</div>
+   <h3>3. Useful Expressions · 10 phút</h3>
+   <div class="wordlist">
+    <div class="wordrow"><b>I went hiking last weekend.</b><span class="meaning">Cuối tuần trước tôi đi leo núi.</span><button class="btn line" type="button" onclick="say('I went hiking last weekend.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I took a lot of photos.</b><span class="meaning">Tôi đã chụp rất nhiều ảnh.</span><button class="btn line" type="button" onclick="say('I took a lot of photos.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I had a wonderful time.</b><span class="meaning">Tôi đã có khoảng thời gian tuyệt vời.</span><button class="btn line" type="button" onclick="say('I had a wonderful time.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I visited a beautiful place.</b><span class="meaning">Tôi đã ghé thăm một nơi tuyệt đẹp.</span><button class="btn line" type="button" onclick="say('I visited a beautiful place.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>It was an unforgettable experience.</b><span class="meaning">Đó là một trải nghiệm khó quên.</span><button class="btn line" type="button" onclick="say('It was an unforgettable experience.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I really enjoyed the trip.</b><span class="meaning">Tôi thực sự thích chuyến đi.</span><button class="btn line" type="button" onclick="say('I really enjoyed the trip.')">🔊 Nghe</button></div>
+   </div>
+   <h3>4. Conversation · 10 phút</h3>
+   <div class="panel" style="margin:10px 0"><p><b>Anna:</b> What did you do last weekend?</p><p><b>Tom:</b> I went hiking with my friends.</p><p><b>Anna:</b> That sounds fun! Where did you go?</p><p><b>Tom:</b> We went to the mountains.</p><p><b>Anna:</b> Did you take any photos?</p><p><b>Tom:</b> Yes! I took lots of photos. The scenery was beautiful.</p><p><b>Anna:</b> Did you enjoy the trip?</p><p><b>Tom:</b> Absolutely! I had a wonderful time.</p><button class="btn line" type="button" onclick="say('What did you do last weekend? I went hiking with my friends. That sounds fun! Where did you go? We went to the mountains. Did you take any photos? Yes, I took lots of photos. The scenery was beautiful. Did you enjoy the trip? Absolutely! I had a wonderful time.')">🔊 Nghe hội thoại</button></div>
+   <h3>5. Day 8 – Final Test · 20 phút</h3>
+   <div class="eg-quiz">
+    <label>1. Yesterday, I ______ to the supermarket.<select id="egDay8Q1"><option value="">-- Chọn --</option><option value="a">A. go</option><option value="b">B. went</option><option value="c">C. going</option></select></label>
+    <label>2. She ______ a beautiful photo last weekend.<select id="egDay8Q2"><option value="">-- Chọn --</option><option value="a">A. take</option><option value="b">B. takes</option><option value="c">C. took</option></select></label>
+    <label>3. I didn't ______ breakfast yesterday.<select id="egDay8Q3"><option value="">-- Chọn --</option><option value="a">A. ate</option><option value="b">B. eat</option><option value="c">C. eating</option></select></label>
+    <label>4. Did you ______ your friends last week?<select id="egDay8Q4"><option value="">-- Chọn --</option><option value="a">A. meet</option><option value="b">B. met</option><option value="c">C. meeting</option></select></label>
+    <label>5. I (visit) ______ my friend yesterday.<input id="egDay8Q5" placeholder="Động từ quá khứ"></label>
+    <label>6. We (have) ______ dinner together last night.<input id="egDay8Q6" placeholder="Động từ quá khứ"></label>
+    <label>7. She (buy) ______ a new dress last week.<input id="egDay8Q7" placeholder="Động từ quá khứ"></label>
+    <label>8. Dịch: Cuối tuần trước tôi đi leo núi với bạn bè.<input id="egDay8Q8" placeholder="Last weekend..."></label>
+    <label>9. Dịch: Tôi đã chụp rất nhiều ảnh.<input id="egDay8Q9" placeholder="I took..."></label>
+    <label>10. Dịch: Chúng tôi đã có một khoảng thời gian tuyệt vời.<input id="egDay8Q10" placeholder="We had..."></label>
+    <label>11. Kể về chuyến đi gần đây nhất bằng 5–7 câu tiếng Anh: đi đâu, với ai, đã làm gì, có chụp ảnh không và cảm thấy thế nào.<textarea id="egDay8Q11" rows="6" placeholder="My recent trip was..."></textarea></label>
+    <button class="btn" id="egDay8Check" type="button">Kiểm tra bài Day 8</button><p id="egDay8Feedback" class="small" aria-live="polite"></p>
+   </div>
+   <div class="example"><b>Speaking practice:</b> Mỗi ngày dành ít nhất 10 phút nghe tiếng Anh thành tiếng. Nghe một câu, dừng lại, nhắc lại rồi thử nói lại mà không nhìn chữ.</div>
+  </div>`;
   return '<div class="eg-lesson-content"><h3>Nội dung hôm nay</h3><p>'+lessons[day-1][1]+'</p><p>Bài tập tương tác cho ngày này sẽ được bổ sung cùng nội dung bài học.</p></div>';
  }
  function render(showStudy){
@@ -5505,6 +5596,22 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
     feedback.textContent=missing>0?"M hãy trả lời đủ 10 câu rồi kiểm tra lại nhé.":"Phần trắc nghiệm có "+firstThree+"/3 câu đúng. Đáp án đúng là: 1A (like), 2B (or), 3A (okay). Kiểm tra lại nhé.";
     feedback.style.color="#b45309";
    }
+  });
+  const day7Check=document.getElementById("egDay7Check");if(day7Check)day7Check.addEventListener("click",()=>{
+   const answers=Array.from({length:18},(_,i)=>(document.getElementById("egDay7Q"+(i+1))?.value||"").trim());
+   const missing=answers.filter(a=>!a).length,expected=["b","a","b","b","a"];
+   const correct=answers.slice(0,5).filter((a,i)=>a.toLowerCase()===expected[i]).length;
+   const feedback=document.getElementById("egDay7Feedback");
+   if(missing===0&&correct===5){feedback.textContent="🎉 Hoàn thành Day 7! Cả 5 câu trắc nghiệm đều đúng. Hãy đọc to phần giới thiệu và câu trả lời phản xạ trước khi đánh dấu hoàn thành.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 7 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
+   else{feedback.textContent=missing>0?"Hãy trả lời đủ các câu trước nhé.":"Bạn đúng "+correct+"/5 câu trắc nghiệm. Đáp án: 1B (lives), 2A (am), 3B (any), 4B (many), 5A (a cup of).";feedback.style.color="#b45309"}
+  });
+  const day8Check=document.getElementById("egDay8Check");if(day8Check)day8Check.addEventListener("click",()=>{
+   const answers=Array.from({length:11},(_,i)=>(document.getElementById("egDay8Q"+(i+1))?.value||"").trim());
+   const missing=answers.filter(a=>!a).length,expected=["b","c","b","a"];
+   const correct=answers.slice(0,4).filter((a,i)=>a.toLowerCase()===expected[i]).length;
+   const feedback=document.getElementById("egDay8Feedback");
+   if(missing===0&&correct===4){feedback.textContent="🎉 Hoàn thành Day 8! Cả 4 câu trắc nghiệm đều đúng. Hãy đọc to câu chuyện chuyến đi 5–7 câu để luyện nói.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 8 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
+   else{feedback.textContent=missing>0?"Hãy trả lời đủ các câu trước nhé.":"Bạn đúng "+correct+"/4 câu trắc nghiệm. Đáp án: 1B (went), 2C (took), 3B (eat), 4A (meet).";feedback.style.color="#b45309"}
   });
   const doneBtn=document.getElementById("egJourneyCompleteToday");if(doneBtn)doneBtn.addEventListener("click",()=>{if(doneBtn.disabled)return;const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();const ok=write(d);const status=document.getElementById("egJourneyStatus");if(status)status.textContent=ok?"Đã ghi nhận Day "+cur.day+". Bài tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";render(false)});
  }
