@@ -900,6 +900,57 @@ html { background: #142342; }
   <div id="contextList"></div>
  </div>
 </section>
+<section class="page" id="dictation">
+ <div class="page-header"><div><p class="eyebrow">LISTEN & TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, gõ lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
+ <div class="card">
+  <div class="controls"><label for="dictationLevel">Cấp độ · Level</label><select id="dictationLevel"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><label for="dictationSpeed">Tốc độ</label><select id="dictationSpeed"><option value="0.75">Chậm</option><option value="0.9" selected>Bình thường</option><option value="1">Nhanh</option></select></div>
+  <div class="controls"><button class="btn primary" type="button" onclick="egDictationPlay()">▶ Nghe câu</button><button class="btn line" type="button" onclick="egDictationNew()">Câu tiếp theo →</button><button class="btn soft" type="button" onclick="egDictationReveal()">Hiện đáp án</button></div>
+  <label for="dictationAnswer">Your answer · Câu bạn nghe được</label><textarea id="dictationAnswer" rows="3" placeholder="Type the sentence you hear..."></textarea>
+  <div class="controls"><button class="btn primary" type="button" onclick="egDictationCheck()">Kiểm tra</button><button class="btn line" type="button" onclick="egDictationClear()">Xóa câu trả lời</button></div>
+  <div id="dictationResult" aria-live="polite"></div><div id="dictationExpected" style="display:none;margin-top:12px"></div>
+  <p class="small muted">Âm thanh sử dụng giọng đọc tiếng Anh có sẵn trên thiết bị. Nếu không nghe được, hãy thử Chrome hoặc Edge.</p>
+ </div>
+</section>
+<script id="englishgo-dictation-page">
+(function(){
+ const sets={
+  A1:["I get up at seven every morning.","She works in a small shop.","Could you please help me?","The bus is late today.","I would like a glass of water.","We usually have dinner at home.","He is learning English.","My appointment is on Monday."],
+  A2:["I have been waiting for the bus for twenty minutes.","Could you tell me how to get to the station?","She usually takes a short break after lunch.","I forgot to bring my umbrella this morning.","We are going to visit our friends this weekend.","Please let me know if you need any help."],
+  B1:["Although it was raining, we decided to walk to the city centre.","I would appreciate it if you could send me the details by email.","The meeting has been postponed until next Thursday.","She has been working here since she moved to Germany.","If I had more free time, I would take a cooking course."]
+ };
+ let current="",used=[];
+ const el=id=>document.getElementById(id);
+ function next(){
+  const level=el("dictationLevel")?.value||"A1",pool=sets[level]||sets.A1;
+  if(used.length>=pool.length)used=[];
+  const choices=pool.map((x,i)=>i).filter(i=>!used.includes(i));
+  const idx=choices[Math.floor(Math.random()*choices.length)];
+  used.push(idx);current=pool[idx];
+  if(el("dictationAnswer"))el("dictationAnswer").value="";
+  if(el("dictationResult"))el("dictationResult").textContent="Bấm “Nghe câu” để bắt đầu.";
+  if(el("dictationExpected")){el("dictationExpected").style.display="none";el("dictationExpected").textContent=""}
+ }
+ window.egDictationNew=next;
+ window.egDictationPlay=function(){
+  if(!current)next();
+  if(!("speechSynthesis" in window)){el("dictationResult").textContent="Trình duyệt này chưa hỗ trợ phát âm thanh.";return}
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(current);u.lang="en-US";u.rate=Number(el("dictationSpeed")?.value||0.9);speechSynthesis.speak(u);
+ };
+ window.egDictationCheck=function(){
+  const norm=x=>x.toLowerCase().replace(/[^a-z0-9']/g," ").replace(/\s+/g," ").trim();
+  const answer=norm(el("dictationAnswer")?.value||"");
+  if(!answer){el("dictationResult").textContent="Bạn hãy nhập câu mình nghe được trước nhé.";return}
+  const ok=answer===norm(current);
+  el("dictationResult").textContent=ok?"✓ Chính xác! Well done!":"Chưa chính xác. Nghe lại và thử lần nữa nhé.";
+ };
+ window.egDictationReveal=function(){el("dictationExpected").textContent="Đáp án: "+current;el("dictationExpected").style.display="block"};
+ window.egDictationClear=function(){el("dictationAnswer").value="";el("dictationResult").textContent=""};
+ el("dictationLevel")?.addEventListener("change",()=>{used=[];next()});
+ next();
+})();
+</script>
+
 <section class="page" id="reallistening">
  <div class="page-header"><div><p class="eyebrow">LISTEN TO REAL SITUATIONS</p><h1>🎧 Real Listening · Nghe hội thoại thực tế</h1><p>Nghe các đoạn hội thoại ngắn trong đời sống. Thử nghe trước, trả lời câu hỏi rồi mở bản chép lời để kiểm tra.</p></div></div>
  <div class="card">
