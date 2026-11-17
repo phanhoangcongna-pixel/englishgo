@@ -4663,7 +4663,7 @@ const vocabContexts=[
 ];
 function lesson(day){
  const index=Math.max(0,Math.min(99,day-1));
- const topic=dayTitles[index],topicVi=dayTitlesVi[index],bankIndex=Math.floor(index/10);
+ const topic=dayTitles[index],topicVi=dayTitlesVi[index],bankIndex=index%vocabularyBanks.length;
  const rotate=(arr,n)=>arr.map((_,i)=>arr[(i+n)%arr.length]);
  const words=rotate(vocabularyBanks[bankIndex],(index%10*3)%10);
  const phrases=rotate(phraseChunkBanks[bankIndex],(index%10*2)%10);
