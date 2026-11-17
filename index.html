@@ -499,7 +499,7 @@ html { background: #142342; }
 <header><div class="nav">
 <a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png?v=20261117"/></a>
 <nav aria-label="Main navigation" class="navlinks" id="mainNav">
-<button class="active nav-home" data-page="home">⌂ Home</button><button data-page="journey">🧭 My English Journey</button>
+<button class="active nav-home" data-page="home">⌂ Home</button>
 <details class="nav-group"><summary>📚 Learn <span aria-hidden="true">▾</span></summary><div class="nav-menu">
 <button data-page="vocab">📚 Vocabulary </button><button data-page="grammar">🔤 Grammar </button><button data-page="phrasal">🧩 Phrasal Verbs & Idioms </button><button data-page="writing">✍️ Writing </button><button data-page="stories">📖 Short Stories </button><button data-page="context">🌱 English in Context </button>
 </div></details>
@@ -604,6 +604,29 @@ html { background: #142342; }
 <div class="home-feature" id="englishgo-100day-home" style="background:linear-gradient(110deg,#eaf2ff,#f0fbf5);border-color:#cbdcf5">
  <div><span class="badge">100-DAY CHALLENGE · THỬ THÁCH 100 NGÀY</span><h2>🌱 100 ngày chinh phục tiếng Anh</h2><p>Mỗi ngày: 10 từ vựng · 10 cụm từ · 1 đoạn đọc · Shadowing. Học đều đặn để hoàn thành hành trình 100 ngày.</p><p id="eg100HomeProgress" class="small" style="margin-top:7px;font-weight:700">0/100 ngày hoàn thành</p></div>
  <button class="btn" onclick="eg100Enter()">Bắt đầu học · Start →</button>
+</div>
+<div class="panel" id="journey">
+ <div class="page-header"><p class="eyebrow">YOUR PERSONAL ROADMAP · LỘ TRÌNH CỦA BẠN</p><h1 class="title">My English Journey 🧭</h1><p class="intro">Lộ trình giao tiếp tiếng Anh trong 6 tháng · 60 phút mỗi ngày · Luyện đều nghe, nói, phát âm, từ vựng và ngữ pháp.</p></div>
+ <div class="panel">
+  <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center"><div><span class="tag">PERSONAL PLAN · A1 FOUNDATION</span><h2 style="margin-top:10px">Cứ tiến bộ từng ngày!</h2><p class="muted">Mục tiêu: nghe hiểu hội thoại đời thường, tự tin giao tiếp trong công việc, cuộc sống ở Đức, du lịch và kết bạn.</p></div><div style="min-width:130px;text-align:center"><div class="word" id="egJourneyPercent">0%</div><span class="small muted">Tổng tiến độ</span></div></div>
+  <div class="bar"><span id="egJourneyBar"></span></div><div class="stats"><div class="mini-stat"><b id="egJourneyDone">0</b><small class="muted">Ngày hoàn thành</small></div><div class="mini-stat"><b>180</b><small class="muted">Ngày dự kiến</small></div><div class="mini-stat"><b>60 phút</b><small class="muted">Mỗi ngày</small></div></div>
+ </div>
+ <div class="section"><div><h2>📆 Lộ trình 6 tháng</h2><p>Mỗi giai đoạn có trọng tâm riêng, nhưng vẫn luyện đủ kỹ năng.</p></div></div>
+ <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+  <article class="card"><span class="tag">MONTH 1–2</span><h3>🌱 Xây nền tảng</h3><p class="muted small">IPA và phát âm cuối từ; từ vựng thông dụng; câu cơ bản, hiện tại đơn/tiếp diễn, quá khứ và tương lai; nghe hội thoại ngắn, chậm.</p><b>Mục tiêu:</b><p class="small">Giới thiệu bản thân, nói về gia đình, công việc, thói quen và sở thích bằng câu đơn giản.</p></article>
+  <article class="card"><span class="tag">MONTH 3–4</span><h3>🎧 Nghe hiểu & phản xạ</h3><p class="muted small">Tăng vốn từ theo chủ đề; luyện nghe nhiều lần; shadowing; hỏi–đáp nhanh; nối ý và kể chuyện ngắn.</p><b>Mục tiêu:</b><p class="small">Duy trì hội thoại quen thuộc và nói liên tục khoảng 2–3 phút.</p></article>
+  <article class="card"><span class="tag">MONTH 5–6</span><h3>🗣️ Giao tiếp thực tế</h3><p class="muted small">Tình huống ở tiệm nail, mua sắm, nhà hàng, khách sạn, du lịch; nghe nhiều tốc độ và giọng khác nhau; hội thoại tự nhiên.</p><b>Mục tiêu:</b><p class="small">Tự tin xử lý tình huống thường ngày, diễn đạt ý kiến và nói dài hơn, hướng tới 5–10 phút.</p></article>
+ </div>
+ <div class="section"><div><h2>⏱️ Lịch học 60 phút mỗi ngày</h2><p>Ưu tiên nghe và nói, nhưng không bỏ quên phát âm và nền tảng.</p></div></div>
+ <div class="panel">
+  <div class="row"><b>📚 10 phút · Từ vựng & cụm từ</b><span class="muted small">Học 5–8 cụm, đặt câu của riêng mình</span></div><div class="row"><b>🔊 10 phút · Phát âm / IPA</b><span class="muted small">Âm khó, trọng âm, âm cuối, nối âm</span></div><div class="row"><b>🎧 15 phút · Listening</b><span class="muted small">Nghe lần 1 không nhìn chữ, lần 2 ghi ý, lần 3 kiểm tra</span></div><div class="row"><b>🎙️ 10 phút · Shadowing</b><span class="muted small">Nghe một câu, nhại lại nhịp và ngữ điệu</span></div><div class="row"><b>💬 15 phút · Speaking</b><span class="muted small">Trả lời câu hỏi, kể chuyện, đóng vai hội thoại</span></div>
+  <p class="small muted" style="margin-top:12px">Lưu ý: đọc đoạn hội thoại không thay thế nghe audio. Hãy bật đọc thành tiếng/Voice hoặc dùng audio thật; lượt nghe đầu tiên nên không nhìn transcript.</p>
+ </div>
+ <div class="section"><div><h2>📖 Nhật ký bài học</h2><p>Đánh dấu bài đã hoàn thành. Tiến độ được lưu trên trình duyệt này.</p></div></div>
+ <div class="panel"><div class="small muted" id="egJourneyCount" style="margin-bottom:12px"></div><div id="egJourneyLessons"></div></div>
+ <div class="section"><div><h2>🎯 Mục tiêu sau 6 tháng</h2><p>Đích đến thực tế, đánh giá qua cả nghe và nói.</p></div></div>
+ <div class="two-col"><div class="card"><h3>Con có thể làm được</h3><ul class="small"><li>Giới thiệu bản thân, gia đình và công việc tự nhiên hơn.</li><li>Giao tiếp với khách tại tiệm nail: hỏi nhu cầu, tư vấn màu/kiểu/dáng móng.</li><li>Gọi món, mua sắm, đặt phòng và trò chuyện khi đi du lịch.</li><li>Nghe ý chính của hội thoại quen thuộc và biết nhờ người khác nói chậm/lặp lại.</li><li>Nói về trải nghiệm, kế hoạch, cảm xúc và sở thích bằng nhiều câu nối ý.</li></ul></div><div class="card"><h3>Nguyên tắc học</h3><ul class="small"><li>Học đều mỗi ngày, không cần hoàn hảo.</li><li>Ưu tiên câu dùng được ngoài đời thay vì chỉ học thuộc quy tắc.</li><li>Ghi âm câu trả lời để tự nghe lại phát âm.</li><li>Ôn lỗi cũ trước khi tăng độ khó.</li><li>Đánh giá tiến bộ qua nghe và nói, không chỉ bài viết.</li></ul></div></div>
+ <div class="controls"><button class="btn" type="button" onclick="egJourneyGoNext()">▶ Tiếp tục bài tiếp theo</button><button class="btn line" type="button" onclick="egJourneyExport()">⬇ Tải tiến độ học</button><button class="btn line" type="button" onclick="egJourneyReset()">Đặt lại dấu hoàn thành</button></div><p class="small muted" id="egJourneyStatus" aria-live="polite">Tiến độ được lưu cục bộ trên trình duyệt này.</p>
 </div>
 <div class="home-tools">
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
@@ -1091,29 +1114,7 @@ html { background: #142342; }
 
 
 
-<section class="page" id="journey">
- <div class="page-header"><p class="eyebrow">YOUR PERSONAL ROADMAP · LỘ TRÌNH CỦA BẠN</p><h1 class="title">My English Journey 🧭</h1><p class="intro">Lộ trình giao tiếp tiếng Anh trong 6 tháng · 60 phút mỗi ngày · Luyện đều nghe, nói, phát âm, từ vựng và ngữ pháp.</p></div>
- <div class="panel">
-  <div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center"><div><span class="tag">PERSONAL PLAN · A1 FOUNDATION</span><h2 style="margin-top:10px">Cứ tiến bộ từng ngày!</h2><p class="muted">Mục tiêu: nghe hiểu hội thoại đời thường, tự tin giao tiếp trong công việc, cuộc sống ở Đức, du lịch và kết bạn.</p></div><div style="min-width:130px;text-align:center"><div class="word" id="egJourneyPercent">0%</div><span class="small muted">Tổng tiến độ</span></div></div>
-  <div class="bar"><span id="egJourneyBar"></span></div><div class="stats"><div class="mini-stat"><b id="egJourneyDone">0</b><small class="muted">Ngày hoàn thành</small></div><div class="mini-stat"><b>180</b><small class="muted">Ngày dự kiến</small></div><div class="mini-stat"><b>60 phút</b><small class="muted">Mỗi ngày</small></div></div>
- </div>
- <div class="section"><div><h2>📆 Lộ trình 6 tháng</h2><p>Mỗi giai đoạn có trọng tâm riêng, nhưng vẫn luyện đủ kỹ năng.</p></div></div>
- <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
-  <article class="card"><span class="tag">MONTH 1–2</span><h3>🌱 Xây nền tảng</h3><p class="muted small">IPA và phát âm cuối từ; từ vựng thông dụng; câu cơ bản, hiện tại đơn/tiếp diễn, quá khứ và tương lai; nghe hội thoại ngắn, chậm.</p><b>Mục tiêu:</b><p class="small">Giới thiệu bản thân, nói về gia đình, công việc, thói quen và sở thích bằng câu đơn giản.</p></article>
-  <article class="card"><span class="tag">MONTH 3–4</span><h3>🎧 Nghe hiểu & phản xạ</h3><p class="muted small">Tăng vốn từ theo chủ đề; luyện nghe nhiều lần; shadowing; hỏi–đáp nhanh; nối ý và kể chuyện ngắn.</p><b>Mục tiêu:</b><p class="small">Duy trì hội thoại quen thuộc và nói liên tục khoảng 2–3 phút.</p></article>
-  <article class="card"><span class="tag">MONTH 5–6</span><h3>🗣️ Giao tiếp thực tế</h3><p class="muted small">Tình huống ở tiệm nail, mua sắm, nhà hàng, khách sạn, du lịch; nghe nhiều tốc độ và giọng khác nhau; hội thoại tự nhiên.</p><b>Mục tiêu:</b><p class="small">Tự tin xử lý tình huống thường ngày, diễn đạt ý kiến và nói dài hơn, hướng tới 5–10 phút.</p></article>
- </div>
- <div class="section"><div><h2>⏱️ Lịch học 60 phút mỗi ngày</h2><p>Ưu tiên nghe và nói, nhưng không bỏ quên phát âm và nền tảng.</p></div></div>
- <div class="panel">
-  <div class="row"><b>📚 10 phút · Từ vựng & cụm từ</b><span class="muted small">Học 5–8 cụm, đặt câu của riêng mình</span></div><div class="row"><b>🔊 10 phút · Phát âm / IPA</b><span class="muted small">Âm khó, trọng âm, âm cuối, nối âm</span></div><div class="row"><b>🎧 15 phút · Listening</b><span class="muted small">Nghe lần 1 không nhìn chữ, lần 2 ghi ý, lần 3 kiểm tra</span></div><div class="row"><b>🎙️ 10 phút · Shadowing</b><span class="muted small">Nghe một câu, nhại lại nhịp và ngữ điệu</span></div><div class="row"><b>💬 15 phút · Speaking</b><span class="muted small">Trả lời câu hỏi, kể chuyện, đóng vai hội thoại</span></div>
-  <p class="small muted" style="margin-top:12px">Lưu ý: đọc đoạn hội thoại không thay thế nghe audio. Hãy bật đọc thành tiếng/Voice hoặc dùng audio thật; lượt nghe đầu tiên nên không nhìn transcript.</p>
- </div>
- <div class="section"><div><h2>📖 Nhật ký bài học</h2><p>Đánh dấu bài đã hoàn thành. Tiến độ được lưu trên trình duyệt này.</p></div></div>
- <div class="panel"><div class="small muted" id="egJourneyCount" style="margin-bottom:12px"></div><div id="egJourneyLessons"></div></div>
- <div class="section"><div><h2>🎯 Mục tiêu sau 6 tháng</h2><p>Đích đến thực tế, đánh giá qua cả nghe và nói.</p></div></div>
- <div class="two-col"><div class="card"><h3>Con có thể làm được</h3><ul class="small"><li>Giới thiệu bản thân, gia đình và công việc tự nhiên hơn.</li><li>Giao tiếp với khách tại tiệm nail: hỏi nhu cầu, tư vấn màu/kiểu/dáng móng.</li><li>Gọi món, mua sắm, đặt phòng và trò chuyện khi đi du lịch.</li><li>Nghe ý chính của hội thoại quen thuộc và biết nhờ người khác nói chậm/lặp lại.</li><li>Nói về trải nghiệm, kế hoạch, cảm xúc và sở thích bằng nhiều câu nối ý.</li></ul></div><div class="card"><h3>Nguyên tắc học</h3><ul class="small"><li>Học đều mỗi ngày, không cần hoàn hảo.</li><li>Ưu tiên câu dùng được ngoài đời thay vì chỉ học thuộc quy tắc.</li><li>Ghi âm câu trả lời để tự nghe lại phát âm.</li><li>Ôn lỗi cũ trước khi tăng độ khó.</li><li>Đánh giá tiến bộ qua nghe và nói, không chỉ bài viết.</li></ul></div></div>
- <div class="controls"><button class="btn" type="button" onclick="egJourneyGoNext()">▶ Tiếp tục bài tiếp theo</button><button class="btn line" type="button" onclick="egJourneyExport()">⬇ Tải tiến độ học</button><button class="btn line" type="button" onclick="egJourneyReset()">Đặt lại dấu hoàn thành</button></div><p class="small muted" id="egJourneyStatus" aria-live="polite">Tiến độ được lưu cục bộ trên trình duyệt này.</p>
-</section>
+
 
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
