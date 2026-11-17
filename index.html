@@ -3537,7 +3537,8 @@ document.addEventListener("DOMContentLoaded",function(){
  window.egSafariRecord=startLocalRecording;
  function bindExtraMics(){
   const dialogue=document.getElementById("egRecordShadow");
-  if(dialogue)dialogue.onclick=()=>startLocalRecording("egDialogueFeedback","Dialogue Shadowing");
+  const supportsSpeechRecognition=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+  if(dialogue&&!supportsSpeechRecognition)dialogue.onclick=()=>startLocalRecording("egDialogueFeedback","Dialogue Shadowing");
  }
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bindExtraMics);else bindExtraMics();
  setTimeout(bindExtraMics,1200);
