@@ -32,6 +32,22 @@ textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px
 .cloud-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:20px;background:#e9f8f0;color:#14734e;font-size:12px}
 @media(max-width:700px){#cloudLoginBtn{width:100%}}
 </style>
+<style id="englishgo-answer-result-colors">
+/* Consistent visual feedback: correct answers green, incorrect answers red. */
+button.good, .btn.good, .choice.good, [role="button"].good {
+  background:#eaf8f0 !important;
+  border:1px solid #36a875 !important;
+  color:#126b48 !important;
+  box-shadow:inset 0 0 0 1px #36a875;
+}
+button.bad, .btn.bad, .choice.bad, [role="button"].bad {
+  background:#fff0ef !important;
+  border:1px solid #df7770 !important;
+  color:#a2322c !important;
+  box-shadow:inset 0 0 0 1px #df7770;
+}
+button.good:disabled, button.bad:disabled { opacity:1 !important; }
+</style>
 <style id="englishgo-mobile-overflow-fix">
 /* Mobile layout fixes: keep long native selects and controls inside their cards. */
 *, *::before, *::after { box-sizing: border-box; }
