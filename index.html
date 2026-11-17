@@ -4812,7 +4812,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    const cached=localStorage.getItem("eg-dict-v3:"+key);
    if(cached){const parsed=JSON.parse(cached);if(parsed&&parsed.savedAt>Date.now()-30*86400000&&parsed.data){lookupMemory.set(key,parsed.data);return Promise.resolve(parsed.data);}}
   }catch(e){}
-  const candidates=wordCandidates(word);
+  const candidates=wordCandidates(word).slice(0,4);
   function lookupVi(index){
    if(index>=candidates.length)return Promise.reject(new Error("No Vietnamese entry"));
    const candidate=candidates[index];
