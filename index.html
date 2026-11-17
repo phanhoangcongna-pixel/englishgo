@@ -638,7 +638,7 @@ html { background: #142342; }
  <div class="controls"><label class="small" for="eg100Rate">Tốc độ</label><select id="eg100Rate" style="max-width:180px"><option value="0.75">Chậm · 0.75×</option><option value="0.9" selected>Tự nhiên · 0.9×</option><option value="1">Bình thường · 1×</option></select></div>
  <div class="controls"><button class="btn" onclick="eg100Speak()">🔊 Nghe mẫu</button><button class="btn soft" onclick="eg100SpeakSlow()">🐢 Nghe chậm</button><button class="btn line" onclick="eg100Stop()">■ Dừng</button></div><p id="eg100ShadowStatus" class="small muted" aria-live="polite">Nghe và nhại lại đoạn văn 2–3 lần nhé.</p>
 </div>
-<div class="panel" style="text-align:center"><button class="btn" id="eg100CompleteBtn" onclick="eg100CompleteDay()">✓ Hoàn thành ngày này · Sang ngày tiếp theo</button><p class="small muted" id="eg100CompleteHint">Sau khi học xong 4 phần, nhấn nút để lưu tiến độ và mở bài kế tiếp.</p></div>
+<div class="eg100-complete-dock"><button class="btn" id="eg100CompleteBtn" onclick="eg100CompleteDay()">✓ Hoàn thành ngày này · Sang ngày tiếp theo</button><p class="small muted" id="eg100CompleteHint">Sau khi học xong 4 phần, nhấn nút để lưu tiến độ và mở bài kế tiếp.</p></div>
 </section>
 <section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><select id="wordLevel" onchange="renderWords()"><option value="all">All levels · Tất cả trình độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả chủ đề</option></select><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/></div><p class="small muted" id="wordLearningOrder">Lộ trình: A1 (dễ) → A2 (trung bình) → B1 (khó). Chọn trình độ và chủ đề để học theo nhóm.</p><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 <section class="page" id="grammar">
@@ -3756,7 +3756,7 @@ document.addEventListener("DOMContentLoaded",function(){
   translation:["Dịch phản xạ thông thường","Dịch theo chủ đề","Bộ 1.000 câu giao tiếp","Bộ 1.500 câu phản xạ"],
   practice:["Luyện nghe","Luyện nói","Luyện viết"]
  };
- const skip=new Set(["home","cloud","dictionary"]);
+ const skip=new Set(["home","cloud","dictionary","daily100"]);
  function directBlocks(page){
   const children=Array.from(page.children);
   let blocks=[];
@@ -4606,5 +4606,19 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 })();
 </script>
 
+
+
+<style id="englishgo-daily100-complete-dock">
+#daily100{padding-bottom:112px}
+#daily100 .eg100-complete-dock{
+ position:sticky;bottom:14px;z-index:30;
+ display:flex;flex-direction:column;align-items:center;gap:6px;
+ margin:22px 0 8px;padding:12px 14px;
+ background:var(--card,#fff);border:1px solid var(--line,#e5eaf2);
+ border-radius:18px;box-shadow:0 10px 28px rgba(20,40,80,.14)
+}
+#daily100 .eg100-complete-dock button{width:100%;min-height:52px;font-weight:800}
+#daily100 .eg100-complete-dock p{margin:0;text-align:center}
+</style>
 
 </body></html>
