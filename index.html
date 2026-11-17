@@ -5236,4 +5236,50 @@ window.deCheckTranslation=()=>{$("deFeedback").textContent=$("deAnswer").value.t
 window.deQuiz=(b,ok)=>{$("deQuizFeedback").textContent=ok?"Richtig! Ich komme aus Vietnam.":"Noch einmal! Chủ ngữ ich đi với komme.";b.style.borderColor=ok?"#16865b":"#c74b4b"};
 function egShowLanguage(which,save=true){const chooser=$("languageChooser"),english=$("englishApp"),german=$("germanApp"),root=document.documentElement;root.classList.remove("eg-lang-en","eg-lang-de");chooser.hidden=which!=="chooser";english.hidden=which!=="en";german.hidden=which!=="de";if(which==="en")root.classList.add("eg-lang-en");if(which==="de")root.classList.add("eg-lang-de");if(save){try{if(which==="chooser"){localStorage.removeItem("eg-selected-language");sessionStorage.removeItem("eg-selected-language")}else{localStorage.setItem("eg-selected-language",which);sessionStorage.setItem("eg-selected-language",which)}}catch(e){}}if(which==="de")dashboard();window.scrollTo(0,0)};window.enterEnglishGo=()=>egShowLanguage("en");window.enterDeutschGo=()=>{if("speechSynthesis"in window)speechSynthesis.getVoices();egShowLanguage("de")};window.backToLanguageChooser=()=>egShowLanguage("chooser");document.addEventListener("DOMContentLoaded",()=>{let selected="";try{selected=localStorage.getItem("eg-selected-language")||sessionStorage.getItem("eg-selected-language")||""}catch(e){}const chooser=$("languageChooser"),english=$("englishApp"),german=$("germanApp");if(selected==="en"){chooser.hidden=true;german.hidden=true;english.hidden=false;document.documentElement.classList.remove("eg-lang-de");document.documentElement.classList.add("eg-lang-en");}else if(selected==="de"){chooser.hidden=true;english.hidden=true;german.hidden=false;document.documentElement.classList.remove("eg-lang-en");document.documentElement.classList.add("eg-lang-de");dashboard();}else{chooser.hidden=false;english.hidden=true;german.hidden=true;document.documentElement.classList.remove("eg-lang-en","eg-lang-de");}});
 })();
-</script></body></html>
+</script>
+<script id="eg-language-persistence-final-v2">
+(function(){
+  const KEY="eg-selected-language";
+  function readChoice(){
+    const hash=(location.hash||"").toLowerCase();
+    if(hash==="#lang-de") return "de";
+    if(hash==="#lang-en") return "en";
+    try { const v=localStorage.getItem(KEY); if(v==="de"||v==="en") return v; } catch(e){}
+    try { const v=sessionStorage.getItem(KEY); if(v==="de"||v==="en") return v; } catch(e){}
+    return "";
+  }
+  function show(choice, persist){
+    const chooser=document.getElementById("languageChooser");
+    const english=document.getElementById("englishApp");
+    const german=document.getElementById("germanApp");
+    if(!chooser||!english||!german) return;
+    document.documentElement.classList.remove("eg-lang-en","eg-lang-de");
+    chooser.hidden=choice!=="";
+    english.hidden=choice!=="en";
+    german.hidden=choice!=="de";
+    if(choice==="en") document.documentElement.classList.add("eg-lang-en");
+    if(choice==="de") document.documentElement.classList.add("eg-lang-de");
+    if(persist){
+      try {
+        if(choice) localStorage.setItem(KEY,choice); else localStorage.removeItem(KEY);
+        if(choice) sessionStorage.setItem(KEY,choice); else sessionStorage.removeItem(KEY);
+      } catch(e){}
+      const hash=choice==="" ? "" : (choice==="de" ? "#lang-de" : "#lang-en");
+      try { history.replaceState(null,"",location.pathname+location.search+hash); } catch(e){}
+    }
+    if(choice==="de" && typeof window.deDashboard==="function") window.deDashboard();
+    window.scrollTo(0,0);
+  }
+  window.enterEnglishGo=function(){show("en",true)};
+  window.enterDeutschGo=function(){
+    if("speechSynthesis" in window) window.speechSynthesis.getVoices();
+    show("de",true);
+  };
+  window.backToLanguageChooser=function(){show("",true)};
+  function restore(){show(readChoice(),false)}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",restore,{once:true});
+  else restore();
+  window.addEventListener("pageshow",restore);
+})();
+</script>
+</body></html>
