@@ -4767,13 +4767,34 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
  }
  function hide(){active="";tip.style.display="none";requestToken++;}
  function fetchMeaning(word){
-  const url="https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word);
-  return fetch(url,{method:"GET",mode:"cors",credentials:"omit"}).then(r=>{if(!r.ok)throw new Error("not found");return r.json();}).then(rows=>{
-   const item=rows&&rows[0];if(!item)throw new Error("empty");
-   const phonetic=item.phonetic||(item.phonetics||[]).find(p=>p.text)?.text||"IPA chưa có";
-   const definitions=(item.meanings||[]).flatMap(m=>(m.definitions||[]).slice(0,2).map(d=>d.definition));
-   const translation=definitions[0]||item.meanings?.[0]?.partOfSpeech||"Chưa có nghĩa tiếng Việt trong dữ liệu trực tuyến";
-   return {ipa:phonetic.replace(/^[/]|[/]$/g,""),meaning:translation,source:"Từ điển trực tuyến (định nghĩa tiếng Anh)"};
+  const clean=s=>String(s||"").trim();
+  const timeout=(url,ms)=> {
+   const controller=new AbortController();
+   const timer=setTimeout(()=>controller.abort(),ms);
+   return fetch(url,{method:"GET",mode:"cors",credentials:"omit",signal:controller.signal})
+    .finally(()=>clearTimeout(timer));
+  };
+  const viUrl="https://dict.minhqnd.com/api/v1/lookup?word="+encodeURIComponent(word)+"&lang=en&def_lang=vi";
+  return timeout(viUrl,5500).then(r=>{if(!r.ok)throw new Error("Vietnamese dictionary unavailable");return r.json();}).then(payload=>{
+   const rows=Array.isArray(payload.results)?payload.results:[];
+   const viDefs=rows.flatMap(row=>(row.meanings||[]).filter(m=>(m.definition_lang||"").toLowerCase()==="vi").map(m=>({text:m.definition,pos:m.pos||m.partOfSpeech,example:m.example}))).filter(x=>clean(x.text));
+   const ipaRow=rows.find(row=>Array.isArray(row.pronunciations)&&row.pronunciations.length);
+   const ipa=ipaRow&&ipaRow.pronunciations.map(p=>p.ipa).filter(Boolean)[0];
+   if(!payload.exists||!viDefs.length)throw new Error("No Vietnamese translation");
+   const first=viDefs[0];
+   const extra=viDefs.slice(1,3).map(x=>x.text);
+   return {ipa:ipa||"IPA chưa có",meaning:(first.pos?first.pos+": ":"")+first.text+(extra.length?"; "+extra.join("; "):""),source:"Từ điển Anh–Việt · MinhQND"};
+  }).catch(()=>{
+   // Fallback: never leave a permanent loading tooltip; show an English definition if Vietnamese data is absent.
+   return timeout("https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word),5500)
+    .then(r=>{if(!r.ok)throw new Error("not found");return r.json();})
+    .then(rows=>{
+     const item=rows&&rows[0];if(!item)throw new Error("empty");
+     const phonetic=item.phonetic||(item.phonetics||[]).find(p=>p.text)?.text||"IPA chưa có";
+     const defs=(item.meanings||[]).flatMap(m=>(m.definitions||[]).slice(0,2).map(d=>({text:d.definition,pos:m.partOfSpeech})));
+     if(!defs.length)throw new Error("no definition");
+     return {ipa:phonetic.replace(/^[/]|[/]$/g,""),meaning:"Nghĩa tiếng Anh: "+defs[0].text,source:"Free Dictionary · chưa có bản dịch tiếng Việt"};
+    });
   });
  }
  function show(x,y,force){
