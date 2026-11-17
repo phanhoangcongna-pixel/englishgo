@@ -1335,17 +1335,21 @@ function waitForEnglishVoice(){
 
 let speechRequestId = 0;
 let egAudioQueueTimer = null;
+let egActiveInlineStop=null;
 function egAudioStop(){
  speechRequestId++;
  if(egAudioQueueTimer){clearTimeout(egAudioQueueTimer);egAudioQueueTimer=null;}
  if(window.speechSynthesis)window.speechSynthesis.cancel();
+ if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}
  const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="none";
 }
-function egAudioSpeak(text,rate=0.88){
+function egAudioSpeak(text,rate=0.88,triggerButton=null){
  const full=String(text||"").trim();if(!full)return;
  const synth=window.speechSynthesis;
  if(!synth||typeof SpeechSynthesisUtterance==="undefined"){alert("Trình duyệt này chưa hỗ trợ phát âm. Hãy thử Chrome, Edge hoặc Safari mới nhất.");return;}
  egAudioStop();const requestId=++speechRequestId;
+ const inlineStop=triggerButton?.nextElementSibling?.classList?.contains("eg-inline-audio-stop")?triggerButton.nextElementSibling:null;
+ if(inlineStop){egActiveInlineStop=inlineStop;inlineStop.style.display="inline-flex";}
  const voice=getEnglishVoice();
  // Split by sentence punctuation so the voice pauses naturally between sentences.
  const parts=full.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[full];
@@ -1353,13 +1357,13 @@ function egAudioSpeak(text,rate=0.88){
  const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="inline-flex";
  const playNext=()=>{
   if(requestId!==speechRequestId)return;
-  if(index>=parts.length){if(stop)stop.style.display="none";return;}
+  if(index>=parts.length){if(stop)stop.style.display="none";if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}return;}
   const chunk=parts[index++].trim();if(!chunk){playNext();return;}
   const utterance=new SpeechSynthesisUtterance(chunk);
   utterance.lang=voice&&voice.lang?voice.lang:"en-US";if(voice)utterance.voice=voice;
   utterance.rate=rate;utterance.pitch=1;utterance.volume=1;
   utterance.onend=()=>{if(requestId!==speechRequestId)return;egAudioQueueTimer=setTimeout(playNext,420);};
-  utterance.onerror=event=>{if(requestId===speechRequestId){if(stop)stop.style.display="none";if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
+  utterance.onerror=event=>{if(requestId===speechRequestId){if(stop)stop.style.display="none";if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
   synth.speak(utterance);
  };
  try{synth.cancel();synth.resume();playNext();}
@@ -4888,7 +4892,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    <p><b>Conversation 1 – Meeting someone</b></p>
    <div class="panel" style="margin:10px 0">
     <p><b>Anna:</b> Hi! What's your name?</p><p><b>Tom:</b> My name is Tom. What's your name?</p><p><b>Anna:</b> I'm Anna. Nice to meet you!</p><p><b>Tom:</b> Nice to meet you too!</p><p><b>Anna:</b> Where are you from?</p><p><b>Tom:</b> I'm from Vietnam. How about you?</p><p><b>Anna:</b> I'm from England.</p>
-    <button class="btn" type="button" onclick="say('Hi! What is your name? My name is Tom. What is your name? I am Anna. Nice to meet you. Nice to meet you too. Where are you from? I am from Vietnam. How about you? I am from England.')">▶ Nghe toàn bộ hội thoại</button>
+    <button class="btn" type="button" onclick="egAudioSpeak('Hi! What is your name? My name is Tom. What is your name? I am Anna. Nice to meet you. Nice to meet you too. Where are you from? I am from Vietnam. How about you? I am from England.',0.88,this)">▶ Nghe toàn bộ hội thoại</button><button class="btn line eg-inline-audio-stop" type="button" onclick="egAudioStop()" style="display:none;margin-left:8px">■ Dừng</button>
    </div>
    <p class="small muted">Bản dịch: Chào! Bạn tên gì? – Tôi tên Tom. Bạn tên gì? – Tôi là Anna. Rất vui được gặp bạn! – Tôi cũng rất vui được gặp bạn! – Bạn đến từ đâu? – Tôi đến từ Việt Nam. Còn bạn? – Tôi đến từ Anh.</p>
    <ol><li>Đọc hội thoại một lần để hiểu nghĩa.</li><li>Che phần tiếng Việt, đọc lại tiếng Anh.</li><li>Bật nghe và nhắc lại nếu có thể.</li><li>Đóng phần hội thoại và tự nói lại theo trí nhớ.</li></ol>
@@ -4927,7 +4931,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
     <p>In my free time, I enjoy listening to music and watching movies.</p>
     <p>I'm also learning English because I want to communicate with people from different countries.</p>
     <p>Nice to meet you!</p>
-    <button class="btn" type="button" onclick="say('Hi! My name is Cong. I am from Vietnam, but I currently live in Germany. I am a nail technician. In my free time, I enjoy listening to music and watching movies. I am also learning English because I want to communicate with people from different countries. Nice to meet you!')">▶ Nghe toàn bộ bài giới thiệu</button>
+    <button class="btn" type="button" onclick="egAudioSpeak('Hi! My name is Cong. I am from Vietnam, but I currently live in Germany. I am a nail technician. In my free time, I enjoy listening to music and watching movies. I am also learning English because I want to communicate with people from different countries. Nice to meet you!',0.88,this)">▶ Nghe toàn bộ bài giới thiệu</button><button class="btn line eg-inline-audio-stop" type="button" onclick="egAudioStop()" style="display:none;margin-left:8px">■ Dừng</button>
    </div>
    <div class="example"><b>Bản dịch</b><br>Xin chào! Tôi tên là Cong.<br>Tôi đến từ Việt Nam nhưng hiện tại đang sống ở Đức.<br>Tôi là một thợ làm móng.<br>Trong thời gian rảnh, tôi thích nghe nhạc và xem phim.<br>Tôi cũng đang học tiếng Anh vì muốn giao tiếp với mọi người từ các quốc gia khác nhau.<br>Rất vui được gặp bạn!</div>
    <h3>8. Day 1 – Speaking Challenge 2 · Luyện phản xạ giao tiếp</h3>
@@ -4987,7 +4991,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
     <p><b>Anna:</b> What time do you start work?</p><p><b>Tom:</b> I start work at 9 a.m. and finish at 6 p.m.</p>
     <p><b>Anna:</b> What do you do after work?</p><p><b>Tom:</b> I usually go shopping or hang out with my friends.</p>
     <p><b>Anna:</b> What about weekends?</p><p><b>Tom:</b> I love going hiking and taking photos.</p>
-    <button class="btn" type="button" onclick="say('Anna: What time do you usually wake up? Tom: I usually wake up at 7 a.m. Anna: What do you do after waking up? Tom: I brush my teeth, take a shower, and have breakfast. Anna: What time do you start work? Tom: I start work at 9 a.m. and finish at 6 p.m. Anna: What do you do after work? Tom: I usually go shopping or hang out with my friends. Anna: What about weekends? Tom: I love going hiking and taking photos.')">▶ Nghe toàn bộ hội thoại</button>
+    <button class="btn" type="button" onclick="egAudioSpeak('Anna: What time do you usually wake up? Tom: I usually wake up at 7 a.m. Anna: What do you do after waking up? Tom: I brush my teeth, take a shower, and have breakfast. Anna: What time do you start work? Tom: I start work at 9 a.m. and finish at 6 p.m. Anna: What do you do after work? Tom: I usually go shopping or hang out with my friends. Anna: What about weekends? Tom: I love going hiking and taking photos.',0.88,this)">▶ Nghe toàn bộ hội thoại</button><button class="btn line eg-inline-audio-stop" type="button" onclick="egAudioStop()" style="display:none;margin-left:8px">■ Dừng</button>
    </div>
    <div class="example"><b>Bản dịch</b><br>Bạn thường thức dậy lúc mấy giờ? – Tôi thường thức dậy lúc 7 giờ sáng.<br>Bạn làm gì sau khi thức dậy? – Tôi đánh răng, tắm và ăn sáng.<br>Bạn bắt đầu làm lúc mấy giờ? – Tôi bắt đầu làm lúc 9 giờ và kết thúc lúc 6 giờ.<br>Sau giờ làm bạn làm gì? – Tôi thường đi mua sắm hoặc đi chơi với bạn bè.<br>Còn cuối tuần thì sao? – Tôi thích đi hiking và chụp ảnh.</div>
    <ol><li>Đọc hội thoại một lần để hiểu nội dung.</li><li>Che phần tiếng Anh và thử nhớ lại nội dung.</li><li>Đọc thành tiếng từng vai Anna và Tom.</li><li>Tập nói lại câu trả lời mà không nhìn văn bản.</li></ol>
