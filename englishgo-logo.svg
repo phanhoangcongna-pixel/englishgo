@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 160" role="img" aria-labelledby="title desc">
-<title id="title">EnglishGo</title><desc id="desc">EnglishGo language learning brand</desc>
-<defs><linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4b8cff"/><stop offset="1" stop-color="#2455d6"/></linearGradient></defs>
-<rect x="18" y="18" width="124" height="124" rx="34" fill="#edf3ff"/>
-<path d="M48 48h34c12 0 21 8 21 20v47c-8-8-17-11-29-11H48z" fill="url(#blue)"/>
-<path d="M112 48H91c-12 0-21 8-21 20v47c8-8 17-11 29-11h13z" fill="#142342" opacity=".92"/>
-<path d="M70 68v47M112 68v47" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9"/>
-<path d="M51 57h15M96 57h12" stroke="#8eb5ff" stroke-width="4" stroke-linecap="round"/>
-<text x="174" y="105" font-family="Inter,Arial,sans-serif" font-size="76" font-weight="760" letter-spacing="-2.2" fill="#142342">English<tspan fill="#3478ed">Go</tspan></text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 190"><title>EnglishGo</title><defs><linearGradient id="b"><stop stop-color="#29b6ff"/><stop offset="1" stop-color="#0754d6"/></linearGradient><clipPath id="f"><rect x="48" y="34" width="132" height="88" rx="12"/></clipPath></defs><path d="M44 15h140a27 27 0 0 1 27 27v78a27 27 0 0 1-27 27h-65l-34 27v-27H44a27 27 0 0 1-27-27V42a27 27 0 0 1 27-27" fill="url(#b)"/><g clip-path="url(#f)"><rect x="48" y="34" width="132" height="88" fill="#012169"/><path d="M48 34l132 88M180 34L48 122" stroke="#fff" stroke-width="20"/><path d="M48 34l132 88M180 34L48 122" stroke="#c8102e" stroke-width="9"/><path d="M114 34v88M48 78h132" stroke="#fff" stroke-width="29"/><path d="M114 34v88M48 78h132" stroke="#c8102e" stroke-width="15"/></g><rect x="48" y="34" width="132" height="88" rx="12" fill="none" stroke="#fff" stroke-width="3"/><text x="242" y="119" font-family="Arial,sans-serif" font-size="88" font-style="italic" font-weight="800" letter-spacing="-3" fill="#102b4d">English</text><text x="580" y="119" font-family="Arial,sans-serif" font-size="88" font-style="italic" font-weight="900" letter-spacing="-4" fill="#087be8">Go</text><path d="M250 151Q485 176 765 146" fill="none" stroke="#168bea" stroke-width="7" stroke-linecap="round"/><path d="M818 31l7-18M840 42l16-13M846 65l21-3" stroke="#168bea" stroke-width="7" stroke-linecap="round"/></svg>
