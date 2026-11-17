@@ -4850,7 +4850,71 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
  const write=d=>{try{localStorage.setItem(key,JSON.stringify(d));return true}catch(e){return false}};
  function current(data){for(let i=1;i<=lessons.length;i++){const done=data.completedAt&&data.completedAt[i];if(!done)return {day:i,done:false};if(done>=today())return {day:i,done:true}}return {day:lessons.length,done:true,finished:true}}
  function lessonContent(day){
-  if(day===1)return '<div class="eg-lesson-content"><h3>1. Từ vựng & cụm từ</h3><ul><li><b>Hello / Hi</b> – Xin chào</li><li><b>My name is…</b> – Tên tôi là…</li><li><b>I’m from Vietnam.</b> – Tôi đến từ Việt Nam.</li><li><b>I live in Germany.</b> – Tôi sống ở Đức.</li><li><b>I work as a nail technician.</b> – Tôi làm nghề thợ nail.</li><li><b>In my free time…</b> – Khi rảnh tôi…</li><li><b>I enjoy listening to music.</b> – Tôi thích nghe nhạc.</li><li><b>Nice to meet you.</b> – Rất vui được gặp bạn.</li></ul><h3>2. Ngữ pháp hôm nay</h3><p><b>I am / I’m + thông tin</b>: I’m from Vietnam. · I’m a nail technician.</p><p><b>I live in + địa điểm</b>: I live in Germany.</p><p><b>I like / enjoy + danh từ hoặc V-ing</b>: I enjoy hiking. · I like listening to music.</p><h3>3. Hội thoại mẫu</h3><p><b>A:</b> Hi! What’s your name?<br><b>B:</b> My name is Anna. What about you?<br><b>A:</b> I’m Tom. Where are you from?<br><b>B:</b> I’m from Vietnam, but I live in Germany. Nice to meet you!<br><b>A:</b> Nice to meet you, too.</p><h3>4. Bài tập – Điền từ còn thiếu</h3><p class="small muted">Điền câu trả lời bằng tiếng Anh. Có thể viết hoa hoặc viết thường.</p><div class="eg-quiz"><label>1. Tên tôi là Anna. <input id="egq1" placeholder="My name is Anna"></label><label>2. Tôi đến từ Việt Nam. <input id="egq2" placeholder="I am from Vietnam"></label><label>3. Tôi sống ở Đức. <input id="egq3" placeholder="I live in Germany"></label><label>4. Tôi làm nghề thợ nail. <input id="egq4" placeholder="I work as a nail technician"></label><label>5. Tôi thích nghe nhạc. <input id="egq5" placeholder="I enjoy listening to music"></label><button class="btn" id="egJourneyCheckQuiz" type="button">Kiểm tra đáp án</button><p id="egJourneyQuizFeedback" class="small" aria-live="polite"></p></div><h3>5. Bài tập nói</h3><p>Viết đoạn giới thiệu bản thân 4–6 câu vào ô dưới đây, sau đó đọc thành tiếng 3 lần.</p><textarea id="egJourneySpeaking" rows="5" placeholder="Hi, my name is... I am from... I live in..."></textarea><p class="small muted">Gợi ý: nghe hội thoại mẫu bằng Voice/đọc thành tiếng. Lần đầu nghe không nhìn chữ, lần sau nhại lại từng câu.</p></div>';
+  if(day===1)return `<div class="eg-lesson-content">
+   <div class="panel" style="margin:12px 0;background:#f3f6ff"><b>🎯 Mục tiêu hôm nay</b><p>Sau bài này, bạn có thể giới thiệu bản thân bằng tiếng Anh trong khoảng 30–60 giây.</p><span class="badge">Beginner · A1 · 60 phút</span></div>
+   <h3>1. Từ vựng & cụm từ thông dụng · 10 phút</h3>
+   <p>Học cả cụm từ, không chỉ nhớ nghĩa tiếng Việt. Nhấn nút nghe và đọc thành tiếng mỗi cụm 5 lần.</p>
+   <div class="wordlist">
+    <div class="wordrow"><b>Hello</b><span class="meaning">Xin chào</span><button class="btn line" type="button" onclick="say('Hello')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>My name is…</b><span class="meaning">Tên tôi là…</span><button class="btn line" type="button" onclick="say('My name is')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I'm from…</b><span class="meaning">Tôi đến từ…</span><button class="btn line" type="button" onclick="say('I am from')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I live in…</b><span class="meaning">Tôi sống ở…</span><button class="btn line" type="button" onclick="say('I live in')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I'm … years old</b><span class="meaning">Tôi … tuổi</span><button class="btn line" type="button" onclick="say('I am years old')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I work as…</b><span class="meaning">Tôi làm nghề…</span><button class="btn line" type="button" onclick="say('I work as')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I study…</b><span class="meaning">Tôi học…</span><button class="btn line" type="button" onclick="say('I study')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>In my free time</b><span class="meaning">Trong thời gian rảnh</span><button class="btn line" type="button" onclick="say('In my free time')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I enjoy…</b><span class="meaning">Tôi thích…</span><button class="btn line" type="button" onclick="say('I enjoy')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Nice to meet you</b><span class="meaning">Rất vui được gặp bạn</span><button class="btn line" type="button" onclick="say('Nice to meet you')">🔊 Nghe</button></div>
+   </div>
+   <div class="example"><b>Ví dụ</b><br>I'm from Vietnam. <em>Tôi đến từ Việt Nam.</em><br>I live in Germany. <em>Tôi sống ở Đức.</em><br>I enjoy listening to music. <em>Tôi thích nghe nhạc.</em><br>I work as a nail technician. <em>Tôi làm nghề thợ nail.</em></div>
+   <h3>2. Ngữ pháp quan trọng · 10 phút</h3>
+   <p><b>I am / I'm + thông tin</b></p><ul><li>I'm Vietnamese. – Tôi là người Việt Nam.</li><li>I'm 25 years old. – Tôi 25 tuổi.</li><li>I'm happy. – Tôi vui.</li></ul>
+   <p><b>I live in + địa điểm</b></p><ul><li>I live in Germany. – Tôi sống ở Đức.</li><li>I live in a small town. – Tôi sống ở một thị trấn nhỏ.</li><li>I live with my family. – Tôi sống cùng gia đình.</li></ul>
+   <p><b>I like / I enjoy + sở thích</b></p><ul><li>I like coffee. – Tôi thích cà phê.</li><li>I like watching movies. – Tôi thích xem phim.</li><li>I enjoy traveling. – Tôi thích đi du lịch.</li></ul>
+   <div class="feedback"><b>Ghi nhớ:</b> I like coffee (like + danh từ); I like drinking coffee (like + V-ing). Không nói “I am like coffee”.</div>
+   <h3>3. Luyện phát âm · 10 phút</h3>
+   <p>Tập trung vào 5 từ dưới đây. Nghe mẫu, đọc chậm rồi đọc với tốc độ tự nhiên.</p>
+   <div class="wordlist">
+    <div class="wordrow"><b>Hello</b><span class="meaning">/həˈloʊ/</span><button class="btn line" type="button" onclick="say('Hello')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Name</b><span class="meaning">/neɪm/ · giữ âm /m/ cuối</span><button class="btn line" type="button" onclick="say('Name')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Live</b><span class="meaning">/lɪv/</span><button class="btn line" type="button" onclick="say('Live')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Like</b><span class="meaning">/laɪk/ · phát âm rõ /k/ cuối</span><button class="btn line" type="button" onclick="say('Like')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Nice</b><span class="meaning">/naɪs/ · phát âm rõ /s/ cuối</span><button class="btn line" type="button" onclick="say('Nice')">🔊 Nghe</button></div>
+   </div>
+   <h3>4. Luyện nghe · 15 phút</h3>
+   <p><b>Conversation 1 – Meeting someone</b></p>
+   <div class="panel" style="margin:10px 0">
+    <p><b>Anna:</b> Hi! What's your name?</p><p><b>Tom:</b> My name is Tom. What's your name?</p><p><b>Anna:</b> I'm Anna. Nice to meet you!</p><p><b>Tom:</b> Nice to meet you too!</p><p><b>Anna:</b> Where are you from?</p><p><b>Tom:</b> I'm from Vietnam. How about you?</p><p><b>Anna:</b> I'm from England.</p>
+    <button class="btn" type="button" onclick="say('Hi! What is your name? My name is Tom. What is your name? I am Anna. Nice to meet you. Nice to meet you too. Where are you from? I am from Vietnam. How about you? I am from England.')">▶ Nghe toàn bộ hội thoại</button>
+   </div>
+   <p class="small muted">Bản dịch: Chào! Bạn tên gì? – Tôi tên Tom. Bạn tên gì? – Tôi là Anna. Rất vui được gặp bạn! – Tôi cũng rất vui được gặp bạn! – Bạn đến từ đâu? – Tôi đến từ Việt Nam. Còn bạn? – Tôi đến từ Anh.</p>
+   <ol><li>Đọc hội thoại một lần để hiểu nghĩa.</li><li>Che phần tiếng Việt, đọc lại tiếng Anh.</li><li>Bật nghe và nhắc lại nếu có thể.</li><li>Đóng phần hội thoại và tự nói lại theo trí nhớ.</li></ol>
+   <h3>5. Shadowing – Nói bắt chước · 5 phút</h3>
+   <p>Đọc 5 câu, bắt chước nhịp điệu và cách nhấn từ. Mỗi câu đọc 5 lần: 2 lần chậm, 2 lần tự nhiên, lần cuối không nhìn chữ.</p>
+   <div class="wordlist">
+    <div class="wordrow"><b>Hello! My name is Anna.</b><span class="meaning">Xin chào! Tôi tên Anna.</span><button class="btn line" type="button" onclick="say('Hello! My name is Anna.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I'm from Vietnam.</b><span class="meaning">Tôi đến từ Việt Nam.</span><button class="btn line" type="button" onclick="say('I am from Vietnam.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I live in Germany.</b><span class="meaning">Tôi sống ở Đức.</span><button class="btn line" type="button" onclick="say('I live in Germany.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>I like listening to music.</b><span class="meaning">Tôi thích nghe nhạc.</span><button class="btn line" type="button" onclick="say('I like listening to music.')">🔊 Nghe</button></div>
+    <div class="wordrow"><b>Nice to meet you!</b><span class="meaning">Rất vui được gặp bạn!</span><button class="btn line" type="button" onclick="say('Nice to meet you!')">🔊 Nghe</button></div>
+   </div>
+   <h3>6. Thực hành giao tiếp · 10 phút</h3>
+   <div class="example"><b>My self-introduction</b><br>Hello! My name is [Tên của bạn].<br>I'm from Vietnam.<br>I live in Germany.<br>I'm [tuổi] years old.<br>I like listening to music and watching movies.<br>In my free time, I enjoy learning English.<br>Nice to meet you!</div>
+   <h3>🎤 Bài kiểm tra Day 1 – Speaking Challenge</h3>
+   <p>Hãy trả lời bằng tiếng Anh như đang nói chuyện với một người nước ngoài mới gặp.</p>
+   <div class="eg-quiz">
+    <label>1. Hello! What's your name? <input id="egq1" placeholder="My name is..."></label>
+    <label>2. Where are you from? <input id="egq2" placeholder="I'm from..."></label>
+    <label>3. Where do you live? <input id="egq3" placeholder="I live in..."></label>
+    <label>4. What do you do? <input id="egq4" placeholder="I work as... / I'm a..."></label>
+    <label>5. What do you like doing in your free time? <input id="egq5" placeholder="I like... / I enjoy..."></label>
+    <button class="btn" id="egJourneyCheckQuiz" type="button">Kiểm tra đáp án</button><p id="egJourneyQuizFeedback" class="small" aria-live="polite"></p>
+   </div>
+   <p class="small muted">Mẹo: Đừng sợ sai ngữ pháp hay phát âm. Hãy chủ động nói trước, sau đó sửa dần.</p>
+   <p><b>Bài giới thiệu của bạn (4–6 câu):</b></p>
+   <textarea id="egJourneySpeaking" rows="5" placeholder="Hello! My name is... I'm from Vietnam. I live in Germany. I work as..."></textarea>
+   <p class="small muted">Viết đoạn giới thiệu, sau đó đọc thành tiếng 3 lần. Nếu có thể, dùng chế độ thoại để luyện nghe và nói.</p>
+  </div>`;
   return '<div class="eg-lesson-content"><h3>Nội dung hôm nay</h3><p>'+lessons[day-1][1]+'</p><p>Bài tập tương tác cho ngày này sẽ được bổ sung cùng nội dung bài học.</p></div>';
  }
  function render(showStudy){
