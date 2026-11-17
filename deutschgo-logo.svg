@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 160" role="img" aria-labelledby="title desc">
-<title id="title">DeutschGo</title><desc id="desc">DeutschGo language learning brand</desc>
-<rect x="18" y="18" width="124" height="124" rx="34" fill="#fff5df"/>
-<path d="M48 48h34c12 0 21 8 21 20v47c-8-8-17-11-29-11H48z" fill="#e5a126"/>
-<path d="M112 48H91c-12 0-21 8-21 20v47c8-8 17-11 29-11h13z" fill="#142342" opacity=".94"/>
-<path d="M70 68v47M112 68v47" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9"/>
-<path d="M51 57h15M96 57h12" stroke="#ffd36b" stroke-width="4" stroke-linecap="round"/>
-<text x="174" y="105" font-family="Inter,Arial,sans-serif" font-size="76" font-weight="760" letter-spacing="-2.2" fill="#142342">Deutsch<tspan fill="#e5a126">Go</tspan></text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 190"><title>DeutschGo</title><defs><linearGradient id="g"><stop stop-color="#ffd34d"/><stop offset="1" stop-color="#ef8b00"/></linearGradient><clipPath id="f"><rect x="48" y="34" width="132" height="88" rx="12"/></clipPath></defs><path d="M44 15h140a27 27 0 0 1 27 27v78a27 27 0 0 1-27 27h-65l-34 27v-27H44a27 27 0 0 1-27-27V42a27 27 0 0 1 27-27" fill="url(#g)"/><g clip-path="url(#f)"><rect x="48" y="34" width="132" height="30" fill="#111"/><rect x="48" y="64" width="132" height="29" fill="#dd001b"/><rect x="48" y="93" width="132" height="29" fill="#ffce00"/></g><rect x="48" y="34" width="132" height="88" rx="12" fill="none" stroke="#fff" stroke-width="3"/><text x="242" y="119" font-family="Arial,sans-serif" font-size="88" font-style="italic" font-weight="800" letter-spacing="-3" fill="#102b4d">Deutsch</text><text x="632" y="119" font-family="Arial,sans-serif" font-size="88" font-style="italic" font-weight="900" letter-spacing="-4" fill="#f39a00">Go</text><path d="M250 151Q505 176 810 146" fill="none" stroke="#f2a000" stroke-width="7" stroke-linecap="round"/><path d="M820 31l7-18M842 42l16-13M848 65l21-3" stroke="#f2a000" stroke-width="7" stroke-linecap="round"/></svg>
