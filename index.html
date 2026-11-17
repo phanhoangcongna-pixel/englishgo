@@ -490,6 +490,7 @@ html { background: #142342; }
   }
 }
 </style>
+<style id="englishgo-vocab-level-topic">#vocab .vocab-level-group{margin:18px 0}#vocab .vocab-level-group h3{padding:10px 12px;border-radius:10px;background:#edf2ff;color:#294ba8}#vocab #wordLearningOrder{margin:8px 2px 14px}#vocab .controls select{flex:1 1 180px}</style>
 </head>
 <body>
 <header><div class="nav"><a aria-label="EnglishGo - Trang chủ" class="brand-logo" href="#" onclick="document.querySelector('[data-page=home]')?.click();return false"><img alt="EnglishGo" src="englishgo-logo.png"/></a>
@@ -624,7 +625,7 @@ html { background: #142342; }
 </div>
 <div class="footer">EnglishGo 2.0 · Free bilingual learning · Học tiếng Anh miễn phí<br/>Progress, XP and writing are stored locally on your device. Tiến độ được lưu trên thiết bị.</div>
 </section>
-<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả</option></select></div><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
+<section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><select id="wordLevel" onchange="renderWords()"><option value="all">All levels · Tất cả trình độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả chủ đề</option></select><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/></div><p class="small muted" id="wordLearningOrder">Lộ trình: A1 (dễ) → A2 (trung bình) → B1 (khó). Chọn trình độ và chủ đề để học theo nhóm.</p><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 <section class="page" id="grammar">
 <h1 class="title">Grammar · Ngữ pháp tiếng Anh</h1>
 <p class="intro">A step-by-step grammar course from A1 to B2. Học ngữ pháp từ nền tảng đến nâng cao, có công thức, ví dụ dịch nghĩa và bài tập.</p>
@@ -1768,13 +1769,16 @@ const EG_POS = {
 };
 DATA.vocab.forEach(w=>{if(!w.pos)w.pos=EG_POS[w.w]||"n";});
 function posLabel(p){return ({n:"Noun · Danh từ",v:"Verb · Động từ",adj:"Adjective · Tính từ",adv:"Adverb · Trạng từ",prep:"Preposition · Giới từ",conj:"Conjunction · Liên từ",det:"Determiner · Từ hạn định","v/n":"Verb / Noun · Động từ / Danh từ","n/v":"Noun / Verb · Danh từ / Động từ","adv/adj":"Adverb / Adjective · Trạng từ / Tính từ"})[p]||p;}
+const EG_VOCAB_LEVELS={"daily life":"A1","food and shopping":"A1","home and city":"A1","feelings and people":"A1","travel":"A2","health":"A2","technology":"A2","nature and weather":"A2","culture":"A2","work and study":"B1"};
+function vocabLevel(word){return word.level||EG_VOCAB_LEVELS[word.cat]||"A2";}
 function renderWords(){
- const cat=document.getElementById("wordCat"),q=document.getElementById("wordSearch").value.toLowerCase();
- if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].forEach(c=>cat.add(new Option(c,c)));
- const chosen=cat.value;
- const list=DATA.vocab.map((w,i)=>({...w,i})).filter(w=>(chosen==="all"||w.cat===chosen)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q)));
- document.getElementById("wordList").innerHTML=list.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" type="button" aria-label="Nghe ${w.w}" data-speak="${w.w.replace(/&/g,"&amp;").replace(/\"/g,"&quot;")}">🔊 Nghe</button></div>`).join("")||"<p>No words found · Không tìm thấy từ.</p>";
- if(list.length && !list.some(w=>w.i===wi))wi=list[0].i;
+ const cat=document.getElementById("wordCat"),level=document.getElementById("wordLevel"),q=document.getElementById("wordSearch").value.trim().toLowerCase();
+ if(cat.options.length===1)[...new Set(DATA.vocab.map(x=>x.cat))].sort((a,b)=>a.localeCompare(b)).forEach(c=>cat.add(new Option(c,c)));
+ const chosen=cat.value,chosenLevel=level.value,rank={A1:1,A2:2,B1:3};
+ const list=DATA.vocab.map((w,i)=>({...w,i,level:vocabLevel(w)})).filter(w=>(chosen==="all"||w.cat===chosen)&&(chosenLevel==="all"||w.level===chosenLevel)&&(w.w.toLowerCase().includes(q)||w.vi.toLowerCase().includes(q))).sort((a,b)=>rank[a.level]-rank[b.level]||a.cat.localeCompare(b.cat)||a.w.localeCompare(b.w));
+ const groups={};list.forEach(w=>(groups[w.level]??=[]).push(w));
+ document.getElementById("wordList").innerHTML=list.length?Object.entries(groups).map(([lv,words])=>`<section class="vocab-level-group"><h3>${lv} · ${({A1:"Cơ bản – dễ",A2:"Sơ cấp mở rộng – trung bình",B1:"Trung cấp – khó"})[lv]} <span class="small muted">(${words.length} từ)</span></h3>${words.map(w=>`<div class="wordrow"><div><b>${w.w}</b><div class="small muted">${w.cat} · ${posLabel(w.pos||"n")}</div></div><span class="meaning muted">${w.vi}</span><button class="btn line" type="button" aria-label="Nghe ${w.w}" data-speak="${w.w.replace(/&/g,"&amp;").replace(/"/g,"&quot;")}">🔊 Nghe</button></div>`).join("")}</section>`).join(""):"<p>No words found · Không tìm thấy từ.</p>";
+ if(list.length&&!list.some(w=>w.i===wi))wi=list[0].i;
  showWord();
 }
 function showWord(){
