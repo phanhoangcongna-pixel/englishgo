@@ -698,7 +698,47 @@ body > header .brand-logo img {object-fit:contain !important}
  body > header .brand-logo,.de-brand {width:210px !important;min-width:210px !important;max-width:210px !important;height:56px !important}
 }
 </style>
-<style id="brand-logo-refresh-sizing">body > header .brand-logo{width:310px!important;min-width:310px!important;max-width:310px!important;height:72px!important}.de-brand{width:310px!important;min-width:310px!important;max-width:310px!important;height:72px!important}@media(max-width:520px){body > header .brand-logo,.de-brand{width:260px!important;min-width:260px!important;max-width:260px!important;height:64px!important}}</style></head>
+<style id="brand-logo-refresh-sizing">body > header .brand-logo{width:310px!important;min-width:310px!important;max-width:310px!important;height:72px!important}.de-brand{width:310px!important;min-width:310px!important;max-width:310px!important;height:72px!important}@media(max-width:520px){body > header .brand-logo,.de-brand{width:260px!important;min-width:260px!important;max-width:260px!important;height:64px!important}}</style><style id="final-logo-size-fix">
+/* In column headers flex-basis was being interpreted as HEIGHT. Reset it. */
+body > header .brand-logo,
+.de-nav > .de-brand {
+  flex:0 0 auto !important;
+  align-self:flex-start !important;
+  display:flex !important;
+  box-sizing:border-box !important;
+  width:310px !important;
+  min-width:0 !important;
+  max-width:310px !important;
+  height:72px !important;
+  min-height:0 !important;
+  max-height:72px !important;
+  padding:5px 10px !important;
+  overflow:hidden !important;
+}
+body > header .brand-logo img,
+.de-nav > .de-brand img {
+  display:block !important;
+  flex:0 0 auto !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  height:100% !important;
+  min-height:0 !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+}
+.de-nav {align-items:flex-start !important}
+@media(max-width:520px) {
+  body > header .brand-logo,
+  .de-nav > .de-brand {
+    flex:0 0 auto !important;
+    width:260px !important;
+    max-width:260px !important;
+    height:64px !important;
+    max-height:64px !important;
+  }
+}
+</style></head>
 <body>
 <div id="languageChooser" class="language-chooser">
  <div class="chooser-brand"><img src="ethango-icon.svg" alt="" /> <span>EthanGo</span></div>
