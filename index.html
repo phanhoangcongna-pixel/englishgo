@@ -2502,7 +2502,13 @@ function shadowRender(){
  setHtml("shadowChecklist",['Mình nghe hết bài một lần trước khi nhìn transcript.','Mình bắt chước âm cuối và cách nối âm.','Mình chú ý trọng âm từ và ngữ điệu của câu.','Mình shadow mỗi câu ít nhất 2–3 lần.','Mình thử nói lại cả bài mà không nhìn chữ.'].map(x=>'<label style="display:block;padding:8px 0"><input type="checkbox" class="shadow-self-check"> '+x+'</label>').join(""));
  shadowUpdateProgress();setText("shadowFeedback","");
 }
-function shadowUpdateProgress(){const d=shadowCurrent();if(!d)return;const done=shadowDone[shadowKey()]||[];const pct=Math.round(done.length/d.chunks.length*100);document.getElementById("shadowProgress").innerHTML='<b>Tiến độ: '+done.length+'/'+d.chunks.length+' câu đã luyện</b><div style="height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:7px"><div style="height:100%;width:'+pct+'%;background:var(--primary);border-radius:20px"></div></div><p class="small muted">'+(pct===100?'Hoàn thành! Hãy thử nói lại toàn bài không nhìn chữ.':'Đánh dấu mỗi câu sau khi đã shadow 2–3 lần.')+'</p>'}
+function shadowUpdateProgress(){
+ const d=shadowCurrent();if(!d)return;
+ const target=document.getElementById("shadowProgress");if(!target)return;
+ const done=shadowDone[shadowKey()]||[];
+ const pct=d.chunks.length?Math.round(done.length/d.chunks.length*100):0;
+ target.innerHTML='<b>Tiến độ: '+done.length+'/'+d.chunks.length+' câu đã luyện</b><div style="height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:7px"><div style="height:100%;width:'+pct+'%;background:var(--primary);border-radius:20px"></div></div><p class="small muted">'+(pct===100?'Hoàn thành! Hãy thử nói lại toàn bài không nhìn chữ.':'Đánh dấu mỗi câu sau khi đã shadow 2–3 lần.')+'</p>';
+}
 function shadowMark(i){const key=shadowKey();shadowDone[key]=shadowDone[key]||[];const pos=shadowDone[key].indexOf(i);if(pos>=0)shadowDone[key].splice(pos,1);else shadowDone[key].push(i);shadowRender()}
 function shadowToggleTranscript(){shadowVisible=!shadowVisible;shadowRender()}
 function shadowSpeakNext(){if(shadowQueueIndex>=shadowQueue.length){shadowStop();return}const u=new SpeechSynthesisUtterance(shadowQueue[shadowQueueIndex++]);u.lang="en-US";u.rate=Number(document.getElementById("shadowSpeed")?.value||.98);u.pitch=1;u.voice=shadowSelectedVoice();shadowUtterance=u;u.onend=()=>{if(shadowUtterance===u)shadowSpeakNext()};u.onerror=()=>{if(shadowUtterance===u)shadowStop()};speechSynthesis.speak(u);document.getElementById("shadowStopBtn").style.display="inline-flex"}
