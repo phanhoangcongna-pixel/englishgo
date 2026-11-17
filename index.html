@@ -632,13 +632,13 @@ html { background: #142342; }
 <p class="intro" id="eg100DayTitle">Day 1/100 · My Morning — Buổi sáng của tôi</p>
 <div class="panel"><div class="row" style="align-items:center;justify-content:space-between;gap:12px"><b id="eg100Count">0/100 ngày hoàn thành</b><span class="badge">Học lần lượt từng ngày</span></div><div class="bar"><span id="eg100Bar" style="width:0%"></span></div><p class="small muted" id="eg100Status">Hoàn thành bài hôm nay để tự động mở bài ngày tiếp theo.</p></div>
 <div class="panel"><h2>📚 10 từ vựng · Vocabulary</h2><p class="small muted" id="eg100TopicVi">Chủ đề: Buổi sáng của tôi</p><div id="eg100Words" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:12px"></div></div>
-<div class="panel"><h2>💬 10 cụm từ · Useful phrases</h2><div id="eg100Phrases" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div></div>
+<div class="panel"><h2>💬 10 cụm từ · Useful phrases</h2><p class="small muted">Các cụm từ tự nhiên thường dùng, không phải câu hoàn chỉnh.</p><div id="eg100Phrases" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div></div><div class="panel"><h2>✍️ 10 câu ví dụ · Example sentences</h2><p class="small muted">Câu hoàn chỉnh giúp áp dụng từ vựng và cụm từ vào ngữ cảnh.</p><div id="eg100Sentences" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div></div>
 <div class="panel"><h2>📖 Đoạn văn · Reading</h2><p class="small muted">Các từ vựng trong bài được tô màu để dễ nhận biết.</p><div id="eg100Passage" class="example" style="line-height:1.9"></div><div id="eg100PassageVi" class="example" style="line-height:1.9;margin-top:12px;background:#f5f8ff"></div></div>
 <div class="panel"><h2>🎙️ Shadowing · Luyện nói nhại</h2><p class="small muted">Nghe toàn đoạn văn, sau đó nhại lại theo nhịp và ngữ điệu.</p>
  
  <div class="controls"><button class="btn" onclick="eg100Speak()">🔊 Nghe mẫu</button><button class="btn soft" onclick="eg100SpeakSlow()">🐢 Nghe chậm</button><button class="btn line" onclick="eg100Stop()">■ Dừng</button></div><p id="eg100ShadowStatus" class="small muted" aria-live="polite">Nghe và nhại lại đoạn văn 2–3 lần nhé.</p>
 </div>
-<div class="eg100-complete-dock"><button class="btn" id="eg100CompleteBtn" onclick="eg100CompleteDay()">✓ Hoàn thành ngày này · Sang ngày tiếp theo</button><p class="small muted" id="eg100CompleteHint">Sau khi học xong 4 phần, nhấn nút để lưu tiến độ và mở bài kế tiếp.</p></div>
+<div class="eg100-complete-dock"><button class="btn" id="eg100CompleteBtn" onclick="eg100CompleteDay()">✓ Hoàn thành ngày này · Sang ngày tiếp theo</button><p class="small muted" id="eg100CompleteHint">Sau khi học xong 5 phần, nhấn nút để lưu tiến độ và mở bài kế tiếp.</p></div>
 </section>
 <section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><select id="wordLevel" onchange="renderWords()"><option value="all">All levels · Tất cả trình độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả chủ đề</option></select><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/></div><p class="small muted" id="wordLearningOrder">Lộ trình: A1 (dễ) → A2 (trung bình) → B1 (khó). Chọn trình độ và chủ đề để học theo nhóm.</p><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 <section class="page" id="grammar">
@@ -4606,8 +4606,31 @@ const themes=[
 
 const dayTitles=["My Morning","My Home","Food & Drinks","At a Coffee Shop","My Family","My Daily Routine","My Hobbies","Shopping","Weather","Meeting New People","My Bedroom","My Clothes","My Favourite Food","At the Supermarket","My Best Friend","Days & Months","Telling the Time","My Neighbourhood","Pets","My Weekend","At a Restaurant","Cooking at Home","Going to the Doctor","At the Pharmacy","Taking the Bus","Asking for Directions","At the Train Station","Making a Phone Call","Making an Appointment","Birthday Parties","Cleaning the House","Doing the Laundry","At the Hair Salon","At the Nail Salon","Ordering Food Online","Paying the Bills","At the Bank","Using the Internet","Social Media","Making Plans","At the Airport","Booking a Hotel","Checking into a Hotel","At the Beach","Visiting a New City","Taking Photos","Asking for Help","Lost Luggage","Travel Problems","Talking About Holidays","My Job","At the Office","Work Colleagues","Daily Tasks","Work Meetings","Writing Emails","Job Interviews","Talking About Skills","Working from Home","Work-Life Balance","Expressing Feelings","Giving Opinions","Agreeing & Disagreeing","Making Suggestions","Apologising","Saying Thank You","Making Complaints","Solving Problems","Making Decisions","Talking About Experiences","My Childhood","My Future Plans","Learning English","Education","Technology in Daily Life","Healthy Lifestyle","Exercise & Fitness","Saving Money","Time Management","Good Habits","Small Talk","Keeping a Conversation Going","Talking About the News","Describing People","Describing Places","Comparing Things","Telling a Story","Talking About Memories","Giving Advice","Making Predictions","Environmental Protection","City Life & Country Life","Culture & Traditions","Movies & Entertainment","Personal Goals","Success & Failure","Overcoming Challenges","A Memorable Experience","My Dream Life","Introducing Myself Confidently"];
 const dayTitlesVi=["Buổi sáng của tôi","Ngôi nhà của tôi","Đồ ăn và thức uống","Tại quán cà phê","Gia đình tôi","Sinh hoạt hằng ngày","Sở thích","Mua sắm","Thời tiết","Làm quen người mới","Phòng ngủ của tôi","Quần áo của tôi","Món ăn yêu thích","Tại siêu thị","Người bạn thân","Thứ và tháng","Cách xem giờ","Khu phố của tôi","Thú cưng","Cuối tuần của tôi","Tại nhà hàng","Nấu ăn tại nhà","Đi khám bác sĩ","Tại hiệu thuốc","Đi xe buýt","Hỏi đường","Tại nhà ga","Gọi điện thoại","Đặt lịch hẹn","Tiệc sinh nhật","Dọn dẹp nhà cửa","Giặt quần áo","Tại tiệm làm tóc","Tại tiệm làm móng","Đặt đồ ăn trực tuyến","Thanh toán hóa đơn","Tại ngân hàng","Sử dụng Internet","Mạng xã hội","Lên kế hoạch","Tại sân bay","Đặt khách sạn","Nhận phòng khách sạn","Tại bãi biển","Tham quan thành phố mới","Chụp ảnh","Nhờ giúp đỡ","Thất lạc hành lý","Sự cố khi du lịch","Kể về kỳ nghỉ","Công việc của tôi","Tại văn phòng","Đồng nghiệp","Công việc hằng ngày","Cuộc họp","Viết email","Phỏng vấn xin việc","Nói về kỹ năng","Làm việc tại nhà","Cân bằng công việc và cuộc sống","Diễn tả cảm xúc","Đưa ra ý kiến","Đồng ý và không đồng ý","Đưa ra gợi ý","Xin lỗi","Cảm ơn","Phàn nàn","Giải quyết vấn đề","Đưa ra quyết định","Kể về trải nghiệm","Tuổi thơ của tôi","Kế hoạch tương lai","Học tiếng Anh","Giáo dục","Công nghệ trong cuộc sống","Lối sống lành mạnh","Tập luyện","Tiết kiệm tiền","Quản lý thời gian","Thói quen tốt","Nói chuyện xã giao","Duy trì cuộc trò chuyện","Nói về tin tức","Miêu tả con người","Miêu tả địa điểm","So sánh sự vật","Kể một câu chuyện","Nói về kỷ niệm","Đưa ra lời khuyên","Dự đoán tương lai","Bảo vệ môi trường","Thành thị và nông thôn","Văn hóa và truyền thống","Phim ảnh và giải trí","Mục tiêu cá nhân","Thành công và thất bại","Vượt qua thử thách","Một trải nghiệm đáng nhớ","Cuộc sống mơ ước","Tự tin giới thiệu bản thân"];
-const wordBanks=themes.map(t=>t.words);
-const phraseBanks=themes.map(t=>t.phrases);
+const vocabularyBanks=[
+ "wake=thức giấc|alarm=chuông báo thức|bed=giường|tooth=răng|shower=vòi sen|clothes=quần áo|breakfast=bữa sáng|morning=buổi sáng|hurry=vội vàng|time=thời gian",
+ "house=ngôi nhà|room=căn phòng|kitchen=nhà bếp|sofa=ghế sofa|bedroom=phòng ngủ|bathroom=phòng tắm|tidy=gọn gàng|clean=sạch sẽ|laundry=việc giặt giũ|chore=việc nhà",
+ "meal=bữa ăn|ingredient=nguyên liệu|recipe=công thức|boil=luộc|fry=chiên|bake=nướng|slice=thái lát|fresh=tươi|delicious=ngon|hungry=đói",
+ "work=công việc|colleague=đồng nghiệp|meeting=cuộc họp|schedule=lịch trình|task=nhiệm vụ|deadline=hạn chót|email=thư điện tử|break=giờ nghỉ|busy=bận rộn|finish=hoàn thành",
+ "street=đường phố|traffic=giao thông|crossroads=ngã tư|bus=xe buýt|ticket=vé|platform=sân ga|journey=hành trình|direction=phương hướng|train=tàu hỏa|nearby=ở gần",
+ "family=gia đình|relative=họ hàng|friend=bạn bè|neighbour=hàng xóm|conversation=cuộc trò chuyện|invite=mời|visit=thăm|message=tin nhắn|together=cùng nhau|friendly=thân thiện",
+ "shop=cửa hàng|price=giá cả|cheap=rẻ|expensive=đắt|discount=giảm giá|size=kích cỡ|receipt=hóa đơn|cash=tiền mặt|card=thẻ|change=tiền thừa",
+ "health=sức khỏe|healthy=khỏe mạnh|exercise=bài tập|medicine=thuốc|headache=đau đầu|cough=cơn ho|fever=cơn sốt|appointment=cuộc hẹn|rest=sự nghỉ ngơi|sleep=giấc ngủ",
+ "hobby=sở thích|leisure=thời gian nhàn rỗi|relax=thư giãn|movie=phim|music=âm nhạc|reading=việc đọc sách|exercise=sự vận động|outdoors=ngoài trời|photograph=bức ảnh|enjoy=tận hưởng",
+ "trip=chuyến đi|holiday=kỳ nghỉ|travel=du lịch|booking=việc đặt chỗ|suitcase=va-li|passport=hộ chiếu|airport=sân bay|hotel=khách sạn|reservation=sự đặt trước|luggage=hành lý"
+].map(s=>s.split("|").map(x=>x.split("=")));
+const phraseChunkBanks=[
+ "wake up=thức dậy|get out of bed=ra khỏi giường|turn off the alarm=tắt chuông báo thức|make the bed=dọn giường|brush my teeth=đánh răng|wash my face=rửa mặt|take a shower=tắm vòi sen|get dressed=mặc quần áo|have breakfast=ăn sáng|leave on time=rời đi đúng giờ",
+ "do the laundry=giặt quần áo|wash the dishes=rửa bát|tidy up the room=dọn phòng|make the bed=dọn giường|clean the kitchen=lau bếp|sweep the floor=quét sàn|vacuum the carpet=hút bụi thảm|take out the rubbish=đổ rác|put things away=cất đồ|share the chores=chia sẻ việc nhà",
+ "prepare a meal=chuẩn bị bữa ăn|follow a recipe=làm theo công thức|chop the vegetables=thái rau củ|boil some water=đun sôi nước|fry an egg=chiên trứng|bake a cake=nướng bánh|add some salt=thêm muối|slice the bread=cắt lát bánh mì|fresh ingredients=nguyên liệu tươi|a delicious meal=một bữa ăn ngon",
+ "start work=bắt đầu làm việc|check my emails=kiểm tra email|attend a meeting=dự cuộc họp|meet a deadline=kịp hạn chót|finish a task=hoàn thành nhiệm vụ|take a short break=nghỉ giải lao|make a schedule=lập lịch trình|work from home=làm việc tại nhà|busy at work=bận rộn ở chỗ làm|get to work=đến nơi làm việc",
+ "catch a bus=bắt xe buýt|buy a ticket=mua vé|miss the train=lỡ tàu|change platforms=đổi sân ga|cross the street=băng qua đường|turn left=rẽ trái|turn right=rẽ phải|go straight ahead=đi thẳng|ask for directions=hỏi đường|within walking distance=trong khoảng cách đi bộ",
+ "spend time together=dành thời gian bên nhau|keep in touch=giữ liên lạc|get along with=hòa thuận với|make friends=kết bạn|invite someone over=mời ai đó đến nhà|pay a visit=đến thăm|have a chat=trò chuyện|send a message=gửi tin nhắn|catch up with a friend=hỏi thăm bạn|stay in touch=duy trì liên lạc",
+ "go shopping=đi mua sắm|compare prices=so sánh giá|get a discount=được giảm giá|pay by card=thanh toán bằng thẻ|pay in cash=trả tiền mặt|keep the receipt=giữ hóa đơn|try something on=mặc thử|return an item=trả lại món hàng|ask for a refund=yêu cầu hoàn tiền|get your change=nhận tiền thừa",
+ "keep fit=giữ dáng|do exercise=tập thể dục|get enough sleep=ngủ đủ giấc|catch a cold=bị cảm lạnh|have a headache=bị đau đầu|run a fever=bị sốt|make an appointment=đặt lịch hẹn|take some medicine=uống thuốc|get some rest=nghỉ ngơi|look after your health=chăm sóc sức khỏe",
+ "spend free time=dành thời gian rảnh|listen to music=nghe nhạc|watch a movie=xem phim|read a book=đọc sách|go for a walk=đi dạo|take photos=chụp ảnh|play a sport=chơi thể thao|hang out with friends=đi chơi với bạn|try something new=thử điều mới|help me relax=giúp tôi thư giãn",
+ "plan a trip=lên kế hoạch chuyến đi|book a room=đặt phòng|check in=làm thủ tục nhận phòng|pack a suitcase=xếp va-li|show your passport=xuất trình hộ chiếu|catch a flight=bắt chuyến bay|miss a connection=lỡ chuyến nối chuyến|make a reservation=đặt chỗ trước|check out of a hotel=trả phòng|travel abroad=du lịch nước ngoài"
+].map(s=>s.split("|").map(x=>x.split("=")));
+const sentenceBanks=themes.map(t=>t.phrases);
 const lessonOpeners=[
 ["I usually start my day by","Tôi thường bắt đầu ngày mới bằng việc"],["At home, I often","Ở nhà, tôi thường"],["When I need something to eat, I","Khi cần ăn gì đó, tôi"],["When I visit this place, I","Khi đến nơi này, tôi"],["The people close to me often","Những người thân thiết với tôi thường"],["On a normal day, I","Vào một ngày bình thường, tôi"],["In my free time, I like to","Trong thời gian rảnh, tôi thích"],["When I go shopping, I","Khi đi mua sắm, tôi"],["The weather today makes me want to","Thời tiết hôm nay khiến tôi muốn"],["When I meet someone new, I","Khi gặp người mới, tôi"]
 ];
@@ -4628,16 +4651,14 @@ const vocabContexts=[
 ];
 function lesson(day){
  const index=Math.max(0,Math.min(99,day-1));
- const topic=dayTitles[index],topicVi=dayTitlesVi[index];
- const bankIndex=Math.floor(index/10);
- const baseWords=themes[bankIndex].words;
+ const topic=dayTitles[index],topicVi=dayTitlesVi[index],bankIndex=Math.floor(index/10);
  const rotate=(arr,n)=>arr.map((_,i)=>arr[(i+n)%arr.length]);
- const words=rotate(baseWords,(index%10*3)%baseWords.length).slice(0,10).map(w=>[w[0],w[1]]);
- const phraseBanks=themes.map(t=>t.phrases);
- const phrases=rotate(phraseBanks[bankIndex],(index%10*2)%phraseBanks[bankIndex].length).map(p=>[p[0],p[1]]);
+ const words=rotate(vocabularyBanks[bankIndex],(index%10*3)%10);
+ const phrases=rotate(phraseChunkBanks[bankIndex],(index%10*2)%10);
+ const sentences=rotate(sentenceBanks[bankIndex],(index%10*2)%10);
  const passage=readings[index][0]+" "+vocabContexts[bankIndex][0];
  const translation=readings[index][1]+" "+vocabContexts[bankIndex][1];
- return {day:index+1,title:topic,group:{vi:topicVi},words,phrases,passage,translation};
+ return {day:index+1,title:topic,group:{vi:topicVi},words,phrases,sentences,passage,translation};
 }
 function render(){
  const p=progress(),d=Math.max(1,Math.min(100,p+1)),l=lesson(d),$=id=>document.getElementById(id);selected=d;
@@ -4647,10 +4668,11 @@ function render(){
 
  $("eg100Status").textContent=p>=100?"🎉 Bạn đã hoàn thành 100/100 ngày!":"Đã hoàn thành "+p+"/100 ngày. Bài tiếp theo: Ngày "+(p+1)+".";
  const completeBtn=$("eg100CompleteBtn");if(completeBtn){completeBtn.disabled=p>=100;completeBtn.textContent=p>=100?"🎉 Đã hoàn thành thử thách 100 ngày":"✓ Hoàn thành ngày "+d+" · Sang ngày "+(d+1);}
- const completeHint=$("eg100CompleteHint");if(completeHint)completeHint.textContent=p>=100?"Bạn đã chinh phục toàn bộ lộ trình!":"Khi học xong từ vựng, cụm từ, đoạn văn và shadowing, nhấn nút để lưu ngày học.";
+ const completeHint=$("eg100CompleteHint");if(completeHint)completeHint.textContent=p>=100?"Bạn đã chinh phục toàn bộ lộ trình!":"Khi học xong từ vựng, cụm từ, câu ví dụ, Reading và Shadowing, nhấn nút để lưu ngày học.";
  const homeProgress=document.getElementById("eg100HomeProgress");if(homeProgress)homeProgress.textContent=p+"/100 ngày đã học"+(p>=100?" · Hoàn thành!":"");
  $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(w[0])+'</b><div class="small muted">'+esc(w[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(w[0])+'">🔊 Nghe</button></div>').join("");
  $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
+  $("eg100Sentences").innerHTML=l.sentences.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
  let passage=esc(l.passage);l.words.forEach(w=>{const re=new RegExp("\\b("+w[0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")\\b","gi");passage=passage.replace(re,'<mark class="eg100-highlight">$1</mark>')});
  $("eg100Passage").innerHTML=passage;$("eg100PassageVi").innerHTML="<b>Bản dịch tiếng Việt</b><p>"+esc(l.translation)+"</p>";
 }
