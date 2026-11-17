@@ -1310,8 +1310,8 @@ function renderWords(){let cat=document.getElementById("wordCat"),q=document.get
 function showWord(){let w=currentWord();document.getElementById("wordCard").innerHTML=`<div class="small muted">Word ${wi+1} / ${DATA.vocab.length} · Từ ${wi+1}/${DATA.vocab.length}</div><div class="word">${w.w}</div><div class="ipa">${w.ipa} · ${w.cat}</div><div class="translation">${w.vi}</div><div class="example"><b>${w.ex}</b><em>${w.vn}</em></div><span class="pill">${known.includes(wi)?"✓ Learned · Đã nhớ":"New word · Từ mới"}</span>`}
 function nextWord(){wi=(wi+1)%DATA.vocab.length;showWord()}function prevWord(){wi=(wi+DATA.vocab.length-1)%DATA.vocab.length;showWord()}
 function markWord(){if(!known.includes(wi)){known.push(wi);save("known",known);award("word-"+wi,5)}if(typeof egRoadmapTrack==="function")egRoadmapTrack("word",{count:known.length});updateStats();showWord()}
-function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("grammar")}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
-function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0){award("listen",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("listen")}}
+function grammarCheck(i){let f=document.getElementById("grammarFeedback");if(i===1){window.egCorrectChime?.();f.className="feedback good";f.textContent="Correct! He goes. Đúng rồi!";award("grammar",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("grammar")}else{f.className="feedback bad";f.textContent="Try again: he/she/it + verb-s/es. Hãy thử lại."}}
+function listenCheck(i){let f=document.getElementById("listenFeedback");f.className="feedback "+(i===0?"good":"bad");f.textContent=i===0?"Correct! Anna orders tea. Chính xác! Anna gọi trà.":"Listen again. Hãy nghe lại.";if(i===0){window.egCorrectChime?.();award("listen",10);if(typeof egRoadmapTrack==="function")egRoadmapTrack("listen")}}
 function escapeHtml(value){return String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function saveWriting(){localStorage.setItem("eg2-writing",document.getElementById("writingText").value);document.getElementById("writingStatus").textContent="Saved · Đã lưu";if(document.getElementById("writingText").value.trim().length>20)award("writing",10)}
 document.getElementById("writingText").value=localStorage.getItem("eg2-writing")||"";
@@ -1693,7 +1693,7 @@ function rlAdvCheck(){
  const sc=RL_ADVANCED[Number(document.getElementById("rlAdvScenario").value)||0],q=sc.turns[rlAdvTurn],correct=!!(rlAdvDisplayChoices[rlAdvChoice]&&rlAdvDisplayChoices[rlAdvChoice].correct);
  document.querySelectorAll("[data-adv-choice]").forEach((btn,i)=>{btn.disabled=true;if(rlAdvDisplayChoices[i].correct){btn.style.borderColor="#239765";btn.style.background="rgba(35,151,101,.10)"}else if(i===rlAdvChoice){btn.style.borderColor="#d97706";btn.style.background="rgba(217,119,6,.10)"}});
  document.getElementById("rlAdvFeedback").innerHTML=`<div class="feedback ${correct?"good":""}"><b>${correct?"Excellent choice! · Rất tốt!":"Try this more natural response · Hãy tham khảo câu tự nhiên hơn"}</b><p>${q.choices[q.answer]}</p><p class="small">${q.why}</p></div>`;
- rlAdvChecked=true;if(correct)rlAdvCompleted++;if(typeof egRoadmapTrack==="function")egRoadmapTrack("advancedAnswer",{correct});
+ rlAdvChecked=true;if(correct){rlAdvCompleted++;window.egCorrectChime?.()}if(typeof egRoadmapTrack==="function")egRoadmapTrack("advancedAnswer",{correct});
  document.getElementById("rlAdvScore").textContent=`Correct advanced turns this session: ${rlAdvCompleted} · Số câu đúng: ${rlAdvCompleted}`;
  document.getElementById("rlAdvNext").disabled=false;
 }
@@ -1847,7 +1847,7 @@ function answerGrammarQuiz(i){
  if(grammarQuizAnswered)return;grammarQuizAnswered=true;
  const q=grammarQuizPool[grammarQuizIndex],buttons=document.querySelectorAll("#grammarQuizChoices .choice");
  buttons.forEach((b,j)=>{if(j===q.ans)b.classList.add("good");else if(j===i)b.classList.add("bad");});
- const ok=i===q.ans;if(ok)grammarQuizCorrect++;else grammarQuizWrong.push(q);
+ const ok=i===q.ans;if(ok){grammarQuizCorrect++;window.egCorrectChime?.()}else grammarQuizWrong.push(q);
  const f=document.getElementById("grammarQuizFeedback");f.className="feedback "+(ok?"good":"bad");
  f.textContent=(ok?"Chính xác! ":"Chưa đúng. Đáp án: "+q.opts[q.ans]+". ")+q.why;
  document.getElementById("grammarQuizNext").disabled=false;
@@ -2620,7 +2620,7 @@ function dictCheck(){
  const feedback=document.getElementById("dictFeedback");
  if(!x||!answer||!feedback)return;
  const normalize=value=>value.trim().toLowerCase().replace(/[.,!?']/g,"").replace(/\s+/g," ");
- const correct=normalize(answer.value)===normalize(x.en);
+ const correct=normalize(answer.value)===normalize(x.en);if(correct)window.egCorrectChime?.();
  feedback.innerHTML=(correct?"<b>✅ Chính xác!</b>":"<b>Chưa chính xác.</b>")+"<p>Đáp án: "+x.en+"</p><p>"+x.vi+"</p>";
 }
 const phrasalData=[
