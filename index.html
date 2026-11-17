@@ -4592,6 +4592,18 @@ const lessonOpeners=[
 const phraseFrames=[
 ["I usually {a}.","Tôi thường {b}."],["I need to {a}.","Tôi cần {b}."],["Could you help me with {c}?","Bạn có thể giúp tôi về {d} không?"],["Where can I find {c}?","Tôi có thể tìm {d} ở đâu?"],["I would like to {a}.","Tôi muốn {b}."],["I prefer {c} because it is {e}.","Tôi thích {d} hơn vì nó {f}."],["How much time do we need for {c}?","Chúng ta cần bao nhiêu thời gian cho {d}?"],["I think {c} is important.","Tôi nghĩ {d} rất quan trọng."],["Can we do {c} together?","Chúng ta có thể cùng nhau {d} không?"],["That sounds good to me.","Nghe có vẻ ổn với tôi."]
 ];
+const vocabContexts=[
+["I wake up when my alarm goes off, get up and make the bed. Then I brush my teeth, take a shower and get dressed. I have breakfast, and even if I have to hurry, I try to leave on time.","Tôi thức dậy khi chuông báo thức reo, ra khỏi giường và dọn giường. Sau đó tôi đánh răng, tắm vòi sen và mặc quần áo. Tôi ăn sáng và dù có phải vội, tôi vẫn cố gắng rời nhà đúng giờ."],
+["At home, I move from room to room: the kitchen, living room, bedroom and bathroom. I like the house to feel tidy and clean, so I keep up with the laundry and share the chores.","Ở nhà, tôi đi từ phòng này sang phòng khác: nhà bếp, phòng khách, phòng ngủ và phòng tắm. Tôi thích ngôi nhà gọn gàng, sạch sẽ nên luôn xử lý việc giặt giũ và chia sẻ việc nhà."],
+["When I make a meal, I choose a fresh ingredient, follow a recipe and prepare everything carefully. I might boil or fry vegetables, bake some bread and slice fresh fruit. It always makes me hungry, and the result is usually delicious.","Khi nấu một bữa ăn, tôi chọn nguyên liệu tươi, làm theo công thức và chuẩn bị mọi thứ cẩn thận. Tôi có thể luộc hoặc chiên rau, nướng bánh mì và thái trái cây tươi. Mùi thơm khiến tôi đói bụng, và thành phẩm thường rất ngon."],
+["At work, I check my schedule, read each email and decide which task to do first. I speak with a colleague, attend a meeting and take a short break when things get busy. I keep an eye on the deadline so I can finish on time.","Ở chỗ làm, tôi xem lịch trình, đọc từng email và quyết định nhiệm vụ nào cần làm trước. Tôi trao đổi với đồng nghiệp, tham gia cuộc họp và nghỉ ngắn khi công việc bận rộn. Tôi chú ý hạn chót để có thể hoàn thành đúng giờ."],
+["When I go out, I check the street and traffic before crossing. I walk to the nearby bus stop, buy a ticket and check the platform for my journey. At the crossroads, I remember to turn left or turn right as the map tells me.","Khi ra ngoài, tôi quan sát đường phố và giao thông trước khi băng qua đường. Tôi đi bộ đến trạm xe buýt gần đó, mua vé và xem sân ga cho hành trình của mình. Ở ngã tư, tôi nhớ rẽ trái hoặc rẽ phải theo chỉ dẫn trên bản đồ."],
+["I often spend time with my family, a relative or a friend. We might visit a neighbour, have a friendly conversation and invite someone to join us. Even when we are apart, we send a message and look forward to being together again.","Tôi thường dành thời gian bên gia đình, họ hàng hoặc bạn bè. Chúng tôi có thể thăm hàng xóm, trò chuyện thân thiện và mời ai đó tham gia cùng. Ngay cả khi không ở gần nhau, chúng tôi vẫn nhắn tin và mong sớm được gặp lại."],
+["When I shop, I check the price and ask whether an item is cheap or expensive. I look for a discount, choose the right size and keep the receipt. At the checkout, I can pay with cash or a card, and I always check my change.","Khi mua sắm, tôi xem giá và cân nhắc món hàng rẻ hay đắt. Tôi tìm chương trình giảm giá, chọn đúng kích cỡ và giữ hóa đơn. Tại quầy thanh toán, tôi có thể trả bằng tiền mặt hoặc thẻ và luôn kiểm tra tiền thừa."],
+["I try to look after my health by eating healthy food, getting enough sleep and doing exercise. If I have a headache, cough or fever, I make an appointment, ask about medicine and give myself time to rest.","Tôi cố chăm sóc sức khỏe bằng cách ăn uống lành mạnh, ngủ đủ và tập thể dục. Nếu bị đau đầu, ho hoặc sốt, tôi đặt lịch hẹn, hỏi về thuốc và dành thời gian nghỉ ngơi."],
+["In my free time, I enjoy my favourite hobby, whether it's a movie, music or reading. I like to relax outdoors, get some exercise and take a photograph when something catches my eye. These are simple things I genuinely enjoy.","Trong thời gian rảnh, tôi tận hưởng sở thích yêu thích, dù đó là xem phim, nghe nhạc hay đọc sách. Tôi thích thư giãn ngoài trời, vận động một chút và chụp ảnh khi bắt gặp điều gì thú vị. Đó là những điều giản dị mà tôi thực sự yêu thích."],
+["Before a trip or holiday, I check my travel booking, passport and reservation. I pack my suitcase and luggage, then head to the airport or hotel. A little preparation makes travelling much less stressful.","Trước chuyến đi hay kỳ nghỉ, tôi kiểm tra đặt chỗ, hộ chiếu và thông tin xác nhận. Tôi xếp va-li và hành lý rồi đi đến sân bay hoặc khách sạn. Chuẩn bị một chút giúp việc du lịch bớt căng thẳng hơn nhiều."]
+];
 function lesson(day){
  const index=Math.max(0,Math.min(99,day-1));
  const topic=dayTitles[index],topicVi=dayTitlesVi[index];
@@ -4601,7 +4613,8 @@ function lesson(day){
  const words=rotate(baseWords,(index%10*3)%baseWords.length).slice(0,10).map(w=>[w[0],w[1]]);
  const phraseBanks=themes.map(t=>t.phrases);
  const phrases=rotate(phraseBanks[bankIndex],(index%10*2)%phraseBanks[bankIndex].length).map(p=>[p[0],p[1]]);
- const passage=readings[index][0],translation=readings[index][1];
+ const passage=readings[index][0]+" "+vocabContexts[bankIndex][0];
+ const translation=readings[index][1]+" "+vocabContexts[bankIndex][1];
  return {day:index+1,title:topic,group:{vi:topicVi},words,phrases,passage,translation};
 }
 function render(){
