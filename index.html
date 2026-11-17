@@ -901,53 +901,59 @@ html { background: #142342; }
  </div>
 </section>
 <section class="page" id="dictation">
- <div class="page-header"><div><p class="eyebrow">LISTEN & TYPE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Nghe câu tiếng Anh, gõ lại những gì bạn nghe được rồi kiểm tra đáp án.</p></div></div>
+ <div class="page-header"><div><p class="eyebrow">LISTEN, TYPE & PRACTISE</p><h1>✍️ Dictation · Nghe và chép chính tả</h1><p>Luyện nghe theo từng cụm từ ngắn trước, sau đó nâng cấp lên chép chính tả cả câu. Có bài tập riêng cho cả hai phần.</p></div></div>
+ <div class="controls" style="margin-bottom:16px"><button class="btn primary" id="dictationSentenceTab" type="button" onclick="egDictationMode('sentence')">📝 Chép chính tả cả câu</button><button class="btn line" id="dictationChunkTab" type="button" onclick="egDictationMode('chunk')">🧩 Nghe và chép theo cụm từ</button></div>
  <div class="card">
-  <div class="controls"><label for="dictationLevel">Cấp độ · Level</label><select id="dictationLevel"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><label for="dictationSpeed">Tốc độ</label><select id="dictationSpeed"><option value="0.75">Chậm</option><option value="0.9" selected>Bình thường</option><option value="1">Nhanh</option></select></div>
-  <div class="controls"><button class="btn primary" type="button" onclick="egDictationPlay()">▶ Nghe câu</button><button class="btn line" type="button" onclick="egDictationNew()">Câu tiếp theo →</button><button class="btn soft" type="button" onclick="egDictationReveal()">Hiện đáp án</button></div>
-  <label for="dictationAnswer">Your answer · Câu bạn nghe được</label><textarea id="dictationAnswer" rows="3" placeholder="Type the sentence you hear..."></textarea>
-  <div class="controls"><button class="btn primary" type="button" onclick="egDictationCheck()">Kiểm tra</button><button class="btn line" type="button" onclick="egDictationClear()">Xóa câu trả lời</button></div>
-  <div id="dictationResult" aria-live="polite"></div><div id="dictationExpected" style="display:none;margin-top:12px"></div>
-  <p class="small muted">Âm thanh sử dụng giọng đọc tiếng Anh có sẵn trên thiết bị. Nếu không nghe được, hãy thử Chrome hoặc Edge.</p>
+  <div class="controls"><label for="dictationLevel">Cấp độ · Level</label><select id="dictationLevel"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><label for="dictationSpeed">Tốc độ</label><select id="dictationSpeed"><option value="0.7">Rất chậm</option><option value="0.85">Chậm</option><option value="0.95" selected>Bình thường</option><option value="1.05">Nhanh</option></select></div>
+  <section id="dictationSentenceMode">
+   <h2>📝 Sentence dictation · Chép cả câu</h2><p class="muted small">Nghe trọn câu, gõ lại chính xác rồi kiểm tra.</p>
+   <div class="controls"><button class="btn primary" type="button" onclick="egDictationPlay()">▶ Nghe câu</button><button class="btn line" type="button" onclick="egDictationNew()">Câu tiếp theo →</button><button class="btn soft" type="button" onclick="egDictationReveal()">Hiện đáp án</button></div>
+   <label for="dictationAnswer">Your answer · Câu bạn nghe được</label><textarea id="dictationAnswer" rows="3" placeholder="Type the sentence you hear..."></textarea>
+   <div class="controls"><button class="btn primary" type="button" onclick="egDictationCheck()">Kiểm tra</button><button class="btn line" type="button" onclick="egDictationClear()">Xóa câu trả lời</button></div>
+   <div id="dictationResult" aria-live="polite"></div><div id="dictationExpected" style="display:none;margin-top:12px"></div>
+   <div class="panel" style="margin-top:20px"><h3>🎯 Bài tập câu · Sentence challenge</h3><p>Nghe câu được đọc, sau đó chọn đúng câu bạn vừa nghe.</p><button class="btn primary" type="button" onclick="egDictationQuiz('sentence')">▶ Nghe và làm bài</button><div id="dictationSentenceQuiz" style="margin-top:12px"></div><div id="dictationSentenceQuizResult" aria-live="polite"></div></div>
+  </section>
+  <section id="dictationChunkMode" style="display:none">
+   <h2>🧩 Chunk dictation · Chép theo cụm từ</h2><p class="muted small">Mỗi lượt chỉ nghe một cụm ngắn (2–6 từ). Tập nhận diện cách các từ nối với nhau trong lời nói tự nhiên.</p>
+   <div class="controls"><button class="btn primary" type="button" onclick="egDictationChunkPlay()">▶ Nghe cụm từ</button><button class="btn line" type="button" onclick="egDictationChunkNew()">Cụm tiếp theo →</button><button class="btn soft" type="button" onclick="egDictationChunkReveal()">Hiện đáp án</button></div>
+   <label for="dictationChunkAnswer">Type the phrase · Gõ lại cụm từ</label><input id="dictationChunkAnswer" type="text" placeholder="Type the words you hear..." style="width:100%;margin:8px 0"/>
+   <div class="controls"><button class="btn primary" type="button" onclick="egDictationChunkCheck()">Kiểm tra</button><button class="btn line" type="button" onclick="egDictationChunkClear()">Xóa</button></div>
+   <div id="dictationChunkResult" aria-live="polite"></div><div id="dictationChunkExpected" style="display:none;margin-top:12px"></div>
+   <div class="panel" style="margin-top:20px"><h3>🎯 Bài tập cụm từ · Chunk challenge</h3><p>Nghe cụm từ và chọn đúng nghĩa tiếng Việt.</p><button class="btn primary" type="button" onclick="egDictationQuiz('chunk')">▶ Nghe và làm bài</button><div id="dictationChunkQuiz" style="margin-top:12px"></div><div id="dictationChunkQuizResult" aria-live="polite"></div></div>
+  </section>
+  <p class="small muted">Âm thanh dùng giọng tiếng Anh có sẵn trên thiết bị. Nếu không nghe được, hãy thử Chrome hoặc Edge.</p>
  </div>
 </section>
 <script id="englishgo-dictation-page">
 (function(){
- const sets={
-  A1:["I get up at seven every morning.","She works in a small shop.","Could you please help me?","The bus is late today.","I would like a glass of water.","We usually have dinner at home.","He is learning English.","My appointment is on Monday."],
-  A2:["I have been waiting for the bus for twenty minutes.","Could you tell me how to get to the station?","She usually takes a short break after lunch.","I forgot to bring my umbrella this morning.","We are going to visit our friends this weekend.","Please let me know if you need any help."],
-  B1:["Although it was raining, we decided to walk to the city centre.","I would appreciate it if you could send me the details by email.","The meeting has been postponed until next Thursday.","She has been working here since she moved to Germany.","If I had more free time, I would take a cooking course."]
+ const sentences={
+  A1:["I get up at seven every morning.","She works in a small shop.","Could you please help me?","The bus is late today.","I would like a glass of water.","We usually have dinner at home.","He is learning English.","My appointment is on Monday.","Please speak more slowly.","I need to buy some food."],
+  A2:["I have been waiting for the bus for twenty minutes.","Could you tell me how to get to the station?","She usually takes a short break after lunch.","I forgot to bring my umbrella this morning.","We are going to visit our friends this weekend.","Please let me know if you need any help.","I'm looking forward to seeing you again.","Would you mind opening the window?"],
+  B1:["Although it was raining, we decided to walk to the city centre.","I would appreciate it if you could send me the details by email.","The meeting has been postponed until next Thursday.","She has been working here since she moved to Germany.","If I had more free time, I would take a cooking course.","We need to figure out what went wrong before making a decision."]
  };
- let current="",used=[];
+ const chunks={
+  A1:[["a cup of tea","một tách trà"],["in the morning","vào buổi sáng"],["at the bus stop","ở trạm xe buýt"],[" How are you doing?","Bạn khỏe không?"],["a little bit of water","một chút nước"],["see you tomorrow","hẹn gặp bạn ngày mai"],["on the left side","ở phía bên trái"],[" after work","sau giờ làm"],["have a nice day","chúc một ngày tốt lành"],["I don't know","tôi không biết"]],
+  A2:[["I'm looking for","tôi đang tìm"],["Could you help me?","Bạn có thể giúp tôi không?"],["as soon as possible","sớm nhất có thể"],["I'm afraid that","Tôi e rằng"],["take care of the children","chăm sóc bọn trẻ"],["at the end of the street","ở cuối con phố"],["It depends on the weather","Còn tùy vào thời tiết"],["Would you like to join us?","Bạn có muốn tham gia cùng chúng tôi không?"]],
+  B1:[["as far as I know","theo như tôi biết"],["I was wondering if","Tôi đang tự hỏi liệu"],["on the other hand","mặt khác"],["to make a long story short","nói ngắn gọn là"],["I completely agree with you","Tôi hoàn toàn đồng ý với bạn"],["take something into consideration","cân nhắc điều gì đó"],["it doesn't make any difference","điều đó không tạo ra khác biệt"],["I'm not quite sure about that","Tôi không hoàn toàn chắc về điều đó"]]
+ };
+ let mode="sentence",current="",chunkCurrent=[],usedSentence=[],usedChunk=[],quizAnswer="";
  const el=id=>document.getElementById(id);
- function next(){
-  const level=el("dictationLevel")?.value||"A1",pool=sets[level]||sets.A1;
-  if(used.length>=pool.length)used=[];
-  const choices=pool.map((x,i)=>i).filter(i=>!used.includes(i));
-  const idx=choices[Math.floor(Math.random()*choices.length)];
-  used.push(idx);current=pool[idx];
-  if(el("dictationAnswer"))el("dictationAnswer").value="";
-  if(el("dictationResult"))el("dictationResult").textContent="Bấm “Nghe câu” để bắt đầu.";
-  if(el("dictationExpected")){el("dictationExpected").style.display="none";el("dictationExpected").textContent=""}
- }
- window.egDictationNew=next;
- window.egDictationPlay=function(){
-  if(!current)next();
-  if(!("speechSynthesis" in window)){el("dictationResult").textContent="Trình duyệt này chưa hỗ trợ phát âm thanh.";return}
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(current);u.lang="en-US";u.rate=Number(el("dictationSpeed")?.value||0.9);speechSynthesis.speak(u);
+ const norm=x=>x.toLowerCase().replace(/[^a-z0-9']/g," ").replace(/\s+/g," ").trim();
+ function speak(text){if(!("speechSynthesis"in window)){const target=el(mode==="chunk"?"dictationChunkResult":"dictationResult");if(target)target.textContent="Trình duyệt chưa hỗ trợ phát âm thanh.";return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=Number(el("dictationSpeed")?.value||0.95);speechSynthesis.speak(u)}
+ function pick(pool,used){if(used.length>=pool.length)used.length=0;const choices=pool.map((_,i)=>i).filter(i=>!used.includes(i));const idx=choices[Math.floor(Math.random()*choices.length)];used.push(idx);return pool[idx]}
+ function nextSentence(){const level=el("dictationLevel").value;current=pick(sentences[level],usedSentence);el("dictationAnswer").value="";el("dictationResult").textContent="Bấm “Nghe câu” để bắt đầu.";el("dictationExpected").style.display="none"}
+ function nextChunk(){const level=el("dictationLevel").value;chunkCurrent=pick(chunks[level],usedChunk);el("dictationChunkAnswer").value="";el("dictationChunkResult").textContent="Bấm “Nghe cụm từ” để bắt đầu.";el("dictationChunkExpected").style.display="none"}
+ window.egDictationMode=function(next){mode=next;el("dictationSentenceMode").style.display=next==="sentence"?"block":"none";el("dictationChunkMode").style.display=next==="chunk"?"block":"none";el("dictationSentenceTab").className="btn "+(next==="sentence"?"primary":"line");el("dictationChunkTab").className="btn "+(next==="chunk"?"primary":"line");speechSynthesis?.cancel?.()};
+ window.egDictationNew=nextSentence;window.egDictationPlay=()=>speak(current);window.egDictationCheck=function(){const v=el("dictationAnswer").value;if(!v.trim()){el("dictationResult").textContent="Bạn hãy nhập câu trả lời trước nhé.";return}el("dictationResult").textContent=norm(v)===norm(current)?"✓ Chính xác! Well done!":"Chưa chính xác. Hãy nghe lại và thử lần nữa nhé."};window.egDictationReveal=()=>{el("dictationExpected").textContent="Đáp án: "+current;el("dictationExpected").style.display="block"};window.egDictationClear=()=>{el("dictationAnswer").value="";el("dictationResult").textContent=""};
+ window.egDictationChunkNew=nextChunk;window.egDictationChunkPlay=()=>speak(chunkCurrent[0]);window.egDictationChunkCheck=function(){const v=el("dictationChunkAnswer").value;if(!v.trim()){el("dictationChunkResult").textContent="Bạn hãy nhập cụm từ trước nhé.";return}el("dictationChunkResult").textContent=norm(v)===norm(chunkCurrent[0])?"✓ Chính xác! Bạn nghe rất tốt!":"Chưa chính xác. Nghe lại cụm từ nhé."};window.egDictationChunkReveal=()=>{el("dictationChunkExpected").textContent="Đáp án: "+chunkCurrent[0];el("dictationChunkExpected").style.display="block"};window.egDictationChunkClear=()=>{el("dictationChunkAnswer").value="";el("dictationChunkResult").textContent=""};
+ window.egDictationQuiz=function(type){
+  const level=el("dictationLevel").value;const box=el(type==="sentence"?"dictationSentenceQuiz":"dictationChunkQuiz");const result=el(type==="sentence"?"dictationSentenceQuizResult":"dictationChunkQuizResult");result.textContent="";
+  if(type==="sentence"){const correct=pick(sentences[level],[]);const pool=sentences[level].filter(x=>x!==correct);const opts=[correct,...pool.slice(0,2)].sort(()=>Math.random()-.5);quizAnswer=correct;speak(correct);box.innerHTML='<p><strong>Chọn câu bạn vừa nghe:</strong></p>'+opts.map((x,i)=>'<label style="display:block;margin:8px 0"><input type="radio" name="egSentenceChoice" value="'+i+'"> '+x+'</label>').join('')+'<button class="btn primary" type="button" onclick="egDictationQuizCheck(\'sentence\')">Kiểm tra</button>';box.dataset.answer=String(opts.indexOf(correct));
+  }else{const item=pick(chunks[level],[]);quizAnswer=item[1];speak(item[0]);const distractors=chunks[level].filter(x=>x[1]!==item[1]).slice(0,2).map(x=>x[1]);const opts=[item[1],...distractors].sort(()=>Math.random()-.5);box.innerHTML='<p><strong>Chọn nghĩa tiếng Việt đúng:</strong></p>'+opts.map((x,i)=>'<label style="display:block;margin:8px 0"><input type="radio" name="egChunkChoice" value="'+i+'"> '+x+'</label>').join('')+'<button class="btn primary" type="button" onclick="egDictationQuizCheck(\'chunk\')">Kiểm tra</button>';box.dataset.answer=String(opts.indexOf(quizAnswer))}
  };
- window.egDictationCheck=function(){
-  const norm=x=>x.toLowerCase().replace(/[^a-z0-9']/g," ").replace(/\s+/g," ").trim();
-  const answer=norm(el("dictationAnswer")?.value||"");
-  if(!answer){el("dictationResult").textContent="Bạn hãy nhập câu mình nghe được trước nhé.";return}
-  const ok=answer===norm(current);
-  el("dictationResult").textContent=ok?"✓ Chính xác! Well done!":"Chưa chính xác. Nghe lại và thử lần nữa nhé.";
- };
- window.egDictationReveal=function(){el("dictationExpected").textContent="Đáp án: "+current;el("dictationExpected").style.display="block"};
- window.egDictationClear=function(){el("dictationAnswer").value="";el("dictationResult").textContent=""};
- el("dictationLevel")?.addEventListener("change",()=>{used=[];next()});
- next();
+ window.egDictationQuizCheck=function(type){const box=el(type==="sentence"?"dictationSentenceQuiz":"dictationChunkQuiz");const result=el(type==="sentence"?"dictationSentenceQuizResult":"dictationChunkQuizResult");const selected=box.querySelector('input[type="radio"]:checked');if(!selected){result.textContent="Hãy chọn một đáp án nhé.";return}result.textContent=Number(selected.value)===Number(box.dataset.answer)?"✓ Chính xác!":"Chưa đúng, hãy nghe lại và thử lần nữa."};
+ el("dictationLevel").addEventListener("change",()=>{usedSentence=[];usedChunk=[];nextSentence();nextChunk();el("dictationSentenceQuiz").innerHTML="";el("dictationChunkQuiz").innerHTML=""});
+ nextSentence();nextChunk();
 })();
 </script>
 
