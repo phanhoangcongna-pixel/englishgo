@@ -4388,4 +4388,90 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
  });
 })();
 </script>
+
+<script id="englishgo-enter-check-all-sections">
+/*
+ * Consistent Enter-to-check support across EnglishGo exercises.
+ * - Enter in a text field/textarea checks the current exercise.
+ * - Shift+Enter remains available for a newline in textareas.
+ * - Enter outside text fields checks the active exercise when a check button exists.
+ * - Radio/option exercises can be checked with Enter without hijacking other controls.
+ */
+(function () {
+  const CHECK_TEXT = /^(check|check answer|kiểm tra|kiểm tra đáp án|submit|nộp bài|finish|hoàn thành|chấm điểm)$/i;
+  const CHECK_HINT = /(check|kiểm tra|submit|nộp bài|chấm điểm)/i;
+  const IGNORE_KEYS = (e) => e.altKey || e.ctrlKey || e.metaKey || e.isComposing;
+
+  function visible(el) {
+    if (!el || el.disabled || el.hidden) return false;
+    const style = window.getComputedStyle(el);
+    return style.display !== "none" && style.visibility !== "hidden" && !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+  }
+
+  function activePage() {
+    return document.querySelector("main .page.active, .page.active") || document.body;
+  }
+
+  function findCheckButton(scope) {
+    if (!scope) return null;
+    const buttons = Array.from(scope.querySelectorAll('button, input[type="button"], input[type="submit"]')).filter(visible);
+    // Prefer explicitly labelled check controls.
+    let button = buttons.find(b => CHECK_TEXT.test((b.innerText || b.value || b.textContent || "").trim()));
+    if (button) return button;
+    // Also accept longer labels such as "Check · Kiểm tra".
+    button = buttons.find(b => CHECK_HINT.test((b.innerText || b.value || b.textContent || "").trim()) &&
+      !/(hint|gợi ý|show|hiện|reveal|answer|đáp án)/i.test((b.innerText || b.value || b.textContent || "").trim()));
+    return button || null;
+  }
+
+  function exerciseScope(target, page) {
+    if (target && target.closest) {
+      const candidate = target.closest('.card, .panel, .exercise, .question-card, fieldset, [data-exercise]');
+      if (candidate && page.contains(candidate) && findCheckButton(candidate)) return candidate;
+    }
+    // If a single check action is present on the active page, it is unambiguous.
+    const pageButtons = Array.from(page.querySelectorAll('button, input[type="button"], input[type="submit"]')).filter(visible);
+    const checks = pageButtons.filter(b => CHECK_HINT.test((b.innerText || b.value || b.textContent || "").trim()) &&
+      !/(hint|gợi ý|show|hiện|reveal|answer|đáp án)/i.test((b.innerText || b.value || b.textContent || "").trim()));
+    if (checks.length === 1) return page;
+    // Multiple sections: choose the nearest visible exercise/card around the focused control.
+    if (target && target.closest) {
+      let node = target.parentElement;
+      while (node && node !== page) {
+        if (node.querySelector && findCheckButton(node)) {
+          const candidates = Array.from(node.querySelectorAll('button')).filter(visible);
+          const useful = candidates.filter(b => CHECK_HINT.test((b.innerText || b.textContent || "").trim()) &&
+            !/(hint|gợi ý|show|hiện|reveal|answer|đáp án)/i.test((b.innerText || b.textContent || "").trim()));
+          if (useful.length === 1) return node;
+        }
+        node = node.parentElement;
+      }
+    }
+    return null;
+  }
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "Enter" || IGNORE_KEYS(event) || event.shiftKey) return;
+    const target = event.target;
+    if (!target) return;
+    if (target.isContentEditable) return;
+    const tag = (target.tagName || "").toLowerCase();
+    if (tag === "select" || (tag === "button") || (tag === "a")) return;
+
+    const page = activePage();
+    if (!page || page === document.body && !document.querySelector(".page.active")) return;
+    const scope = exerciseScope(target, page) || page;
+    const check = findCheckButton(scope);
+    if (!check) return;
+
+    // Avoid submitting a form through the browser's default action.
+    if (tag === "textarea" || tag === "input" || target.getAttribute("role") === "radio") {
+      event.preventDefault();
+      event.stopPropagation();
+      check.click();
+    }
+  }, true);
+})();
+</script>
+
 </body></html>
