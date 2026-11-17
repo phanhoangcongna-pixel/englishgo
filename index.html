@@ -585,6 +585,10 @@ html { background: #142342; }
 @media(max-width:760px){.home-welcome{grid-template-columns:1fr;padding:23px}.home-tools{grid-template-columns:repeat(2,minmax(0,1fr))}.home-secondary{grid-template-columns:1fr}.home-tool{min-height:120px}}
 </style>
 <div class="home-v2">
+<div class="home-feature" id="englishgo-100day-home" style="background:linear-gradient(110deg,#eaf2ff,#f0fbf5);border-color:#cbdcf5">
+ <div><span class="badge">100-DAY CHALLENGE · THỬ THÁCH 100 NGÀY</span><h2>🌱 100 ngày chinh phục tiếng Anh</h2><p>Mỗi ngày: 10 từ vựng · 10 cụm từ · 1 đoạn đọc · Shadowing. Học đều đặn để hoàn thành hành trình 100 ngày.</p><p id="eg100HomeProgress" class="small" style="margin-top:7px;font-weight:700">0/100 ngày hoàn thành</p></div>
+ <button class="btn" onclick="eg100Enter()">Bắt đầu học · Start →</button>
+</div>
 <div class="home-welcome">
 <div>
 <div class="eyebrow">A1–B1 English learning · Học tiếng Anh A1–B1</div>
@@ -624,6 +628,23 @@ html { background: #142342; }
 </div>
 </div>
 <div class="footer">EnglishGo 2.0 · Free bilingual learning · Học tiếng Anh miễn phí<br/>Progress, XP and writing are stored locally on your device. Tiến độ được lưu trên thiết bị.</div>
+</section>
+<section class="page" id="daily100">
+<h1 class="title">🌱 100 ngày chinh phục tiếng Anh</h1>
+<p class="intro">Mỗi ngày một chủ đề thông dụng: 10 từ mới, 10 cụm từ, một đoạn văn và shadowing. Your 100-day English journey.</p>
+<div class="panel">
+ <div class="row"><div><b id="eg100DayTitle">Ngày 1 · Getting to know people</b><div class="small muted" id="eg100DaySub">Chủ đề giao tiếp thường ngày</div></div><span class="badge" id="eg100Count">0/100 ngày</span></div>
+ <div class="bar"><span id="eg100Bar" style="width:0%"></span></div>
+ <p class="small muted" id="eg100Status">Mỗi ngày truy cập mục này sẽ ghi nhận một ngày học. Vào lại trong cùng ngày không cộng thêm.</p>
+ <div class="controls"><button class="btn line" id="eg100Prev" onclick="eg100Change(-1)">← Ngày trước</button><button class="btn" id="eg100Next" onclick="eg100Change(1)">Ngày tiếp theo →</button></div>
+</div>
+<div class="panel"><h2>📚 10 từ vựng · Vocabulary</h2><div id="eg100Words" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:12px"></div></div>
+<div class="panel"><h2>💬 10 cụm từ thông dụng · Useful phrases</h2><div id="eg100Phrases" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div></div>
+<div class="panel"><h2>📖 Đoạn văn · Reading</h2><p class="small muted">Đoạn văn sử dụng đủ 10 từ vựng của bài học.</p><div id="eg100Passage" class="example" style="line-height:1.9"></div></div>
+<div class="panel"><h2>🎙️ Shadowing · Luyện nói nhại</h2><p class="small muted">Nghe toàn bộ đoạn văn, sau đó nhại lại theo nhịp và ngữ điệu. Có thể nghe chậm hoặc dừng bất cứ lúc nào.</p>
+ <div class="controls"><label class="small" for="eg100Rate">Tốc độ</label><select id="eg100Rate" style="max-width:180px"><option value="0.75">Chậm · 0.75×</option><option value="0.9" selected>Tự nhiên · 0.9×</option><option value="1">Bình thường · 1×</option></select></div>
+ <div class="controls"><button class="btn" onclick="eg100Speak()">🔊 Nghe mẫu</button><button class="btn soft" onclick="eg100SpeakSlow()">🐢 Nghe chậm</button><button class="btn line" onclick="eg100Stop()">■ Dừng</button></div><p id="eg100ShadowStatus" class="small muted" aria-live="polite">Nghe và nhại lại đoạn văn 2–3 lần nhé.</p>
+</div>
 </section>
 <section class="page" id="vocab"><h1 class="title">Vocabulary · Từ vựng</h1><p class="intro">211 practical A1–B1 words in useful topics. 211 từ thông dụng theo chủ đề thực tế.</p><div class="panel"><div class="controls"><select id="wordLevel" onchange="renderWords()"><option value="all">All levels · Tất cả trình độ</option><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><select id="wordCat" onchange="renderWords()"><option value="all">All topics · Tất cả chủ đề</option></select><input id="wordSearch" oninput="renderWords()" placeholder="Search / Tìm từ..."/></div><p class="small muted" id="wordLearningOrder">Lộ trình: A1 (dễ) → A2 (trung bình) → B1 (khó). Chọn trình độ và chủ đề để học theo nhóm.</p><div class="panel" id="wordCard" style="margin:14px 0;background:#f8faff"></div><div class="controls"><button class="btn line" onclick="prevWord()">← Previous</button><button class="btn" onclick="nextWord()">Next →</button><button class="btn soft" onclick="markWord()">✓ I know this · Đã nhớ</button><button class="btn line" onclick="say(currentWord().w)">🔊 Nghe từ đang chọn</button></div><h2 style="margin-top:22px">All words · Danh sách từ</h2><div id="wordList"></div></div></section>
 <section class="page" id="grammar">
@@ -4539,6 +4560,76 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
  window.egVocabMove=function(step){const total=(typeof DATA!=="undefined"&&DATA.vocab)?DATA.vocab.length:0;if(!total)return;window.egVocabIndex=((Number(window.egVocabIndex)||0)+step+total)%total;render()};
  const init=()=>{try{render()}catch(err){console.error("EnglishGo vocabulary render error:",err);const box=document.getElementById("wordList");if(box)box.innerHTML="<p>Không tải được danh sách từ vựng. Hãy tải lại trang.</p>"}};
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
+})();
+</script>
+<script id="englishgo-100-day-course">
+(function(){
+const topics=[
+["daily life",["Greetings and introductions","Daily routines","Talking about time","Making plans","At home","Cooking and meals","Shopping for groceries","Clothes and colours","Weather and seasons","Free-time activities"]],
+["feelings and people",["Family and relatives","Friends and relationships","Feelings and emotions","Personality","Inviting someone","Making small talk","Saying thank you","Apologising politely","Celebrations","Helping other people"]],
+["food and shopping",["At a café","Ordering food","At a restaurant","Fruit and vegetables","Cooking at home","Shopping and prices","Paying and receipts","Choosing clothes","Returning an item","Describing taste"]],
+["travel",["Asking for directions","Using public transport","At the train station","At the airport","Booking a hotel","Checking in","Finding your way","A day trip","Travel problems","Talking about holidays"]],
+["home and city",["Rooms and furniture","Describing your home","Renting a flat","Neighbours","Around the neighbourhood","Places in town","At the post office","At the bank","Using local services","Moving house"]],
+["health",["Parts of the body","At the pharmacy","Making a doctor’s appointment","Describing symptoms","Healthy habits","Exercise and fitness","At the dentist","Rest and sleep","Asking for help","Feeling better"]],
+["work and study",["Jobs and workplaces","A typical workday","Colleagues","Meetings","Work schedules","Applying for a job","Job interviews","Learning English","Courses and skills","Talking about goals"]],
+["technology",["Phones and apps","Using the internet","Sending messages","Computers and files","Online shopping","Making a video call","Passwords and safety","Solving tech problems","Social media","Digital habits"]],
+["nature and weather",["The weather today","In the park","Animals","Plants and gardens","At the beach","The countryside","Environmental habits","Seasons","A rainy day","Outdoor activities"]],
+["culture",["Languages and countries","Local traditions","Music and films","Books and reading","Museums","Festivals","Meeting new cultures","Describing a city","Special occasions","Weekend experiences"]]
+];
+const phraseTemplates=[
+"Could you tell me more about this?","What would you recommend?","I’m looking for something suitable.","That sounds like a good idea.","Could you help me with this, please?","Let me think about it for a moment.","I’m not sure I understand.","Would you mind saying that again?","That works well for me.","Thanks for letting me know."
+];
+const key="eg100-study-dates-v1",lessonKey="eg100-selected-day-v1";
+const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+let dates=read(key,[]),selected=Number(read(lessonKey,1))||1;
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function progress(){return Math.min(100,Array.isArray(dates)?new Set(dates).size:0)}
+function save(){try{localStorage.setItem(key,JSON.stringify([...new Set(dates)].slice(-100)));localStorage.setItem(lessonKey,String(selected))}catch(e){}}
+function poolFor(cat,day){
+ const all=(window.DATA&&Array.isArray(DATA.vocab))?DATA.vocab:[];
+ let pool=all.filter(w=>w.cat===cat);
+ if(pool.length<10)pool=pool.concat(all.filter(w=>w.cat!==cat));
+ const seen=new Set(),out=[];
+ for(let n=0;n<pool.length&&out.length<10;n++){const w=pool[(Math.max(0,day-1)*7+n)%pool.length];if(w&&!seen.has(w.w.toLowerCase())){seen.add(w.w.toLowerCase());out.push(w)}}
+ return out;
+}
+function sentence(w,i){
+ const word=w.w, pos=w.pos||"n";
+ if(/^v/.test(pos))return ["I usually try to "+word+" when I have time.","I need to "+word+" before I make a decision.","It is useful to "+word+" every day."][i%3];
+ if(pos==="adj")return ["It is important to feel "+word+" in everyday life.","The place is "+word+" and comfortable.","I think this is a very "+word+" idea."][i%3];
+ if(pos==="adv")return ["I try to do things "+word+" and carefully.","She explained it "+word+".","We can practise "+word+" every day."][i%3];
+ return ["I often use the word "+word+" when I talk about this topic.","The word "+word+" is useful in everyday conversations.","I learned how to use "+word+" in a simple sentence."][i%3];
+}
+function lesson(day){
+ const group=topics[Math.floor((day-1)/10)%topics.length],topic=group[1][(day-1)%10],cat=group[0],words=poolFor(cat,day);
+ const phrases=phraseTemplates.map((p,i)=>({en:p,vi:["Bạn có thể nói thêm về điều này không?","Bạn sẽ gợi ý điều gì?","Tôi đang tìm thứ phù hợp.","Nghe có vẻ là một ý hay.","Bạn có thể giúp tôi việc này được không?","Để tôi suy nghĩ một lát.","Tôi không chắc mình hiểu.","Bạn có thể nói lại được không?","Điều đó phù hợp với tôi.","Cảm ơn bạn đã cho tôi biết."][i]}));
+ const para="Today, I want to talk about "+topic.toLowerCase()+". "+words.map((w,i)=>sentence(w,i)).join(" ");
+ return {topic,cat,words,phrases,para};
+}
+function render(){
+ const p=progress(),d=Math.max(1,Math.min(100,selected)),l=lesson(d);
+ const $=id=>document.getElementById(id);
+ $("eg100DayTitle").textContent="Ngày "+d+" · "+l.topic;
+ $("eg100DaySub").textContent="Chủ đề: "+l.topic+" · "+l.cat;
+ $("eg100Count").textContent=p+"/100 ngày";
+ $("eg100Bar").style.width=p+"%";
+ $("eg100Status").textContent=p>=100?"🎉 Bạn đã hoàn thành thử thách 100 ngày!": "Đã ghi nhận "+p+" ngày học khác nhau. Ngày học tiếp theo: "+Math.min(100,p+1)+".";
+ $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+w.w+'</b><div class="small muted">'+(w.ipa||"")+' · '+(w.pos||"")+'</div><div>'+w.vi+'</div><button class="btn line" style="margin-top:7px" onclick="say('+JSON.stringify(w.w).replace(/</g,"\\u003c")+')">🔊 Nghe</button></div>').join("")||"<p>Chưa có dữ liệu từ.</p>";
+ $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+x.en+'</b><div class="small muted">'+x.vi+'</div><button class="btn line" style="margin-top:7px" onclick="say('+JSON.stringify(x.en)+')">🔊 Nghe</button></div>').join("");
+ $("eg100Passage").textContent=l.para;
+ $("eg100Prev").disabled=d===1;$("eg100Next").disabled=d===100;
+ $("eg100HomeProgress").textContent=p+"/100 ngày đã học"+(p>=100?" · Hoàn thành!":"");
+}
+window.eg100Enter=function(){
+ const t=today();if(!dates.includes(t)&&progress()<100)dates.push(t);
+ selected=Math.min(100,Math.max(1,progress()));save();render();if(typeof go==="function")go("daily100");
+};
+window.eg100Change=function(step){selected=Math.max(1,Math.min(100,selected+step));save();eg100Stop();render()};
+window.eg100Speak=function(rate){const el=document.getElementById("eg100Passage");if(!el||!("speechSynthesis"in window)){document.getElementById("eg100ShadowStatus").textContent="Trình duyệt chưa hỗ trợ đọc văn bản.";return}eg100Stop();const u=new SpeechSynthesisUtterance(el.textContent);u.lang="en-US";u.rate=rate||Number(document.getElementById("eg100Rate").value)||.9;u.onend=()=>{document.getElementById("eg100ShadowStatus").textContent="Đã nghe xong. Hãy thử nhại lại đoạn văn."};speechSynthesis.speak(u);document.getElementById("eg100ShadowStatus").textContent="Đang phát đoạn văn…"};
+window.eg100SpeakSlow=function(){eg100Speak(.72)};
+window.eg100Stop=function(){if("speechSynthesis"in window)speechSynthesis.cancel();const e=document.getElementById("eg100ShadowStatus");if(e)e.textContent="Đã dừng audio."};
+const init=()=>{render();};
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
 })();
 </script>
 </body></html>
