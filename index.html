@@ -2852,11 +2852,21 @@ phrasalData.push(
  document.addEventListener('keydown',function(e){
    if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
    const target=e.target;
-   if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)))return;
+   if(target&&target.isContentEditable)return;
    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
    const page=document.querySelector('.page.active');
    /* Grammar Quiz has its own checked-answer navigation handler below. */
    if(!page || page.id==='grammar')return;
+   const tag=(target&&target.tagName||'').toUpperCase();
+   if(tag==='SELECT')return;
+   // In answer fields, keep normal caret movement. At the relevant edge,
+   // allow the arrow key to activate the enabled Previous/Next exercise button.
+   if(tag==='INPUT'||tag==='TEXTAREA'){
+     if(!target.value)return;
+     const start=target.selectionStart,end=target.selectionEnd;
+     if(e.key==='ArrowRight' && (start!==end || end!==target.value.length))return;
+     if(e.key==='ArrowLeft' && (start!==end || start!==0))return;
+   }
    const buttons=[...page.querySelectorAll('button:not(:disabled)')].filter(isVisible);
    const pattern=e.key==='ArrowRight'?/(next|continue|câu tiếp|tiếp theo|tiếp tục|→)/i:/(previous|prev|back|câu trước|trước đó|←)/i;
    const button=buttons.find(b=>pattern.test((b.innerText||b.textContent||'').trim()));
