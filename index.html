@@ -5152,8 +5152,8 @@ const panel=(t,b)=>'<div class="de-panel"><h2>'+t+'</h2>'+b+'</div>';
 const rows=a=>a.map(w=>'<div class="de-word"><div><b>'+w[0]+'</b><br><small>'+w[3]+'</small></div><span>'+w[1]+'<br><small>'+w[2]+'</small></span><button class="de-action" onclick="deSpeak(\''+w[0]+'\')">🔊</button></div>').join("");
 function open(id){$("deDashboard").hidden=true;$("deLesson").hidden=false;let m=modules.find(x=>x[3]===id);$("deLessonTitle").textContent=m?m[1]:"Deutsch";$("deLessonIntro").textContent="Lerne Deutsch Schritt für Schritt · Học tiếng Đức từng bước";$("deLessonLevel").textContent=level;let out="";
 if(id==="lessons")out=newLessons.map((l,i)=>panel(l.title+" · "+l.vi,
-'<h3>Wortschatz · Từ vựng</h3>'+l.words.map(w=>'<div class="de-word"><b>'+w[0]+'</b><span>'+w[1]+'</span><button class="de-action" onclick="deSpeak(\\''+w[0]+'\\')">🔊</button></div>').join("")+
-'<h3>Beispiele · Ví dụ</h3>'+l.examples.map(x=>'<div class="de-example"><b>'+x[0]+'</b><br><span class="de-muted">'+x[1]+'</span><button class="de-action" onclick="deSpeak(\\''+x[0]+'\\')">🔊</button></div>').join("")+
+'<h3>Wortschatz · Từ vựng</h3>'+l.words.map(w=>'<div class="de-word"><b>'+w[0]+'</b><span>'+w[1]+'</span><button class="de-action" onclick="deSpeak(\''+w[0]+'\')">🔊</button></div>').join("")+
+'<h3>Beispiele · Ví dụ</h3>'+l.examples.map(x=>'<div class="de-example"><b>'+x[0]+'</b><br><span class="de-muted">'+x[1]+'</span><button class="de-action" onclick="deSpeak(\''+x[0]+'\')">🔊</button></div>').join("")+
 '<h3>Grammatik · Ghi nhớ</h3><p>'+l.rule+'</p><h3>Übung · Luyện tập</h3><p><b>'+l.q+'</b></p>'+l.opts.map((v,j)=>'<button class="de-choice" onclick="deLessonQuiz(this,'+i+','+j+')">'+v+'</button>').join(" ")+'<p id="deLessonFeedback'+i+'"></p>'
 )).join("");
 else if(id==="vocab")out=panel("Wortschatz · Từ vựng",'<p class="de-muted">Danh từ luôn học cùng mạo từ và dạng số nhiều.</p>'+rows(words));
