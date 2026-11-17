@@ -1334,35 +1334,38 @@ function waitForEnglishVoice(){
 }
 
 let speechRequestId = 0;
-function say(t){
- const text=String(t||"").trim();
- if(!text)return;
- const synth=window.speechSynthesis;
- if(!synth||typeof SpeechSynthesisUtterance==="undefined"){
-  alert("Trình duyệt này chưa hỗ trợ phát âm. Hãy thử Chrome, Edge hoặc Safari mới nhất.");
-  return;
- }
- const requestId=++speechRequestId;
- try{
-  synth.cancel();
-  synth.resume();
-  const voice=getEnglishVoice();
-  const utterance=new SpeechSynthesisUtterance(text);
-  utterance.lang=voice&&voice.lang?voice.lang:"en-US";
-  if(voice)utterance.voice=voice;
-  utterance.rate=0.88;
-  utterance.pitch=1;
-  utterance.volume=1;
-  utterance.onerror=event=>{
-   if(requestId===speechRequestId&&event.error!=="interrupted")
-    console.warn("EnglishGo speech error:",event.error);
-  };
-  synth.speak(utterance);
-  setTimeout(()=>{if(requestId===speechRequestId&&!synth.speaking)synth.resume()},180);
- }catch(err){
-  console.warn("EnglishGo pronunciation error:",err);
- }
+let egAudioQueueTimer = null;
+function egAudioStop(){
+ speechRequestId++;
+ if(egAudioQueueTimer){clearTimeout(egAudioQueueTimer);egAudioQueueTimer=null;}
+ if(window.speechSynthesis)window.speechSynthesis.cancel();
+ const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="none";
 }
+function egAudioSpeak(text,rate=0.88){
+ const full=String(text||"").trim();if(!full)return;
+ const synth=window.speechSynthesis;
+ if(!synth||typeof SpeechSynthesisUtterance==="undefined"){alert("Trình duyệt này chưa hỗ trợ phát âm. Hãy thử Chrome, Edge hoặc Safari mới nhất.");return;}
+ egAudioStop();const requestId=++speechRequestId;
+ const voice=getEnglishVoice();
+ // Split by sentence punctuation so the voice pauses naturally between sentences.
+ const parts=full.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[full];
+ let index=0;
+ const stop=document.getElementById("egGlobalAudioStop");if(stop)stop.style.display="inline-flex";
+ const playNext=()=>{
+  if(requestId!==speechRequestId)return;
+  if(index>=parts.length){if(stop)stop.style.display="none";return;}
+  const chunk=parts[index++].trim();if(!chunk){playNext();return;}
+  const utterance=new SpeechSynthesisUtterance(chunk);
+  utterance.lang=voice&&voice.lang?voice.lang:"en-US";if(voice)utterance.voice=voice;
+  utterance.rate=rate;utterance.pitch=1;utterance.volume=1;
+  utterance.onend=()=>{if(requestId!==speechRequestId)return;egAudioQueueTimer=setTimeout(playNext,420);};
+  utterance.onerror=event=>{if(requestId===speechRequestId){if(stop)stop.style.display="none";if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
+  synth.speak(utterance);
+ };
+ try{synth.cancel();synth.resume();playNext();}
+ catch(err){if(stop)stop.style.display="none";console.warn("EnglishGo pronunciation error:",err);}
+}
+function say(t){egAudioSpeak(t,0.88);}
 function sayWordFromList(text){ say(text); }
 // Use data attributes instead of inline onclick strings: this avoids broken HTML
 // when a word or sentence is wrapped in quotes.
@@ -4447,8 +4450,8 @@ function egShadowModeChanged(){egShadowStop();egShadowPopulate()}
 function egShadowCurrent(){return egShadowData()[Number(document.getElementById("shadowLesson")?.value||0)]}
 function egShadowLoad(){egShadowIndex=0;egShadowDialogueTurn=0;egShadowStop();egShadowRender()}
 function egShadowRender(){const d=egShadowCurrent();if(!d)return;const dialogue=egShadowMode()==="dialogues";const lines=document.getElementById("shadowDialogueLines");lines.innerHTML="";if(dialogue){const line=d.lines[egShadowDialogueTurn];document.getElementById("shadowLevel").textContent=d.level+" · Lượt "+(egShadowDialogueTurn+1)+"/"+d.lines.length;document.getElementById("shadowSentence").textContent=line[0]+": "+line[1];document.getElementById("shadowMeaning").textContent=line[2];lines.innerHTML=d.lines.map((x,i)=>'<div class="conversation" style="'+(i===egShadowDialogueTurn?'background:#eef3ff;border-radius:10px;padding:12px':'')+'"><b>'+x[0]+':</b> '+x[1]+'<div class="line-vi">'+x[2]+'</div></div>').join("");document.getElementById("shadowCount").textContent="Lượt "+(egShadowDialogueTurn+1)+"/"+d.lines.length+" · Nghe và nhại theo từng lượt thoại." ;document.getElementById("shadowProgress").style.width=((egShadowDialogueTurn+1)/d.lines.length*100)+"%"}else{const item=d.items[egShadowIndex];document.getElementById("shadowLevel").textContent=d.level+" · Câu "+(egShadowIndex+1)+"/"+d.items.length;document.getElementById("shadowSentence").textContent=item[0];document.getElementById("shadowMeaning").textContent=item[1];document.getElementById("shadowCount").textContent="Câu "+(egShadowIndex+1)+"/"+d.items.length+" · Hãy nhại lại câu này 2–3 lần.";document.getElementById("shadowProgress").style.width=((egShadowIndex+1)/d.items.length*100)+"%"}}
-function egShadowSpeak(rate){if(!("speechSynthesis"in window)||!("SpeechSynthesisUtterance"in window)){alert("Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.");return}speechSynthesis.cancel();const dialogue=egShadowMode()==="dialogues",d=egShadowCurrent(),text=dialogue?d.lines[egShadowDialogueTurn][1]:d.items[egShadowIndex][0];const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=rate||0.9;u.pitch=1;speechSynthesis.speak(u)}
-function egShadowSpeakSlow(){egShadowSpeak(0.55)}function egShadowStop(){if("speechSynthesis"in window)speechSynthesis.cancel()}
+function egShadowSpeak(rate){const dialogue=egShadowMode()==="dialogues",d=egShadowCurrent(),text=dialogue?d.lines[egShadowDialogueTurn][1]:d.items[egShadowIndex][0];egAudioSpeak(text,rate||0.9)}
+function egShadowSpeakSlow(){egShadowSpeak(0.55)}function egShadowStop(){egAudioStop()}
 function egShadowNext(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn+1)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex+1)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowPrev(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn-1+egShadowCurrent().lines.length)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex-1+egShadowCurrent().items.length)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowToggleTip(){const e=document.getElementById("shadowTip");e.hidden=!e.hidden}
@@ -4967,4 +4970,5 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 })();
 </script>
 
+<button id="egGlobalAudioStop" type="button" onclick="egAudioStop()" style="display:none;position:fixed;right:18px;bottom:22px;z-index:99999;border:0;border-radius:999px;padding:12px 18px;background:#b42318;color:#fff;font-weight:700;box-shadow:0 4px 16px #0003">■ Dừng phát</button>
 </body></html>
