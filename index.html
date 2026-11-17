@@ -4689,7 +4689,7 @@ function render(){
   l.words.forEach((word,wi)=>{
    const w=String(word[0]||"").toLowerCase();
    let score=0;
-   const escaped=w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+   const escaped=w.replace(/[.*+?^${}()|[\\]\\]/g,"\\$&");
    if(w && new RegExp("(^|[^a-z])"+escaped+"(s|es)?($|[^a-z])","i").test(phraseText)) score=3;
    if((relatedAliases[w]||[]).some(alias=>phraseText.includes(alias))) score=Math.max(score,2);
    if(score>bestScore){bestScore=score;best=wi}
@@ -4697,7 +4697,7 @@ function render(){
   if(best>=0) phraseGroups[best].push(phrase);
   else unassigned.push({phrase,pi});
  });
- $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");");if(new RegExp("(^|[^a-z])"+escaped+"(s|es)?($|[^a-z])","i").test(p))score=3;if((relatedAliases[w]||[]).some(alias=>p.includes(alias)))score=Math.max(score,2);if(score>bestScore){bestScore=score;best=wi}});if(best>=0)phraseGroups[best].push(phrase);else unassigned.push({phrase,pi})});
+ $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
  unassigned.forEach(({phrase,pi})=>phraseGroups[pi%phraseGroups.length].push(phrase));
  $("eg100Words").innerHTML=l.words.map((w,i)=>'<div class="card" style="padding:14px"><b>'+(i+1)+'. '+esc(w[0])+'</b><div class="small" style="color:var(--accent);font-weight:700;margin-top:4px">'+esc(vocabularyPartsOfSpeech[w[0]]||"") +'</div><div class="small muted">'+esc(w[1])+'</div><div style="border-top:1px solid var(--line);margin-top:10px;padding-top:9px"><div class="small" style="font-weight:800;margin-bottom:5px">Cụm từ liên quan</div>'+(phraseGroups[i].length?phraseGroups[i].map(x=>'<div style="margin:6px 0"><b style="font-size:.95em">'+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:5px;padding:5px 9px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe cụm từ</button></div>').join(""):'<div class="small muted">Chưa có cụm từ riêng cho từ này trong bài.</div>')+'</div><button class="btn line" style="margin-top:9px" data-eg100-audio="'+esc(w[0])+'">🔊 Nghe từ</button></div>').join("");
   $("eg100Sentences").innerHTML=l.sentences.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
