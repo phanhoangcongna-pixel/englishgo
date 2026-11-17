@@ -4226,4 +4226,28 @@ function egShadowPlayRecording(){
 }
 document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 </script>
+<script id="englishgo-navigation-repair">
+/* Delegated navigation keeps top-menu clicks working despite later feature scripts. */
+(function(){
+ function handleNavigation(event){
+  const button=event.target && event.target.closest ? event.target.closest("header [data-page]") : null;
+  if(!button)return;
+  const page=button.getAttribute("data-page");
+  if(!page || typeof window.go!=="function")return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  window.go(page);
+ }
+ document.addEventListener("click",handleNavigation,true);
+ document.querySelectorAll("header .nav-group").forEach(group=>{
+  const summary=group.querySelector("summary");
+  if(summary)summary.addEventListener("click",event=>{
+   event.preventDefault();
+   const willOpen=!group.open;
+   document.querySelectorAll("header .nav-group").forEach(other=>{other.open=false});
+   group.open=willOpen;
+  },true);
+ });
+})();
+</script>
 </body></html>
