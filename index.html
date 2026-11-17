@@ -938,7 +938,7 @@ html { background: #142342; }
  };
  let mode="sentence",current="",chunkCurrent=[],usedSentence=[],usedChunk=[],quizAnswer="";
  const el=id=>document.getElementById(id);
- const norm=x=>x.toLowerCase().replace(/[^a-z0-9']/g," ").replace(/\s+/g," ").trim();
+ const norm=x=>String(x||"").toLowerCase().replace(/[’‘`´]/g,"'").replace(/[^a-z0-9]+/g," ").replace(/\s+/g," ").trim();
  let dictationVoices=[];
  function voiceScore(v){const n=(v.name||"").toLowerCase(),lang=(v.lang||"").toLowerCase();let score=0;if(lang==="en-us")score+=45;else if(lang.startsWith("en-gb"))score+=35;else if(lang.startsWith("en"))score+=20;if(/neural|natural|online/.test(n))score+=100;if(/aria|jenny|guy|sonia|ryan|sara|ava|andrew|emma|brian/.test(n))score+=65;if(/google us english|google uk english/.test(n))score+=60;if(/samantha/.test(n))score+=50;if(/compact|espeak|festival/.test(n))score-=80;return score}
  function loadDictationVoices(){if(!("speechSynthesis"in window))return;const sel=el("dictationVoice"),old=sel.value;dictationVoices=speechSynthesis.getVoices().filter(v=>/^en(-|_)/i.test(v.lang||"")).sort((a,b)=>voiceScore(b)-voiceScore(a));sel.innerHTML=dictationVoices.length?dictationVoices.map((v,i)=>'<option value="'+i+'">'+v.name+' · '+v.lang+'</option>').join(""):'<option value="">Giọng mặc định của thiết bị</option>';if(old&&dictationVoices[Number(old)])sel.value=old;el("dictationVoiceNote").textContent=dictationVoices.length?"Đã ưu tiên giọng tiếng Anh tự nhiên. Chất lượng giọng phụ thuộc giọng được cài trên thiết bị và trình duyệt.":"Không tìm thấy giọng tiếng Anh riêng; trình duyệt sẽ dùng giọng mặc định."}
