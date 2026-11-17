@@ -2160,7 +2160,9 @@ const thousandHintDictionary={
 };
 const thousandHintStopWords=new Set("a an the is am are was were be been being do does did have has had can could would should will shall may might must to of in on at for from with by as and or but if it its this that these those i you he she we they me him her us them my your his our their who what where when why how not no yes so very just than then there here".split(" "));
 function buildThousandHints(item,dir){
- const text=item.en||"";
+ if(!item)return [];
+ // Show useful English keywords for either translation direction, not the full answer.
+ const text=String(item.en||"");
  const words=text.match(/[A-Za-z]+(?:['’][A-Za-z]+)*/g)||[];
  const seen=new Set(),found=[];
  for(const raw of words){
@@ -2184,7 +2186,7 @@ function buildThousandHints(item,dir){
 }
 function toggleThousandHints(){
  const box=document.getElementById("thousandHints"),button=document.getElementById("thousandHintToggle");
- if(!box||!button||!thousandPool.length)return;
+ if(!box||!button||!thousandPool.length||thousandIndex<0||thousandIndex>=thousandPool.length)return;
  if(box.style.display!=="none"&&box.style.display!==""){
   box.style.display="none";button.textContent="💡 Gợi ý từ";button.setAttribute("aria-expanded","false");return;
  }
