@@ -4585,10 +4585,11 @@ const key="eg100-study-dates-v1",lessonKey="eg100-selected-day-v1";
 const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
 let dates=read(key,[]),selected=Number(read(lessonKey,1))||1;
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function progress(){return Math.min(100,Array.isArray(dates)?new Set(dates).size:0)}
 function save(){try{localStorage.setItem(key,JSON.stringify([...new Set(dates)].slice(-100)));localStorage.setItem(lessonKey,String(selected))}catch(e){}}
 function poolFor(cat,day){
- const all=(window.DATA&&Array.isArray(DATA.vocab))?DATA.vocab:[];
+ const all=(typeof DATA!=="undefined"&&Array.isArray(DATA.vocab))?DATA.vocab:[];
  let pool=all.filter(w=>w.cat===cat);
  if(pool.length<10)pool=pool.concat(all.filter(w=>w.cat!==cat));
  const seen=new Set(),out=[];
