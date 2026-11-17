@@ -4504,4 +4504,41 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 })();
 </script>
 
+<script id="englishgo-vocabulary-render-repair">
+/* Defensive vocabulary renderer: keep the vocabulary visible with level/topic filters. */
+(function(){
+ const levels={"daily life":"A1","food and shopping":"A1","home and city":"A1","feelings and people":"A1","travel":"A2","health":"A2","technology":"A2","nature and weather":"A2","culture":"A2","work and study":"B1"};
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ function render(){
+  const listBox=document.getElementById("wordList"),card=document.getElementById("wordCard"),cat=document.getElementById("wordCat"),level=document.getElementById("wordLevel"),search=document.getElementById("wordSearch");
+  if(!listBox||!card||!cat||!level||!search)return;
+  if(typeof DATA==="undefined"||!Array.isArray(DATA.vocab)||!DATA.vocab.length){listBox.innerHTML="<p>Chưa tải được dữ liệu từ vựng. Hãy tải lại trang.</p>";return;}
+  if(cat.options.length===1)[...new Set(DATA.vocab.map(w=>w.cat||"other"))].sort().forEach(c=>cat.add(new Option(c,c)));
+  const rank={A1:1,A2:2,B1:3},q=search.value.trim().toLowerCase(),chosen=cat.value,chosenLevel=level.value;
+  const words=DATA.vocab.map((w,i)=>({...w,_i:i,_level:w.level||levels[w.cat]||"A2"}))
+   .filter(w=>(chosen==="all"||w.cat===chosen)&&(chosenLevel==="all"||w._level===chosenLevel)&&(!q||String(w.w).toLowerCase().includes(q)||String(w.vi).toLowerCase().includes(q)))
+   .sort((a,b)=>(rank[a._level]||9)-(rank[b._level]||9)||String(a.cat).localeCompare(String(b.cat))||String(a.w).localeCompare(String(b.w)));
+  const groups={};words.forEach(w=>(groups[w._level]??=[]).push(w));
+  listBox.innerHTML=words.length?Object.entries(groups).map(([lv,items])=>'<section class="vocab-level-group"><h3>'+lv+' · '+({A1:"Cơ bản – dễ",A2:"Sơ cấp mở rộng – trung bình",B1:"Trung cấp – khó"}[lv]||"")+' <span class="small muted">('+items.length+' từ)</span></h3>'+items.map(w=>'<div class="wordrow"><div><b>'+esc(w.w)+'</b><div class="small muted">'+esc(w.cat)+' · '+esc(typeof posLabel==="function"?posLabel(w.pos||"n"):w.pos||"")+'</div></div><span class="meaning muted">'+esc(w.vi)+'</span><button class="btn line" type="button" data-eg-word-index="'+w._i+'">🔊 Nghe</button></div>').join("")+'</section>').join(""):"<p>Không tìm thấy từ phù hợp. Hãy đổi trình độ, chủ đề hoặc từ khóa.</p>";
+  const selected=words.find(w=>w._i===Number(window.egVocabIndex))||words[0]||DATA.vocab[0];
+  if(selected){
+   window.egVocabIndex=selected._i;
+   card.innerHTML='<div class="small muted">Word '+(selected._i+1)+' / '+DATA.vocab.length+' · '+esc(selected._level)+' · '+esc(selected.cat)+'</div><div class="word">'+esc(selected.w)+'</div><div class="ipa">'+esc(selected.ipa||"Pronunciation · Phát âm")+' · '+esc(typeof posLabel==="function"?posLabel(selected.pos||"n"):selected.pos||"")+'</div><div class="translation">'+esc(selected.vi)+'</div><button class="btn soft" type="button" data-eg-speak-word="'+esc(selected.w)+'">🔊 Nghe phát âm</button><div class="example"><b>'+esc(selected.ex||"")+'</b><em>'+esc(selected.vn||"")+'</em><button class="btn line" type="button" data-eg-speak-example="'+esc(selected.ex||"")+'">🔊 Nghe câu ví dụ</button></div>';
+  }
+ }
+ window.renderWords=render;
+ document.addEventListener("change",e=>{if(e.target.matches("#wordLevel,#wordCat"))render()});
+ document.addEventListener("input",e=>{if(e.target.matches("#wordSearch"))render()});
+ document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-eg-word-index],[data-eg-speak-word],[data-eg-speak-example]");
+  if(!b)return;
+  if(b.hasAttribute("data-eg-word-index")){window.egVocabIndex=Number(b.getAttribute("data-eg-word-index"));render();return;}
+  const phrase=b.getAttribute("data-eg-speak-word")||b.getAttribute("data-eg-speak-example");
+  if(phrase&&typeof say==="function")say(phrase);
+ });
+ window.egVocabMove=function(step){const total=(typeof DATA!=="undefined"&&DATA.vocab)?DATA.vocab.length:0;if(!total)return;window.egVocabIndex=((Number(window.egVocabIndex)||0)+step+total)%total;render()};
+ const init=()=>{try{render()}catch(err){console.error("EnglishGo vocabulary render error:",err);const box=document.getElementById("wordList");if(box)box.innerHTML="<p>Không tải được danh sách từ vựng. Hãy tải lại trang.</p>"}};
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
+})();
+</script>
 </body></html>
