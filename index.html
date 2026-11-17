@@ -1074,12 +1074,12 @@ html { background: #142342; }
  <div class="page-header"><div><p class="eyebrow">LISTEN TO REAL SITUATIONS</p><h1>🎧 Real Listening · Nghe hội thoại thực tế</h1><p>Nghe các đoạn hội thoại ngắn trong đời sống. Thử nghe trước, trả lời câu hỏi rồi mở bản chép lời để kiểm tra.</p></div></div>
  <div class="card">
   <div class="controls"><label for="listeningLevel">Cấp độ · Level</label><select id="listeningLevel" onchange="egListeningLevelChanged()"><option value="A1">A1 · Cơ bản</option><option value="A2">A2 · Sơ cấp mở rộng</option><option value="B1">B1 · Trung cấp</option></select><label for="listeningSelect">Chủ đề · Situation</label><select id="listeningSelect" onchange="egListeningRender()"></select></div>
-  <div class="controls"><label for="listeningVoice">Giọng đọc · Voice</label><select id="listeningVoice" aria-label="Chọn giọng đọc tiếng Anh"></select><label for="listeningSpeed">Tốc độ</label><select id="listeningSpeed"><option value="0.85">Chậm</option><option value="0.95" selected>Bình thường</option><option value="1.05">Nhanh</option></select></div><div class="controls"><button class="btn primary" type="button" onclick="egListeningPlay()">▶ Nghe hội thoại</button><button class="btn line" id="listeningStopBtn" type="button" onclick="egListeningStop()" style="display:none">■ Dừng</button><button class="btn soft" id="listeningTranscriptBtn" type="button" onclick="egListeningToggleTranscript()">Hiện bản chép lời</button></div>
+  <div class="controls"><span class="small muted" aria-label="Giọng đọc">Giọng đọc: Nữ Mỹ · tự động chọn giọng phù hợp trên thiết bị</span><label for="listeningSpeed">Tốc độ</label><select id="listeningSpeed"><option value="0.85">Chậm</option><option value="0.95" selected>Bình thường</option><option value="1.05">Nhanh</option></select></div><div class="controls"><button class="btn primary" type="button" onclick="egListeningPlay()">▶ Nghe hội thoại</button><button class="btn line" id="listeningStopBtn" type="button" onclick="egListeningStop()" style="display:none">■ Dừng</button><button class="btn soft" id="listeningTranscriptBtn" type="button" onclick="egListeningToggleTranscript()">Hiện bản chép lời</button></div>
   <div id="listeningTranscript" style="display:none"></div>
   <div id="listeningQuestions"></div>
   <div class="controls"><button class="btn primary" type="button" onclick="egListeningCheck()">Kiểm tra đáp án</button><button class="btn line" type="button" onclick="egListeningReset()">Làm lại</button></div>
   <div id="listeningResult" aria-live="polite"></div>
-  <p class="small muted" id="listeningVoiceNote">Ưu tiên giọng tiếng Anh tự nhiên có sẵn trên thiết bị. Bạn có thể chọn giọng và điều chỉnh tốc độ nghe.</p>
+  <p class="small muted" id="listeningVoiceNote">EnglishGo ưu tiên giọng nữ Mỹ trên thiết bị; tốc độ đọc có thể điều chỉnh ngay phía trên.</p>
  </div>
 </section>
 
@@ -1263,10 +1263,13 @@ function getEnglishVoice(){
  const voices = synth && synth.getVoices ? synth.getVoices() : [];
  if(!voices.length) return null;
 
- // Prefer a native English voice, but do not depend on one specific vendor.
- return voices.find(v => /^en-US/i.test(v.lang) && /Google|Microsoft|Natural|Premium/i.test(v.name))
+ // Prefer a feminine US English voice across devices; fall back gracefully when unavailable.
+ const femaleUS = voices.filter(v => /^en-US/i.test(v.lang) && /aria|jenny|ava|emma|sara|samantha|zira|karen|google us english|female/i.test(v.name));
+ const naturalFemaleUS = femaleUS.find(v => /natural|neural|online|premium/i.test(v.name));
+ if(naturalFemaleUS) return naturalFemaleUS;
+ if(femaleUS.length) return femaleUS[0];
+ return voices.find(v => /^en-US/i.test(v.lang) && /natural|neural|online|premium/i.test(v.name))
    || voices.find(v => /^en-US/i.test(v.lang))
-   || voices.find(v => /^en-GB/i.test(v.lang))
    || voices.find(v => /^en/i.test(v.lang))
    || null;
 }
@@ -4358,7 +4361,7 @@ function egShadowCurrent(){return egShadowData()[Number(document.getElementById(
 function egShadowLoad(){egShadowIndex=0;egShadowDialogueTurn=0;egShadowStop();egShadowRender()}
 function egShadowRender(){const d=egShadowCurrent();if(!d)return;const dialogue=egShadowMode()==="dialogues";const lines=document.getElementById("shadowDialogueLines");lines.innerHTML="";if(dialogue){const line=d.lines[egShadowDialogueTurn];document.getElementById("shadowLevel").textContent=d.level+" · Lượt "+(egShadowDialogueTurn+1)+"/"+d.lines.length;document.getElementById("shadowSentence").textContent=line[0]+": "+line[1];document.getElementById("shadowMeaning").textContent=line[2];lines.innerHTML=d.lines.map((x,i)=>'<div class="conversation" style="'+(i===egShadowDialogueTurn?'background:#eef3ff;border-radius:10px;padding:12px':'')+'"><b>'+x[0]+':</b> '+x[1]+'<div class="line-vi">'+x[2]+'</div></div>').join("");document.getElementById("shadowCount").textContent="Lượt "+(egShadowDialogueTurn+1)+"/"+d.lines.length+" · Nghe và nhại theo từng lượt thoại." ;document.getElementById("shadowProgress").style.width=((egShadowDialogueTurn+1)/d.lines.length*100)+"%"}else{const item=d.items[egShadowIndex];document.getElementById("shadowLevel").textContent=d.level+" · Câu "+(egShadowIndex+1)+"/"+d.items.length;document.getElementById("shadowSentence").textContent=item[0];document.getElementById("shadowMeaning").textContent=item[1];document.getElementById("shadowCount").textContent="Câu "+(egShadowIndex+1)+"/"+d.items.length+" · Hãy nhại lại câu này 2–3 lần.";document.getElementById("shadowProgress").style.width=((egShadowIndex+1)/d.items.length*100)+"%"}}
 function egShadowSpeak(rate){if(!("speechSynthesis"in window)||!("SpeechSynthesisUtterance"in window)){alert("Trình duyệt chưa hỗ trợ đọc văn bản. Hãy thử Chrome hoặc Edge.");return}speechSynthesis.cancel();const dialogue=egShadowMode()==="dialogues",d=egShadowCurrent(),text=dialogue?d.lines[egShadowDialogueTurn][1]:d.items[egShadowIndex][0];const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=rate||Number(document.getElementById("shadowRate").value||.9);u.pitch=1;speechSynthesis.speak(u)}
-function egShadowSpeakSlow(){egShadowSpeak(.58)}function egShadowStop(){if("speechSynthesis"in window)speechSynthesis.cancel()}
+function egShadowSpeakSlow(){const selected=Number(document.getElementById("shadowRate")?.value||.9);egShadowSpeak(Math.max(.5,selected*.8))}function egShadowStop(){if("speechSynthesis"in window)speechSynthesis.cancel()}
 function egShadowNext(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn+1)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex+1)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowPrev(){egShadowStop();if(egShadowMode()==="dialogues")egShadowDialogueTurn=(egShadowDialogueTurn-1+egShadowCurrent().lines.length)%egShadowCurrent().lines.length;else egShadowIndex=(egShadowIndex-1+egShadowCurrent().items.length)%egShadowCurrent().items.length;egShadowRender()}
 function egShadowToggleTip(){const e=document.getElementById("shadowTip");e.hidden=!e.hidden}
@@ -4599,7 +4602,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-eg100-audi
 window.eg100Enter=function(){selected=Math.min(100,progress()+1);render();if(typeof go==="function")go("daily100")};
 window.eg100CompleteDay=function(){const day=progress()+1;if(day>100)return;if(!completed.includes(day))completed.push(day);completed.sort((a,b)=>a-b);save();selected=Math.min(100,progress()+1);render();eg100Stop();const hint=document.getElementById("eg100CompleteHint");if(hint)hint.textContent=progress()>=100?"Bạn đã hoàn thành toàn bộ 100 ngày!":"Tuyệt vời! Đã lưu Ngày "+day+". Bài tiếp theo là Ngày "+(day+1)+". Hãy tiếp tục nhé!";};
 window.eg100Speak=function(rate){const el=document.getElementById("eg100Passage");if(!el||!("speechSynthesis"in window))return;eg100Stop();const u=new SpeechSynthesisUtterance(el.innerText);u.lang="en-US";u.rate=rate||Number(document.getElementById("eg100Rate").value)||.9;speechSynthesis.speak(u);document.getElementById("eg100ShadowStatus").textContent="Đang phát đoạn văn…"};
-window.eg100SpeakSlow=function(){eg100Speak(.72)};
+window.eg100SpeakSlow=function(){const selected=Number(document.getElementById("eg100Rate")?.value||.9);eg100Speak(Math.max(.5,selected*.8))};
 window.eg100Stop=function(){if("speechSynthesis"in window)speechSynthesis.cancel();const e=document.getElementById("eg100ShadowStatus");if(e)e.textContent="Đã dừng audio."};
 const init=()=>{render()};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
@@ -4620,5 +4623,31 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 #daily100 .eg100-complete-dock button{width:100%;min-height:52px;font-weight:800}
 #daily100 .eg100-complete-dock p{margin:0;text-align:center}
 </style>
+
+
+<script id="englishgo-unified-female-us-voice">
+/* Use one preferred voice for all browser speech, while leaving each lesson's rate intact. */
+(function(){
+ const synth=window.speechSynthesis;
+ if(!synth||synth.__englishGoUnifiedVoice)return;
+ const nativeSpeak=synth.speak.bind(synth);
+ function preferredVoice(){
+  const voices=synth.getVoices?synth.getVoices():[];
+  const femaleUS=voices.filter(v=>/^en-US/i.test(v.lang||"")&&/aria|jenny|ava|emma|sara|samantha|zira|karen|google us english|female/i.test(v.name||""));
+  return femaleUS.find(v=>/natural|neural|online|premium/i.test(v.name||""))||femaleUS[0]||
+   voices.find(v=>/^en-US/i.test(v.lang||"")&&/natural|neural|online|premium/i.test(v.name||""))||
+   voices.find(v=>/^en-US/i.test(v.lang||""))||voices.find(v=>/^en/i.test(v.lang||""))||null;
+ }
+ synth.speak=function(utterance){
+  try{
+   const voice=preferredVoice();
+   if(utterance&&voice){utterance.voice=voice;utterance.lang=voice.lang||"en-US"}
+   else if(utterance&&!utterance.lang)utterance.lang="en-US";
+  }catch(e){}
+  return nativeSpeak(utterance);
+ };
+ try{Object.defineProperty(synth,"__englishGoUnifiedVoice",{value:true})}catch(e){}
+})();
+</script>
 
 </body></html>
