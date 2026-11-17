@@ -2485,7 +2485,23 @@ function shadowKey(){const d=shadowCurrent();return d?d.level+"|"+d.title:""}
 let shadowMode="shadowing";
 function shadowBackToModes(){shadowStop();document.getElementById("shadowWorkspace").style.display="none";document.getElementById("shadowLessonList").style.display="grid"}
 
-function shadowRender(){shadowStop();const d=shadowCurrent();if(!d)return;document.getElementById("shadowModeTitle").textContent=shadowMode==="shadowing"?"🗣️ Luyện nói đuổi":shadowMode==="sentences"?"📝 Luyện từng câu":"💬 Luyện hội thoại";document.getElementById("shadowGoal").textContent=d.goal;document.getElementById("shadowTranscript").style.display=shadowVisible?"block":"none";document.getElementById("shadowTranscript").innerHTML='<h3>Transcript · Bản chép lời</h3>'+d.chunks.map((x,i)=>'<p style="line-height:1.8"><b>'+(i+1)+'.</b> '+x[0]+'<br><span class="small muted">'+x[1]+'</span></p>').join("");document.getElementById("shadowTranscriptBtn").textContent=shadowVisible?"Ẩn transcript":"Hiện transcript";const done=shadowDone[shadowKey()]||[];document.getElementById("shadowChunks").innerHTML='<h3>'+(shadowMode==="dialogues"?"Dialogue practice · Luyện theo lượt hội thoại":shadowMode==="sentences"?"Sentence practice · Luyện từng câu":"Shadow từng câu · Sentence practice") +'</h3>'+d.chunks.map((x,i)=>'<div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0"><p style="line-height:1.8;margin:0 0 5px"><b>'+(i+1)+'. '+(shadowMode==="dialogues"?(i%2===0?"A: ":"B: "):"")+x[0]+'</b></p><p class="small muted" style="margin:0 0 10px">'+x[1]+'</p><div class="controls"><button class="btn soft" type="button" onclick="shadowPlayChunk('+i+')">🔊 Nghe câu</button><button class="btn line" type="button" onclick="shadowRecordChunk('+i+')">🎙️ Thử nói</button><button class="btn '+(done.includes(i)?'primary':'line')+'" type="button" onclick="shadowMark('+i+')">'+(done.includes(i)?'✓ Đã luyện':'Đánh dấu đã luyện')+'</button></div></div>').join("");document.getElementById("shadowChecklist").innerHTML=['Mình nghe hết bài một lần trước khi nhìn transcript.','Mình bắt chước âm cuối và cách nối âm.','Mình chú ý trọng âm từ và ngữ điệu của câu.','Mình shadow mỗi câu ít nhất 2–3 lần.','Mình thử nói lại cả bài mà không nhìn chữ.'].map(x=>'<label style="display:block;padding:8px 0"><input type="checkbox" class="shadow-self-check"> '+x+'</label>').join("");shadowUpdateProgress();document.getElementById("shadowFeedback").textContent=""}
+function shadowRender(){
+ shadowStop();
+ const d=shadowCurrent();if(!d)return;
+ const byId=id=>document.getElementById(id);
+ const setText=(id,value)=>{const el=byId(id);if(el)el.textContent=value};
+ const setHtml=(id,value)=>{const el=byId(id);if(el)el.innerHTML=value};
+ const setDisplay=(id,value)=>{const el=byId(id);if(el)el.style.display=value};
+ setText("shadowModeTitle",shadowMode==="shadowing"?"🗣️ Luyện nói đuổi":shadowMode==="sentences"?"📝 Luyện từng câu":"💬 Luyện hội thoại");
+ setText("shadowGoal",d.goal);
+ setDisplay("shadowTranscript",shadowVisible?"block":"none");
+ setHtml("shadowTranscript",'<h3>Transcript · Bản chép lời</h3>'+d.chunks.map((x,i)=>'<p style="line-height:1.8"><b>'+(i+1)+'.</b> '+x[0]+'<br><span class="small muted">'+x[1]+'</span></p>').join(""));
+ setText("shadowTranscriptBtn",shadowVisible?"Ẩn transcript":"Hiện transcript");
+ const done=shadowDone[shadowKey()]||[];
+ setHtml("shadowChunks",'<h3>'+(shadowMode==="dialogues"?"Dialogue practice · Luyện theo lượt hội thoại":shadowMode==="sentences"?"Sentence practice · Luyện từng câu":"Shadow từng câu · Sentence practice")+'</h3>'+d.chunks.map((x,i)=>'<div style="border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0"><p style="line-height:1.8;margin:0 0 5px"><b>'+(i+1)+'. '+(shadowMode==="dialogues"?(i%2===0?"A: ":"B: "):"")+x[0]+'</b></p><p class="small muted" style="margin:0 0 10px">'+x[1]+'</p><div class="controls"><button class="btn soft" type="button" onclick="shadowPlayChunk('+i+')">🔊 Nghe câu</button><button class="btn line" type="button" onclick="shadowRecordChunk('+i+')">🎙️ Thử nói</button><button class="btn '+(done.includes(i)?"primary":"line")+'" type="button" onclick="shadowMark('+i+')">'+(done.includes(i)?"✓ Đã luyện":"Đánh dấu đã luyện")+'</button></div></div>').join(""));
+ setHtml("shadowChecklist",['Mình nghe hết bài một lần trước khi nhìn transcript.','Mình bắt chước âm cuối và cách nối âm.','Mình chú ý trọng âm từ và ngữ điệu của câu.','Mình shadow mỗi câu ít nhất 2–3 lần.','Mình thử nói lại cả bài mà không nhìn chữ.'].map(x=>'<label style="display:block;padding:8px 0"><input type="checkbox" class="shadow-self-check"> '+x+'</label>').join(""));
+ shadowUpdateProgress();setText("shadowFeedback","");
+}
 function shadowUpdateProgress(){const d=shadowCurrent();if(!d)return;const done=shadowDone[shadowKey()]||[];const pct=Math.round(done.length/d.chunks.length*100);document.getElementById("shadowProgress").innerHTML='<b>Tiến độ: '+done.length+'/'+d.chunks.length+' câu đã luyện</b><div style="height:9px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:7px"><div style="height:100%;width:'+pct+'%;background:var(--primary);border-radius:20px"></div></div><p class="small muted">'+(pct===100?'Hoàn thành! Hãy thử nói lại toàn bài không nhìn chữ.':'Đánh dấu mỗi câu sau khi đã shadow 2–3 lần.')+'</p>'}
 function shadowMark(i){const key=shadowKey();shadowDone[key]=shadowDone[key]||[];const pos=shadowDone[key].indexOf(i);if(pos>=0)shadowDone[key].splice(pos,1);else shadowDone[key].push(i);shadowRender()}
 function shadowToggleTranscript(){shadowVisible=!shadowVisible;shadowRender()}
@@ -4816,7 +4832,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   function lookupVi(index){
    if(index>=candidates.length)return Promise.reject(new Error("No Vietnamese entry"));
    const candidate=candidates[index];
-   const url="https://dict.minhqnd.com/api/v1/lookup?word="+encodeURIComponent(candidate)+"&lang=en&def_lang=vi";
+   const url="https://dict.minhqnd.com/api/v1/lookup?word="+encodeURIComponent(candidate);
    return requestJson(url,4500).then(parseVietnamese).then(data=>{
     if(!data)return lookupVi(index+1);
     if(candidate!==key)data.source="Từ gốc: "+candidate+" · "+data.source;
