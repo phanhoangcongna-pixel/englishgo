@@ -102,7 +102,20 @@ textarea { width: 100%; }
   }catch(e){}
 })();
 </script>
+<script id="eg-language-restore-before-paint">
+(function(){
+ try{
+  var selected=localStorage.getItem("eg-selected-language")||sessionStorage.getItem("eg-selected-language");
+  if(selected==="en"||selected==="de"){
+   document.documentElement.classList.add("eg-lang-"+selected);
+   document.write('<style id="eg-language-restore-css">#languageChooser{display:none!important}#'+(selected==="en"?"englishApp":"germanApp")+'{display:block!important}</style>');
+  }
+ }catch(e){}
+})();
+</script>
 <style>
+html.eg-lang-en #languageChooser,html.eg-lang-de #languageChooser{display:none!important}
+html.eg-lang-en #englishApp,html.eg-lang-de #germanApp{display:block!important}
 .spoken-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
 .spoken-item{border:1px solid var(--border, #ddd);border-radius:12px;padding:12px;background:var(--card, transparent)}
 .spoken-item strong{display:block;font-size:1.05em;margin-bottom:5px}
@@ -5218,9 +5231,9 @@ window.deCompleteDay=()=>{let n=done.length+1;if(n>100)return;done.push(n);xp+=2
 window.deSaveWriting=()=>{localStorage.setItem("eg-de-writing",$("deWriting").value);$("deWritingFeedback").textContent="Đã lưu bản nháp trên thiết bị này."};
 window.deCheckTranslation=()=>{$("deFeedback").textContent=$("deAnswer").value.toLowerCase().includes("ich wohne")?"Richtig! · Chính xác.":"Gợi ý: Ich wohne in Deutschland und lerne Deutsch."};
 window.deQuiz=(b,ok)=>{$("deQuizFeedback").textContent=ok?"Richtig! Ich komme aus Vietnam.":"Noch einmal! Chủ ngữ ich đi với komme.";b.style.borderColor=ok?"#16865b":"#c74b4b"};
-window.enterEnglishGo=()=>{$("languageChooser").hidden=true;$("germanApp").hidden=true;$("englishApp").hidden=false;sessionStorage.setItem("eg-selected-language","en");scrollTo(0,0)};
-window.enterDeutschGo=()=>{$("languageChooser").hidden=true;$("englishApp").hidden=true;$("germanApp").hidden=false;sessionStorage.setItem("eg-selected-language","de");dashboard();scrollTo(0,0)};
-window.backToLanguageChooser=()=>{$("languageChooser").hidden=false;$("englishApp").hidden=true;$("germanApp").hidden=true;sessionStorage.removeItem("eg-selected-language");scrollTo(0,0)};
-document.addEventListener("DOMContentLoaded",()=>{let s=sessionStorage.getItem("eg-selected-language");if(s==="en")enterEnglishGo();else if(s==="de")enterDeutschGo();else backToLanguageChooser()});
+window.enterEnglishGo=()=>{$("languageChooser").hidden=true;$("germanApp").hidden=true;$("englishApp").hidden=false;try{localStorage.setItem("eg-selected-language","en");sessionStorage.setItem("eg-selected-language","en")}catch(e){}scrollTo(0,0)};
+window.enterDeutschGo=()=>{$("languageChooser").hidden=true;$("englishApp").hidden=true;$("germanApp").hidden=false;try{localStorage.setItem("eg-selected-language","de");sessionStorage.setItem("eg-selected-language","de")}catch(e){}dashboard();scrollTo(0,0)};
+window.backToLanguageChooser=()=>{$("languageChooser").hidden=false;$("englishApp").hidden=true;$("germanApp").hidden=true;try{localStorage.removeItem("eg-selected-language");sessionStorage.removeItem("eg-selected-language")}catch(e){}scrollTo(0,0)};
+document.addEventListener("DOMContentLoaded",()=>{let s="";try{s=localStorage.getItem("eg-selected-language")||sessionStorage.getItem("eg-selected-language")||""}catch(e){}if(s==="en")enterEnglishGo();else if(s==="de")enterDeutschGo();else backToLanguageChooser()});
 })();
 </script></body></html>
