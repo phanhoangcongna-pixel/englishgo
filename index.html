@@ -4005,6 +4005,166 @@ const egShadowDialogueLessons=[
 ["Assistant","You're very welcome. Have a lovely day!","Không có gì. Chúc bạn một ngày vui vẻ!"]
 ]}
 ];
+
+/* Complete the original Shadowing library so every short lesson has a fuller practice set. */
+(function(){
+ const sentenceAdds={
+ "Daily routines · Sinh hoạt hằng ngày":[
+ ["I check the weather before I leave home.","Tôi kiểm tra thời tiết trước khi rời nhà."],
+ ["I usually pack my lunch the night before.","Tôi thường chuẩn bị bữa trưa từ tối hôm trước."],
+ ["I water the plants every other morning.","Tôi tưới cây cách ngày vào buổi sáng."],
+ ["I take a short break when I feel tired.","Tôi nghỉ giải lao một chút khi cảm thấy mệt."],
+ ["I try to keep my room clean and organised.","Tôi cố gắng giữ phòng sạch sẽ và ngăn nắp."],
+ ["After dinner, I sometimes call my family.","Sau bữa tối, đôi khi tôi gọi điện cho gia đình."],
+ ["I write down my plans for the following day.","Tôi ghi lại kế hoạch cho ngày hôm sau."],
+ ["At weekends, I allow myself to sleep a little longer.","Cuối tuần, tôi cho phép mình ngủ thêm một chút."]
+ ],
+ "At a café · Ở quán cà phê":[
+ ["Could I see the menu, please?","Cho tôi xem thực đơn được không?"],
+ ["Do you have any cakes without nuts?","Quán có loại bánh nào không có hạt không?"],
+ ["I'd like to order a sandwich as well.","Tôi muốn gọi thêm một chiếc bánh sandwich."],
+ ["Could you bring the bill when you have a moment?","Khi nào tiện, bạn mang hóa đơn giúp tôi nhé."],
+ ["Is service included in the price?","Giá này đã bao gồm phí phục vụ chưa?"],
+ ["Would you mind making the coffee a little less strong?","Bạn có thể pha cà phê nhẹ hơn một chút không?"],
+ ["I think I left my umbrella near the door.","Tôi nghĩ mình để quên ô gần cửa ra vào."],
+ ["Thanks, everything was delicious.","Cảm ơn, mọi thứ đều rất ngon."]
+ ],
+ "Work and plans · Công việc và kế hoạch":[
+ ["Could you give me a quick update on the project?","Bạn có thể cập nhật nhanh cho tôi về dự án không?"],
+ ["I've attached the file to my email.","Tôi đã đính kèm tệp vào email."],
+ ["Let's make sure we agree on the next steps.","Hãy đảm bảo chúng ta thống nhất các bước tiếp theo."],
+ ["I may be a few minutes late because of traffic.","Có thể tôi sẽ đến muộn vài phút vì tắc đường."],
+ ["Would you mind taking notes during the meeting?","Bạn có thể ghi chú trong cuộc họp được không?"],
+ ["We should consider the costs before making a decision.","Chúng ta nên cân nhắc chi phí trước khi quyết định."],
+ ["I'll prioritise the urgent tasks first.","Tôi sẽ ưu tiên xử lý các việc khẩn cấp trước."],
+ ["Thanks for keeping me updated.","Cảm ơn bạn đã thường xuyên cập nhật thông tin cho tôi."]
+ ],
+ "Travel and directions · Du lịch và chỉ đường":[
+ ["Could you tell me which platform the train leaves from?","Bạn có thể cho tôi biết tàu khởi hành ở sân ga nào không?"],
+ ["I'd like a window seat if one is available.","Nếu còn chỗ, tôi muốn ngồi cạnh cửa sổ."],
+ ["How much is a return ticket?","Vé khứ hồi giá bao nhiêu?"],
+ ["Could you drop me off in front of the main entrance?","Bạn có thể cho tôi xuống trước lối vào chính không?"],
+ ["My flight has been delayed by two hours.","Chuyến bay của tôi bị hoãn hai tiếng."],
+ ["Is there a luggage locker at the station?","Ở nhà ga có tủ gửi hành lý không?"],
+ ["We should leave early to avoid the rush hour.","Chúng ta nên đi sớm để tránh giờ cao điểm."],
+ ["Could you mark the location on this map?","Bạn có thể đánh dấu địa điểm trên bản đồ này không?"]
+ ],
+ "Feelings and opinions · Cảm xúc và ý kiến":[
+ ["I was relieved when I heard the good news.","Tôi cảm thấy nhẹ nhõm khi nghe tin tốt."],
+ ["I sometimes find it difficult to express my thoughts.","Đôi khi tôi thấy khó diễn đạt suy nghĩ của mình."],
+ ["From my point of view, communication is essential.","Theo quan điểm của tôi, giao tiếp là điều thiết yếu."],
+ ["I appreciate your honesty, even when we disagree.","Tôi trân trọng sự thẳng thắn của bạn, ngay cả khi chúng ta bất đồng."],
+ ["That experience taught me to be more patient.","Trải nghiệm đó dạy tôi kiên nhẫn hơn."],
+ ["I'm not entirely convinced that this is the best option.","Tôi chưa hoàn toàn tin rằng đây là lựa chọn tốt nhất."],
+ ["I'd rather discuss the issue calmly than argue about it.","Tôi muốn bình tĩnh thảo luận vấn đề hơn là tranh cãi."],
+ ["It makes me happy to see how much progress we've made.","Tôi vui khi thấy chúng ta đã tiến bộ nhiều như thế nào."]
+ ]
+ };
+ const dialogueAdds={
+ "Meeting someone new · Làm quen":[
+ ["Anna","What do you enjoy doing in your free time?","Bạn thích làm gì khi có thời gian rảnh?"],
+ ["Ben","I enjoy cycling and trying new food.","Mình thích đạp xe và thử những món ăn mới."],
+ ["Anna","Have you joined any of the club's activities yet?","Bạn đã tham gia hoạt động nào của câu lạc bộ chưa?"],
+ ["Ben","Not yet. I'm hoping to join the conversation group.","Chưa. Mình hy vọng sẽ tham gia nhóm luyện hội thoại."],
+ ["Anna","We meet every Wednesday evening.","Chúng mình gặp nhau vào mỗi tối thứ Tư."],
+ ["Ben","That works well for me. Where do you usually meet?","Thời gian đó rất phù hợp với mình. Mọi người thường gặp ở đâu?"],
+ ["Anna","In the room next to the reception desk.","Trong căn phòng cạnh quầy lễ tân."],
+ ["Ben","Great. I'll see you on Wednesday, then.","Tuyệt. Vậy hẹn gặp bạn vào thứ Tư nhé."]
+ ],
+ "Ordering at a café · Gọi món ở quán":[
+ ["Barista","Would you like your coffee to have an extra shot?","Bạn có muốn thêm một shot cà phê không?"],
+ ["Customer","No, thanks. One shot is enough for me.","Không, cảm ơn. Một shot là đủ với tôi."],
+ ["Barista","Would you like your drink hot or iced?","Bạn muốn đồ uống nóng hay đá?"],
+ ["Customer","Iced, please. Could I have less sugar?","Cho tôi loại đá nhé. Có thể cho ít đường hơn không?"],
+ ["Barista","Of course. Your order will be ready shortly.","Tất nhiên. Đồ uống của bạn sẽ sẵn sàng ngay thôi."],
+ ["Customer","Can I sit outside while I wait?","Trong lúc chờ, tôi có thể ngồi bên ngoài không?"],
+ ["Barista","Certainly. I'll bring it to your table.","Được chứ. Tôi sẽ mang ra bàn cho bạn."],
+ ["Customer","That's very kind of you. Thank you.","Bạn thật chu đáo. Cảm ơn nhé."]
+ ],
+ "Making weekend plans · Lên kế hoạch cuối tuần":[
+ ["Mia","Do you know a good place to start the hike?","Bạn có biết địa điểm nào phù hợp để bắt đầu chuyến đi bộ không?"],
+ ["Tom","There's a popular trail near the lake.","Có một đường mòn phổ biến gần hồ."],
+ ["Mia","How long does the route usually take?","Thông thường đi hết tuyến đường đó mất bao lâu?"],
+ ["Tom","About three hours, depending on our pace.","Khoảng ba tiếng, tùy tốc độ của chúng ta."],
+ ["Mia","Let's pack lunch so we can stop along the way.","Chúng ta chuẩn bị bữa trưa để có thể dừng ăn dọc đường nhé."],
+ ["Tom","Good idea. I'll bring sandwiches and fruit.","Ý hay đấy. Mình sẽ mang sandwich và trái cây."],
+ ["Mia","I'll check the train times tonight.","Tối nay mình sẽ kiểm tra giờ tàu."],
+ ["Tom","Brilliant. Message me when you've found a suitable train.","Tuyệt. Nhắn mình khi bạn tìm được chuyến tàu phù hợp nhé."]
+ ],
+ "At the hotel · Ở khách sạn":[
+ ["Guest","Could you recommend a good restaurant nearby?","Bạn có thể giới thiệu một nhà hàng ngon gần đây không?"],
+ ["Receptionist","There's a lovely Italian restaurant two streets away.","Có một nhà hàng Ý rất đẹp cách đây hai con phố."],
+ ["Guest","Do I need to book a table in advance?","Tôi có cần đặt bàn trước không?"],
+ ["Receptionist","It's usually busy in the evening, so I'd recommend it.","Buổi tối thường khá đông, nên tôi khuyên quý khách nên đặt trước."],
+ ["Guest","Could you help me arrange a taxi for seven o'clock?","Bạn có thể giúp tôi gọi taxi lúc bảy giờ không?"],
+ ["Receptionist","Of course. I'll arrange that for you.","Tất nhiên. Tôi sẽ sắp xếp cho quý khách."],
+ ["Guest","Thank you. Is there anything else I should know?","Cảm ơn. Tôi còn cần biết điều gì nữa không?"],
+ ["Receptionist","Please let us know if you need any assistance.","Vui lòng cho chúng tôi biết nếu quý khách cần hỗ trợ."]
+ ],
+ "Solving a problem at work · Giải quyết vấn đề ở công ty":[
+ ["Emma","The customer comments suggest that response times are too slow.","Phản hồi của khách hàng cho thấy thời gian trả lời quá chậm."],
+ ["James","We may need to review how support requests are assigned.","Có lẽ chúng ta cần xem lại cách phân công các yêu cầu hỗ trợ."],
+ ["Emma","I can analyse the busiest periods and identify the main delays.","Tôi có thể phân tích những khung giờ bận nhất và xác định nguyên nhân chậm trễ chính."],
+ ["James","That would be useful. Could you finish it by Thursday?","Việc đó sẽ hữu ích. Bạn có thể hoàn thành trước thứ Năm không?"],
+ ["Emma","Yes. I'll share the results with the whole team.","Được. Tôi sẽ chia sẻ kết quả với cả nhóm."],
+ ["James","Let's also suggest a few changes we can test next week.","Chúng ta cũng đề xuất vài thay đổi có thể thử vào tuần tới nhé."],
+ ["Emma","Agreed. We should measure the results before deciding what to keep.","Đồng ý. Chúng ta nên đo lường kết quả trước khi quyết định giữ lại điều gì."],
+ ["James","Great. I'll add this to the agenda for our next meeting.","Tốt. Tôi sẽ thêm việc này vào chương trình cuộc họp tiếp theo."]
+ ],
+ "Making an appointment · Đặt lịch hẹn":[
+ ["Receptionist","May I have your full name and date of birth?","Tôi xin họ tên đầy đủ và ngày sinh của bạn được không?"],
+ ["Caller","Certainly. It's Nguyen Minh Anh, born on the fifth of May.","Được ạ. Tôi là Nguyen Minh Anh, sinh ngày mùng năm tháng Năm."],
+ ["Receptionist","Thank you. Is this your first visit to our clinic?","Cảm ơn bạn. Đây có phải lần đầu bạn đến phòng khám không?"],
+ ["Caller","No, I've visited once before.","Không, tôi đã đến đây một lần trước đó."],
+ ["Receptionist","Please arrive ten minutes early to complete the form.","Vui lòng đến sớm mười phút để điền biểu mẫu."],
+ ["Caller","Should I bring my insurance card as well?","Tôi có cần mang theo thẻ bảo hiểm không?"],
+ ["Receptionist","Yes, please bring it along with any relevant documents.","Có, vui lòng mang theo cùng các giấy tờ liên quan."],
+ ["Caller","Understood. Thank you for confirming everything.","Tôi hiểu rồi. Cảm ơn bạn đã xác nhận mọi thứ."]
+ ],
+ "Job interview · Phỏng vấn xin việc":[
+ ["Interviewer","What motivates you to do your best work?","Điều gì thúc đẩy bạn làm việc hết sức mình?"],
+ ["Candidate","I enjoy solving problems and seeing the positive results of my work.","Tôi thích giải quyết vấn đề và nhìn thấy kết quả tích cực từ công việc."],
+ ["Interviewer","How do you respond to constructive feedback?","Bạn phản hồi thế nào trước những góp ý mang tính xây dựng?"],
+ ["Candidate","I listen carefully, ask questions, and use the feedback to improve.","Tôi lắng nghe cẩn thận, đặt câu hỏi và dùng góp ý để cải thiện."],
+ ["Interviewer","Do you prefer working independently or as part of a team?","Bạn thích làm việc độc lập hay theo nhóm hơn?"],
+ ["Candidate","I'm comfortable with both, depending on what the task requires.","Tôi đều thấy thoải mái với cả hai, tùy yêu cầu của công việc."],
+ ["Interviewer","Do you have any questions about the role?","Bạn có câu hỏi nào về vị trí này không?"],
+ ["Candidate","Yes. What would success look like in the first six months?","Có. Thành công trong sáu tháng đầu tiên sẽ được đánh giá như thế nào?"]
+ ],
+ "At the nail salon · Tại tiệm làm móng":[
+ ["Nail technician","Would you like me to add a strengthening treatment?","Bạn có muốn tôi thêm liệu trình làm móng chắc khỏe không?"],
+ ["Customer","Yes, please. My nails have been quite weak recently.","Có, làm ơn nhé. Gần đây móng tôi khá yếu."],
+ ["Nail technician","I'll make sure the layers are thin and even.","Tôi sẽ đảm bảo các lớp sơn mỏng và đều."],
+ ["Customer","Could you check that both hands are the same length?","Bạn có thể kiểm tra để hai bàn tay có độ dài móng giống nhau không?"],
+ ["Nail technician","Of course. Let me compare them before the final coat.","Tất nhiên. Để tôi so sánh trước khi phủ lớp cuối."],
+ ["Customer","That looks much better. How should I care for them at home?","Trông đẹp hơn nhiều rồi. Tôi nên chăm sóc móng ở nhà thế nào?"],
+ ["Nail technician","Use cuticle oil and wear gloves when cleaning.","Hãy dùng dầu dưỡng biểu bì và đeo găng tay khi dọn dẹp."],
+ ["Customer","Thanks for the advice. I'm really happy with the result.","Cảm ơn lời khuyên của bạn. Tôi rất hài lòng với kết quả."]
+ ],
+ "Returning an item · Đổi trả hàng":[
+ ["Customer","Is there a fee for returning the faulty item?","Trả lại sản phẩm bị lỗi có mất phí không?"],
+ ["Assistant","No, returns for faulty products are free of charge.","Không, việc trả lại sản phẩm lỗi hoàn toàn miễn phí."],
+ ["Customer","Do I need to put it back in the original packaging?","Tôi có cần cho sản phẩm vào bao bì ban đầu không?"],
+ ["Assistant","If you still have it, that would be helpful, but it isn't required.","Nếu bạn còn giữ thì sẽ tốt, nhưng không bắt buộc."],
+ ["Customer","How will I know when the refund has been processed?","Làm sao tôi biết khi nào khoản hoàn tiền được xử lý?"],
+ ["Assistant","We'll email you as soon as the refund is complete.","Chúng tôi sẽ gửi email ngay khi hoàn tiền xong."],
+ ["Customer","Could you give me a reference number for this return?","Bạn có thể cung cấp mã tham chiếu cho lần trả hàng này không?"],
+ ["Assistant","Certainly. Here's your reference number. Thank you for your patience.","Được chứ. Đây là mã tham chiếu của bạn. Cảm ơn bạn đã kiên nhẫn."]
+ ]
+ };
+ Object.entries(sentenceAdds).forEach(([title,items])=>{const d=egShadowSentenceLessons.find(x=>x.title===title);if(d)d.items.push(...items)});
+ Object.entries(dialogueAdds).forEach(([title,lines])=>{const d=egShadowDialogueLessons.find(x=>x.title===title);if(d)d.lines.push(...lines)});
+ const legacyAdds={
+ "Introducing Yourself · Giới thiệu bản thân":[["I work as a graphic designer, and I enjoy being creative.","Mình làm thiết kế đồ họa và thích sáng tạo."],["I moved here last year to study and work.","Mình chuyển đến đây năm ngoái để học tập và làm việc."],["I'm still getting used to the local weather.","Mình vẫn đang làm quen với thời tiết ở đây."],["I speak Vietnamese and a little Spanish as well.","Mình nói tiếng Việt và cũng biết một chút tiếng Tây Ban Nha."],["I'm hoping to improve my English by practising every day.","Mình hy vọng cải thiện tiếng Anh bằng cách luyện tập mỗi ngày."],["What do you usually do at the weekends?","Cuối tuần bạn thường làm gì?"],["It was lovely talking to you. See you around!","Rất vui được trò chuyện với bạn. Hẹn gặp lại nhé!"],["Let's keep in touch and practise together sometime.","Chúng ta giữ liên lạc và hôm nào cùng luyện tập nhé."]],
+ "A Morning Routine · Thói quen buổi sáng":[["Before breakfast, I usually open the windows and let some fresh air in.","Trước bữa sáng, mình thường mở cửa sổ để không khí trong lành tràn vào."],["I check my calendar to see what I have planned for the day.","Mình xem lịch để biết kế hoạch trong ngày."],["If I have enough time, I do a few simple exercises.","Nếu có đủ thời gian, mình tập vài động tác đơn giản."],["I pack my laptop and make sure I have my keys.","Mình cho máy tính vào túi và kiểm tra chìa khóa."],["I prefer walking part of the way because it helps me wake up.","Mình thích đi bộ một đoạn vì việc đó giúp tỉnh táo."],["When I arrive, I make a list of my most important tasks.","Khi đến nơi, mình lập danh sách những việc quan trọng nhất."],["I try not to check social media until I've finished breakfast.","Mình cố không xem mạng xã hội cho đến khi ăn sáng xong."],["A calm morning helps me feel ready for the day ahead.","Một buổi sáng bình yên giúp mình sẵn sàng cho ngày mới."]],
+ "Making Weekend Plans · Lên kế hoạch cuối tuần":[["Would you be interested in inviting a few more friends?","Bạn có muốn mời thêm vài người bạn không?"],["I know a small café near the gallery where we could meet.","Mình biết một quán cà phê nhỏ gần phòng trưng bày để chúng ta gặp nhau."],["Let's check whether we need to buy tickets in advance.","Hãy kiểm tra xem chúng ta có cần mua vé trước không."],["I'd prefer to avoid the busiest time of the day.","Mình muốn tránh khung giờ đông nhất trong ngày."],["If the weather is bad, we could watch a film instead.","Nếu thời tiết xấu, chúng ta có thể xem phim thay thế."],["I'll check my schedule and confirm everything tonight.","Tối nay mình sẽ kiểm tra lịch và xác nhận mọi thứ."],["We should decide on a meeting point that's easy to find.","Chúng ta nên chọn điểm hẹn dễ tìm."],["I'll message you if anything changes.","Mình sẽ nhắn bạn nếu có thay đổi."]],
+ "At the Doctor's · Ở phòng khám":[["When did you first notice these symptoms?","Bạn bắt đầu nhận thấy những triệu chứng này từ khi nào?"],["The pain gets worse when I swallow.","Cơn đau nặng hơn khi tôi nuốt."],["Have you taken anything for the headache?","Bạn đã dùng thuốc gì để giảm đau đầu chưa?"],["I took a painkiller this morning, but it hasn't helped much.","Sáng nay tôi đã uống thuốc giảm đau nhưng không đỡ nhiều."],["Are you allergic to any medicines?","Bạn có dị ứng với loại thuốc nào không?"],["No, I don't have any known allergies.","Không, tôi không có dị ứng nào đã biết."],["Please make another appointment if the symptoms continue.","Vui lòng đặt lịch khám lại nếu các triệu chứng tiếp tục."],["Thank you. I'll follow your advice and get some rest.","Cảm ơn. Tôi sẽ làm theo lời khuyên và nghỉ ngơi."]],
+ "Sharing an Opinion at Work · Nêu ý kiến ở nơi làm việc":[["Before we make a decision, I'd like to hear everyone's concerns.","Trước khi quyết định, tôi muốn nghe những băn khoăn của mọi người."],["We need to balance the deadline with the quality of the work.","Chúng ta cần cân bằng thời hạn với chất lượng công việc."],["One possible solution would be to divide the work into smaller stages.","Một giải pháp có thể là chia công việc thành những giai đoạn nhỏ hơn."],["That would allow us to identify problems much earlier.","Điều đó sẽ giúp chúng ta phát hiện vấn đề sớm hơn nhiều."],["I agree with the overall direction, although I have one concern.","Tôi đồng ý với định hướng chung, dù có một điều khiến tôi băn khoăn."],["Could we review the risks before approving the proposal?","Chúng ta có thể xem xét rủi ro trước khi thông qua đề xuất không?"],["I'm happy to take responsibility for coordinating the next steps.","Tôi sẵn sàng chịu trách nhiệm điều phối các bước tiếp theo."],["Let's review the outcome after the first week.","Hãy đánh giá kết quả sau tuần đầu tiên."]],
+ "A Memorable Travel Experience · Một chuyến đi đáng nhớ":[["We set off early because we wanted to make the most of the day.","Chúng tôi khởi hành sớm vì muốn tận dụng tối đa thời gian trong ngày."],["The road was steep, and we had to stop several times to rest.","Con đường dốc và chúng tôi phải dừng lại nghỉ vài lần."],["Along the way, we passed fields, rivers, and traditional houses.","Trên đường đi, chúng tôi băng qua những cánh đồng, dòng sông và ngôi nhà truyền thống."],["Our guide explained how the village had changed over the years.","Hướng dẫn viên giải thích ngôi làng đã thay đổi thế nào qua nhiều năm."],["In the evening, we tried a local dish that I had never tasted before.","Buổi tối, chúng tôi thử một món địa phương mà tôi chưa từng nếm."],["I took plenty of photos, but they couldn't capture the atmosphere.","Tôi chụp rất nhiều ảnh nhưng chúng không thể ghi lại hết bầu không khí nơi đó."],["On the way home, I realised how much I had enjoyed the break.","Trên đường về, tôi nhận ra mình đã tận hưởng kỳ nghỉ nhiều đến thế nào."],["I'd love to return one day and explore more of the area.","Một ngày nào đó tôi rất muốn quay lại và khám phá thêm khu vực này."]]
+ };
+ Object.entries(legacyAdds).forEach(([title,chunks])=>{const d=shadowLessons.find(x=>x.title===title);if(d)d.chunks.push(...chunks)});
+})();
+
 let egShadowIndex=0,egShadowDialogueTurn=0;
 function egOpenShadowDialogues(){const mode=document.getElementById("shadowMode");if(!mode)return;mode.value="dialogues";egShadowModeChanged();document.getElementById("shadowMode").scrollIntoView({behavior:"smooth",block:"center"});}
 function egShadowMode(){return document.getElementById("shadowMode")?.value||"sentences"}
