@@ -4674,12 +4674,15 @@ function render(){
  $("eg100Phrases").innerHTML=l.phrases.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
   $("eg100Sentences").innerHTML=l.sentences.map((x,i)=>'<div class="card" style="padding:12px"><b>'+(i+1)+'. '+esc(x[0])+'</b><div class="small muted">'+esc(x[1])+'</div><button class="btn line" style="margin-top:7px" data-eg100-audio="'+esc(x[0])+'">🔊 Nghe</button></div>').join("");
  let passage=esc(l.passage);
- const highlightTerms=[...l.words,...(l.phrases||[])].map(w=>w[0]).filter(Boolean).sort((a,b)=>b.length-a.length);
+ // Highlight only this lesson’s vocabulary and useful phrases; match longest phrases first.
+ const phraseTerms=(l.phrases||[]).map(item=>item[0]).filter(Boolean);
+ const wordTerms=(l.words||[]).map(item=>item[0]).filter(Boolean);
+ const highlightTerms=[...new Set([...phraseTerms,...wordTerms])].sort((a,b)=>b.length-a.length);
  if(highlightTerms.length){
-    const escapeRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,ch=>"\\"+ch).replace(/\s+/g,"\\s+");
+  const escapeRe=s=>s.replace(/[.*+?^${}()|[\]\\]/g,ch=>"\\"+ch).replace(/\s+/g,"\\s+");
   const pattern=highlightTerms.map(escapeRe).join("|");
   const re=new RegExp("(^|[^A-Za-z0-9])("+pattern+")(?=$|[^A-Za-z0-9])","gi");
-  passage=passage.replace(re,(_,prefix,match)=>prefix+"<mark class=\"eg100-highlight\">"+match+"</mark>");
+  passage=passage.replace(re,(_,prefix,match)=>prefix+"<mark class=\"eg100-highlight\" data-lesson-term=\""+match.toLowerCase()+"\">"+match+"</mark>");
  }
  $("eg100Passage").innerHTML=passage;$("eg100PassageVi").innerHTML="<b>Bản dịch tiếng Việt</b><p>"+esc(l.translation)+"</p>";
 }
