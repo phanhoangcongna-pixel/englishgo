@@ -4693,61 +4693,114 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 #egWordHoverTip .egwh-hint{font-size:10px;color:#cbd5e1;margin-top:5px}
 @media(hover:none){#egWordHoverTip .egwh-hint{display:block}}
 </style>
+<style id="englishgo-word-hover-dictionary-v2">
+#egWordHoverTip{position:fixed;z-index:2147483647;display:none;max-width:min(320px,calc(100vw - 20px));padding:10px 13px;border:1px solid rgba(148,163,184,.35);border-radius:12px;background:#172033;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.25);font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;pointer-events:none}
+#egWordHoverTip .egwh-word{font-size:16px;font-weight:750}
+#egWordHoverTip .egwh-ipa{color:#c7d2fe;font-weight:650;margin-top:2px}
+#egWordHoverTip .egwh-meaning{margin-top:4px;color:#f1f5f9}
+#egWordHoverTip .egwh-source{font-size:10px;color:#cbd5e1;margin-top:5px}
+</style>
 <script id="englishgo-sitewide-word-hover-dictionary">
 (function(){
- if(window.__egWordHoverDictionary)return;window.__egWordHoverDictionary=true;
+ if(window.__egWordHoverDictionaryV2)return;window.__egWordHoverDictionaryV2=true;
+ const excluded='script,style,textarea,input,select,button,audio,video,canvas,svg,code,pre,[contenteditable="true"],[data-no-word-tip],#egWordHoverTip';
  const tip=document.createElement("div");tip.id="egWordHoverTip";tip.setAttribute("role","status");tip.setAttribute("aria-live","polite");document.body.appendChild(tip);
- const extra={
-  "a":["ə","một"],"an":["ən","một"],"the":["ðə; ðiː","(mạo từ xác định)"],"and":["ænd","và"],"or":["ɔːr","hoặc"],"but":["bʌt","nhưng"],"if":["ɪf","nếu"],"because":["bɪˈkɔːz","bởi vì"],"when":["wen","khi"],"while":["waɪl","trong khi"],"before":["bɪˈfɔːr","trước khi"],"after":["ˈæftər","sau khi"],"with":["wɪð","với"],"without":["wɪˈðaʊt","không có"],"from":["frəm","từ"],"to":["tuː; tə","đến; để"],"of":["əv","của"],"in":["ɪn","trong; ở"],"on":["ɑːn","trên; vào"],"at":["æt","ở; lúc"],"for":["fɔːr; fər","cho; vì"],"by":["baɪ","bởi; bằng; cạnh"],"about":["əˈbaʊt","về; khoảng"],"as":["æz","như; với tư cách là"],"is":["ɪz","là; thì; ở"],"am":["æm","là; thì; ở"],"are":["ɑːr","là; thì; ở"],"was":["wʌz","đã là; đã ở"],"were":["wɜːr","đã là; đã ở"],"be":["biː","là; thì; ở"],"been":["bɪn","đã từng; đã là"],"being":["ˈbiːɪŋ","đang là"],"do":["duː","làm"],"does":["dʌz","làm (ngôi thứ ba)"],"did":["dɪd","đã làm"],"have":["hæv","có"],"has":["hæz","có (ngôi thứ ba)"],"had":["hæd","đã có"],"can":["kæn","có thể"],"could":["kʊd","có thể; đã có thể"],"will":["wɪl","sẽ"],"would":["wʊd","sẽ; muốn"],"should":["ʃʊd","nên"],"may":["meɪ","có thể"],"might":["maɪt","có lẽ"],"must":["mʌst","phải"],"i":["aɪ","tôi"],"you":["juː","bạn; các bạn"],"he":["hiː","anh ấy"],"she":["ʃiː","cô ấy"],"it":["ɪt","nó"],"we":["wiː","chúng tôi; chúng ta"],"they":["ðeɪ","họ; chúng"],"me":["miː","tôi (tân ngữ)"],"him":["hɪm","anh ấy (tân ngữ)"],"her":["hɜːr","cô ấy (tân ngữ); của cô ấy"],"us":["ʌs","chúng tôi (tân ngữ)"],"them":["ðem","họ (tân ngữ)"],"my":["maɪ","của tôi"],"your":["jʊr","của bạn"],"his":["hɪz","của anh ấy"],"our":["aʊər","của chúng tôi"],"their":["ðer","của họ"],"this":["ðɪs","này"],"that":["ðæt","kia; đó"],"these":["ðiːz","những cái này"],"those":["ðoʊz","những cái kia"],"what":["wʌt","cái gì"],"which":["wɪtʃ","cái nào"],"who":["huː","ai"],"where":["wer","ở đâu"],"why":["waɪ","tại sao"],"how":["haʊ","như thế nào"],"not":["nɑːt","không"],"no":["noʊ","không"],"yes":["jes","vâng; có"],"very":["ˈveri","rất"],"more":["mɔːr","nhiều hơn"],"most":["moʊst","nhiều nhất; hầu hết"],"some":["sʌm","một vài; một ít"],"any":["ˈeni","bất kỳ; chút nào"],"all":["ɔːl","tất cả"],"each":["iːtʃ","mỗi"],"every":["ˈevri","mọi"],"much":["mʌtʃ","nhiều (không đếm được)"],"many":["ˈmeni","nhiều"],"few":["fjuː","ít; một vài"],"little":["ˈlɪtl","ít; nhỏ"],"here":["hɪr","ở đây"],"there":["ðer","ở đó"],"now":["naʊ","bây giờ"],"then":["ðen","sau đó; khi ấy"],"today":["təˈdeɪ","hôm nay"],"tomorrow":["təˈmɑːroʊ","ngày mai"],"yesterday":["ˈjestərdeɪ","hôm qua"],"always":["ˈɔːlweɪz","luôn luôn"],"usually":["ˈjuːʒuəli","thường thường"],"often":["ˈɔːfən","thường xuyên"],"sometimes":["ˈsʌmtaɪmz","đôi khi"],"never":["ˈnevər","không bao giờ"],"also":["ˈɔːlsoʊ","cũng"],"just":["dʒʌst","chỉ; vừa mới"],"only":["ˈoʊnli","chỉ"],"too":["tuː","cũng; quá"],"again":["əˈɡen","lại; một lần nữa"],"well":["wel","tốt; khỏe"],"good":["ɡʊd","tốt"],"great":["ɡreɪt","tuyệt vời"],"like":["laɪk","thích; giống như"],"love":["lʌv","yêu; rất thích"],"want":["wɑːnt","muốn"],"need":["niːd","cần"],"make":["meɪk","làm; tạo ra"],"get":["ɡet","nhận; trở nên; lấy"],"go":["ɡoʊ","đi"],"come":["kʌm","đến"],"take":["teɪk","lấy; mang; mất (thời gian)"],"give":["ɡɪv","đưa; cho"],"know":["noʊ","biết"],"think":["θɪŋk","nghĩ"],"say":["seɪ","nói"],"tell":["tel","kể; bảo"],"see":["siː","nhìn thấy"],"look":["lʊk","nhìn"],"watch":["wɑːtʃ","xem; theo dõi"],"use":["juːz","sử dụng"],"try":["traɪ","thử; cố gắng"],"work":["wɜːrk","làm việc; công việc"],"help":["help","giúp đỡ"],"ask":["æsk","hỏi; yêu cầu"],"find":["faɪnd","tìm thấy"],"feel":["fiːl","cảm thấy"],"keep":["kiːp","giữ"],"leave":["liːv","rời đi; để lại"],"put":["pʊt","đặt; để"],"let":["let","để; cho phép"],"seem":["siːm","có vẻ"],"become":["bɪˈkʌm","trở thành"],"start":["stɑːrt","bắt đầu"],"begin":["bɪˈɡɪn","bắt đầu"],"finish":["ˈfɪnɪʃ","hoàn thành; kết thúc"],"people":["ˈpiːpl","mọi người"],"person":["ˈpɜːrsn","người"],"time":["taɪm","thời gian; lần"],"day":["deɪ","ngày"],"thing":["θɪŋ","sự vật; điều"],"things":["θɪŋz","những thứ"],"way":["weɪ","cách; con đường"],"life":["laɪf","cuộc sống"],"year":["jɪr","năm"],"week":["wiːk","tuần"],"home":["hoʊm","nhà"],"house":["haʊs","ngôi nhà"],"friend":["frend","bạn bè"],"family":["ˈfæməli","gia đình"],"food":["fuːd","thức ăn"],"water":["ˈwɔːtər","nước"],"money":["ˈmʌni","tiền"],"school":["skuːl","trường học"],"job":["dʒɑːb","công việc"],"new":["nuː","mới"],"old":["oʊld","cũ; già"],"big":["bɪɡ","to; lớn"],"small":["smɔːl","nhỏ"],"long":["lɔːŋ","dài; lâu"],"short":["ʃɔːrt","ngắn; thấp"],"easy":["ˈiːzi","dễ"],"hard":["hɑːrd","khó; chăm chỉ"],"important":["ɪmˈpɔːrtnt","quan trọng"],"different":["ˈdɪfrənt","khác nhau"],"beautiful":["ˈbjuːtɪfl","đẹp"],"happy":["ˈhæpi","vui vẻ"],"sad":["sæd","buồn"],"tired":["ˈtaɪərd","mệt"],"busy":["ˈbɪzi","bận rộn"],"early":["ˈɜːrli","sớm"],"late":["leɪt","muộn"],"right":["raɪt","đúng; bên phải"],"left":["left","trái; bên trái"],"first":["fɜːrst","đầu tiên"],"last":["læst","cuối cùng; trước"],"next":["nekst","tiếp theo"],"please":["pliːz","làm ơn"],"thanks":["θæŋks","cảm ơn"],"thank":["θæŋk","cảm ơn"],"hello":["həˈloʊ","xin chào"],"sorry":["ˈsɑːri","xin lỗi"],"morning":["ˈmɔːrnɪŋ","buổi sáng"],"night":["naɪt","đêm"],"coffee":["ˈkɔːfi","cà phê"],"breakfast":["ˈbrekfəst","bữa sáng"],"school":["skuːl","trường học"],"book":["bʊk","sách"],"read":["riːd","đọc"],"write":["raɪt","viết"],"speak":["spiːk","nói"],"listen":["ˈlɪsn","nghe"],"learn":["lɜːrn","học"],"study":["ˈstʌdi","học tập"],"english":["ˈɪŋɡlɪʃ","tiếng Anh"]
- };
  const dictionary=new Map();
- function add(w,ipa,meaning){if(w&&meaning){const key=String(w).toLowerCase(),old=dictionary.get(key);dictionary.set(key,{ipa:ipa||(old&&old.ipa)||"IPA chưa có",meaning:meaning||(old&&old.meaning)||""});}}
- Object.entries(extra).forEach(([w,v])=>add(w,v[0],v[1]));
- try{if(typeof DATA!=="undefined"&&Array.isArray(DATA.vocab))DATA.vocab.forEach(x=>add(x.w,x.ipa,x.vi));}catch(e){}
+ function add(word,ipa,meaning,source){
+  if(!word||!meaning)return;
+  const key=String(word).toLowerCase().replace(/’/g,"'");
+  dictionary.set(key,{ipa:ipa||"IPA đang cập nhật",meaning:String(meaning),source:source||"EnglishGo"});
+ }
+ const common={
+  "a":["ə","một"],"an":["ən","một"],"the":["ðə; ðiː","(mạo từ xác định)"],"and":["ænd","và"],"or":["ɔːr","hoặc"],"but":["bʌt","nhưng"],"if":["ɪf","nếu"],"because":["bɪˈkɔːz","bởi vì"],"when":["wen","khi"],"while":["waɪl","trong khi"],"before":["bɪˈfɔːr","trước khi"],"after":["ˈæftər","sau khi"],"with":["wɪð","với"],"without":["wɪˈðaʊt","không có"],"from":["frəm","từ"],"to":["tuː; tə","đến; để"],"of":["əv","của"],"in":["ɪn","trong; ở"],"on":["ɑːn","trên; vào"],"at":["æt","ở; lúc"],"for":["fɔːr; fər","cho; vì"],"by":["baɪ","bởi; bằng; cạnh"],"about":["əˈbaʊt","về; khoảng"],"as":["æz","như; với tư cách là"],"is":["ɪz","là; thì; ở"],"am":["æm","là; thì; ở"],"are":["ɑːr","là; thì; ở"],"was":["wʌz","đã là; đã ở"],"were":["wɜːr","đã là; đã ở"],"be":["biː","là; thì; ở"],"been":["bɪn","đã từng; đã là"],"being":["ˈbiːɪŋ","đang là"],"do":["duː","làm"],"does":["dʌz","làm (ngôi thứ ba)"],"did":["dɪd","đã làm"],"have":["hæv","có"],"has":["hæz","có (ngôi thứ ba)"],"had":["hæd","đã có"],"can":["kæn","có thể"],"could":["kʊd","có thể; đã có thể"],"will":["wɪl","sẽ"],"would":["wʊd","sẽ; muốn"],"should":["ʃʊd","nên"],"may":["meɪ","có thể"],"might":["maɪt","có lẽ"],"must":["mʌst","phải"],"i":["aɪ","tôi"],"you":["juː","bạn; các bạn"],"he":["hiː","anh ấy"],"she":["ʃiː","cô ấy"],"it":["ɪt","nó"],"we":["wiː","chúng tôi; chúng ta"],"they":["ðeɪ","họ; chúng"],"me":["miː","tôi (tân ngữ)"],"him":["hɪm","anh ấy (tân ngữ)"],"her":["hɜːr","cô ấy (tân ngữ); của cô ấy"],"us":["ʌs","chúng tôi (tân ngữ)"],"them":["ðem","họ (tân ngữ)"],"my":["maɪ","của tôi"],"your":["jʊr","của bạn"],"his":["hɪz","của anh ấy"],"our":["aʊər","của chúng tôi"],"their":["ðer","của họ"],"this":["ðɪs","này"],"that":["ðæt","kia; đó"],"these":["ðiːz","những cái này"],"those":["ðoʊz","những cái kia"],"what":["wʌt","cái gì"],"which":["wɪtʃ","cái nào"],"who":["huː","ai"],"where":["wer","ở đâu"],"why":["waɪ","tại sao"],"how":["haʊ","như thế nào"],"not":["nɑːt","không"],"no":["noʊ","không"],"yes":["jes","vâng; có"],"very":["ˈveri","rất"],"more":["mɔːr","nhiều hơn"],"most":["moʊst","nhiều nhất; hầu hết"],"some":["sʌm","một vài; một ít"],"any":["ˈeni","bất kỳ; chút nào"],"all":["ɔːl","tất cả"],"each":["iːtʃ","mỗi"],"every":["ˈevri","mọi"],"much":["mʌtʃ","nhiều (không đếm được)"],"many":["ˈmeni","nhiều"],"few":["fjuː","ít; một vài"],"little":["ˈlɪtl","ít; nhỏ"],"here":["hɪr","ở đây"],"there":["ðer","ở đó"],"now":["naʊ","bây giờ"],"then":["ðen","sau đó; khi ấy"],"today":["təˈdeɪ","hôm nay"],"tomorrow":["təˈmɑːroʊ","ngày mai"],"yesterday":["ˈjestərdeɪ","hôm qua"],"always":["ˈɔːlweɪz","luôn luôn"],"usually":["ˈjuːʒuəli","thường thường"],"often":["ˈɔːfən","thường xuyên"],"sometimes":["ˈsʌmtaɪmz","đôi khi"],"never":["ˈnevər","không bao giờ"],"also":["ˈɔːlsoʊ","cũng"],"just":["dʒʌst","chỉ; vừa mới"],"only":["ˈoʊnli","chỉ"],"too":["tuː","cũng; quá"],"again":["əˈɡen","lại; một lần nữa"],"well":["wel","tốt; khỏe"],"good":["ɡʊd","tốt"],"great":["ɡreɪt","tuyệt vời"],"like":["laɪk","thích; giống như"],"love":["lʌv","yêu; rất thích"],"want":["wɑːnt","muốn"],"need":["niːd","cần"],"make":["meɪk","làm; tạo ra"],"get":["ɡet","nhận; trở nên; lấy"],"go":["ɡoʊ","đi"],"come":["kʌm","đến"],"take":["teɪk","lấy; mang; mất (thời gian)"],"give":["ɡɪv","đưa; cho"],"know":["noʊ","biết"],"think":["θɪŋk","nghĩ"],"say":["seɪ","nói"],"tell":["tel","kể; bảo"],"see":["siː","nhìn thấy"],"look":["lʊk","nhìn"],"watch":["wɑːtʃ","xem; theo dõi"],"use":["juːz","sử dụng"],"try":["traɪ","thử; cố gắng"],"work":["wɜːrk","làm việc; công việc"],"help":["help","giúp đỡ"],"ask":["æsk","hỏi; yêu cầu"],"find":["faɪnd","tìm thấy"],"feel":["fiːl","cảm thấy"],"keep":["kiːp","giữ"],"leave":["liːv","rời đi; để lại"],"put":["pʊt","đặt; để"],"let":["let","để; cho phép"],"seem":["siːm","có vẻ"],"become":["bɪˈkʌm","trở thành"],"start":["stɑːrt","bắt đầu"],"begin":["bɪˈɡɪn","bắt đầu"],"finish":["ˈfɪnɪʃ","hoàn thành; kết thúc"],"people":["ˈpiːpl","mọi người"],"person":["ˈpɜːrsn","người"],"time":["taɪm","thời gian; lần"],"day":["deɪ","ngày"],"thing":["θɪŋ","sự vật; điều"],"things":["θɪŋz","những thứ"],"way":["weɪ","cách; con đường"],"life":["laɪf","cuộc sống"],"year":["jɪr","năm"],"week":["wiːk","tuần"],"home":["hoʊm","nhà"],"house":["haʊs","ngôi nhà"],"friend":["frend","bạn bè"],"family":["ˈfæməli","gia đình"],"food":["fuːd","thức ăn"],"water":["ˈwɔːtər","nước"],"money":["ˈmʌni","tiền"],"school":["skuːl","trường học"],"job":["dʒɑːb","công việc"],"new":["nuː","mới"],"old":["oʊld","cũ; già"],"big":["bɪɡ","to; lớn"],"small":["smɔːl","nhỏ"],"long":["lɔːŋ","dài; lâu"],"short":["ʃɔːrt","ngắn; thấp"],"easy":["ˈiːzi","dễ"],"hard":["hɑːrd","khó; chăm chỉ"],"important":["ɪmˈpɔːrtnt","quan trọng"],"different":["ˈdɪfrənt","khác nhau"],"beautiful":["ˈbjuːtɪfl","đẹp"],"happy":["ˈhæpi","vui vẻ"],"sad":["sæd","buồn"],"tired":["ˈtaɪərd","mệt"],"busy":["ˈbɪzi","bận rộn"],"early":["ˈɜːrli","sớm"],"late":["leɪt","muộn"],"right":["raɪt","đúng; bên phải"],"left":["left","trái; bên trái"],"first":["fɜːrst","đầu tiên"],"last":["læst","cuối cùng; trước"],"next":["nekst","tiếp theo"],"please":["pliːz","làm ơn"],"thanks":["θæŋks","cảm ơn"],"thank":["θæŋk","cảm ơn"],"hello":["həˈloʊ","xin chào"],"sorry":["ˈsɑːri","xin lỗi"],"morning":["ˈmɔːrnɪŋ","buổi sáng"],"night":["naɪt","đêm"],"coffee":["ˈkɔːfi","cà phê"],"breakfast":["ˈbrekfəst","bữa sáng"],"book":["bʊk","sách"],"read":["riːd","đọc"],"write":["raɪt","viết"],"speak":["spiːk","nói"],"listen":["ˈlɪsn","nghe"],"learn":["lɜːrn","học"],"study":["ˈstʌdi","học tập"],"english":["ˈɪŋɡlɪʃ","tiếng Anh"]
+ };
+ Object.entries(common).forEach(([w,v])=>add(w,v[0],v[1],"Từ điển cơ bản"));
+ try{
+  if(typeof DATA!=="undefined"&&DATA&&Array.isArray(DATA.vocab))DATA.vocab.forEach(x=>add(x.w,x.ipa,x.vi,"Từ vựng EnglishGo"));
+ }catch(e){}
+ const irregular={children:"child",men:"man",women:"woman",people:"person",went:"go",gone:"go",did:"do",done:"do",had:"have",has:"have",was:"be",were:"be",been:"be",better:"good",best:"good",worse:"bad",worst:"bad",bought:"buy",brought:"bring",thought:"think",taught:"teach",made:"make",took:"take",taken:"take",gave:"give",given:"give",wrote:"write",written:"write",spoke:"speak",spoken:"speak",ate:"eat",eaten:"eat",saw:"see",seen:"see",knew:"know",known:"know",found:"find",left:"leave",felt:"feel",kept:"keep",said:"say",told:"tell",ran:"run",read:"read",slept:"sleep",sent:"send",spent:"spend",built:"build",bought:"buy",caught:"catch"};
  function lookup(raw){
-  const key=raw.toLowerCase().replace(/’/g,"'");
+  const key=String(raw).toLowerCase().replace(/’/g,"'");
   let hit=dictionary.get(key);if(hit)return hit;
-  const candidates=[];
-  if(key.endsWith("'s"))candidates.push(key.slice(0,-2));
-  if(key.endsWith("ies"))candidates.push(key.slice(0,-3)+"y");
-  if(key.endsWith("es"))candidates.push(key.slice(0,-2));
-  if(key.endsWith("s"))candidates.push(key.slice(0,-1));
-  if(key.endsWith("ing")){candidates.push(key.slice(0,-3),key.slice(0,-3)+"e");}
-  if(key.endsWith("ed")){candidates.push(key.slice(0,-2),key.slice(0,-2)+"e");}
-  if(key.endsWith("ly"))candidates.push(key.slice(0,-2));
-  for(const c of candidates){hit=dictionary.get(c);if(hit)return hit;}
+  const bases=[];
+  if(irregular[key])bases.push(irregular[key]);
+  if(key.endsWith("'s"))bases.push(key.slice(0,-2));
+  if(key.endsWith("ies"))bases.push(key.slice(0,-3)+"y");
+  if(key.endsWith("ves"))bases.push(key.slice(0,-3)+"f",key.slice(0,-3)+"fe");
+  if(key.endsWith("es"))bases.push(key.slice(0,-2),key.slice(0,-1));
+  if(key.endsWith("s"))bases.push(key.slice(0,-1));
+  if(key.endsWith("ing")){const b=key.slice(0,-3);bases.push(b,b+"e",b.slice(0,-1));}
+  if(key.endsWith("ed")){const b=key.slice(0,-2);bases.push(b,b+"e",b.slice(0,-1));}
+  if(key.endsWith("er")){const b=key.slice(0,-2);bases.push(b,b+"e",b.slice(0,-1));}
+  if(key.endsWith("est")){const b=key.slice(0,-3);bases.push(b,b+"e",b.slice(0,-1));}
+  if(key.endsWith("ly"))bases.push(key.slice(0,-2));
+  for(const base of bases){hit=dictionary.get(base);if(hit)return {...hit,source:"Từ gốc: "+base};}
   return null;
  }
- let active="";
  function wordAt(x,y){
   let node=null,offset=0;
-  if(document.caretPositionFromPoint){const p=document.caretPositionFromPoint(x,y);if(p){node=p.offsetNode;offset=p.offset;}}
-  else if(document.caretRangeFromPoint){const r=document.caretRangeFromPoint(x,y);if(r){node=r.startContainer;offset=r.startOffset;}}
+  try{
+   if(document.caretPositionFromPoint){const p=document.caretPositionFromPoint(x,y);if(p){node=p.offsetNode;offset=p.offset;}}
+   else if(document.caretRangeFromPoint){const r=document.caretRangeFromPoint(x,y);if(r){node=r.startContainer;offset=r.startOffset;}}
+  }catch(e){}
   if(!node||node.nodeType!==Node.TEXT_NODE)return null;
-  const parent=node.parentElement;if(!parent||parent.closest("#egWordHoverTip,script,style,textarea,input,select,button,audio,video,code,pre,[contenteditable=true],[data-no-word-tip]"))return null;
+  const parent=node.parentElement;if(!parent||parent.closest(excluded))return null;
   const text=node.nodeValue||"",re=/[A-Za-z]+(?:['’][A-Za-z]+)?/g;let m;
-  while((m=re.exec(text))){if(offset>=m.index&&offset<=m.index+m[0].length)return {word:m[0],parent};}
+  while((m=re.exec(text))){if(offset>=m.index&&offset<=m.index+m[0].length)return {word:m[0],parent,node};}
   return null;
+ }
+ let active="",requestToken=0,lastPoint=null;
+ function position(x,y){
+  tip.style.display="block";const w=tip.offsetWidth,h=tip.offsetHeight;
+  let left=x+13,top=y+17;
+  if(left+w>innerWidth-8)left=Math.max(8,x-w-13);
+  if(top+h>innerHeight-8)top=Math.max(8,y-h-17);
+  tip.style.left=left+"px";tip.style.top=top+"px";
+ }
+ function paint(word,data,x,y){
+  tip.replaceChildren();
+  const title=document.createElement("div");title.className="egwh-word";title.textContent=word;
+  const ipa=document.createElement("div");ipa.className="egwh-ipa";ipa.textContent="/"+data.ipa+"/";
+  const meaning=document.createElement("div");meaning.className="egwh-meaning";meaning.textContent=data.meaning;
+  const source=document.createElement("div");source.className="egwh-source";source.textContent=data.source||"EnglishGo";
+  tip.append(title,ipa,meaning,source);active=word.toLowerCase();position(x,y);
+ }
+ function hide(){active="";tip.style.display="none";requestToken++;}
+ function fetchMeaning(word){
+  const url="https://api.dictionaryapi.dev/api/v2/entries/en/"+encodeURIComponent(word);
+  return fetch(url,{method:"GET",mode:"cors",credentials:"omit"}).then(r=>{if(!r.ok)throw new Error("not found");return r.json();}).then(rows=>{
+   const item=rows&&rows[0];if(!item)throw new Error("empty");
+   const phonetic=item.phonetic||(item.phonetics||[]).find(p=>p.text)?.text||"IPA chưa có";
+   const definitions=(item.meanings||[]).flatMap(m=>(m.definitions||[]).slice(0,2).map(d=>d.definition));
+   const translation=definitions[0]||item.meanings?.[0]?.partOfSpeech||"Chưa có nghĩa tiếng Việt trong dữ liệu trực tuyến";
+   return {ipa:phonetic.replace(/^[/]|[/]$/g,""),meaning:translation,source:"Từ điển trực tuyến (định nghĩa tiếng Anh)"};
+  });
  }
  function show(x,y,force){
   const found=wordAt(x,y);if(!found){if(!force)hide();return;}
   const key=found.word.toLowerCase();if(key===active)return;
-  const data=lookup(found.word);if(!data){hide();return;}
-  active=key;
-  tip.innerHTML='<div class="egwh-word"></div><div class="egwh-ipa"></div><div class="egwh-meaning"></div><div class="egwh-hint"></div>';
-  tip.querySelector(".egwh-word").textContent=found.word;
-  tip.querySelector(".egwh-ipa").textContent="/"+data.ipa+"/";
-  tip.querySelector(".egwh-meaning").textContent=data.meaning;
-  tip.querySelector(".egwh-hint").textContent="Di chuột hoặc chạm vào từ khác để tra";
-  tip.style.display="block";
-  const w=tip.offsetWidth,h=tip.offsetHeight;
-  let left=x+14,top=y+18;if(left+w>innerWidth-8)left=Math.max(8,x-w-14);if(top+h>innerHeight-8)top=Math.max(8,y-h-18);
-  tip.style.left=left+"px";tip.style.top=top+"px";
+  const token=++requestToken,last= {x,y,word:key};lastPoint=last;
+  const data=lookup(found.word);
+  if(data){paint(found.word,data,x,y);return;}
+  // Show the selected word immediately; fill in a definition when the online dictionary responds.
+  paint(found.word,{ipa:"Đang tra IPA…",meaning:"Đang tìm nghĩa của từ…",source:"Đang tra từ điển"},x,y);
+  fetchMeaning(found.word).then(result=>{
+   if(token!==requestToken||!lastPoint||lastPoint.word!==key)return;
+   paint(found.word,result,lastPoint.x,lastPoint.y);
+  }).catch(()=>{
+   if(token!==requestToken||!lastPoint||lastPoint.word!==key)return;
+   paint(found.word,{ipa:"Chưa có IPA",meaning:"Chưa tìm thấy nghĩa trong từ điển. Hãy thử dạng từ gốc.",source:"Không tìm thấy kết quả"},lastPoint.x,lastPoint.y);
+  });
  }
- function hide(){active="";tip.style.display="none";}
- let moveFrame=0,last=null;
- document.addEventListener("pointermove",e=>{if(e.pointerType==="touch")return;last={x:e.clientX,y:e.clientY};if(moveFrame)return;moveFrame=requestAnimationFrame(()=>{moveFrame=0;if(last)show(last.x,last.y,false);});},{passive:true});
- document.addEventListener("pointerdown",e=>{if(e.pointerType==="touch")show(e.clientX,e.clientY,true);},{passive:true});
+ let frame=0;
+ document.addEventListener("pointermove",e=>{
+  if(e.pointerType==="touch")return;
+  const point={x:e.clientX,y:e.clientY};lastPoint=point;
+  if(frame)return;frame=requestAnimationFrame(()=>{frame=0;if(lastPoint)show(lastPoint.x,lastPoint.y,false);});
+ },{passive:true});
+ document.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="touch"){show(e.clientX,e.clientY,true);}
+ },{passive:true});
  document.addEventListener("scroll",hide,true);
  document.addEventListener("keydown",e=>{if(e.key==="Escape")hide();});
  document.addEventListener("pointerleave",e=>{if(e.target===document.documentElement)hide();});
