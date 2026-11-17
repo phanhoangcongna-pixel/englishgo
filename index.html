@@ -4859,11 +4859,8 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   const host=document.getElementById("egJourneyLessons");if(!host)return;
   const data=read(),cur=current(data),lesson=lessons[cur.day-1];
   const completed=Object.keys(data.completedAt||{}).filter(k=>Number(k)>=1&&Number(k)<=lessons.length).length;
-  const pct=Math.round(completed/180*100);
-  document.getElementById("egJourneyDone").textContent=completed;
-  document.getElementById("egJourneyPercent").textContent=pct+"%";
-  document.getElementById("egJourneyBar").style.width=pct+"%";
-  document.getElementById("egJourneyCount").textContent="Đã hoàn thành "+completed+" ngày · Chỉ mở một bài mỗi ngày";
+  const countEl=document.getElementById("egJourneyCount");
+  if(countEl)countEl.textContent="Đã hoàn thành "+completed+" ngày · Chỉ mở một bài mỗi ngày";
   const homeProgress=document.getElementById("egJourneyHomeProgress");if(homeProgress)homeProgress.textContent=completed+" ngày hoàn thành · "+(completed? "Tiếp tục hành trình của bạn":"Bắt đầu hành trình của bạn");
   if(cur.finished){
    host.innerHTML='<div class="card"><span class="badge">🎉 HOÀN THÀNH</span><h3>Bạn đã hoàn thành các bài học hiện có!</h3><p class="muted">Các bài tiếp theo sẽ được bổ sung vào lộ trình.</p></div>';
