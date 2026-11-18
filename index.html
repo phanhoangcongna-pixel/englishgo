@@ -631,10 +631,6 @@ html { background: #142342; }
  <div><span class="badge">100-DAY CHALLENGE · THỬ THÁCH 100 NGÀY</span><h2>🌱 100 ngày chinh phục tiếng Anh</h2><p>Mỗi ngày: 10 từ vựng · 10 cụm từ · 1 đoạn đọc · Shadowing. Học đều đặn để hoàn thành hành trình 100 ngày.</p><p id="eg100HomeProgress" class="small" style="margin-top:7px;font-weight:700">0/100 ngày hoàn thành</p></div>
  <button class="btn" onclick="eg100Enter()">Bắt đầu học · Start →</button>
 </div>
-<div class="home-feature" id="englishgo-journey-home" style="background:linear-gradient(110deg,#eef2ff,#f5f0ff);border-color:#d5dafa;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
- <div style="flex:1;min-width:220px"><span class="badge">6-MONTH PERSONAL PLAN · LỘ TRÌNH CÁ NHÂN</span><h2>🧭 My English Journey</h2><p class="small muted">Lộ trình giao tiếp tiếng Anh 6 tháng · 60 phút mỗi ngày · Theo dõi bài học và tiến độ của bạn.</p><p id="egJourneyHomeProgress" class="small" style="font-weight:750;margin-top:7px">0 ngày hoàn thành · Bắt đầu hành trình của bạn</p></div>
- <button class="btn" type="button" data-page="journey">Mở lộ trình · Open →</button>
-</div>
 <div class="home-tools">
 <button class="home-tool" onclick="go('vocab')"><div class="ico">📚</div><h3>Vocabulary · Từ vựng</h3><p>Learn words by topic · Học từ mới theo chủ đề</p></button>
 <button class="home-tool" onclick="go('grammar')"><div class="ico">🔤</div><h3>Grammar · Ngữ pháp</h3><p>Understand structures and usage · Hiểu cấu trúc và cách dùng</p></button>
@@ -1123,22 +1119,7 @@ html { background: #142342; }
 
 
 
-<section class="page" id="journey">
- <div class="page-header">
-  <p class="eyebrow">YOUR PERSONAL ROADMAP · LỘ TRÌNH CỦA BẠN</p>
-  <h1 class="title">My English Journey 🧭</h1>
-  <p class="intro">Lộ trình giao tiếp tiếng Anh trong 6 tháng · 60 phút mỗi ngày.</p>
- </div>
- <div class="panel">
-  <div id="egJourneyLessons"></div>
-  <p class="small muted" id="egJourneyCount" style="margin-top:12px"></p>
-  <div class="controls">
-   <button class="btn line" type="button" onclick="egJourneyExport()">⬇ Tải tiến độ học</button>
-   <button class="btn line" type="button" onclick="egJourneyReset()">Đặt lại tiến độ</button>
-  </div>
-  <p class="small muted" id="egJourneyStatus" aria-live="polite">Tiến độ được lưu trên trình duyệt này.</p>
- </div>
-</section>
+
 </main>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script>
@@ -2961,8 +2942,7 @@ phrasalData.push(
 ["once and for all","một lần dứt điểm","Let's settle this once and for all."]
 );
 
-</script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();if(document.getElementById("roleScenario"))roleStart();dictNew();phrasalRender()});</script>
-<style id="englishgo-navigation-final">
+</script><script>document.addEventListener("DOMContentLoaded",()=>{shadowRender();pronLoad();if(document.getElementById("roleScenario"))roleStart();dictNew();phrasalRender()});</script><style id="englishgo-navigation-final">
 /* Clean grouped navigation: hover on desktop, tap on touch screens. */
 #mainNav{display:flex;align-items:center;gap:6px;overflow:visible;flex-wrap:nowrap;min-width:0}
 #mainNav>.nav-group{position:relative;flex:0 0 auto}
@@ -2979,32 +2959,7 @@ phrasalData.push(
 @media(max-width:900px){#mainNav{flex-wrap:wrap;overflow:visible;gap:4px}#mainNav .nav-menu{min-width:min(270px,85vw)}}
 @media(max-width:700px){#mainNav{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:5px!important}#mainNav>.nav-group[open]{flex:1 1 100%;width:100%}#mainNav>.nav-group[open]>.nav-menu{position:static;min-width:0;width:100%;max-height:45vh;border-radius:12px;margin-top:5px;box-shadow:none}#mainNav>.nav-group>summary{padding:9px 10px;font-size:12px}#mainNav>button{font-size:12px;padding:9px 10px}}
 </style>
-<script id="englishgo-nav-keyboard">
-(function(){
- const nav=document.getElementById('mainNav'); if(!nav)return;
- const groups=[...nav.querySelectorAll(':scope > details.nav-group')];
- groups.forEach(group=>{
-   const summary=group.querySelector(':scope > summary');
-   const items=[...group.querySelectorAll('.nav-menu button')];
-   summary.addEventListener('keydown',e=>{
-     if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){if(e.key==='ArrowDown'){e.preventDefault();group.open=true;items[0]?.focus()}}
-     if(e.key==='ArrowUp'){e.preventDefault();group.open=true;items[items.length-1]?.focus()}
-   });
-   items.forEach((item,index)=>item.addEventListener('keydown',e=>{
-     if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const step=e.key==='ArrowDown'?1:-1;items[(index+step+items.length)%items.length]?.focus()}
-     if(e.key==='Home'){e.preventDefault();items[0]?.focus()}
-     if(e.key==='End'){e.preventDefault();items[items.length-1]?.focus()}
-     if(e.key==='Escape'){group.open=false;summary.focus()}
-   }));
- });
- document.addEventListener('click',e=>{
-   const chosen=e.target.closest('#mainNav [data-page]');
-   if(chosen){groups.forEach(g=>g.open=false)}
-   else if(!e.target.closest('#mainNav'))groups.forEach(g=>g.open=false);
- });
- document.addEventListener('keydown',e=>{if(e.key==='Escape')groups.forEach(g=>g.open=false)});
-})();
-</script>
+
 
 <script id="englishgo-question-arrow-keys">
 /* Keyboard navigation for lesson steps. Never steal arrows while typing or choosing answers. */
