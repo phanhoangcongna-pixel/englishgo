@@ -1149,7 +1149,7 @@ function cloudCompactProgressValue(k,raw){
  return raw;
 }
 function cloudCollect(){
- const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-"))){let value=localStorage.getItem(k); value=cloudCompactProgressValue(k,value);o[k]=value}}return o;
+ const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2")){let value=localStorage.getItem(k); value=cloudCompactProgressValue(k,value);o[k]=value}}return o;
 }
 function cloudMerge(local,remote){
  const out={...remote};
@@ -1197,6 +1197,7 @@ async function cloudInitialSync(){
  const merged=cloudMerge(local,remote);
  Object.entries(merged).forEach(([k,v])=>{try{ v=cloudCompactProgressValue(k,v);localStorage.setItem(k,v)}catch(e){if(e&&(/QuotaExceededError|quota/i.test(e.name+" "+e.message))){console.warn("Skipped local progress item because browser storage quota was exceeded:",k,"; other progress will still sync.")}else{console.warn("Could not restore local key",k,e)}}});
  await ref.set({progress:merged,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+ window.dispatchEvent(new CustomEvent("englishgo:cloud-progress-restored"));
  egCloudReady=true;cloudSetStatus("Connected · Đã kết nối",egCloudUser.email,"Your progress is synced. Use this same Google account on both devices. Tiến độ đã đồng bộ.");
  // Refresh in-memory app state from the merged local cache.
  xp=get("xp",0);known=get("known",[]);done=get("done",[]);lastDay=get("day","");streak=get("streak",0);
@@ -1212,7 +1213,7 @@ function cloudInit(){
 }
 // Watch app progress writes. Firebase sync is debounced to avoid excessive writes.
 const egOriginalSetItem=Storage.prototype.setItem;
-Storage.prototype.setItem=function(k,v){egOriginalSetItem.call(this,k,v);if(typeof k==="string"&&(k.startsWith("eg2-")||k.startsWith("eg3-")))cloudSchedule()};
+Storage.prototype.setItem=function(k,v){egOriginalSetItem.call(this,k,v);if(typeof k==="string"&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2"))cloudSchedule()};
 window.addEventListener("load",cloudInit);
 
 </script>
@@ -4642,7 +4643,9 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const EG100_STORAGE_KEY="eg100-completed-lessons-v2";
 let completed=[];
-try{const saved=JSON.parse(localStorage.getItem(EG100_STORAGE_KEY)||"[]");if(Array.isArray(saved))completed=saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=100)}catch(e){}
+function eg100LoadCompleted(){try{const saved=JSON.parse(localStorage.getItem(EG100_STORAGE_KEY)||"[]");completed=Array.isArray(saved)?saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=100):[]}catch(e){completed=[]}}
+eg100LoadCompleted();
+window.addEventListener("englishgo:cloud-progress-restored",()=>{eg100LoadCompleted();const home=document.getElementById("eg100HomeProgress");if(home)home.textContent=progress()+"/100 ngày đã học"+(progress()>=100?" · Hoàn thành!":"")});
 let selected=1;
 function progress(){let n=0;while(completed.includes(n+1))n++;return n}
 function save(){try{localStorage.setItem(EG100_STORAGE_KEY,JSON.stringify(completed))}catch(e){}}
