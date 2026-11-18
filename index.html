@@ -1149,7 +1149,7 @@ function cloudCompactProgressValue(k,raw){
  return raw;
 }
 function cloudCollect(){
- const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2")){let value=localStorage.getItem(k); value=cloudCompactProgressValue(k,value);o[k]=value}}return o;
+ const o={};for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2"||k==="eg-personal-english-journey-v2")){let value=localStorage.getItem(k); value=cloudCompactProgressValue(k,value);o[k]=value}}return o;
 }
 function cloudMerge(local,remote){
  const out={...remote};
@@ -1158,6 +1158,7 @@ function cloudMerge(local,remote){
   try{
    let a=JSON.parse(lv),b=JSON.parse(out[k]);
    if(Array.isArray(a)&&Array.isArray(b))out[k]=JSON.stringify([...new Set([...b,...a])]);
+   else if(k==="eg-personal-english-journey-v2"&&a&&b&&typeof a==="object"&&typeof b==="object"){const ca={...(b.completedAt||{})};Object.entries(a.completedAt||{}).forEach(([day,date])=>{if(!ca[day]||String(date)>String(ca[day]))ca[day]=date});out[k]=JSON.stringify({...b,...a,completedAt:ca})}
    else if(typeof a==="number"&&typeof b==="number")out[k]=JSON.stringify(Math.max(a,b));
    else if(typeof a==="string"&&typeof b==="string"){
     if(k.endsWith("-day"))out[k]=a>b?a:b;
@@ -1213,7 +1214,7 @@ function cloudInit(){
 }
 // Watch app progress writes. Firebase sync is debounced to avoid excessive writes.
 const egOriginalSetItem=Storage.prototype.setItem;
-Storage.prototype.setItem=function(k,v){egOriginalSetItem.call(this,k,v);if(typeof k==="string"&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2"))cloudSchedule()};
+Storage.prototype.setItem=function(k,v){egOriginalSetItem.call(this,k,v);if(typeof k==="string"&&(k.startsWith("eg2-")||k.startsWith("eg3-")||k==="eg100-completed-lessons-v2"||k==="eg-personal-english-journey-v2"))cloudSchedule()};
 window.addEventListener("load",cloudInit);
 
 </script>
@@ -4634,7 +4635,7 @@ document.addEventListener("DOMContentLoaded",()=>{egShadowPopulate()});
 const esc=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const EG100_STORAGE_KEY="eg100-completed-lessons-v2";
 let completed=[];
-function eg100LoadCompleted(){try{const saved=JSON.parse(localStorage.getItem(EG100_STORAGE_KEY)||"[]");completed=Array.isArray(saved)?saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=100):[]}catch(e){completed=[]}}
+function eg100LoadCompleted(){try{const saved=JSON.parse(localStorage.getItem(EG100_STORAGE_KEY)||"[]");completed=Array.isArray(saved)?saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=100):[]}catch(e){completed=[]}try{const journey=JSON.parse(localStorage.getItem("eg-personal-english-journey-v2")||"{}");Object.keys(journey.completedAt||{}).forEach(k=>{const n=Number(k);if(Number.isInteger(n)&&n>=1&&n<=100&&!completed.includes(n))completed.push(n)});completed.sort((a,b)=>a-b)}catch(e){}}
 eg100LoadCompleted();
 let selected=1;
 function progress(){let n=0;while(completed.includes(n+1))n++;return n}
@@ -4754,7 +4755,7 @@ function render(){
 }
 document.addEventListener("click",e=>{const b=e.target.closest("[data-eg100-audio]");if(b&&typeof say==="function")say(b.getAttribute("data-eg100-audio"))});
 window.eg100Enter=function(){selected=Math.min(100,progress()+1);render();if(typeof go==="function")go("daily100")};
-window.eg100CompleteDay=function(){const day=progress()+1;if(day>100)return;if(!completed.includes(day))completed.push(day);completed.sort((a,b)=>a-b);save();selected=Math.min(100,progress()+1);render();eg100Stop();const hint=document.getElementById("eg100CompleteHint");if(hint)hint.textContent=progress()>=100?"Bạn đã hoàn thành toàn bộ 100 ngày!":"Tuyệt vời! Đã lưu Ngày "+day+". Bài tiếp theo là Ngày "+(day+1)+". Hãy tiếp tục nhé!";};
+window.eg100CompleteDay=function(){const day=progress()+1;if(day>100)return;if(!completed.includes(day))completed.push(day);completed.sort((a,b)=>a-b);save();try{const key="eg-personal-english-journey-v2",data=JSON.parse(localStorage.getItem(key)||'{"completedAt":{}}');data.completedAt=data.completedAt||{};data.completedAt[day]=data.completedAt[day]||new Date().getFullYear()+"-"+String(new Date().getMonth()+1).padStart(2,"0")+"-"+String(new Date().getDate()).padStart(2,"0");localStorage.setItem(key,JSON.stringify(data))}catch(e){}selected=Math.min(100,progress()+1);render();eg100Stop();const hint=document.getElementById("eg100CompleteHint");if(hint)hint.textContent=progress()>=100?"Bạn đã hoàn thành toàn bộ 100 ngày!":"Tuyệt vời! Đã lưu Ngày "+day+". Bài tiếp theo là Ngày "+(day+1)+". Hãy tiếp tục nhé!";};
 window.eg100Speak=function(rate){const el=document.getElementById("eg100Passage");if(!el||!("speechSynthesis"in window))return;eg100Stop();const u=new SpeechSynthesisUtterance(el.innerText);u.lang="en-US";u.rate=rate||0.9;speechSynthesis.speak(u);document.getElementById("eg100ShadowStatus").textContent="Đang phát đoạn văn…"};
 window.eg100SpeakSlow=function(){eg100Speak(0.55)};
 window.eg100Stop=function(){if("speechSynthesis"in window)speechSynthesis.cancel();const e=document.getElementById("eg100ShadowStatus");if(e)e.textContent="Đã dừng audio."};
@@ -6279,7 +6280,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    if(missing===0&&correct===4){feedback.textContent="🎉 Hoàn thành Day 21! Cả 4 câu trắc nghiệm đều đúng. Hãy đọc to phần hội thoại để luyện nói.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 21 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
    else{feedback.textContent=missing>0?"Hãy trả lời đủ 8 câu trước nhé.":"Bạn đúng "+correct+"/4 câu trắc nghiệm. Hãy xem lại phần ngữ pháp và từ vựng.";feedback.style.color="#b45309"}
   });
-  const doneBtn=document.getElementById("egJourneyCompleteToday");if(doneBtn)doneBtn.addEventListener("click",()=>{if(doneBtn.disabled)return;const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();const ok=write(d);const status=document.getElementById("egJourneyStatus");if(status)status.textContent=ok?"Đã ghi nhận Day "+cur.day+". Bài tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";render(false)});
+  const doneBtn=document.getElementById("egJourneyCompleteToday");if(doneBtn)doneBtn.addEventListener("click",()=>{if(doneBtn.disabled)return;const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();const ok=write(d);if(ok&&cur.day<=100){try{const k="eg100-completed-lessons-v2",saved=JSON.parse(localStorage.getItem(k)||"[]");if(!saved.includes(cur.day)){saved.push(cur.day);saved.sort((a,b)=>a-b);localStorage.setItem(k,JSON.stringify(saved))}}catch(e){}}const status=document.getElementById("egJourneyStatus");if(status)status.textContent=ok?"Đã ghi nhận Day "+cur.day+". Bài tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";window.dispatchEvent(new CustomEvent("englishgo:cloud-progress-restored"));render(false)});
  }
  window.egJourneyGoNext=function(){const cur=current(read()),status=document.getElementById("egJourneyStatus");if(status)status.textContent=cur.done?"Bài hôm nay đã xong. Bài tiếp theo sẽ mở vào ngày mai.":"Nhấn “Bắt đầu học” để mở nội dung và bài tập Day "+cur.day+".";document.getElementById("egJourneyLessons")?.scrollIntoView({behavior:"smooth",block:"start"})};
  window.egJourneyExport=function(){const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),completedAt:read().completedAt||{}},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="englishgo-learning-progress.json";a.click();URL.revokeObjectURL(url)};
