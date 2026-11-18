@@ -5611,6 +5611,71 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    </div>
    <div class="example"><b>Mục tiêu:</b> Nói thành tiếng 5 câu khuyên một người bạn sống lành mạnh hơn, sử dụng should và shouldn't.</div>
   </div>`;
+  if(day===11)return `<div class="eg-lesson-content">
+   <div class="panel" style="margin:12px 0;background:#f3f6ff"><b>🎯 Mục tiêu hôm nay</b><p>Học cách diễn đạt cảm xúc và tâm trạng khi trò chuyện với bạn bè, khách hàng và người thân.</p><span class="badge">Beginner · A1/A2 · 60 phút</span></div>
+   <h3>A. Vocabulary – Từ vựng · 10 phút</h3><div class="wordlist">
+    ${[["Happy","Vui vẻ"],["Sad","Buồn"],["Excited","Hào hứng"],["Nervous","Lo lắng"],["Worried","Lo lắng, bất an"],["Angry","Tức giận"],["Relaxed","Thư giãn"],["Bored","Chán"],["Surprised","Ngạc nhiên"],["Confident","Tự tin"],["Lonely","Cô đơn"],["Proud","Tự hào"],["Disappointed","Thất vọng"],["Comfortable","Thoải mái"],["Grateful","Biết ơn"]].map(([w,m])=>'<div class="wordrow"><b>'+w+'</b><span class="meaning">'+m+'</span><button class="btn line" type="button" onclick="say(\''+w+'\')">🔊 Nghe</button></div>').join("")}
+   </div>
+   <h3>B. Grammar – Feel / Look / Sound · 10 phút</h3>
+   <div class="example"><b>Feel + adjective:</b> diễn tả cảm xúc của bản thân.<br>I feel happy. · I feel tired. · I feel nervous.</div>
+   <div class="example"><b>Look + adjective:</b> nhận xét vẻ ngoài hoặc biểu hiện.<br>You look happy. · She looks tired. · You look beautiful.</div>
+   <div class="example"><b>Sound + adjective:</b> nhận xét điều gì đó nghe có vẻ thế nào.<br>That sounds interesting. · That sounds exciting. · It sounds difficult.</div>
+   <div class="feedback">Với he/she/it, động từ thường thêm s: feels, looks, sounds.</div>
+   <h3>C. Useful expressions · 10 phút</h3><div class="wordlist">
+    ${[["I'm feeling great today.","Hôm nay tôi cảm thấy rất tuyệt."],["I'm a little tired.","Tôi hơi mệt."],["I'm really excited about my trip.","Tôi rất hào hứng về chuyến đi."],["I'm worried about my English.","Tôi lo lắng về tiếng Anh của mình."],["That makes me happy.","Điều đó khiến tôi vui."],["I'm proud of myself.","Tôi tự hào về bản thân."],["I feel more confident when I speak English.","Tôi cảm thấy tự tin hơn khi nói tiếng Anh."]].map(([w,m])=>'<div class="wordrow"><b>'+w+'</b><span class="meaning">'+m+'</span><button class="btn line" type="button" onclick="say(\''+w.replace(/'/g,"\\'")+'\')">🔊 Nghe</button></div>').join("")}
+   </div>
+   <h3>D. Conversation · 10 phút</h3><div class="panel"><p><b>Anna:</b> How are you feeling today?</p><p><b>Tom:</b> I'm feeling pretty good, thanks.</p><p><b>Anna:</b> That's nice! Why are you so happy?</p><p><b>Tom:</b> I'm excited about my holiday next month.</p><p><b>Anna:</b> That sounds amazing! Where are you going?</p><p><b>Tom:</b> I'm going to Switzerland.</p><p><b>Anna:</b> Wow! You must be excited.</p><p><b>Tom:</b> Yes! I can't wait.</p><p><b><i>I can't wait</i></b> = Tôi rất mong chờ điều đó.</p><button class="btn line" type="button" onclick="say('How are you feeling today? I am feeling pretty good, thanks. That is nice! Why are you so happy? I am excited about my holiday next month. That sounds amazing! Where are you going? I am going to Switzerland. Wow! You must be excited. Yes! I cannot wait.')">🔊 Nghe hội thoại</button></div>
+   <h3>E. Day 11 – Bài kiểm tra · 20 phút</h3><div class="eg-quiz">
+    <p><b>Phần 1 – Chọn đáp án đúng</b></p>
+    <label>1. I ______ happy today.<select id="egDay11Q1"><option value="">-- Chọn --</option><option value="a">A. feel</option><option value="b">B. feels</option><option value="c">C. feeling</option></select></label>
+    <label>2. She ______ very tired.<select id="egDay11Q2"><option value="">-- Chọn --</option><option value="a">A. look</option><option value="b">B. looks</option><option value="c">C. looking</option></select></label>
+    <label>3. That ______ interesting!<select id="egDay11Q3"><option value="">-- Chọn --</option><option value="a">A. sound</option><option value="b">B. sounds</option><option value="c">C. sounding</option></select></label>
+    <label>4. I'm really ______ about my trip.<select id="egDay11Q4"><option value="">-- Chọn --</option><option value="a">A. excite</option><option value="b">B. excited</option><option value="c">C. exciting</option></select></label>
+    <p><b>Phần 2 – Điền từ: proud / nervous / relaxed / disappointed</b></p>
+    <label>5. I feel ______ when I speak English in front of many people.<input id="egDay11Q5"></label>
+    <label>6. I feel ______ after going hiking in nature.<input id="egDay11Q6"></label>
+    <label>7. I'm ______ of my progress.<input id="egDay11Q7"></label>
+    <label>8. I was ______ because my trip was cancelled.<input id="egDay11Q8"></label>
+    <p><b>Phần 3 – Dịch sang tiếng Anh</b></p>
+    <label>9. Hôm nay tôi cảm thấy rất vui.<input id="egDay11Q9" placeholder="I feel..."></label>
+    <label>10. Tôi rất hào hứng về chuyến du lịch sắp tới.<input id="egDay11Q10" placeholder="I'm really..."></label>
+    <label>11. Bạn trông rất mệt hôm nay.<input id="egDay11Q11" placeholder="You look..."></label>
+    <p><b>Phần 4 – Speaking Challenge</b></p><label>12. Viết 5–7 câu về cảm xúc của mày: hôm nay cảm thấy thế nào, điều gì khiến mày vui/lo lắng, cảm giác khi nói tiếng Anh và điều mày tự hào.<textarea id="egDay11Q12" rows="6" placeholder="Today, I feel..."></textarea></label>
+    <button class="btn" id="egDay11Check" type="button">Kiểm tra bài Day 11</button><p id="egDay11Feedback" class="small" aria-live="polite"></p>
+   </div><div class="example"><b>Thử thách nói:</b> Nói thành tiếng 5 câu bắt đầu bằng I feel..., I'm excited about..., I'm worried about..., I'm proud of..., That sounds...</div>
+  </div>`;
+  if(day===12)return `<div class="eg-lesson-content">
+   <div class="panel" style="margin:12px 0;background:#f3f6ff"><b>🎯 Mục tiêu hôm nay</b><p>Luyện kết bạn và trò chuyện với người nước ngoài bằng những câu hỏi đơn giản, tự nhiên.</p><span class="badge">Beginner · A1/A2 · 60 phút</span></div>
+   <h3>A. Vocabulary – Từ vựng · 10 phút</h3><div class="wordlist">
+    ${[["Introduce","Giới thiệu"],["Stranger","Người lạ"],["Conversation","Cuộc trò chuyện"],["Friendly","Thân thiện"],["Interested","Quan tâm, hứng thú"],["Common interests","Sở thích chung"],["Get along","Hòa hợp"],["Make friends","Kết bạn"],["Meet new people","Gặp người mới"],["Keep in touch","Giữ liên lạc"],["Invitation","Lời mời"],["Free time","Thời gian rảnh"],["Relationship","Mối quan hệ"],["Personality","Tính cách"],["Comfortable","Thoải mái"]].map(([w,m])=>'<div class="wordrow"><b>'+w+'</b><span class="meaning">'+m+'</span><button class="btn line" type="button" onclick="say(\''+w+'\')">🔊 Nghe</button></div>').join("")}
+   </div>
+   <h3>B. Useful expressions – Câu giao tiếp · 10 phút</h3>
+   <div class="example"><b>Bắt đầu:</b><br>Hi! How's your day going?<br>Is this your first time here?<br>Where are you from?<br>What do you do for a living?</div>
+   <div class="example"><b>Nói về sở thích:</b><br>What do you like doing in your free time?<br>What kind of music do you listen to?<br>Do you enjoy travelling?<br>I'm really into hiking and photography.</div>
+   <div class="example"><b>Duy trì cuộc trò chuyện:</b><br>Really? That's interesting! · Me too! · That sounds great! · Tell me more about it. · What about you?</div>
+   <div class="example"><b>Kết thúc:</b><br>It was nice talking to you. · Let's keep in touch. · Hope to see you again!</div>
+   <h3>C. Grammar – Wh-questions · 10 phút</h3><div class="example"><b>What</b> – Cái gì: What do you do?<br><b>Where</b> – Ở đâu: Where are you from?<br><b>When</b> – Khi nào: When do you work?<br><b>Why</b> – Tại sao: Why do you like hiking?<br><b>Who</b> – Ai: Who do you live with?<br><b>How</b> – Như thế nào: How are you?<br><b>How often</b> – Bao lâu một lần: How often do you travel?</div>
+   <div class="feedback">Nhớ dùng do/does khi đặt câu hỏi Present Simple: Where do you live? · What does she do? · Why are you learning English?</div>
+   <h3>D. Conversation – Making a new friend · 10 phút</h3><div class="panel"><p><b>Anna:</b> Hi! Is this seat taken?</p><p><b>Tom:</b> No, not at all. Have a seat!</p><p><b>Anna:</b> Thanks! My name is Anna. What's your name?</p><p><b>Tom:</b> I'm Tom. Nice to meet you.</p><p><b>Anna:</b> Nice to meet you too! Where are you from?</p><p><b>Tom:</b> I'm from Germany. What about you?</p><p><b>Anna:</b> I'm from Vietnam, but I live in Germany now.</p><p><b>Tom:</b> That's nice! What do you like doing in your free time?</p><p><b>Anna:</b> I enjoy hiking, taking photos, and listening to music.</p><p><b>Tom:</b> Really? I love hiking too!</p><p><b>Anna:</b> That's great! Maybe we can go hiking together sometime.</p><button class="btn line" type="button" onclick="say('Hi! Is this seat taken? No, not at all. Have a seat! Thanks! My name is Anna. What is your name? I am Tom. Nice to meet you. Nice to meet you too! Where are you from? I am from Germany. What about you? I am from Vietnam, but I live in Germany now. What do you like doing in your free time? I enjoy hiking, taking photos, and listening to music. Really? I love hiking too! Maybe we can go hiking together sometime.')">🔊 Nghe hội thoại</button></div>
+   <h3>E. Day 12 – Bài kiểm tra · 20 phút</h3><div class="eg-quiz">
+    <p><b>Phần 1 – Chọn đáp án đúng</b></p>
+    <label>1. Where ______ you from?<select id="egDay12Q1"><option value="">-- Chọn --</option><option value="a">A. are</option><option value="b">B. do</option><option value="c">C. is</option></select></label>
+    <label>2. What ______ she do for a living?<select id="egDay12Q2"><option value="">-- Chọn --</option><option value="a">A. do</option><option value="b">B. does</option><option value="c">C. is</option></select></label>
+    <label>3. How often ______ you go hiking?<select id="egDay12Q3"><option value="">-- Chọn --</option><option value="a">A. are</option><option value="b">B. does</option><option value="c">C. do</option></select></label>
+    <label>4. What kind of music ______ you like?<select id="egDay12Q4"><option value="">-- Chọn --</option><option value="a">A. do</option><option value="b">B. does</option><option value="c">C. are</option></select></label>
+    <p><b>Phần 2 – Điền từ: keep in touch / get along / free time / common interests</b></p>
+    <label>5. I like spending my ______ with friends.<input id="egDay12Q5"></label>
+    <label>6. My brother and I ______ very well.<input id="egDay12Q6"></label>
+    <label>7. We have many ______, such as music and hiking.<input id="egDay12Q7"></label>
+    <label>8. Even though we live far apart, we still ______.<input id="egDay12Q8"></label>
+    <p><b>Phần 3 – Dịch sang tiếng Anh</b></p>
+    <label>9. Bạn thích làm gì vào thời gian rảnh?<input id="egDay12Q9"></label>
+    <label>10. Tôi thích gặp gỡ những người mới.<input id="egDay12Q10"></label>
+    <label>11. Chúng ta có thể giữ liên lạc nhé.<input id="egDay12Q11"></label>
+    <p><b>Phần 4 – Speaking Challenge</b></p><label>12. Viết đoạn hội thoại khoảng 8–10 câu khi gặp người nước ngoài lần đầu: giới thiệu bản thân, hỏi quê quán, công việc, sở thích và tìm điểm chung.<textarea id="egDay12Q12" rows="7" placeholder="Hi! My name is..."></textarea></label>
+    <button class="btn" id="egDay12Check" type="button">Kiểm tra bài Day 12</button><p id="egDay12Feedback" class="small" aria-live="polite"></p>
+   </div><div class="example"><b>Thử thách đặc biệt:</b> Đọc cả hai vai trong hội thoại. Đọc câu của Anna, dừng lại, rồi tự trả lời bằng vai Tom mà không nhìn câu trả lời mẫu.</div>
+  </div>`;
   return '<div class="eg-lesson-content"><h3>Nội dung hôm nay</h3><p>'+lessons[day-1][1]+'</p><p>Bài tập tương tác cho ngày này sẽ được bổ sung cùng nội dung bài học.</p></div>';
  }
  function render(showStudy){
@@ -5745,6 +5810,22 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
    const feedback=document.getElementById("egDay10Feedback");
    if(missing===0&&correct===4){feedback.textContent="🎉 Hoàn thành Day 10! Cả 4 câu trắc nghiệm đều đúng. Hãy đọc to 5 câu khuyên bạn bè sống lành mạnh bằng should/shouldn't.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 10 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
    else{feedback.textContent=missing>0?"Hãy trả lời đủ 12 câu trước nhé.":"Bạn đúng "+correct+"/4 câu trắc nghiệm. Đáp án: 1A (should), 2B (stay), 3C (stay), 4A (tired).";feedback.style.color="#b45309"}
+  });
+  const day11Check=document.getElementById("egDay11Check");if(day11Check)day11Check.addEventListener("click",()=>{
+   const answers=Array.from({length:12},(_,i)=>(document.getElementById("egDay11Q"+(i+1))?.value||"").trim());
+   const missing=answers.filter(a=>!a).length,expected=["a","b","b","b"];
+   const correct=answers.slice(0,4).filter((a,i)=>a.toLowerCase()===expected[i]).length;
+   const feedback=document.getElementById("egDay11Feedback");
+   if(missing===0&&correct===4){feedback.textContent="🎉 Hoàn thành Day 11! Cả 4 câu trắc nghiệm đều đúng. Hãy đọc to đoạn văn về cảm xúc để luyện nói.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 11 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
+   else{feedback.textContent=missing>0?"Hãy trả lời đủ 12 câu trước nhé.":"Bạn đúng "+correct+"/4 câu trắc nghiệm. Đáp án: 1A (feel), 2B (looks), 3B (sounds), 4B (excited).";feedback.style.color="#b45309"}
+  });
+  const day12Check=document.getElementById("egDay12Check");if(day12Check)day12Check.addEventListener("click",()=>{
+   const answers=Array.from({length:12},(_,i)=>(document.getElementById("egDay12Q"+(i+1))?.value||"").trim());
+   const missing=answers.filter(a=>!a).length,expected=["a","b","c","a"];
+   const correct=answers.slice(0,4).filter((a,i)=>a.toLowerCase()===expected[i]).length;
+   const feedback=document.getElementById("egDay12Feedback");
+   if(missing===0&&correct===4){feedback.textContent="🎉 Hoàn thành Day 12! Cả 4 câu trắc nghiệm đều đúng. Hãy đọc to hội thoại 8–10 câu để luyện bắt chuyện.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer"}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài kiểm tra Day 12 đã hoàn tất. Nhấn nút bên dưới để lưu tiến độ."}
+   else{feedback.textContent=missing>0?"Hãy trả lời đủ 12 câu trước nhé.":"Bạn đúng "+correct+"/4 câu trắc nghiệm. Đáp án: 1A (are), 2B (does), 3C (do), 4A (do).";feedback.style.color="#b45309"}
   });
   const doneBtn=document.getElementById("egJourneyCompleteToday");if(doneBtn)doneBtn.addEventListener("click",()=>{if(doneBtn.disabled)return;const d=read();d.completedAt=d.completedAt||{};d.completedAt[cur.day]=today();const ok=write(d);const status=document.getElementById("egJourneyStatus");if(status)status.textContent=ok?"Đã ghi nhận Day "+cur.day+". Bài tiếp theo sẽ mở vào ngày mai.":"Không thể lưu tiến độ trong trình duyệt.";render(false)});
  }
