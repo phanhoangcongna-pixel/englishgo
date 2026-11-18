@@ -1314,17 +1314,22 @@ let voiceLoadPromise = null;
 function getEnglishVoice(){
  const synth = window.speechSynthesis;
  const voices = synth && synth.getVoices ? synth.getVoices() : [];
- if(!voices.length) return null;
-
- // Prefer a feminine US English voice across devices; fall back gracefully when unavailable.
- const femaleUS = voices.filter(v => /^en-US/i.test(v.lang) && /aria|jenny|ava|emma|sara|samantha|zira|karen|google us english|female/i.test(v.name));
- const naturalFemaleUS = femaleUS.find(v => /natural|neural|online|premium/i.test(v.name));
- if(naturalFemaleUS) return naturalFemaleUS;
- if(femaleUS.length) return femaleUS[0];
- return voices.find(v => /^en-US/i.test(v.lang) && /natural|neural|online|premium/i.test(v.name))
-   || voices.find(v => /^en-US/i.test(v.lang))
-   || voices.find(v => /^en/i.test(v.lang))
-   || null;
+ const english = voices.filter(v => /^en([_-]|$)/i.test(v.lang || ""));
+ if(!english.length) return null;
+ // Choose by voice quality first, then accent; don't force a gender.
+ const score = v => {
+  const name = (v.name || "").toLowerCase(), lang = (v.lang || "").toLowerCase();
+  let n = 0;
+  if(/neural|natural|online|premium/.test(name)) n += 100;
+  if(/aria|jenny|guy|sonia|ryan|sara|ava|andrew|emma|brian|libby|oliver/.test(name)) n += 35;
+  if(/google (us|uk) english/.test(name)) n += 45;
+  if(lang === "en-us") n += 24;
+  else if(lang.startsWith("en-gb") || lang.startsWith("en-au")) n += 20;
+  else n += 10;
+  if(/compact|espeak|festival| robotic/.test(name)) n -= 100;
+  return n;
+ };
+ return english.sort((a,b) => score(b)-score(a))[0] || null;
 }
 
 function waitForEnglishVoice(){
@@ -1368,7 +1373,7 @@ function egAudioStop(){
  if(window.speechSynthesis)window.speechSynthesis.cancel();
  if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}
 }
-function egAudioSpeak(text,rate=0.88,triggerButton=null){
+function egAudioSpeak(text,rate=0.94,triggerButton=null){
  const full=String(text||"").trim();if(!full)return;
  const synth=window.speechSynthesis;
  if(!synth||typeof SpeechSynthesisUtterance==="undefined"){alert("Trình duyệt này chưa hỗ trợ phát âm. Hãy thử Chrome, Edge hoặc Safari mới nhất.");return;}
@@ -1386,14 +1391,14 @@ function egAudioSpeak(text,rate=0.88,triggerButton=null){
   const utterance=new SpeechSynthesisUtterance(chunk);
   utterance.lang=voice&&voice.lang?voice.lang:"en-US";if(voice)utterance.voice=voice;
   utterance.rate=rate;utterance.pitch=1;utterance.volume=1;
-  utterance.onend=()=>{if(requestId!==speechRequestId)return;egAudioQueueTimer=setTimeout(playNext,420);};
+  utterance.onend=()=>{if(requestId!==speechRequestId)return;egAudioQueueTimer=setTimeout(playNext,260);};
   utterance.onerror=event=>{if(requestId===speechRequestId){if(egActiveInlineStop){egActiveInlineStop.style.display="none";egActiveInlineStop=null;}if(event.error!=="interrupted")console.warn("EnglishGo speech error:",event.error);}};
   synth.speak(utterance);
  };
  try{synth.cancel();synth.resume();playNext();}
  catch(err){if(stop)stop.style.display="none";console.warn("EnglishGo pronunciation error:",err);}
 }
-function say(t){egAudioSpeak(t,0.88);}
+function say(t){egAudioSpeak(t,0.96);}
 function sayWordFromList(text){ say(text); }
 // Use data attributes instead of inline onclick strings: this avoids broken HTML
 // when a word or sentence is wrapped in quotes.
