@@ -6106,12 +6106,22 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   host.innerHTML='<div class="card" style="border:2px solid #b7c9ff"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><span class="tag">BÀI HỌC HÔM NAY</span><span class="small muted">Day '+cur.day+' / 180</span></div><h2 style="margin:12px 0 6px">Day '+cur.day+' · '+lesson[0]+'</h2><p class="muted">'+lesson[1]+'</p>'+(cur.done?'<div class="feedback good">✓ Bạn đã hoàn thành bài hôm nay. Bài tiếp theo sẽ mở vào ngày mai.</div>':(showStudy?lessonContent(cur.day)+'<button class="btn" id="egJourneyCompleteToday" type="button" disabled style="opacity:.5;cursor:not-allowed">✓ Hoàn thành bài học hôm nay</button><p class="small muted" id="egJourneyCompleteHint">Làm đúng bài tập và nhấn kiểm tra để mở nút hoàn thành.</p>':'<p class="small muted">Nhấn bắt đầu để mở bài học và bài tập hôm nay.</p><button class="btn" id="egJourneyStartToday" type="button">▶ Bắt đầu học Day '+cur.day+'</button>'))+'</div>';
   const startBtn=document.getElementById("egJourneyStartToday");if(startBtn)startBtn.addEventListener("click",()=>render(true));
   const checkBtn=document.getElementById("egJourneyCheckQuiz");if(checkBtn)checkBtn.addEventListener("click",()=>{
-   const answers=Array.from({length:5},(_,i)=>(document.getElementById("egq"+(i+1))?.value||"").trim().toLowerCase().replace(/[.!?]/g,"").replace(/\s+/g," "));
-   const patterns=[/^my name is .+/, /^(i'm from|i am from) .+/, /^i live in .+/, /^(i work as|i'm a|i am a) .+/, /^(i like|i enjoy) .+/];
-   const correct=answers.filter((a,i)=>patterns[i].test(a)).length;
+   const answers=Array.from({length:5},(_,i)=>(document.getElementById("egq"+(i+1))?.value||"").trim().toLowerCase()
+    .replace(/[’‘`´]/g,"'").replace(/[.!?]/g,"").replace(/[,]/g,"").replace(/\s+/g," "));
+   // Accept natural greetings and common contractions, including iPhone smart apostrophes.
+   const patterns=[
+    /^(hello )?(hi )?(my name is|i am|i'm) .+/,
+    /^(i'm from|i am from) .+/,
+    /^(i live in|i'm living in|i am living in) .+/,
+    /^(i work as|i'm a|i am a|i work in|i'm an|i am an) .+/,
+    /^(i like|i enjoy|i love|in my free time i (like|enjoy|love)) .+/
+   ];
+   const results=answers.map((a,i)=>a.length>0&&patterns[i].test(a));
+   const correct=results.filter(Boolean).length;
    const feedback=document.getElementById("egJourneyQuizFeedback");
-   if(correct===5){feedback.textContent="🎉 Chính xác 5/5! M đã hoàn thành bài tập. Giờ có thể đánh dấu hoàn thành bài học.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");done.disabled=false;done.style.opacity="1";done.style.cursor="pointer";document.getElementById("egJourneyCompleteHint").textContent="Bài tập đạt 5/5. Nhấn nút bên dưới để lưu hoàn thành."}
-   else{feedback.textContent="Bạn đúng "+correct+"/5. Hãy xem lại các câu chưa đúng và thử lại nhé.";feedback.style.color="#b45309"}
+   const details=results.map((ok,i)=>(ok?"✓":"✗")+" Câu "+(i+1)+(ok?" đúng":" cần xem lại")).join(" · ");
+   if(correct===5){feedback.textContent="🎉 Chính xác 5/5! "+details+". Bài tập đã đạt yêu cầu; m có thể đánh dấu hoàn thành bài học.";feedback.style.color="green";const done=document.getElementById("egJourneyCompleteToday");if(done){done.disabled=false;done.style.opacity="1";done.style.cursor="pointer";}const hint=document.getElementById("egJourneyCompleteHint");if(hint)hint.textContent="Bài tập đạt 5/5. Nhấn nút bên dưới để lưu hoàn thành."}
+   else{feedback.textContent="Bạn đúng "+correct+"/5. "+details+". Câu trả lời được chấm theo cấu trúc và nội dung cơ bản, không phải chấm phát âm.";feedback.style.color="#b45309"}
   });
   const day2Check=document.getElementById("egDay2Check");if(day2Check)day2Check.addEventListener("click",()=>{
    const ids=["egDay2Q1","egDay2Q2","egDay2Q3","egDay2Q4","egDay2Q5"];
