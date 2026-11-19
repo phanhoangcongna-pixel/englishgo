@@ -533,7 +533,7 @@ html { background: #142342; }
 <button data-page="shadowing">🎙️ Shadowing</button><button data-page="realconversation">💬 Real-life Conversation </button><button data-page="dictation">✍️ Dictation </button><button data-page="spokenenglish">🗣️ Natural Spoken English </button><button data-page="reallistening">🎧 Real Listening </button>
 </div></details>
 <details class="nav-group"><summary>🎯 Practice <span aria-hidden="true">▾</span></summary><div class="nav-menu">
-<button data-page="translation">🔁 Translation Reflex </button>
+<button data-page="translation">🔁 Translation Reflex </button><button data-page="phrases">🧩 Topic Phrases · Cụm từ theo chủ đề</button>
 </div></details>
 <button data-page="cloud">☁ Cloud Sync</button></nav>
 <button class="btn line" id="cloudLoginBtn" onclick="cloudSignIn()">☁ Sign in · Đăng nhập</button><button class="lang" onclick="alert('English + Vietnamese are shown together in this version. Phiên bản này hiển thị song song tiếng Anh và tiếng Việt.')">EN | VI</button></div></header>
@@ -655,6 +655,12 @@ html { background: #142342; }
 </div>
 </div>
 <div class="footer">EnglishGo 2.0 · Free bilingual learning · Học tiếng Anh miễn phí<br/>Progress, XP and writing are stored locally on your device. Tiến độ được lưu trên thiết bị.</div>
+</section>
+<section class="page" id="phrases">
+<div class="page-header"><div><p class="eyebrow">TOPIC PHRASES · LEARN IN CONTEXT</p><h1>🧩 Topic Phrases · Cụm từ theo chủ đề</h1><p>Học cụm từ thực tế, câu ví dụ, IPA từng từ (American English), nghĩa và luyện tập liên tục.</p></div></div>
+<div class="panel"><div class="row" style="gap:12px;flex-wrap:wrap;align-items:center"><label>Chủ đề / Topic <select id="phraseTopic"></select></label><label>Tìm cụm từ <input id="phraseSearch" placeholder="Search phrase or meaning"></label><button class="btn soft" id="phraseRandom">🎲 Cụm từ ngẫu nhiên</button></div><p id="phraseCount" class="small muted"></p></div>
+<div id="phraseCards" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px"></div>
+<div class="panel" style="margin-top:20px"><h2>📝 Practice Zone · Khu bài tập</h2><p>Kho bài tập tạo theo cụm từ đã chọn: trắc nghiệm nghĩa, điền cụm từ, chọn câu đúng, dịch tình huống. Mỗi lượt có 20 câu và có thể luyện lại vô hạn.</p><div class="row" style="flex-wrap:wrap"><button class="btn" id="phraseStartQuiz">▶ Bắt đầu 20 câu</button><button class="btn soft" id="phraseStartFill">✍️ Luyện điền cụm từ</button><button class="btn line" id="phraseStartTranslate">🔁 Luyện dịch tình huống</button></div><div id="phraseQuiz" style="margin-top:14px"></div><div id="phraseQuizResult" class="small" style="margin-top:10px"></div></div>
 </section>
 <section class="page" id="daily100">
 <h1 class="title">🌱 100 ngày chinh phục tiếng Anh</h1>
@@ -6290,4 +6296,71 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 </script>
 
 
+<script id="englishgo-topic-phrases">
+(()=>{const topics={
+"Daily routines · Sinh hoạt": [
+["get ready for work","chuẩn bị đi làm","I get ready for work at seven.","get /ɡɛt/ · ready /ˈrɛdi/ · for /fɔːr/ · work /wɝːk/"],
+"At home · Ở nhà":[
+["do the laundry","giặt quần áo","I do the laundry every Sunday.","do /duː/ · the /ðə/ · laundry /ˈlɔːndri/"],
+["clean up the kitchen","dọn bếp","Please clean up the kitchen after dinner.","clean /kliːn/ · up /ʌp/ · the /ðə/ · kitchen /ˈkɪtʃən/"],
+["make the bed","dọn giường","I make the bed as soon as I get up.","make /meɪk/ · the /ðə/ · bed /bɛd/"],
+["take out the trash","đổ rác","Could you take out the trash?","take /teɪk/ · out /aʊt/ · the /ðə/ · trash /træʃ/"],
+["run out of milk","hết sữa","We've run out of milk.","run /rʌn/ · out /aʊt/ · of /əv/ · milk /mɪlk/"]],
+"Work · Công việc":[
+["meet a deadline","đáp ứng hạn chót","We need to meet the deadline.","meet /miːt/ · a /ə/ · deadline /ˈdɛdˌlaɪn/"],
+["take a day off","nghỉ một ngày","I'm taking a day off tomorrow.","take /teɪk/ · a /ə/ · day /deɪ/ · off /ɔːf/"],
+["get back to someone","phản hồi ai đó","I'll get back to you this afternoon.","get /ɡɛt/ · back /bæk/ · to /tuː/ · someone /ˈsʌmwʌn/"],
+["work overtime","làm thêm giờ","I have to work overtime tonight.","work /wɝːk/ · overtime /ˈoʊvərˌtaɪm/"],
+["keep someone updated","cập nhật thông tin cho ai","Please keep me updated.","keep /kiːp/ · someone /ˈsʌmwʌn/ · updated /ʌpˈdeɪtɪd/"]],
+"Shopping · Mua sắm":[
+["try it on","thử đồ","Can I try this jacket on?","try /traɪ/ · it /ɪt/ · on /ɑːn/"],
+["be on sale","đang giảm giá","These shoes are on sale.","be /biː/ · on /ɑːn/ · sale /seɪl/"],
+["pay by card","thanh toán bằng thẻ","Can I pay by card?","pay /peɪ/ · by /baɪ/ · card /kɑːrd/"],
+["look for a bargain","tìm món hời","I'm looking for a bargain.","look /lʊk/ · for /fɔːr/ · a /ə/ · bargain /ˈbɑːrɡən/"],
+["return an item","trả lại món hàng","I'd like to return an item.","return /rɪˈtɝːn/ · an /ən/ · item /ˈaɪtəm/"]],
+"Food & Restaurant · Ăn uống":[
+["place an order","đặt món","I'd like to place an order.","place /pleɪs/ · an /ən/ · order /ˈɔːrdər/"],
+["eat out","ăn ngoài","We eat out on Fridays.","eat /iːt/ · out /aʊt/"],
+["split the bill","chia hóa đơn","Let's split the bill.","split /splɪt/ · the /ðə/ · bill /bɪl/"],
+["have a sweet tooth","hảo ngọt","I have a sweet tooth.","have /hæv/ · a /ə/ · sweet /swiːt/ · tooth /tuːθ/"],
+["make a reservation","đặt bàn","I'd like to make a reservation for two.","make /meɪk/ · a /ə/ · reservation /ˌrɛzərˈveɪʃən/"]],
+"Travel · Du lịch":[
+["miss the train","lỡ tàu","I missed the train this morning.","miss /mɪs/ · the /ðə/ · train /treɪn/"],
+["check in at a hotel","làm thủ tục nhận phòng","We check in at the hotel at three.","check /tʃɛk/ · in /ɪn/ · at /æt/ · a /ə/ · hotel /hoʊˈtɛl/"],
+["get lost","bị lạc","We got lost in the city.","get /ɡɛt/ · lost /lɔːst/"],
+["catch a bus","bắt xe buýt","I catch a bus to work.","catch /kætʃ/ · a /ə/ · bus /bʌs/"],
+["book a flight","đặt vé máy bay","We booked a flight to New York.","book /bʊk/ · a /ə/ · flight /flaɪt/"]],
+"Social & Feelings · Giao tiếp & cảm xúc":[
+["get along with","hòa hợp với","I get along with my coworkers.","get /ɡɛt/ · along /əˈlɔːŋ/ · with /wɪð/"],
+["catch up with someone","hỏi thăm/cập nhật với ai","Let's catch up this weekend.","catch /kætʃ/ · up /ʌp/ · with /wɪð/ · someone /ˈsʌmwʌn/"],
+["feel under the weather","cảm thấy không khỏe","I'm feeling under the weather today.","feel /fiːl/ · under /ˈʌndər/ · the /ðə/ · weather /ˈwɛðər/"],
+["have a good time","có khoảng thời gian vui","We had a good time together.","have /hæv/ · a /ə/ · good /ɡʊd/ · time /taɪm/"],
+["make someone feel welcome","làm ai cảm thấy được chào đón","They made me feel welcome.","make /meɪk/ · someone /ˈsʌmwʌn/ · feel /fiːl/ · welcome /ˈwɛlkəm/"]],
+"Health · Sức khỏe":[
+["come down with a cold","bị cảm","I think I'm coming down with a cold.","come /kʌm/ · down /daʊn/ · with /wɪð/ · a /ə/ · cold /koʊld/"],
+["get some rest","nghỉ ngơi","You should get some rest.","get /ɡɛt/ · some /sʌm/ · rest /rɛst/"],
+["make an appointment","đặt lịch hẹn","I need to make an appointment.","make /meɪk/ · an /ən/ · appointment /əˈpɔɪntmənt/"],
+["take medicine","uống thuốc","Take the medicine after meals.","take /teɪk/ · medicine /ˈmɛdɪsən/"],
+["feel better","cảm thấy khỏe hơn","I hope you feel better soon.","feel /fiːl/ · better /ˈbɛtər/"]]};
+const flat=Object.entries(topics).flatMap(([topic,items])=>items.map(p=>({topic,phrase:p[0],vi:p[1],ex:p[2],ipa:p[3]})));
+const $=id=>document.getElementById(id), topic=$("phraseTopic"), cards=$("phraseCards"), search=$("phraseSearch");
+if(!topic)return;
+topic.innerHTML='<option value="all">All topics · Tất cả</option>'+Object.keys(topics).map(t=>'<option>'+t+'</option>').join('');
+function filtered(){const t=topic.value,q=(search.value||"").toLowerCase();return flat.filter(x=>(t==="all"||x.topic===t)&&(!q||[x.phrase,x.vi,x.ex,x.topic].join(" ").toLowerCase().includes(q)))}
+function render(){const list=filtered();$("phraseCount").textContent=list.length+" cụm từ · "+Object.keys(topics).length+" chủ đề · American IPA từng từ";cards.innerHTML=list.map(x=>'<article class="card"><span class="badge">'+x.topic+'</span><h3>'+x.phrase+'</h3><p><b>🇻🇳 '+x.vi+'</b></p><div class="example"><b>Example:</b> '+x.ex+'<br><small>'+x.ex+'</small></div><p class="small"><b>🇺🇸 IPA từng từ:</b><br>'+x.ipa+'</p><button class="btn line" onclick="phraseSpeak('+JSON.stringify(x.phrase)+')">🔊 Nghe cụm từ</button> <button class="btn soft" onclick="phraseSpeak('+JSON.stringify(x.ex)+')">🔊 Nghe câu</button></article>').join('')}
+window.phraseSpeak=text=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";speechSynthesis.speak(u)}catch(e){}};
+topic.onchange=render;search.oninput=render;$("phraseRandom").onclick=()=>{const x=flat[Math.floor(Math.random()*flat.length)];topic.value=x.topic;search.value=x.phrase;render()};
+let quiz=[],index=0,score=0,mode="mc";
+function start(m){mode=m;index=0;score=0;quiz=Array.from({length:20},()=>flat[Math.floor(Math.random()*flat.length)]);$("phraseQuizResult").textContent="";showQ()}
+function showQ(){if(index>=quiz.length){$("phraseQuiz").innerHTML='<h3>🎉 Hoàn thành lượt!</h3><p>Bạn đạt '+score+'/20 ('+Math.round(score/20*100)+'%).</p><button class="btn" onclick="phraseRestart()">Luyện lại 20 câu</button>';return}
+const x=quiz[index];let html='<div class="card"><p><b>Câu '+(index+1)+'/20</b></p><h3>'+ (mode==="fill"?"Dịch/nhớ cụm từ: "+x.vi:mode==="translate"?"Dịch sang tiếng Anh: "+x.ex:"Nghĩa của: "+x.phrase)+'</h3>';
+if(mode==="fill"||mode==="translate"){html+='<input id="phraseAnswer" placeholder="Nhập câu trả lời..."><button class="btn" id="phraseCheck">Kiểm tra</button>'}
+else{const opts=[x.vi,...flat.filter(y=>y.phrase!==x.phrase).sort(()=>Math.random()-.5).slice(0,3).map(y=>y.vi)].sort(()=>Math.random()-.5);html+='<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">'+opts.map(o=>'<button class="btn soft phrase-option">'+o+'</button>').join('')+'</div>'}
+html+='<p id="phraseFeedback" class="small"></p></div>';$("phraseQuiz").innerHTML=html;
+if(mode==="mc")document.querySelectorAll(".phrase-option").forEach(btn=>btn.onclick=()=>check(btn.textContent===x.vi));
+else $("phraseCheck").onclick=()=>{const ans=$("phraseAnswer").value.trim().toLowerCase();check(mode==="fill"?ans===x.phrase.toLowerCase():ans===x.ex.toLowerCase())}}
+function check(ok){if(ok)score++;$("phraseFeedback").textContent=(ok?"✅ Chính xác! ":"❌ Chưa đúng. Đáp án: ")+(mode==="translate"?quiz[index].ex:quiz[index].phrase+" — "+quiz[index].vi);setTimeout(()=>{index++;showQ()},1100)}
+$("phraseStartQuiz").onclick=()=>start("mc");$("phraseStartFill").onclick=()=>start("fill");$("phraseStartTranslate").onclick=()=>start("translate");window.phraseRestart=()=>start(mode);render();
+})();
+</script>
 </body></html>
